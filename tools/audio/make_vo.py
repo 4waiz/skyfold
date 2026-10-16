@@ -125,6 +125,8 @@ ONES = "zero one two three four five six seven eight nine ten eleven twelve thir
 TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
 SPELL = {"harbour": ["harbor"], "alright": ["all", "right"], "okay": ["ok"], "neighbour": ["neighbor"]}
 NAME_FORMS = ("nacre", "naker", "nayker", "neiker")
+# Noor = /nu:r/. "nor" (/no:r/, the espeak reading of "Noor") is deliberately NOT accepted.
+NOOR_FORMS = {"noor", "nuur", "nur", "nooer", "noer", "newer"}
 
 
 def num_words(s):
@@ -179,6 +181,8 @@ def same(c, r):
         return rn in LETTER_FORMS[craw] or rn == craw.lower()
     if cn == "nacre":
         return any(lev(rn, f) <= 1 for f in NAME_FORMS)
+    if cn == "noor":
+        return rn in NOOR_FORMS
     return cn == rn
 
 
