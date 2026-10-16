@@ -55,6 +55,8 @@ Shader "Skyfold/StylizedLit"
             #pragma fragment frag
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            // Forward+ (the PC renderer's path): lights come from the cluster loop, not per-object lists.
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
             #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
@@ -129,12 +131,22 @@ Shader "Skyfold/StylizedLit"
                 color += mainLight.color * pow(saturate(dot(n, h)), specPow) * _Smoothness * 0.45h * shadow;
 
                 #if defined(_ADDITIONAL_LIGHTS)
-                uint count = GetAdditionalLightsCount();
-                for (uint li = 0u; li < count; ++li)
+                // Same loop structure as URP Lit, so Forward and Forward+ both get the right lights.
+                InputData inputData = (InputData)0;
+                inputData.positionWS = i.positionWS;
+                inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(i.positionCS);
+                uint pixelLightCount = GetAdditionalLightsCount();
+                #if USE_CLUSTER_LIGHT_LOOP
+                [loop] for (uint lightIndex = 0; lightIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); lightIndex++)
                 {
-                    Light l = GetAdditionalLight(li, i.positionWS);
+                    Light l = GetAdditionalLight(lightIndex, i.positionWS);
                     color += albedo * l.color * l.distanceAttenuation * l.shadowAttenuation * saturate(dot(n, l.direction) * 0.7h + 0.3h);
                 }
+                #endif
+                LIGHT_LOOP_BEGIN(pixelLightCount)
+                    Light l = GetAdditionalLight(lightIndex, i.positionWS);
+                    color += albedo * l.color * l.distanceAttenuation * l.shadowAttenuation * saturate(dot(n, l.direction) * 0.7h + 0.3h);
+                LIGHT_LOOP_END
                 #endif
 
                 color *= ao;

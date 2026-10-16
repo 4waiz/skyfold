@@ -276,7 +276,9 @@ namespace Skyfold
             }
             if (State != MissionState.Active) return;
 
-            if (m_IntroPending && !Ctx.Dialogue.IsSpeaking) m_IntroPending = false;
+            // The storm waits for the welcome lines themselves, not for every later tutorial line.
+            if (m_IntroPending && (Current.IntroVoice == null || System.Array.TrueForAll(Current.IntroVoice, v => !Ctx.Dialogue.IsPending(v))))
+                m_IntroPending = false;
             PlayTime += dt;
             ObjectiveElapsed += dt;
 

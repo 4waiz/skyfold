@@ -104,6 +104,16 @@ namespace Skyfold
             m_Queue.Add(new Pending { id = id, context = context, queuedAt = m_Clock, maxWait = maxWait });
         }
 
+        /// <summary>True while this line (any desktop/VR variant) is playing or waiting in the queue.</summary>
+        public bool IsPending(string baseId)
+        {
+            var id = Resolve(baseId);
+            if (id == null) return false;
+            if (m_Current != null && m_Current.id == id) return true;
+            foreach (var q in m_Queue) if (q.id == id) return true;
+            return false;
+        }
+
         /// <summary>Discards queued lines that belong to a finished objective.</summary>
         public void DropContext(string context)
         {

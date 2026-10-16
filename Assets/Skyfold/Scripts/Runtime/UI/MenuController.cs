@@ -494,8 +494,16 @@ namespace Skyfold
             if (!def.IsDemo && !string.IsNullOrEmpty(r.Medal))
             {
                 var medalRow = UIKit.Row(b.Panel, "Medal", 18f);
+                medalRow.GetComponent<HorizontalLayoutGroup>().childForceExpandWidth = false;
                 var disc = UIKit.Image(medalRow, "Disc", UIStyle.Hex(UIStyle.MedalColor(r.Medal)), UIKit.Circle, false);
+                disc.preserveAspect = true;
                 UIKit.Layout(disc, 84f, 84f, 0f, 84f);
+                // A pearl ring inside the disc so it reads as a medal, not a dot.
+                var ring = UIKit.Image(disc.rectTransform, "Ring", new Color(1f, 1f, 1f, 0.55f), UIKit.Ring, false);
+                ring.preserveAspect = true;
+                ring.rectTransform.anchorMin = new Vector2(0.18f, 0.18f);
+                ring.rectTransform.anchorMax = new Vector2(0.82f, 0.82f);
+                ring.rectTransform.offsetMin = ring.rectTransform.offsetMax = Vector2.zero;
                 var mt = UIKit.Text(medalRow, r.Medal + " medal", UIStyle.HeadingSize, UIStyle.Ink, true);
                 UIKit.Layout(mt, 84f, -1f, 1f);
             }
