@@ -383,9 +383,8 @@ def quay_corner_wedge(a, c, r, a0, a1, seg=8):
 
 
 def bollard_mooring(mb, x, y, z=0.0):
-    prof = [(0, z), (0.22, z), (0.22, z + 0.07), (0.14, z + 0.14), (0.13, z + 0.4), (0.2, z + 0.48),
-            (0.2, z + 0.56), (0, z + 0.6)]
-    mb.lathe(prof, 10, 'SKY_Ink', cx=x, cy=y)
+    prof = [(0, z), (0.21, z), (0.21, z + 0.06), (0.13, z + 0.15), (0.13, z + 0.42), (0.2, z + 0.5), (0, z + 0.58)]
+    mb.lathe(prof, 8, 'SKY_Ink', cx=x, cy=y, a0=22.5)
 
 
 def fender(mb, x, y_face, z0=-1.9, z1=-0.4, outward=1):
@@ -502,7 +501,7 @@ def bridge_fascia(a, y0, y1):
     a.part(mb, name="glow")
 
 
-def balustrade(a, y0, y1, posts, x_side, ends=(), spacing=0.5):
+def balustrade(a, y0, y1, posts, x_side, ends=(), spacing=0.6):
     """Pearl balustrade on the fascia top: posts with brass caps, top rail, slim balusters."""
     s = x_side
     xc = s * (DECK_HW + 0.125)
@@ -514,7 +513,7 @@ def balustrade(a, y0, y1, posts, x_side, ends=(), spacing=0.5):
         a.part(mb, bevel=0.025, seg=1, name="posts")
         mb = MB()
         for py in posts:
-            mb.lathe([(0, zt + 1.0), (0.11, zt + 1.0), (0.09, zt + 1.08), (0.04, zt + 1.15), (0, zt + 1.19)], 6,
+            mb.lathe([(0, zt + 1.0), (0.11, zt + 1.0), (0.05, zt + 1.12), (0, zt + 1.19)], 6,
                      'SKY_Brass', cx=xc, cy=py, a0=30)
         a.part(mb, name="caps")
     mb = MB()
@@ -547,7 +546,7 @@ def bridge_abutment(a, sgn):
     mb = MB(); mb.prism(_band(p0, p1, 0.08, QT), -4.0, COURSES[-1][0], 'SKY_SandstoneDeep')
     a.part(mb, name="acore")
     mb = MB()
-    cuts = [0.0, 3.0, 8.0, 13.0, 16.0]
+    cuts = [0.0, 5.3, 10.7, 16.0]
     for k in range(len(cuts) - 1):
         mb.prism(_band(p0v + t * cuts[k], p0v + t * cuts[k + 1], 0.0, QT), COURSES[-1][0], -0.3, 'SKY_SandstoneDeep')
     a.part(mb, bevel=0.04, seg=1, name="acourse")
@@ -566,7 +565,7 @@ def bridge_abutment(a, sgn):
         mb.box(x0, x1, yA, yB, -4.0, -0.75, 'SKY_Sandstone')
         mbc.box(x0 - s * 0.07, x1 + s * 0.07, yA, yB - sgn * 0.07, -0.75, -0.6, 'SKY_Pearl')
     a.part(mb, bevel=0.05, seg=1, name="piers")
-    a.part(mbc, bevel=0.03, seg=1, name="pier_caps")
+    a.part(mbc, name="pier_caps")
 
 
 def arch_curve(y_spring, z_spring, z_crown, n=14):
@@ -585,7 +584,7 @@ ARCH_ZS, ARCH_ZC, RING_T = -2.4, -0.85, 0.38
 
 def bridge_arch(a, keep=None):
     """Spandrel body (sandstone) + pearl arch rings on both faces. keep: keep only |y| >= keep (broken)."""
-    crv, (rr, cz) = arch_curve(PIER, ARCH_ZS, ARCH_ZC, 14)
+    crv, (rr, cz) = arch_curve(PIER, ARCH_ZS, ARCH_ZC, 10)
     ext = []
     for (y, z) in crv:
         ang = math.atan2(z - cz, y)
@@ -604,7 +603,7 @@ def bridge_arch(a, keep=None):
         mb = MB()
         for s in (-1, 1):
             mb.box(s * 4.75, s * 5.23, -0.32, 0.32, ARCH_ZC - 0.08, FASCIA_BOT + 0.01, 'SKY_Pearl')
-        a.part(mb, bevel=0.03, seg=1, name="keystone")
+        a.part(mb, name="keystone")
         return
     for sgn in (-1, 1):
         idx = [i for i, p in enumerate(crv) if p[0] * sgn >= keep]
@@ -689,7 +688,7 @@ def bridge_stub(a):
             p_in = sg * (H - 1.85)
             balustrade(a, min(p_out, p_in) - 0.12, max(p_out, p_in) + 0.12, [p_out, p_in], s, spacing=0.45)
         rnd = random.Random(11 + sg)
-        xs = [-DECK_HW - 0.25, -2.6, 0.3, 2.9, DECK_HW + 0.25]
+        xs = [-DECK_HW - 0.25, -1.6, 1.9, DECK_HW + 0.25]
         for k in range(len(xs) - 1):
             poly = jag_poly(xs[k], xs[k + 1], y_break, sg, rnd)
             top = -0.05 - 0.14 * rnd.random()
@@ -698,19 +697,20 @@ def bridge_stub(a):
             a.part(mb, bevel=0.03, seg=1, name="break")
         yb_ = sg * (H - 1.35)
         mb = MB()
-        striped_beam_x(mb, -RW + 0.25, RW - 0.25, yb_ - 0.07, yb_ + 0.07, 0.55, 0.88, 12, ['SKY_Coral', 'SKY_Pearl'])
-        a.part(mb, bevel=0.015, seg=1, name="barrier_beam")
+        striped_beam_x(mb, -RW + 0.25, RW - 0.25, yb_ - 0.07, yb_ + 0.07, 0.55, 0.88, 11, ['SKY_Coral', 'SKY_Pearl'])
+        a.part(mb, name="barrier_beam")
         mb = MB()
         for x in (-RW + 0.7, 0.0, RW - 0.7):
             mb.box(x - 0.05, x + 0.05, yb_ - 0.04, yb_ + 0.04, 0.06, 0.6, 'SKY_Pearl')
             mb.box(x - 0.09, x + 0.09, yb_ - 0.32, yb_ + 0.32, 0.0, 0.07, 'SKY_Ink')
         for x in (-RW + 0.7, RW - 0.7):
-            mb.cyl(0.07, 0.88, 1.0, 8, 'SKY_Coral', cx=x, cy=yb_)
+            mb.cyl(0.07, 0.88, 1.0, 6, 'SKY_Coral', cx=x, cy=yb_)
         a.part(mb, name="barrier_legs")
         bridge_abutment(a, sg)
     bridge_arch(a, keep=3.6)
     mb = MB()
-    mb.prism(circle(0.85, 7, 0.4, 0.2), -4.0, -0.95, 'SKY_Sandstone', top='SKY_SandstoneDeep')
+    mb.prism(circle(0.85, 6, 0.4, 0.2), -4.0, -0.95, 'SKY_Sandstone', top='SKY_SandstoneDeep')
+
     a.part(mb, bevel=0.06, seg=1, name="stump")
     mb = MB()
     mb.prism([(-0.6, -0.5), (1.1, -0.7), (1.3, 0.55), (-0.2, 0.75)], -1.3, -0.95, 'SKY_Sandstone')
