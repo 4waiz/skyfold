@@ -1,0 +1,28 @@
+* text=auto
+
+# Unity YAML
+*.unity text eol=lf
+*.prefab text eol=lf
+*.asset text eol=lf
+*.mat text eol=lf
+*.meta text eol=lf
+*.inputactions text eol=lf
+
+# Binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.tga binary
+*.psd binary
+*.fbx binary
+*.glb binary
+*.blend binary
+*.wav binary
+*.ogg binary
+*.mp3 binary
+*.mp4 binary
+*.ttf binary
+*.otf binary
+*.ico binary
+*.onnx binary

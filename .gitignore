@@ -1,0 +1,54 @@
+# Unity generated
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/Release/
+sysinfo.txt
+crashlytics-build.properties
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Build outputs and archives (never commit builds or ZIPs)
+*.apk
+*.aab
+*.unitypackage
+*.zip
+*.7z
+*.exe
+*.dll.bak
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project scratch (temporary generated media, caches, QA captures)
+/source-art/_work/
+/tools/_cache/
+/tools/**/__pycache__/
+/qa/_captures/
+*.blend1
+*.blend2
