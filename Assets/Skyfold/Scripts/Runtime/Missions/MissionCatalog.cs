@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Skyfold
@@ -147,10 +147,6 @@ namespace Skyfold
                     P("piece.corner", ModuleType.Corner),
                     P("piece.straight", ModuleType.Straight)
                 },
-                Presets = new Dictionary<string, Placement>
-                {
-                    ["terminal_link"] = new Placement { PieceId = "fixed.terminal", Type = ModuleType.Straight, Rotation = 0, Locked = true }
-                },
                 IntroVoice = new[] { "e1.welcome", "e1.plinth" },
                 MedalRulesText = "Gold: east shortcut, 40% storm time left, at most 2 rejected placements and 1 hint, no retries. Silver: 15% time left. Bronze: complete."
             };
@@ -227,10 +223,6 @@ namespace Skyfold
                     P("piece.bridge", ModuleType.Bridge),
                     P("piece.corner", ModuleType.Corner),
                     P("piece.straight", ModuleType.Straight)
-                },
-                Presets = new Dictionary<string, Placement>
-                {
-                    ["terminal_link"] = new Placement { PieceId = "fixed.terminal", Type = ModuleType.Straight, Rotation = 0, Locked = true }
                 },
                 IntroVoice = new[] { "e2.brief" },
                 MedalRulesText = "Gold: 40% storm time left, no retries, at most 1 hint. Silver: 15% time left. Bronze: complete."

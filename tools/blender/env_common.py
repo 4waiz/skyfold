@@ -730,13 +730,37 @@ def tile_surface(asset, regions, base_z=-0.3, target=None, side_mat="SKY_Sandsto
         vid(p)
     out = delaunay_2d_cdt(verts2, [], faces_in, 0, 1e-5)
     ov, oe, of, ov_orig, oe_orig, of_orig = out
+    # NOTE: faces_orig is unreliable for overlapping input polygons, so region membership is
+    # resolved with a point-in-polygon test on each triangle centroid (triangles never cross
+    # constraint edges, so the centroid is representative).
+    order = sorted(range(len(regions)), key=lambda k: -regions[k]['prio'])
+    bbs = []
+    for r in regions:
+        xs = [p[0] for p in r['pts']]; ys = [p[1] for p in r['pts']]
+        bbs.append((min(xs) - 1e-6, max(xs) + 1e-6, min(ys) - 1e-6, max(ys) + 1e-6))
+
+    def pip(x, y, poly):
+        inside = False
+        n = len(poly)
+        for i in range(n):
+            x1, y1 = poly[i][0], poly[i][1]
+            x2, y2 = poly[(i + 1) % n][0], poly[(i + 1) % n][1]
+            if (y1 > y) != (y2 > y):
+                if x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+                    inside = not inside
+        return inside
     tris = []
     for fi, f in enumerate(of):
-        orig = of_orig[fi]
-        if not orig:
+        cx = sum(ov[i].x for i in f) / len(f)
+        cy = sum(ov[i].y for i in f) / len(f)
+        reg = None
+        for k in order:
+            b = bbs[k]
+            if b[0] <= cx <= b[1] and b[2] <= cy <= b[3] and pip(cx, cy, regions[k]['pts']):
+                reg = regions[k]
+                break
+        if reg is None:
             continue
-        best = max(orig, key=lambda k: regions[k]['prio'])
-        reg = regions[best]
         # ensure CCW
         pts = [ov[i] for i in f]
         if poly_area([(p.x, p.y) for p in pts]) < 0:

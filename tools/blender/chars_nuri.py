@@ -39,7 +39,7 @@ SHOULDER = Vector((0.040, -0.028, 0.025)) # Wing_L pivot (Wing_R mirrored)
 TAIL_P = Vector((0.0, 0.086, 0.004))      # Tail pivot
 THR_C = Vector((0.0, 0.006, -0.0495))     # Thruster pivot
 DIHEDRAL = 18.0
-WRIST_BEND = 10.0
+WRIST_BEND = 7.0
 SWEEP = 3.0
 
 
@@ -168,13 +168,13 @@ def body_center(th, ph):
 
 def build_body(parent):
     p = C.Part()
-    shell(p, body_pt, body_center, 14, 20, lambda s, ph: s * pi, [],
+    shell(p, body_pt, body_center, 13, 18, lambda s, ph: s * pi, [],
           [(0.0, 0.05, 0.30, 0.86), (0.62 * pi, 0.05, 0.22, 0.88), (1.38 * pi, 0.05, 0.22, 0.88)],
           0.0012, lambda s, ph, g: INK if g > 0.3 else IVORY)
     # neck collar (brass) + dark neck core so the head can turn without gaps
     ax = (HEAD_C - NECK).normalized()
     M = Matrix.Translation(NECK) @ ax.to_track_quat('Z', 'Y').to_matrix().to_4x4()
-    p.torus(0.0225, 0.0042, 20, 5, BRASS, matrix=M @ Matrix.Translation((0, 0, -0.002)))
+    p.torus(0.0225, 0.0042, 16, 4, BRASS, matrix=M @ Matrix.Translation((0, 0, -0.002)))
     p.cylinder(0.0205, 0.030, 12, INK, matrix=M @ Matrix.Translation((0, 0, -0.012)), caps=False)
     # shoulder sockets (ink cup + brass ring), both sides
     for sx in (1, -1):
@@ -232,16 +232,17 @@ def build_head(parent):
 
     def mat(s, ph, g):
         if g > 0.3:
-            return INK
+            # spine groove on the dark hood becomes a slim brass inlay
+            return BRASS if (s > S_HOOD + 0.03 and cdist(ph, 0.0) < 0.06) else INK
         return HOOD if s > S_HOOD else IVORY
-    shell(p, head_pt, lambda th, ph: HEAD_C, 14, 26, head_theta, [(S_HOOD, 0.022)],
+    shell(p, head_pt, lambda th, ph: HEAD_C, 13, 24, head_theta, [(S_HOOD, 0.022)],
           [(0.0, 0.045, S_HOOD + 0.02, 0.86)], 0.0011, mat)
     # lens bezel (ink) around the forward (-Y) axis, brass trim on its face
     Mf = Matrix.Translation(LENS_C) @ Matrix.Rotation(radians(90), 4, 'X')  # local +Z -> -Y
     vr, fs = p.lathe([(0.0158, -0.0045), (0.0158, 0.0028), (0.0170, 0.0052), (0.0186, 0.0058),
                       (0.0202, 0.0054), (0.0216, 0.0034), (0.0221, 0.0), (0.0216, -0.0120),
-                      (0.0158, -0.0120)], 24, INK, matrix=Mf)
-    p.assign(fs[3 * 24:4 * 24], BRASS)
+                      (0.0158, -0.0120)], 20, INK, matrix=Mf)
+    p.assign(fs[3 * 20:4 * 20], BRASS)
     tmp = p.to_temp()
     return C.merge_to_object("Head", [tmp], pivot=NECK, parent=parent, sharp_deg=48)
 
@@ -254,7 +255,7 @@ def build_lens(parent):
             (0.0094, 0.00185), (0.0104, 0.0017),                     # thin dark ring
             (0.0110, 0.0016), (0.0134, 0.0009), (0.0151, 0.0000),    # lens body (glow)
             (0.0156, -0.0014), (0.0156, -0.0040), (0.0, -0.0040)]
-    seg = 20
+    seg = 18
     vr, faces = p.lathe(prof, seg, GLOW, matrix=Mf)
     for b in (0, 1, 4, 5):          # band b = between profile points b+1 and b+2
         p.assign(faces[b * seg:(b + 1) * seg], TEAL)
@@ -283,19 +284,19 @@ def build_beak(parent):
 
 # ---------------------------------------------------------------------------- wings
 # Wing-local top-view outlines (x = outward from the shoulder, y = backward), metres.
-COVERTS = [(-0.006, -0.010), (0.045, -0.027), (0.095, -0.034), (0.135, -0.027),
-           (0.152, -0.010), (0.140, 0.012), (0.100, 0.024), (0.055, 0.034), (0.012, 0.034),
-           (-0.008, 0.014)]
-SECONDARIES = [(-0.004, -0.004), (0.050, -0.018), (0.100, -0.024), (0.140, -0.016),
-               (0.150, 0.040), (0.140, 0.080), (0.118, 0.090), (0.104, 0.082), (0.082, 0.094),
-               (0.060, 0.086), (0.038, 0.095), (0.014, 0.086), (-0.004, 0.058)]
-PRIMARIES = [(0.075, -0.026), (0.135, -0.025), (0.185, -0.010), (0.228, 0.014), (0.262, 0.040),
-             (0.276, 0.052), (0.262, 0.062), (0.249, 0.059), (0.238, 0.071), (0.224, 0.068),
-             (0.212, 0.080), (0.197, 0.077), (0.184, 0.089), (0.160, 0.088), (0.125, 0.088),
-             (0.088, 0.066)]
-EDGE = [(-0.003, -0.007, 0.0062), (0.045, -0.026, 0.0082), (0.095, -0.035, 0.0082),
-        (0.138, -0.028, 0.0062), (0.186, -0.012, 0.0030), (0.230, 0.012, 0.0006),
-        (0.272, 0.048, -0.0014)]
+COVERTS = [(-0.006, -0.010), (0.045, -0.032), (0.090, -0.046), (0.125, -0.042),
+           (0.141, -0.026), (0.132, 0.004), (0.095, 0.021), (0.055, 0.031), (0.012, 0.033),
+           (-0.008, 0.012)]
+SECONDARIES = [(-0.004, -0.004), (0.050, -0.024), (0.095, -0.037), (0.128, -0.030),
+               (0.134, 0.020), (0.124, 0.064), (0.110, 0.078), (0.096, 0.071), (0.078, 0.086),
+               (0.058, 0.078), (0.036, 0.089), (0.014, 0.082), (-0.004, 0.058)]
+PRIMARIES = [(0.080, -0.040), (0.120, -0.047), (0.165, -0.038), (0.205, -0.018), (0.240, 0.010),
+             (0.265, 0.039), (0.283, 0.067), (0.263, 0.064), (0.250, 0.057), (0.238, 0.070),
+             (0.222, 0.063), (0.210, 0.076), (0.193, 0.069), (0.180, 0.082), (0.155, 0.084),
+             (0.125, 0.084), (0.092, 0.064)]
+EDGE = [(-0.003, -0.008, 0.0062), (0.045, -0.034, 0.0082), (0.090, -0.048, 0.0082),
+        (0.125, -0.047, 0.0062), (0.165, -0.039, 0.0035), (0.205, -0.019, 0.0012),
+        (0.240, 0.009, -0.0004), (0.265, 0.038, -0.0012), (0.281, 0.064, -0.0018)]
 WRIST_X = 0.110
 WING_SCALE = 0.92
 
@@ -326,11 +327,11 @@ def build_wing(name, sx, parent):
         L = Matrix.Translation((0, 0, z)) @ Matrix.Rotation(radians(pitch), 4, 'X')
         vs, fs = plates.prism(pts, thick, mat, matrix=L)
         plates.deform(vs, lambda v: W @ wrist(v))
-    plate(PRIMARIES, 3, 0.0058, -0.0048, -3.0, IVORY)
+    plate(PRIMARIES, 2, 0.0058, -0.0048, -3.0, IVORY)
     plate(SECONDARIES, 2, 0.0062, -0.0004, -5.0, IVORY)
     plate(COVERTS, 2, 0.0070, 0.0048, -1.5, IVORY)
     path = [W @ wrist(Vector((x, y, 0.0035 + zz))) for (x, y, zz) in EDGE]
-    rad = [0.0080, 0.0074, 0.0066, 0.0055, 0.0042, 0.0028, 0.0015]
+    rad = [0.0080, 0.0075, 0.0068, 0.0060, 0.0050, 0.0040, 0.0030, 0.0020, 0.0013]
     trim.tube(path, rad, 7, BRASS, caps='round', cap_segs=2, scale_xy=(1.0, 0.8), up=(0, 0, 1))
     # shoulder hub (brass) seated in the body socket
     n = Vector((1.0, 0.0, 0.55)).normalized()
@@ -370,7 +371,7 @@ def build_tail(parent):
         trim.prism(tip, 0.0078, BRASS, matrix=M @ Matrix.Translation((0, 0, 0.0002)))
     # tail mount: rounded brass clamp
     trim.superellipsoid(TAIL_P + Vector((0, -0.003, 0.002)), (0.021, 0.016, 0.0092), 0.6, 0.6,
-                        12, 6, BRASS)
+                        10, 5, BRASS)
     temps = [plates.to_temp(bevel=(0.0013, 1, 40)), trim.to_temp(bevel=(0.0008, 1, 40))]
     return C.merge_to_object("Tail", temps, pivot=TAIL_P, parent=parent, sharp_deg=46)
 

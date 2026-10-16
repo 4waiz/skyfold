@@ -148,7 +148,23 @@ def road_corner(a):
         s1 = s0 + 2
         a0, a1 = math.degrees(s0 / 8.0), math.degrees(s1 / 8.0)
         R.append(line(arc(P[0], P[1], 8 + LW, a0, a1, 4) + arc(P[0], P[1], 8 - LW, a1, a0, 4)))
-    # drains on the outer kerb
+    # paving joints: building-line arcs continue the straight tiles' joint at 1.6 m from the cell edge
+    jw = 0.03
+    R.append(sw_joint(arc(P[0], P[1], 1.6 + jw, 0, 90, 6) + arc(P[0], P[1], 1.6 - jw, 90, 0, 6)))
+    R.append(sw_joint(arc(P[0], P[1], 14.4 + jw, 0, 90, 18) + arc(P[0], P[1], 14.4 - jw, 90, 0, 18)))
+    for ang in (22.5, 45.0, 67.5):
+        ca, sa = math.cos(math.radians(ang)), math.sin(math.radians(ang))
+        nx, ny = -sa * jw, ca * jw
+        r0, r1 = 0.4, r_in - KW - 0.02
+        R.append(sw_joint([(P[0] + ca * r0 - nx, P[1] + sa * r0 - ny), (P[0] + ca * r1 - nx, P[1] + sa * r1 - ny),
+                           (P[0] + ca * r1 + nx, P[1] + sa * r1 + ny), (P[0] + ca * r0 + nx, P[1] + sa * r0 + ny)]))
+    for ang in (4.6, 22.5, 45.0, 67.5, 85.4):
+        ca, sa = math.cos(math.radians(ang)), math.sin(math.radians(ang))
+        nx, ny = -sa * jw, ca * jw
+        r0 = r_out + KW + 0.02
+        r1 = min(2 * H / max(ca, 1e-6), 2 * H / max(sa, 1e-6)) - 0.01
+        R.append(sw_joint([(P[0] + ca * r0 - nx, P[1] + sa * r0 - ny), (P[0] + ca * r1 - nx, P[1] + sa * r1 - ny),
+                           (P[0] + ca * r1 + nx, P[1] + sa * r1 + ny), (P[0] + ca * r0 + nx, P[1] + sa * r0 + ny)]))
     tile_surface(a, R)
 
 
@@ -197,7 +213,13 @@ def road_end(a):
     R = [reg(SQ, SWZ, 'SKY_Kerb', 0), reg(path, 0.0, 'SKY_Road', 3), reg(path + list(reversed(off)), SWZ, 'SKY_Pearl', 2)]
     R += dashes_y([(-7, -5)])
     R += [drain(-0.3, 0.3, 5.9, 6.6)]
-    # make sure the asphalt region beats the sidewalk
+    # paving joints matching the straight tiles at the open (N) edge
+    for s in (-1, 1):
+        R.append(sw_joint(rect(s * (H - 1.6) - 0.03, s * (H - 1.6) + 0.03, -H, H)))
+        for y in (-7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0):
+            x0 = RW + KW if y < -3.2 else H - 1.6
+            R.append(sw_joint(rect(s * x0, s * H, y - 0.03, y + 0.03)))
+    R.append(sw_joint(rect(-H + 1.6, H - 1.6, H - 0.6 - 0.03, H - 0.6 + 0.03)))
     tile_surface(a, R)
 
 
