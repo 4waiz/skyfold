@@ -136,15 +136,16 @@ def balustrade_arc(a, r, a0, a1, posts, zt=0.0, h=1.0, name="bal"):
     a.part(mbb, name=name + "_balusters")
 
 
-def rock_ring(mb, rings, seg, mat, seed=1, jitter=0.35, zjit=0.15):
+def rock_ring(mb, rings, seg, mat, seed=1, jitter=0.35, zjit=0.15, calm_first=True):
     rnd = random.Random(seed)
     pts = []
-    for (r, z) in rings:
+    for ri, (r, z) in enumerate(rings):
         ring = []
+        calm = calm_first and ri == 0
         for k in range(seg):
-            ang = 2 * math.pi * (k + rnd.uniform(-0.2, 0.2)) / seg
-            rr = r + rnd.uniform(-jitter, jitter)
-            ring.append((rr * math.cos(ang), rr * math.sin(ang), z + rnd.uniform(-zjit, zjit)))
+            ang = 2 * math.pi * (k + (0 if calm else rnd.uniform(-0.2, 0.2))) / seg
+            rr = r + (0 if calm else rnd.uniform(-jitter, jitter))
+            ring.append((rr * math.cos(ang), rr * math.sin(ang), z + (0 if calm else rnd.uniform(-zjit, zjit))))
         pts.append(ring)
     return mb.loft(pts, mat)
 
@@ -169,11 +170,13 @@ def atelier_platform(a):
                  kerb_bevel=0.0)
     # rim band
     mb = MB()
-    mb.lathe([(R_ - 0.02, -0.6), (R_ + 0.12, -0.6), (R_ + 0.12, -0.42), (R_ - 0.02, -0.42)], 48, 'SKY_Brass')
+    mb.lathe([(R_ - 0.02, -0.6), (R_ + 0.12, -0.6), (R_ + 0.12, -0.42), (R_ - 0.02, -0.42)], 48, 'SKY_Brass',
+             closed=True)
+
     a.part(mb, name="rim_brass")
     # rocky plinth under the deck
     mb = MB()
-    rock_ring(mb, [(R_ - 0.1, -0.5), (R_ + 0.35, -1.1), (R_ + 0.6, -1.9), (R_ + 0.9, -2.8), (R_ + 1.1, -3.4)], 18,
+    rock_ring(mb, [(R_ - 0.3, -0.6), (R_ + 0.3, -1.15), (R_ + 0.6, -1.9), (R_ + 0.9, -2.8), (R_ + 1.1, -3.4)], 18,
               'SKY_SandstoneDeep', seed=4)
     a.part(mb, name="rock")
     a.set_target(a.name, smooth=30.0)

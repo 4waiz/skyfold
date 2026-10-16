@@ -384,15 +384,15 @@ namespace Skyfold.EditorTools
             basin.transform.localScale = new Vector3(12 * 16f + 24f, 0.4f, 9 * 16f + 24f);
             basin.GetComponent<MeshRenderer>().sharedMaterial = MaterialLibrary.Get("SKY_Seabed");
             SetLayer(basin, "MiniCity");
-            var water = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            Object.DestroyImmediate(water.GetComponent<Collider>());
-            water.name = "Mini Sea";
-            water.transform.SetParent(blocks, false);
-            water.transform.localPosition = CityLayout.CityCenter + new Vector3(0f, CityLayout.WaterLevel, 0f);
-            water.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-            water.transform.localScale = new Vector3(12 * 16f + 24f, 9 * 16f + 24f, 1f);
-            water.GetComponent<MeshRenderer>().sharedMaterial = MaterialLibrary.Get("SKY_Water");
-            SetLayer(water, "MiniCity");
+            var miniSea = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            Object.DestroyImmediate(miniSea.GetComponent<Collider>());
+            miniSea.name = "Mini Sea";
+            miniSea.transform.SetParent(blocks, false);
+            miniSea.transform.localPosition = CityLayout.CityCenter + new Vector3(0f, CityLayout.WaterLevel, 0f);
+            miniSea.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+            miniSea.transform.localScale = new Vector3(12 * 16f + 24f, 9 * 16f + 24f, 1f);
+            miniSea.GetComponent<MeshRenderer>().sharedMaterial = MaterialLibrary.Get("SKY_Water");
+            SetLayer(miniSea, "MiniCity");
         }
 
         static DirMask CityOpenings(CityLayout L, Vector2Int cell)

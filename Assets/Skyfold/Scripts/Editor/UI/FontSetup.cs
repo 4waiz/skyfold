@@ -50,7 +50,6 @@ namespace Skyfold.EditorTools
                 {
                     var table = body.fontWeightTable;
                     table[7].regularTypeface = boldAsset;
-                    body.fontWeightTable = table;
                     EditorUtility.SetDirty(body);
                 }
             }
@@ -60,14 +59,24 @@ namespace Skyfold.EditorTools
 
         static void EnsureEssentials()
         {
-            if (AssetDatabase.FindAssets("t:TMP_Settings").Length > 0) return;
-            if (File.Exists(Path.GetFullPath(Essentials)))
+            if (AssetDatabase.FindAssets("t:TMP_Settings").Length == 0)
             {
-                AssetDatabase.ImportPackage(Essentials, false);
-                AssetDatabase.Refresh();
-                Debug.Log("[SKYFOLD] Imported TMP Essential Resources.");
+                if (File.Exists(Path.GetFullPath(Essentials)))
+                {
+                    AssetDatabase.ImportPackage(Essentials, false);
+                    AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+                    Debug.Log("[SKYFOLD] Imported TMP Essential Resources.");
+                }
+                else Debug.LogWarning("[SKYFOLD] TMP Essential Resources package not found at " + Essentials);
             }
-            else Debug.LogWarning("[SKYFOLD] TMP Essential Resources package not found at " + Essentials);
+            // In the same batch run the settings singleton may not be loadable yet; hand it over directly.
+            var field = typeof(TMP_Settings).GetField("s_Instance", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            if (field != null && field.GetValue(null) == null)
+            {
+                var guid = AssetDatabase.FindAssets("t:TMP_Settings").FirstOrDefault();
+                var settings = guid != null ? AssetDatabase.LoadAssetAtPath<TMP_Settings>(AssetDatabase.GUIDToAssetPath(guid)) : null;
+                if (settings != null) field.SetValue(null, settings);
+            }
         }
 
         static TMP_FontAsset Make(string ttfPath, string assetPath)

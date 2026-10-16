@@ -284,11 +284,18 @@ class MB:
         self._recalc(fs)
         return fs
 
-    def lathe(self, prof, seg, mat, mats=None, cx=0.0, cy=0.0, a0=0.0, z_off=0.0, smooth=True):
+    def lathe(self, prof, seg, mat, mats=None, cx=0.0, cy=0.0, a0=0.0, z_off=0.0, smooth=True, closed=False):
         """Surface of revolution. prof = [(r, z), ...] bottom -> top (CCW in r-z plane).
-        r == 0 at an end collapses to a pole. mats: per-segment material list."""
+        r == 0 at an end collapses to a pole. mats: per-segment material list.
+        closed=True treats the profile as a closed loop (ring/tube cross-section, no caps)."""
+        if closed:
+            prof = list(prof) + [prof[0]]
+            mats = (list(mats) + [mats[-1]]) if mats else None
         rings = []
-        for (r, z) in prof:
+        for pi_, (r, z) in enumerate(prof):
+            if closed and pi_ == len(prof) - 1:
+                rings.append(rings[0])
+                continue
             if r <= 1e-6:
                 rings.append([self.v((cx, cy, z + z_off))])
             else:
@@ -310,10 +317,11 @@ class MB:
                 else:
                     fs.append(self.f([A[k], A[k2], B[k2], B[k]], m))
         # caps for open ends
-        if len(rings[0]) > 1:
-            fs.append(self.f(list(reversed(rings[0])), mats[0] if mats else mat))
-        if len(rings[-1]) > 1:
-            fs.append(self.f(list(rings[-1]), mats[-1] if mats else mat))
+        if not closed:
+            if len(rings[0]) > 1:
+                fs.append(self.f(list(reversed(rings[0])), mats[0] if mats else mat))
+            if len(rings[-1]) > 1:
+                fs.append(self.f(list(rings[-1]), mats[-1] if mats else mat))
         self._recalc(fs)
         return fs
 

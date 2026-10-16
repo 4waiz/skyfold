@@ -154,6 +154,8 @@ def finish(y, lp=11000, hp=30, fin=0.0015, fout=0.012, peak=-3.0, max_dur=None):
         y = y[: int(max_dur * SR)]
         fout = max(fout, min(0.35, max_dur * 0.2))
     y = sa.fade(y, fin, fout)
+    w = np.hanning(len(y))                     # remove residual mean of very short transients without
+    y = y - np.mean(y) * w / np.mean(w)        # moving the (zero) end points
     return sa.peak_normalize(y, peak)
 
 

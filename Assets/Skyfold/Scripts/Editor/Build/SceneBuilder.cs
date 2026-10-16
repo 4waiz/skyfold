@@ -212,7 +212,7 @@ namespace Skyfold.EditorTools
                 float a = i / 14f * Mathf.PI * 2f + (float)c.Rng.NextDouble() * 0.4f;
                 float r = 520f + (float)c.Rng.NextDouble() * 260f;
                 var p = new Vector3(96f + Mathf.Cos(a) * r, 120f + (float)c.Rng.NextDouble() * 90f, 72f + Mathf.Sin(a) * r);
-                var cl = ModelLibrary.Spawn(i % 3 == 0 ? "cloud_puff_a" : i % 3 == 1 ? "cloud_puff_b" : "cloud_puff_c", clouds, p, (float)c.Rng.NextDouble() * 360f, 2.6f + (float)c.Rng.NextDouble() * 2f);
+                var cl = ModelLibrary.Spawn(i % 3 == 0 ? "cloud_puff_a" : i % 3 == 1 ? "cloud_puff_b" : "cloud_puff_c", clouds.transform, p, (float)c.Rng.NextDouble() * 360f, 2.6f + (float)c.Rng.NextDouble() * 2f);
                 foreach (var rr in cl.GetComponentsInChildren<Renderer>()) rr.shadowCastingMode = ShadowCastingMode.Off;
             }
             c.StormFront = Child(c.Env, "Storm Front", new Vector3(520f, 0f, 300f)).transform;
