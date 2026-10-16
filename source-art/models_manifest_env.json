@@ -12,9 +12,9 @@
      "name": "road_straight",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 488,
      "color_attributes": [
@@ -69,9 +69,9 @@
      "name": "road_corner",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 536,
      "color_attributes": [
@@ -124,9 +124,9 @@
      "name": "road_tee",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 502,
      "color_attributes": [
@@ -181,9 +181,9 @@
      "name": "road_cross",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 604,
      "color_attributes": [
@@ -236,9 +236,9 @@
      "name": "road_end",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 604,
      "color_attributes": [
@@ -293,9 +293,9 @@
      "name": "road_plaza",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 732,
      "color_attributes": [
@@ -346,9 +346,9 @@
      "name": "ground_paving",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 460,
      "color_attributes": [
@@ -395,9 +395,9 @@
      "name": "runway_section",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 88,
      "color_attributes": [
@@ -448,9 +448,9 @@
      "name": "runway_end",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 168,
      "color_attributes": [
@@ -503,9 +503,9 @@
      "name": "apron_tile",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 300,
      "color_attributes": [
@@ -554,9 +554,9 @@
      "name": "quay_straight",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 984,
      "color_attributes": [
@@ -613,9 +613,9 @@
      "name": "quay_corner_outer",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 1792,
      "color_attributes": [
@@ -670,9 +670,9 @@
      "name": "quay_corner_inner",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 764,
      "color_attributes": [
@@ -769,9 +769,9 @@
      "name": "bridge_span",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 2860,
      "color_attributes": [
@@ -827,7 +827,7 @@
       1.9,
       7.55
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     },
     {
      "name": "LIGHT_lantern_1",
@@ -836,7 +836,7 @@
       1.9,
       -7.55
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     },
     {
      "name": "LIGHT_lantern_2",
@@ -845,7 +845,7 @@
       1.9,
       7.55
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     },
     {
      "name": "LIGHT_lantern_3",
@@ -854,7 +854,7 @@
       1.9,
       -7.55
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -871,9 +871,9 @@
      "name": "bridge_stub",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 2904,
      "color_attributes": [
@@ -936,9 +936,9 @@
      "name": "bldg_house_a",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 4430,
      "color_attributes": [
@@ -1005,9 +1005,9 @@
      "name": "bldg_house_b",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 4922,
      "color_attributes": [
@@ -1072,9 +1072,9 @@
      "name": "bldg_shoprow",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 4928,
      "color_attributes": [
@@ -1143,9 +1143,9 @@
      "name": "bldg_tower",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 4728,
      "color_attributes": [
@@ -1210,9 +1210,9 @@
      "name": "bldg_dome",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 4298,
      "color_attributes": [
@@ -1271,9 +1271,9 @@
      "name": "bldg_courtyard",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 5736,
      "color_attributes": [
@@ -1350,9 +1350,9 @@
      "name": "bldg_depot",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 2736,
      "color_attributes": [
@@ -1406,7 +1406,7 @@
       0.0,
       4.8
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -1423,9 +1423,9 @@
      "name": "PowerLights",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 60,
      "color_attributes": [
@@ -1441,7 +1441,7 @@
      "position_unity": [
       -1.2,
       1.1,
-      1.32
+      1.37
      ],
      "yaw_deg_blender": 0.0
     },
@@ -1449,11 +1449,11 @@
      "name": "bldg_substation",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
-     "tris": 3128,
+     "tris": 3204,
      "color_attributes": [
       "Col"
      ],
@@ -1470,7 +1470,7 @@
      ]
     }
    ],
-   "tris": 3188,
+   "tris": 3264,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
@@ -1506,9 +1506,9 @@
      "position_unity": [
       -1.2,
       1.1,
-      1.32
+      1.37
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -1525,7 +1525,7 @@
      "name": "ANCHOR_convoy_stop",
      "type": "EMPTY",
      "position_unity": [
-      -0.0,
+      0.0,
       0.0,
       7.0
      ],
@@ -1535,9 +1535,9 @@
      "name": "bldg_terminal",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 3380,
      "color_attributes": [
@@ -1589,11 +1589,11 @@
     {
      "name": "ANCHOR_convoy_stop",
      "position_unity": [
-      -0.0,
+      0.0,
       0.0,
       7.0
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -1620,9 +1620,9 @@
      "name": "bldg_tower_control",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 1696,
      "color_attributes": [
@@ -1680,7 +1680,7 @@
       0.0,
       3.75
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -1697,9 +1697,9 @@
      "name": "bldg_hangar",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 2288,
      "color_attributes": [
@@ -1760,7 +1760,7 @@
      "name": "ANCHOR_player",
      "type": "EMPTY",
      "position_unity": [
-      -0.0,
+      0.0,
       0.0,
       1.8
      ],
@@ -1770,7 +1770,7 @@
      "name": "LensRing",
      "type": "MESH",
      "position_unity": [
-      -0.0,
+      0.0,
       1.72,
       0.39
      ],
@@ -1786,9 +1786,9 @@
      "name": "foldstation_kiosk",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 1464,
      "color_attributes": [
@@ -1834,7 +1834,7 @@
     {
      "name": "ANCHOR_player",
      "position_unity": [
-      -0.0,
+      0.0,
       0.0,
       1.8
      ],
@@ -1855,9 +1855,9 @@
      "name": "atelier_platform",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 4244,
      "color_attributes": [
@@ -1912,9 +1912,9 @@
      "name": "atelier_pergola",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 2474,
      "color_attributes": [
@@ -1971,9 +1971,9 @@
      "name": "ANCHOR_minicity",
      "type": "EMPTY",
      "position_unity": [
-      -0.0,
+      0.0,
       0.9,
-      -0.0
+      0.0
      ],
      "yaw_deg_blender": 0.0
     },
@@ -1981,7 +1981,7 @@
      "name": "ANCHOR_player",
      "type": "EMPTY",
      "position_unity": [
-      -0.0,
+      0.0,
       0.0,
       -1.15
      ],
@@ -1991,9 +1991,9 @@
      "name": "PlinthRim",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 60,
      "color_attributes": [
@@ -2007,9 +2007,9 @@
      "name": "plinth",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 808,
      "color_attributes": [
@@ -2053,20 +2053,20 @@
     {
      "name": "ANCHOR_minicity",
      "position_unity": [
-      -0.0,
+      0.0,
       0.9,
-      -0.0
+      0.0
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     },
     {
      "name": "ANCHOR_player",
      "position_unity": [
-      -0.0,
+      0.0,
       0.0,
       -1.15
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -2143,9 +2143,9 @@
      "name": "plinth_tray",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 476,
      "color_attributes": [
@@ -2191,7 +2191,7 @@
       0.875,
       -0.715
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     },
     {
      "name": "SOCKET_slot_2",
@@ -2200,7 +2200,7 @@
       0.875,
       -0.715
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     },
     {
      "name": "SOCKET_slot_3",
@@ -2209,7 +2209,7 @@
       0.875,
       -0.715
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     },
     {
      "name": "SOCKET_slot_4",
@@ -2218,7 +2218,7 @@
       0.875,
       -0.715
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     },
     {
      "name": "SOCKET_slot_5",
@@ -2227,7 +2227,7 @@
       0.875,
       -0.715
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     },
     {
      "name": "SOCKET_slot_6",
@@ -2236,7 +2236,7 @@
       0.875,
       -0.715
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -2253,8 +2253,8 @@
      "name": "LIGHT_lamp",
      "type": "EMPTY",
      "position_unity": [
-      -0.0,
-      3.98,
+      0.0,
+      4.31,
       0.92
      ],
      "yaw_deg_blender": 0.0
@@ -2263,9 +2263,9 @@
      "name": "street_lamp",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 386,
      "color_attributes": [
@@ -2292,24 +2292,24 @@
     ],
     "max": [
      0.2217,
-     4.6899,
+     5.0199,
      1.1105
     ]
    },
    "size_m": [
     0.443,
-    4.69,
+    5.02,
     1.332
    ],
    "empties": [
     {
      "name": "LIGHT_lamp",
      "position_unity": [
-      -0.0,
-      3.98,
+      0.0,
+      4.31,
       0.92
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -2324,9 +2324,9 @@
      "name": "bench",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 376,
      "color_attributes": [
@@ -2377,9 +2377,9 @@
      "name": "bollard",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 192,
      "color_attributes": [
@@ -2426,9 +2426,9 @@
      "name": "barrier_coral",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 296,
      "color_attributes": [
@@ -2479,9 +2479,9 @@
      "name": "traffic_cone",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 164,
      "color_attributes": [
@@ -2530,9 +2530,9 @@
      "name": "LIGHT_beacon",
      "type": "EMPTY",
      "position_unity": [
-      -0.0,
+      0.0,
       0.42,
-      -0.0
+      0.0
      ],
      "yaw_deg_blender": 0.0
     },
@@ -2540,9 +2540,9 @@
      "name": "Lens",
      "type": "MESH",
      "position_unity": [
-      -0.0,
+      0.0,
       0.4,
-      -0.0
+      0.0
      ],
      "tris": 60,
      "color_attributes": [
@@ -2556,9 +2556,9 @@
      "name": "runway_beacon",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 164,
      "color_attributes": [
@@ -2601,11 +2601,11 @@
     {
      "name": "LIGHT_beacon",
      "position_unity": [
-      -0.0,
+      0.0,
       0.42,
-      -0.0
+      0.0
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -2620,7 +2620,7 @@
      "name": "Lever",
      "type": "MESH",
      "position_unity": [
-      -0.0,
+      0.0,
       0.72,
       0.235
      ],
@@ -2637,9 +2637,9 @@
      "name": "switch_box",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 288,
      "color_attributes": [
@@ -2694,9 +2694,9 @@
      "name": "SOCKET_cell",
      "type": "EMPTY",
      "position_unity": [
-      -0.0,
+      0.0,
       0.44,
-      -0.0
+      0.0
      ],
      "yaw_deg_blender": 0.0
     },
@@ -2704,9 +2704,9 @@
      "name": "cell_dock",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 336,
      "color_attributes": [
@@ -2735,24 +2735,24 @@
     ],
     "max": [
      0.3,
-     0.6011,
+     0.6,
      0.2853
     ]
    },
    "size_m": [
     0.6,
-    0.601,
+    0.6,
     0.571
    ],
    "empties": [
     {
      "name": "SOCKET_cell",
      "position_unity": [
-      -0.0,
+      0.0,
       0.44,
-      -0.0
+      0.0
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -2767,9 +2767,9 @@
      "name": "awning_striped",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 204,
      "color_attributes": [
@@ -2818,9 +2818,9 @@
      "name": "shade_sail",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 320,
      "color_attributes": [
@@ -2869,9 +2869,9 @@
      "name": "planter_box",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 324,
      "color_attributes": [
@@ -2922,9 +2922,9 @@
      "name": "palm_date_a",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 1520,
      "color_attributes": [
@@ -2973,9 +2973,9 @@
      "name": "palm_date_b",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 1416,
      "color_attributes": [
@@ -3024,9 +3024,9 @@
      "name": "palm_small",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 1084,
      "color_attributes": [
@@ -3073,9 +3073,9 @@
      "name": "shrub_round",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 450,
      "color_attributes": [
@@ -3120,9 +3120,9 @@
      "name": "bougainvillea_clump",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 834,
      "color_attributes": [
@@ -3169,9 +3169,9 @@
      "name": "cloud_puff_a",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 600,
      "color_attributes": [
@@ -3216,9 +3216,9 @@
      "name": "cloud_puff_b",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 600,
      "color_attributes": [
@@ -3263,9 +3263,9 @@
      "name": "cloud_puff_c",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 400,
      "color_attributes": [
@@ -3310,9 +3310,9 @@
      "name": "storm_cloud",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 1388,
      "color_attributes": [
@@ -3357,9 +3357,9 @@
      "name": "skyline_ring_piece",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 192,
      "color_attributes": [
@@ -3408,9 +3408,9 @@
      "name": "rock_sea_a",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 138,
      "color_attributes": [
@@ -3457,9 +3457,9 @@
      "name": "rock_sea_b",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 172,
      "color_attributes": [
@@ -3506,9 +3506,9 @@
      "name": "cliff_headland",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 748,
      "color_attributes": [
@@ -3559,9 +3559,9 @@
      "name": "dhow_small",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 454,
      "color_attributes": [
@@ -3616,9 +3616,9 @@
      "name": "LIGHT_buoy",
      "type": "EMPTY",
      "position_unity": [
-      -0.0,
+      0.0,
       1.4,
-      -0.0
+      0.0
      ],
      "yaw_deg_blender": 0.0
     },
@@ -3626,9 +3626,9 @@
      "name": "buoy",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 232,
      "color_attributes": [
@@ -3672,11 +3672,11 @@
     {
      "name": "LIGHT_buoy",
      "position_unity": [
-      -0.0,
+      0.0,
       1.4,
-      -0.0
+      0.0
      ],
-     "yaw_unity_deg": -0.0
+     "yaw_unity_deg": 0.0
     }
    ],
    "issues": [],
@@ -3691,9 +3691,9 @@
      "name": "fountain_small",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 444,
      "color_attributes": [
@@ -3742,9 +3742,9 @@
      "name": "crate_stack",
      "type": "MESH",
      "position_unity": [
-      -0.0,
       0.0,
-      -0.0
+      0.0,
+      0.0
      ],
      "tris": 204,
      "color_attributes": [
