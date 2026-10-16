@@ -365,16 +365,24 @@ namespace Skyfold
             m_CarRespawnYaw = (int)best * 90f;
         }
 
+        /// <summary>Player asked to put the car back on the road (hold R / X while stuck).</summary>
+        public void RequestCarReset()
+        {
+            if (m_Respawning || State != MissionState.Active || Ctx.Car == null || !Ctx.Car.HasDriver) return;
+            Debug.Log($"[SKYFOLD] Car reset requested at {Ctx.Car.Position}");
+            StartCoroutine(RespawnCar(false));
+        }
+
         public void OnCarLost()
         {
             if (m_Respawning || State != MissionState.Active) return;
             StartCoroutine(RespawnCar());
         }
 
-        IEnumerator RespawnCar()
+        IEnumerator RespawnCar(bool fromWater = true)
         {
             m_Respawning = true;
-            if (Ctx.Car.HasDriver) yield return Ctx.Car.RespawnWithDriver(m_CarRespawnPos, m_CarRespawnYaw);
+            if (Ctx.Car.HasDriver) yield return Ctx.Car.RespawnWithDriver(m_CarRespawnPos, m_CarRespawnYaw, fromWater);
             else Ctx.Car.ResetTo(m_CarRespawnPos, m_CarRespawnYaw);
             m_Respawning = false;
         }

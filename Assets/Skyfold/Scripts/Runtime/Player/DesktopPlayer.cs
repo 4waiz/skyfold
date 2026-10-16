@@ -100,6 +100,13 @@ namespace Skyfold
             Physics.SyncTransforms();
         }
 
+        /// <summary>Turns the walking capsule off while the player is in the car, so it cannot block the car.</summary>
+        public void SetBodyEnabled(bool on)
+        {
+            if (m_Body != null) m_Body.enabled = on;
+            m_VerticalVel = 0f;
+        }
+
         public void SetPitch(float pitch)
         {
             m_Pitch = Mathf.Clamp(pitch, -80f, 80f);

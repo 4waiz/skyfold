@@ -39,7 +39,12 @@ namespace Skyfold
 
         Rigidbody m_Rb;
         float m_Steer, m_SteerSmoothed, m_Throttle, m_Brake;
+        bool m_Handbrake;
         float m_ReverseHold;
+        float m_StuckTime, m_ResetHold;
+        bool m_ResetLatched;
+        string m_ShownHint;
+        int m_GroundedWheels;
         bool m_Grounded;
         float m_WheelSpin;
         AudioSource m_Motor, m_Roll;
@@ -56,6 +61,14 @@ namespace Skyfold
         public Vector2Int Cell => m_Cell;
         public Vector3 Position => transform.position;
         public VignetteParameters vignetteParameters => m_VignetteParams;
+
+        // Read-only telemetry for diagnostics and automated QA.
+        public int GroundedWheels => m_GroundedWheels;
+        public float ThrottleInput => m_Throttle;
+        public float BrakeInput => m_Brake;
+        public float SteerInput => m_SteerSmoothed;
+        /// <summary>Raised for notable physics events (bumps) when something is listening, e.g. QA.</summary>
+        public static System.Action<string> DebugEvent;
 
         static readonly Vector3[] WheelOffsets =
         {
@@ -154,6 +167,7 @@ namespace Skyfold
             else
             {
                 rigs.desktop.chaseTarget = transform;
+                rigs.desktop.SetBodyEnabled(false); // the walking capsule must not block the car
                 rigs.desktop.SetView(DesktopView.Chase);
             }
             input.SetContext(remote ? InputContext.RemoteDriving : InputContext.Driving);
@@ -259,10 +273,10 @@ namespace Skyfold
         }
 
         /// <summary>Respawn with the driver still aboard (fell in the water or left the map).</summary>
-        public IEnumerator RespawnWithDriver(Vector3 position, float yaw)
+        public IEnumerator RespawnWithDriver(Vector3 position, float yaw, bool fromWater = true)
         {
             Busy = true;
-            AudioDirector.Instance?.PlayAt("splash", transform.position, 1f);
+            if (fromWater) AudioDirector.Instance?.PlayAt("splash", transform.position, 1f);
             yield return ScreenFader.Instance.FadeOut(0.25f);
             m_Rb.linearVelocity = Vector3.zero;
             m_Rb.angularVelocity = Vector3.zero;
@@ -286,11 +300,12 @@ namespace Skyfold
                            (input.Context == InputContext.Driving || input.Context == InputContext.RemoteDriving);
 
             m_ControllerHold = false;
+            string hint = null;
             if (driving && PlayerRigs.Instance.Mode == PlayMode.VR && XRBootstrap.Instance != null && !XRBootstrap.Instance.ControllersTracked)
             {
                 // Never drive blind: hold the car still until both controllers are tracked again.
                 m_ControllerHold = true;
-                HUDMessages.SetHint("Controller not tracked. The car is holding still until both controllers are visible.");
+                hint = "Controller not tracked. The car is holding still until both controllers are visible.";
             }
 
             if (driving && !m_ControllerHold)
@@ -298,16 +313,42 @@ namespace Skyfold
                 m_Steer = Mathf.Clamp(input.Steer.ReadValue<float>(), -1f, 1f);
                 m_Throttle = Mathf.Clamp01(input.Throttle.ReadValue<float>());
                 m_Brake = Mathf.Clamp01(input.Brake.ReadValue<float>());
-                if (input.Handbrake.IsPressed()) m_Brake = 1f;
+                m_Handbrake = input.Handbrake.IsPressed();
                 if (input.Horn.WasPressedThisFrame()) AudioDirector.Instance?.PlayAt("car_horn", transform.position, 0.8f);
                 if (input.Exit.WasPressedThisFrame()) RequestExit();
+
+                // Stuck against something: suggest reversing, and offer a hold-to-reset back onto the road.
+                bool pushing = m_Throttle > 0.4f || m_Brake > 0.4f;
+                m_StuckTime = pushing && Mathf.Abs(Speed) < 0.4f ? m_StuckTime + Time.deltaTime : Mathf.Max(0f, m_StuckTime - Time.deltaTime * 2f);
+                if (input.ResetCar.IsPressed())
+                {
+                    m_ResetHold += Time.deltaTime;
+                    if (m_ResetHold > 0.9f && !m_ResetLatched)
+                    {
+                        m_ResetLatched = true;
+                        m_StuckTime = 0f;
+                        MissionDirector.Instance?.RequestCarReset();
+                    }
+                }
+                else { m_ResetHold = 0f; m_ResetLatched = false; }
+                if (m_StuckTime > 2.5f)
+                {
+                    bool vr = PlayerRigs.Instance.Mode == PlayMode.VR;
+                    hint = vr ? "Stuck? Hold the left trigger to reverse, or hold X to put the car back on the road."
+                              : "Stuck? Hold S to reverse, or hold R to put the car back on the road.";
+                }
             }
             else
             {
+                // Parked, entering, exiting or holding for tracking: the parking brake keeps it still.
                 m_Steer = 0f;
                 m_Throttle = 0f;
-                m_Brake = HasDriver ? 1f : 0.2f;
+                m_Brake = 0f;
+                m_Handbrake = true;
+                m_StuckTime = 0f;
+                m_ResetHold = 0f;
             }
+            ShowHint(hint);
 
             m_SteerSmoothed = Mathf.MoveTowards(m_SteerSmoothed, m_Steer, Time.deltaTime * 3.2f);
             UpdateVisuals();
@@ -333,6 +374,7 @@ namespace Skyfold
                 }
             }
             m_Grounded = grounded > 0f;
+            m_GroundedWheels = (int)grounded;
 
             Vector3 v = m_Rb.linearVelocity;
             Vector3 fwd = transform.forward;
@@ -343,7 +385,13 @@ namespace Skyfold
             if (m_Grounded)
             {
                 float a;
-                if (m_Throttle > 0.05f && vf > -0.3f)
+                if (m_Handbrake)
+                {
+                    // Parking brake: stop and hold, never creep or reverse.
+                    a = -Mathf.Sign(vf) * Mathf.Min(brakeDecel, Mathf.Abs(vf) / dt);
+                    m_ReverseHold = 0f;
+                }
+                else if (m_Throttle > 0.05f && vf > -0.3f)
                 {
                     a = vf < maxSpeed * m_Throttle ? acceleration * m_Throttle : -coastDecel;
                     m_ReverseHold = 0f;
@@ -373,7 +421,7 @@ namespace Skyfold
                 vr *= Mathf.Exp(-grip * dt);
                 m_Rb.linearVelocity = fwd * vf + right * vr + Vector3.up * v.y;
 
-                float speedFactor = Mathf.Clamp01(Mathf.Abs(vf) / 2.5f) * Mathf.Lerp(1f, 0.5f, Mathf.Abs(vf) / maxSpeed);
+                float speedFactor = Mathf.Clamp01(Mathf.Abs(vf) / 2.5f) * Mathf.Lerp(1f, 0.65f, Mathf.Abs(vf) / maxSpeed);
                 float yawRate = m_SteerSmoothed * maxSteerRate * speedFactor * Mathf.Sign(vf == 0f ? 1f : vf);
                 m_Rb.MoveRotation(m_Rb.rotation * Quaternion.Euler(0f, yawRate * dt, 0f));
             }
@@ -436,6 +484,14 @@ namespace Skyfold
             }
         }
 
+        void ShowHint(string text)
+        {
+            if (text == m_ShownHint) return;
+            // Only clear a hint this car put up; other systems own theirs.
+            if (text != null || HUDMessages.Hint == m_ShownHint) HUDMessages.SetHint(text);
+            m_ShownHint = text;
+        }
+
         void SetVignette(bool on)
         {
             if (on == m_VignetteOn) return;
@@ -450,6 +506,8 @@ namespace Skyfold
 
         void OnCollisionEnter(Collision c)
         {
+            if (DebugEvent != null && c.relativeVelocity.magnitude > 0.5f)
+                DebugEvent($"bump {c.collider.name} (layer {LayerMask.LayerToName(c.collider.gameObject.layer)}) at {c.GetContact(0).point} rel {c.relativeVelocity.magnitude:0.0} m/s");
             if (c.relativeVelocity.magnitude < 3f) return;
             AudioDirector.Instance?.PlayAt("car_bump", c.GetContact(0).point, Mathf.Clamp01(c.relativeVelocity.magnitude / 10f));
             if (HasDriver) PlayerRigs.Instance?.HapticBoth(Mathf.Clamp01(c.relativeVelocity.magnitude / 12f), 0.1f);

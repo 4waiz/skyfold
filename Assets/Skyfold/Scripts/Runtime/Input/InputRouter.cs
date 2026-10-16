@@ -24,7 +24,7 @@ namespace Skyfold
         public InputAction Pause, Objectives, Back;
         public InputAction Move, Look, Interact, FoldDesktop, WalkSlow;
         public InputAction Orbit, Point, Drag, OrbitDrag, MouseDelta, Zoom, Rotate, FoldArchitect;
-        public InputAction Steer, Throttle, Brake, Handbrake, Exit, Horn, CameraToggle;
+        public InputAction Steer, Throttle, Brake, Handbrake, Exit, Horn, CameraToggle, ResetCar;
         public InputAction FoldVR, UseRight, UseLeft, GripRight, GripLeft;
         public InputAction Diagnostics, Screenshot, OperatorReset;
 
@@ -48,7 +48,7 @@ namespace Skyfold
             Rotate = m_Architect["Rotate"]; FoldArchitect = m_Architect["Fold"];
             Steer = m_Driving["Steer"]; Throttle = m_Driving["Throttle"]; Brake = m_Driving["Brake"];
             Handbrake = m_Driving["Handbrake"]; Exit = m_Driving["Exit"]; Horn = m_Driving["Horn"];
-            CameraToggle = m_Driving["CameraToggle"];
+            CameraToggle = m_Driving["CameraToggle"]; ResetCar = m_Driving["ResetCar"];
             FoldVR = m_VR["Fold"]; UseRight = m_VR["UseRight"]; UseLeft = m_VR["UseLeft"];
             GripRight = m_VR["GripRight"]; GripLeft = m_VR["GripLeft"];
             Diagnostics = m_Debug["Diagnostics"]; Screenshot = m_Debug["Screenshot"]; OperatorReset = m_Debug["OperatorReset"];
@@ -114,6 +114,7 @@ namespace Skyfold
         public string FoldKeyLabel => Mode == PlayMode.VR ? "X" : "Q";
         public string UseKeyLabel => Mode == PlayMode.VR ? "Trigger" : "E";
         public string ExitKeyLabel => Mode == PlayMode.VR ? "B" : "E";
+        public string ResetCarKeyLabel => Mode == PlayMode.VR ? "X" : "R";
         public string ObjectivesKeyLabel => Mode == PlayMode.VR ? "Y" : "Tab";
         public string PauseKeyLabel => Mode == PlayMode.VR ? "Menu" : "Esc";
     }

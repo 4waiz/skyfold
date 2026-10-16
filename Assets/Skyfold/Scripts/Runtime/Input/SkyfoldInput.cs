@@ -88,6 +88,9 @@ namespace Skyfold
             horn.AddBinding("<Keyboard>/h");
             horn.AddBinding(RightHand + "/{PrimaryButton}"); // A is free while driving
             drive.AddAction("CameraToggle", InputActionType.Button, "<Keyboard>/c");
+            var reset = drive.AddAction("ResetCar", InputActionType.Button); // hold to put the car back on the road
+            reset.AddBinding("<Keyboard>/r");
+            reset.AddBinding(LeftHand + "/{PrimaryButton}"); // X is free while driving
 
             // VR game actions on top of XRI (fold on X, trigger "use" on hovered world objects).
             var vr = asset.AddActionMap(MapVR);
