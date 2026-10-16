@@ -220,7 +220,12 @@ def pergola(a, x0, x1, y0, y1, z, h=2.5, post=0.18, beam_dir='x', slats=8, sail=
 def sail_mesh(mb, corners, mat='SKY_Fabric', sag=0.25, n=4, t=0.03):
     """Tensioned shade sail over 3 or 4 corner points: sagging surface with thickness (closed solid)."""
     C = [Vector(c) for c in corners]
-    top_idx = {}
+    nrm = (C[1] - C[0]).cross(C[2] - C[0])
+    if nrm.length < 1e-9:
+        nrm = Vector((0, 0, 1))
+    nrm.normalize()
+    if nrm.z < -1e-3:
+        nrm = -nrm
     pts = {}
     faces = []
     if len(C) == 4:
@@ -228,7 +233,7 @@ def sail_mesh(mb, corners, mat='SKY_Fabric', sag=0.25, n=4, t=0.03):
             for j in range(n + 1):
                 u, v = i / n, j / n
                 p = C[0].lerp(C[1], u).lerp(C[3].lerp(C[2], u), v)
-                p = p - Vector((0, 0, sag * 16 * u * (1 - u) * v * (1 - v)))
+                p = p - nrm * (sag * 16 * u * (1 - u) * v * (1 - v))
                 pts[(i, j)] = p
         for i in range(n):
             for j in range(n):
@@ -239,7 +244,7 @@ def sail_mesh(mb, corners, mat='SKY_Fabric', sag=0.25, n=4, t=0.03):
                 u, v = i / n, j / n
                 w = 1 - u - v
                 p = C[0] + (C[1] - C[0]) * u + (C[2] - C[0]) * v
-                p = p - Vector((0, 0, sag * 27 * u * v * w))
+                p = p - nrm * (sag * 27 * u * v * w)
                 pts[(i, j)] = p
         for i in range(n):
             for j in range(n - i):
@@ -247,7 +252,7 @@ def sail_mesh(mb, corners, mat='SKY_Fabric', sag=0.25, n=4, t=0.03):
                 if i + j + 2 <= n:
                     faces.append([(i + 1, j), (i + 1, j + 1), (i, j + 1)])
     T = {k: mb.v(p) for k, p in pts.items()}
-    B = {k: mb.v(p - Vector((0, 0, t))) for k, p in pts.items()}
+    B = {k: mb.v(p - nrm * t) for k, p in pts.items()}
     fs = []
     edge_count = {}
     for f in faces:

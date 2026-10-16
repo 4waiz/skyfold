@@ -781,6 +781,20 @@ def export_fbx(root, path):
         mesh_smooth_type='FACE', add_leaf_bones=False, use_armature_deform_only=True,
         colors_type='SRGB', path_mode='AUTO', embed_textures=False)
     log("exported", path)
+    # sidecar with the intended Blender-space hierarchy, used by chars_verify.py
+    try:
+        os.makedirs(DEBUG_DIR, exist_ok=True)
+        rows = []
+        for o in objs:
+            rows.append(dict(name=o.name, type=o.type, parent=o.parent.name if o.parent else None,
+                             world=list(o.matrix_world.translation),
+                             local=list(o.matrix_basis.translation),
+                             rot_deg=[degrees(a) for a in o.matrix_basis.to_euler('XYZ')],
+                             tris=tri_count(o) if o.type == 'MESH' else 0))
+        with open(os.path.join(DEBUG_DIR, os.path.basename(path) + ".expected.json"), "w") as f:
+            json.dump(dict(file=path, objects=rows), f, indent=1)
+    except Exception as e:
+        log("sidecar failed", e)
     return path
 
 
