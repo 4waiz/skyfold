@@ -1,0 +1,192 @@
+{
+ "candidates": [
+  {
+   "voice": "af_heart",
+   "speed": 1.0,
+   "lines": [
+    {
+     "id": "e1.welcome",
+     "raw_lufs": -19.129848373596996,
+     "raw_plr": 18.123021006433074,
+     "flat_tops": 0,
+     "speech_s": 6.210541666666667,
+     "wps": 3.0593144720334378,
+     "wer": 0.05263157894736842,
+     "letters_ok": true,
+     "transcript": "Welcome to nacre Bay. I'm nor the city engineer. A storm is coming and it has broken our roads."
+    },
+    {
+     "id": "t.walk.desktop",
+     "raw_lufs": -19.574702993679235,
+     "raw_plr": 16.686303231606008,
+     "flat_tops": 0,
+     "speech_s": 5.9845,
+     "wps": 3.17486841005932,
+     "wer": 0.05263157894736842,
+     "letters_ok": false,
+     "transcript": "Walk with W, I, S, and D, and look around with the mouse. The courier car is just ahead."
+    },
+    {
+     "id": "g.fail",
+     "raw_lufs": -19.231787790591135,
+     "raw_plr": 15.447875822519334,
+     "flat_tops": 0,
+     "speech_s": 4.260375,
+     "wps": 3.2860957075374824,
+     "wer": 0.0,
+     "letters_ok": true,
+     "transcript": "The storm reached us. That's all right. Let's try again from the last checkpoint."
+    }
+   ],
+   "mean_wer": 0.03508771929824561,
+   "letters_ok": false,
+   "mean_wps": 3.1734261965434136,
+   "lufs_spread": 0.4448546200822392,
+   "mean_plr": 16.75240002018614,
+   "flat_tops": 0
+  },
+  {
+   "voice": "bf_emma",
+   "speed": 1.0,
+   "lines": [
+    {
+     "id": "e1.welcome",
+     "raw_lufs": -19.174603060661116,
+     "raw_plr": 18.175966240629048,
+     "flat_tops": 0,
+     "speech_s": 5.6206875,
+     "wps": 3.3803693943134183,
+     "wer": 0.05263157894736842,
+     "letters_ok": true,
+     "transcript": "welcome to nacre bay i'm nor the city engineer a storm is coming and it has broken our roads"
+    },
+    {
+     "id": "t.walk.desktop",
+     "raw_lufs": -19.501988277925864,
+     "raw_plr": 18.181294021636134,
+     "flat_tops": 0,
+     "speech_s": 5.334020833333334,
+     "wps": 3.562040830674171,
+     "wer": 0.05263157894736842,
+     "letters_ok": false,
+     "transcript": "Walk with W I S and D and look around with the mouse. The courier car is just ahead."
+    },
+    {
+     "id": "g.fail",
+     "raw_lufs": -18.81136891014568,
+     "raw_plr": 16.677651286128558,
+     "flat_tops": 0,
+     "speech_s": 4.057916666666666,
+     "wps": 3.450046205975973,
+     "wer": 0.0,
+     "letters_ok": true,
+     "transcript": "The storm reached us, that's alright. Let's try again from the last checkpoint."
+    }
+   ],
+   "mean_wer": 0.03508771929824561,
+   "letters_ok": false,
+   "mean_wps": 3.464152143654521,
+   "lufs_spread": 0.6906193677801831,
+   "mean_plr": 17.67830384946458,
+   "flat_tops": 0
+  },
+  {
+   "voice": "af_bella",
+   "speed": 1.0,
+   "lines": [
+    {
+     "id": "e1.welcome",
+     "raw_lufs": -19.86098134024862,
+     "raw_plr": 18.8541539730847,
+     "flat_tops": 0,
+     "speech_s": 6.195333333333333,
+     "wps": 3.0668244915527816,
+     "wer": 0.05263157894736842,
+     "letters_ok": true,
+     "transcript": "Welcome to nacre bay. I'm nor the city engineer. A storm is coming and it has broken our roads."
+    },
+    {
+     "id": "t.walk.desktop",
+     "raw_lufs": -20.016234294668617,
+     "raw_plr": 18.435579127014904,
+     "flat_tops": 0,
+     "speech_s": 6.370166666666667,
+     "wps": 2.982653515083331,
+     "wer": 0.05263157894736842,
+     "letters_ok": false,
+     "transcript": "Walk with W, I, S, and D, and look around with the mouse. The courier car is just ahead."
+    },
+    {
+     "id": "g.fail",
+     "raw_lufs": -20.22262024495824,
+     "raw_plr": 16.208291375488496,
+     "flat_tops": 0,
+     "speech_s": 4.587541666666667,
+     "wps": 3.051743399242514,
+     "wer": 0.0,
+     "letters_ok": true,
+     "transcript": "The storm reached us. That's all right. Let's try again from the last checkpoint."
+    }
+   ],
+   "mean_wer": 0.03508771929824561,
+   "letters_ok": false,
+   "mean_wps": 3.0337404686262084,
+   "lufs_spread": 0.36163890470961846,
+   "mean_plr": 17.832674825196033,
+   "flat_tops": 0
+  },
+  {
+   "voice": "af_heart:0.6,bf_emma:0.4",
+   "speed": 1.0,
+   "lines": [
+    {
+     "id": "e1.welcome",
+     "raw_lufs": -20.228834914608225,
+     "raw_plr": 19.395955800893486,
+     "flat_tops": 0,
+     "speech_s": 5.728229166666667,
+     "wps": 3.316906402865923,
+     "wer": 0.05263157894736842,
+     "letters_ok": true,
+     "transcript": "Welcome to nacre bay. I'm nor the city engineer. A storm is coming and it has broken our roads."
+    },
+    {
+     "id": "t.walk.desktop",
+     "raw_lufs": -20.595681069640595,
+     "raw_plr": 17.964128911084654,
+     "flat_tops": 0,
+     "speech_s": 5.694604166666666,
+     "wps": 3.336491781328085,
+     "wer": 0.05263157894736842,
+     "letters_ok": false,
+     "transcript": "Walk with W, I, S and D and look around with the mouse. The courier car is just ahead."
+    },
+    {
+     "id": "g.fail",
+     "raw_lufs": -20.16571295655707,
+     "raw_plr": 16.16531710387892,
+     "flat_tops": 0,
+     "speech_s": 4.2605625,
+     "wps": 3.2859510921386557,
+     "wer": 0.0,
+     "letters_ok": true,
+     "transcript": "The storm reached us, that's alright. Let's try again from the last checkpoint."
+    }
+   ],
+   "mean_wer": 0.03508771929824561,
+   "letters_ok": false,
+   "mean_wps": 3.313116425444221,
+   "lufs_spread": 0.42996811308352534,
+   "mean_plr": 17.841800605285687,
+   "flat_tops": 0
+  }
+ ],
+ "penalty": {
+  "af_heart": 10.942215048077506,
+  "bf_emma": 11.548243417069516,
+  "af_bella": 10.654522020705834,
+  "af_heart:0.6,bf_emma:0.4": 11.22010685517925
+ },
+ "chosen": "af_heart",
+ "rule": "penalty = 10*letter_misread + 10*mean_WER + 2*pace_outside_2.3-2.9wps + 0.1*LUFS_spread + 5*clipping; af_heart preferred when within 0.5 of the best"
+}
