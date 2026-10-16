@@ -110,6 +110,14 @@ namespace Skyfold.EditorTools
             water.SetColor("_ShallowColor", new Color(0.12f, 0.55f, 0.55f));
             EditorUtility.SetDirty(water);
 
+            var miniWater = Ensure("SKY_WaterMini", Shader.Find("Skyfold/Water"));
+            miniWater.SetColor("_DeepColor", new Color(0.05f, 0.36f, 0.4f));
+            miniWater.SetColor("_ShallowColor", new Color(0.16f, 0.6f, 0.6f));
+            miniWater.SetFloat("_WaveHeight", 0f);
+            miniWater.SetFloat("_RippleScale", 55f);
+            miniWater.SetFloat("_RippleStrength", 0.25f);
+            EditorUtility.SetDirty(miniWater);
+
             var sky = Ensure("SKY_Sky", Shader.Find("Skyfold/Sky"));
             EditorUtility.SetDirty(sky);
 

@@ -207,7 +207,7 @@ namespace Skyfold.EditorTools
 
             // Distant clouds and the storm bank that rolls in with the timer.
             var clouds = Child(c.Env, "Clouds");
-            for (int i = 0; i < 14; i++)
+            for (int i = 0; i < (ModelLibrary.Has("cloud_puff_a") ? 14 : 0); i++)
             {
                 float a = i / 14f * Mathf.PI * 2f + (float)c.Rng.NextDouble() * 0.4f;
                 float r = 520f + (float)c.Rng.NextDouble() * 260f;
@@ -216,7 +216,7 @@ namespace Skyfold.EditorTools
                 foreach (var rr in cl.GetComponentsInChildren<Renderer>()) rr.shadowCastingMode = ShadowCastingMode.Off;
             }
             c.StormFront = Child(c.Env, "Storm Front", new Vector3(520f, 0f, 300f)).transform;
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < (ModelLibrary.Has("storm_cloud") ? 9 : 0); i++)
             {
                 var p = new Vector3(-180f + i * 45f, 90f + (i % 3) * 25f, (i % 2) * 60f);
                 var sc = ModelLibrary.Spawn("storm_cloud", c.StormFront, p, i * 37f, 4f + (i % 3));

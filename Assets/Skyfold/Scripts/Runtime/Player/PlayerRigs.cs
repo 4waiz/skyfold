@@ -17,7 +17,7 @@ namespace Skyfold
         void OnDestroy() { if (Instance == this) Instance = null; }
 
         public Camera ActiveCamera => Mode == PlayMode.VR && vr != null ? vr.Camera : desktop != null ? desktop.cam : Camera.main;
-        public Transform Head => Mode == PlayMode.VR && vr != null ? vr.Head : desktop.Head;
+        public Transform Head => Mode == PlayMode.VR && vr != null ? vr.Head : (desktop.cam != null ? desktop.cam.transform : desktop.Head);
         public Vector3 FeetPosition
         {
             get

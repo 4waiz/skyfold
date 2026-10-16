@@ -293,7 +293,7 @@ namespace Skyfold.EditorTools
                 MirrorProxy(c, "traffic" + i, v.transform, i % 2 == 0 ? "city_car_a" : "city_car_b");
             }
             // A few boats on the bay for life (static, gently bobbing via the water).
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < (ModelLibrary.Has("dhow_small") ? 3 : 0); i++)
             {
                 var b = ModelLibrary.Spawn("dhow_small", c.Env, new Vector3(-40f + i * 130f, CityLayout.WaterLevel + 0.1f, -20f - i * 18f), i * 50f);
                 SetStatic(b);
@@ -346,6 +346,7 @@ namespace Skyfold.EditorTools
             n.tail = FindDeep(model.transform, "Tail");
             n.lensRenderer = n.lens != null ? n.lens.GetComponent<Renderer>() : null;
             foreach (var r in model.GetComponentsInChildren<Renderer>()) r.shadowCastingMode = ShadowCastingMode.On;
+            n.atelierPerch = Child(c.Atelier, "NURI Perch", c.PlinthTop.position + new Vector3(0.95f, 0.42f, -0.1f)).transform;
             c.Nuri = n;
         }
     }

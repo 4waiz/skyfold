@@ -100,6 +100,12 @@ namespace Skyfold
             Physics.SyncTransforms();
         }
 
+        public void SetPitch(float pitch)
+        {
+            m_Pitch = Mathf.Clamp(pitch, -80f, 80f);
+            if (head != null) head.localRotation = Quaternion.Euler(m_Pitch, 0f, 0f);
+        }
+
         public void ApplySettings(GameSettings s)
         {
             if (cam != null) cam.fieldOfView = s.fov;

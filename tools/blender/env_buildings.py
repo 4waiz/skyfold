@@ -278,7 +278,7 @@ def door(a, face, plane, u, w=1.4, h=2.6, kind='round', frame='SKY_Pearl', leaf=
     op = Op(face, u, z, w, h, kind, depth=depth, back=leaf, sill=False, frame=frame, frame_t=0.16)
     if steps and z > 0.05:
         mb = MB()
-        fbox(mb, face, plane, u - w / 2 - 0.35, u + w / 2 + 0.35, 0.0, z * 0.5, 0.05, 0.85, 'SKY_Pearl')
+        fbox(mb, face, plane, u - w / 2 - 0.35, u + w / 2 + 0.35, 0.0, z * 0.5, 0.05, 0.7, 'SKY_Pearl')
         fbox(mb, face, plane, u - w / 2 - 0.2, u + w / 2 + 0.2, 0.0, z, 0.05, 0.45, 'SKY_Pearl')
         a.part(mb, bevel=0.02, seg=1, name="steps")
     mb = MB()
@@ -602,16 +602,19 @@ def bldg_shoprow(a):
     # arcade front wall with through arches, carrying the upper floor
     arc_ops = [Op('N', x, 0.0, 2.25, 3.35, 'pointed', through=True, sill=False, back=wall, seg=6, frame='SKY_Pearl',
                   frame_t=0.14) for x in xs]
-    arc_ops += [Op('E', Y0 + 1.05, 0.0, 1.3, 2.9, 'round', through=True, sill=False, back=wall),
-                Op('W', Y0 + 1.05, 0.0, 1.3, 2.9, 'round', through=True, sill=False, back=wall)]
     planes = {'N': Y0, 'S': Ya, 'E': X0, 'W': X1}
     cuts = [make_cutter(a, op, planes[op.face], 'SKY_Pearl') for op in arc_ops]
     mb = MB()
     mb.box(X0, X1, Y0, Y0 + 0.55, 0.0, z1, 'SKY_Pearl')
-    mb.box(X0, X0 + 0.55, Y0 + 0.55, Ya, 0.0, z1, 'SKY_Pearl')
-    mb.box(X1 - 0.55, X1, Y0 + 0.55, Ya, 0.0, z1, 'SKY_Pearl')
     a.part(mb, bevel=0.05, seg=1, cutters=cuts, name="arcade")
-    deco(a, [o for o in arc_ops if o.face == 'N'], planes)
+    deco(a, arc_ops, planes)
+    # end walls of the arcade, each pierced by its own side arch (separate closed solids -> clean booleans)
+    for f, x0_, x1_ in (('E', X0, X0 + 0.55), ('W', X1 - 0.55, X1)):
+        op = Op(f, (Y0 + 0.55 + Ya) / 2, -0.05, 1.0, 2.85, 'round', depth=1.2, through=False, sill=False, back=wall)
+        c = make_cutter(a, op, planes[f], 'SKY_Pearl')
+        mb = MB()
+        mb.box(x0_, x1_, Y0 + 0.55, Ya, 0.0, z1, 'SKY_Pearl')
+        a.part(mb, bevel=0.05, seg=1, cutters=[c], name="arcade_end")
     # arcade floor and soffit glow
     mb = MB(); mb.box(X0 + 0.55, X1 - 0.55, Y0 + 0.55, Ya, 0.0, 0.12, 'SKY_Kerb')
     a.part(mb, name="arcade_floor")
@@ -793,7 +796,7 @@ def bldg_courtyard(a):
     wall = 'SKY_Sandstone'
     # wing A along the Unity south (Blender +Y): x -6..6, y 1.5..6 ; wing B along Unity east (Blender -X)
     A = (-6.0, 6.0, 1.5, 6.0)
-    B = (-6.0, -1.5, -6.0, 1.5)
+    B = (-6.0, -1.5, -5.4, 1.5)
     plinth(a, *A)
     plinth(a, B[0], B[1], B[2], A[2])
     opsA = [Op('N', x, 0.35, 1.7, 2.9, 'round', depth=1.4, back=wall, sill=False, frame='SKY_Pearl', frame_t=0.12)
@@ -817,7 +820,7 @@ def bldg_courtyard(a):
     merlons(a, 'N', B[2], B[0] + 0.3, B[1] - 0.3, zr + 0.82, h=0.5, w=0.5, gap=0.4, t=0.22, inset=0.02)
     merlons(a, 'W', A[1], A[2] + 0.3, A[3] - 0.3, zr + 0.82, h=0.5, w=0.5, gap=0.4, t=0.22, inset=0.02)
     # courtyard: paving, low perimeter wall with gate on Unity N and W, fountain, palm, sail, planters
-    cx0, cx1, cy0, cy1 = -1.5, 6.0, -6.0, 1.5
+    cx0, cx1, cy0, cy1 = -1.5, 6.0, -5.4, 1.5
     mb = MB(); mb.box(cx0, cx1, cy0, cy1, 0.0, 0.12, 'SKY_Kerb')
     a.part(mb, name="court_paving")
     gx, gw, gt = 2.8, 1.6, 0.35
@@ -859,10 +862,10 @@ def bldg_courtyard(a):
     a.part(mb, name="palm_bed")
     # shade sail from the wing corners to a brass mast
     mb = MB()
-    mb.cyl(0.08, 0.12, 4.1, 6, 'SKY_Brass', cx=5.6, cy=-5.6)
+    mb.cyl(0.08, 0.12, 4.1, 6, 'SKY_Brass', cx=5.5, cy=-5.0)
     a.part(mb, name="mast")
-    sail_quad(a, [(-1.4, -5.6, 4.6), (5.6, -5.6, 4.0), (-1.4, 1.4, 5.0)], sag=0.2, n=4)
-    planter_at(a, -0.9, -5.3, 0.12, 0.8, 0.8, 0.55)
+    sail_quad(a, [(-1.4, -5.0, 4.6), (5.5, -5.0, 4.0), (-1.4, 1.4, 5.0)], sag=0.2, n=4)
+    planter_at(a, -0.9, -4.7, 0.12, 0.8, 0.8, 0.55)
     planter_at(a, 0.6, 1.0, 0.12, 2.0, 0.7, 0.5)
 
 

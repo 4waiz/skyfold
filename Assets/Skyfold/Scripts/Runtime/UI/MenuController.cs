@@ -22,6 +22,7 @@ namespace Skyfold
         string m_Screen;
         readonly Stack<string> m_History = new Stack<string>();
         Selectable m_First;
+        bool m_Compact;
         float m_OpenedAt;
 
         public bool IsOpen => m_Screen != null;
@@ -106,6 +107,7 @@ namespace Skyfold
             Clear(m_DesktopRoot);
             Clear(m_VRRoot);
             m_First = null;
+            m_Compact = false;
             m_OpenedAt = Time.unscaledTime;
             bool vr = VRMode;
             m_Desktop.gameObject.SetActive(!vr);
@@ -132,10 +134,14 @@ namespace Skyfold
             }
             else if (title)
             {
-                panel.anchorMin = panel.anchorMax = new Vector2(0f, 0.5f);
-                panel.pivot = new Vector2(0f, 0.5f);
-                panel.anchoredPosition = new Vector2(120f, -90f);
-                panel.sizeDelta = new Vector2(640f, 0f);
+                panel.anchorMin = panel.anchorMax = new Vector2(0f, 1f);
+                panel.pivot = new Vector2(0f, 1f);
+                panel.anchoredPosition = new Vector2(110f, -262f);
+                panel.sizeDelta = new Vector2(600f, 0f);
+                var vlg = panel.GetComponent<VerticalLayoutGroup>();
+                vlg.spacing = 8f;
+                vlg.padding = new RectOffset(24, 24, 24, 24);
+                m_Compact = true;
             }
             else
             {
@@ -144,6 +150,7 @@ namespace Skyfold
                 panel.sizeDelta = new Vector2(m_Screen == "controls" || m_Screen == "credits" ? 1120f : 820f, 0f);
             }
 
+            m_Compact = m_Compact && title && !vr;
             var b = new Builder(panel, this);
             switch (m_Screen)
             {
@@ -173,7 +180,7 @@ namespace Skyfold
             var w = UIKit.Rect(root, "Wordmark");
             w.anchorMin = w.anchorMax = new Vector2(0f, 1f);
             w.pivot = new Vector2(0f, 1f);
-            w.anchoredPosition = new Vector2(120f, -70f);
+            w.anchoredPosition = new Vector2(110f, -36f);
             w.sizeDelta = new Vector2(1100f, 220f);
             var t = UIKit.Text(w, SkyfoldInfo.Title, UIStyle.TitleSize * 1.25f, UIStyle.Pearl, true);
             t.characterSpacing = 6f;
@@ -190,11 +197,12 @@ namespace Skyfold
             s.gameObject.AddComponent<Shadow>().effectColor = new Color(0.05f, 0.12f, 0.14f, 0.5f);
 
             var foot = UIKit.Text(root, SkyfoldInfo.Credit + "   ·   " + SkyfoldInfo.ProjectLabel + "   ·   v" + Application.version, UIStyle.SmallSize, UIStyle.Pearl, false, TextAlignmentOptions.BottomLeft, "Footer");
+            foot.alignment = TextAlignmentOptions.BottomRight;
             foot.rectTransform.anchorMin = new Vector2(0f, 0f);
             foot.rectTransform.anchorMax = new Vector2(1f, 0f);
-            foot.rectTransform.pivot = new Vector2(0f, 0f);
-            foot.rectTransform.anchoredPosition = new Vector2(120f, 36f);
-            foot.rectTransform.sizeDelta = new Vector2(-160f, 40f);
+            foot.rectTransform.pivot = new Vector2(1f, 0f);
+            foot.rectTransform.anchoredPosition = new Vector2(-48f, 28f);
+            foot.rectTransform.sizeDelta = new Vector2(-96f, 40f);
             foot.gameObject.AddComponent<Shadow>().effectColor = new Color(0f, 0f, 0f, 0.6f);
         }
 
@@ -243,7 +251,7 @@ namespace Skyfold
 
             public Button Button(string label, Action a, bool primary = false, string detail = null, bool enabled = true)
             {
-                var btn = UIKit.Button(m_Panel, label, a, primary, UIStyle.ButtonHeight, detail);
+                var btn = UIKit.Button(m_Panel, label, a, primary, m_Menu.m_Compact ? 52f : UIStyle.ButtonHeight, detail);
                 btn.interactable = enabled;
                 return First(btn);
             }

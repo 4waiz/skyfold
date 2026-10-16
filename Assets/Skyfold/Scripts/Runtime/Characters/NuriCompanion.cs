@@ -70,8 +70,12 @@ namespace Skyfold
             m_Vel = Vector3.zero;
         }
 
+        public Transform atelierPerch;
+
         Vector3 HomePosition(PlayerRigs rigs)
         {
+            if (atelierPerch != null && FoldController.Instance != null && FoldController.Instance.InAtelier)
+                return atelierPerch.position;
             var head = rigs.Head;
             Vector3 fwd = rigs.Forward;
             Vector3 right = Vector3.Cross(Vector3.up, fwd);
@@ -97,7 +101,9 @@ namespace Skyfold
                 // Hover just above and in front of the target, but stay within a sensible range of the player.
                 Vector3 tp = m_PointTarget.position + Vector3.up * 0.35f;
                 Vector3 toTarget = tp - rigs.Head.position;
-                float maxReach = FoldController.Instance != null && FoldController.Instance.InAtelier ? 1.2f : 6f;
+                bool atelier = FoldController.Instance != null && FoldController.Instance.InAtelier;
+                if (atelier) tp = m_PointTarget.position + Vector3.up * 0.12f;
+                float maxReach = atelier ? 1.6f : 6f;
                 goal = toTarget.magnitude > maxReach ? rigs.Head.position + toTarget.normalized * maxReach : tp;
             }
             if (m_Mood == NuriMood.Celebrate) goal += new Vector3(Mathf.Cos(t * 6f), 0.15f, Mathf.Sin(t * 6f)) * 0.25f;

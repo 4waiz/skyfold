@@ -391,7 +391,7 @@ namespace Skyfold.EditorTools
             miniSea.transform.localPosition = CityLayout.CityCenter + new Vector3(0f, CityLayout.WaterLevel, 0f);
             miniSea.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
             miniSea.transform.localScale = new Vector3(12 * 16f + 24f, 9 * 16f + 24f, 1f);
-            miniSea.GetComponent<MeshRenderer>().sharedMaterial = MaterialLibrary.Get("SKY_Water");
+            miniSea.GetComponent<MeshRenderer>().sharedMaterial = MaterialLibrary.Get("SKY_WaterMini");
             SetLayer(miniSea, "MiniCity");
         }
 

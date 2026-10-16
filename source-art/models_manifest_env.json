@@ -57,9 +57,7 @@
     16.0
    ],
    "empties": [],
-   "issues": [
-    "road_straight: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -75,7 +73,7 @@
       0.0,
       -0.0
      ],
-     "tris": 666,
+     "tris": 536,
      "color_attributes": [
       "Col"
      ],
@@ -88,7 +86,7 @@
      ]
     }
    ],
-   "tris": 666,
+   "tris": 536,
    "materials": [
     "SKY_Kerb",
     "SKY_Pearl",
@@ -98,9 +96,9 @@
    ],
    "bounds_unity": {
     "min": [
-     -8.0141,
+     -8.0,
      -0.3,
-     -8.0141
+     -8.0
     ],
     "max": [
      8.0,
@@ -109,14 +107,12 @@
     ]
    },
    "size_m": [
-    16.014,
+    16.0,
     0.45,
-    16.014
+    16.0
    ],
    "empties": [],
-   "issues": [
-    "road_corner: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -173,9 +169,7 @@
     16.0
    ],
    "empties": [],
-   "issues": [
-    "road_tee: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -230,9 +224,7 @@
     16.0
    ],
    "empties": [],
-   "issues": [
-    "road_cross: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -289,9 +281,7 @@
     16.0
    ],
    "empties": [],
-   "issues": [
-    "road_end: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -344,9 +334,7 @@
     16.0
    ],
    "empties": [],
-   "issues": [
-    "road_plaza: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -395,9 +383,7 @@
     16.0
    ],
    "empties": [],
-   "issues": [
-    "ground_paving: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -450,9 +436,7 @@
     16.0
    ],
    "empties": [],
-   "issues": [
-    "runway_section: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -468,7 +452,7 @@
       0.0,
       -0.0
      ],
-     "tris": 214,
+     "tris": 168,
      "color_attributes": [
       "Col"
      ],
@@ -476,12 +460,12 @@
       "SKY_RoadLine",
       "SKY_Road",
       "SKY_Kerb",
-      "SKY_SandstoneDeep",
-      "SKY_Coral"
+      "SKY_Coral",
+      "SKY_SandstoneDeep"
      ]
     }
    ],
-   "tris": 214,
+   "tris": 168,
    "materials": [
     "SKY_Coral",
     "SKY_Kerb",
@@ -493,7 +477,7 @@
     "min": [
      -8.0,
      -0.3,
-     -8.25
+     -8.0
     ],
     "max": [
      8.0,
@@ -504,13 +488,10 @@
    "size_m": [
     16.0,
     0.3,
-    16.25
+    16.0
    ],
    "empties": [],
-   "issues": [
-    "runway_end: rotation not applied (90.0, -0.0, 0.0)",
-    "tile footprint 16.00 x 16.25 != 16 x 16"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -561,9 +542,7 @@
     16.0
    ],
    "empties": [],
-   "issues": [
-    "apron_tile: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -620,9 +599,7 @@
     1.66
    ],
    "empties": [],
-   "issues": [
-    "quay_straight: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Wall occupies Blender y 8..9.5 (Unity z -8..-9.5), i.e. the 1.5 m water margin outside the cell's south edge; top flush at Z0; face drops to Z-4."
    ]
@@ -679,9 +656,7 @@
     17.66
    ],
    "empties": [],
-   "issues": [
-    "quay_corner_outer: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Walls lie outside the cell on the Unity S and E sides plus the rounded corner square."
    ]
@@ -740,9 +715,7 @@
     1.66
    ],
    "empties": [],
-   "issues": [
-    "quay_corner_inner: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Use on the land cell whose wall runs into the concave corner at its local Unity-east end; the neighbouring cell keeps a quay_straight."
    ]
@@ -884,9 +857,7 @@
      "yaw_unity_deg": -0.0
     }
    ],
-   "issues": [
-    "bridge_span: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Deck top Z0 (8 m asphalt + 1 m walkways at Z0.15). Abutments fill the 1.5 m channel margins at both cell edges, continuing the quay line; arch springs from piers at |y|=5.8."
    ]
@@ -951,9 +922,7 @@
     16.0
    ],
    "empties": [],
-   "issues": [
-    "bridge_stub: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Broken deck ends reach ~2.2-2.8 m from each cell edge; coral/pearl barriers at |y|=6.65."
    ]
@@ -1009,24 +978,22 @@
    "bounds_unity": {
     "min": [
      -5.6,
-     -0.0,
+     0.0,
      -5.6
     ],
     "max": [
      5.6,
      10.9,
-     6.35
+     6.2
     ]
    },
    "size_m": [
     11.2,
     10.9,
-    11.95
+    11.8
    ],
    "empties": [],
-   "issues": [
-    "bldg_house_a: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -1078,7 +1045,7 @@
    "bounds_unity": {
     "min": [
      -4.9,
-     -0.0,
+     0.0,
      -5.1
     ],
     "max": [
@@ -1093,9 +1060,7 @@
     11.1
    ],
    "empties": [],
-   "issues": [
-    "bldg_house_b: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -1111,7 +1076,7 @@
       0.0,
       -0.0
      ],
-     "tris": 5159,
+     "tris": 4928,
      "color_attributes": [
       "Col"
      ],
@@ -1132,7 +1097,7 @@
      ]
     }
    ],
-   "tris": 5159,
+   "tris": 4928,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
@@ -1151,7 +1116,7 @@
    "bounds_unity": {
     "min": [
      -6.1,
-     -0.098,
+     0.0,
      -4.6
     ],
     "max": [
@@ -1162,14 +1127,11 @@
    },
    "size_m": [
     12.2,
-    10.398,
+    10.3,
     9.95
    ],
    "empties": [],
-   "issues": [
-    "bldg_shoprow: rotation not applied (90.0, -0.0, 0.0)",
-    "geometry below ground: min z -0.098"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -1221,25 +1183,22 @@
    "bounds_unity": {
     "min": [
      -5.6,
-     -0.0,
-     -5.6
+     0.0,
+     -5.3
     ],
     "max": [
      5.6,
      20.6,
-     6.9
+     5.98
     ]
    },
    "size_m": [
     11.2,
     20.6,
-    12.5
+    11.28
    ],
    "empties": [],
-   "issues": [
-    "bldg_tower: rotation not applied (90.0, -0.0, 0.0)",
-    "building footprint 11.20 x 12.50 exceeds 12 m"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -1285,7 +1244,7 @@
    "bounds_unity": {
     "min": [
      -4.7,
-     -0.0,
+     0.0,
      -5.7
     ],
     "max": [
@@ -1300,9 +1259,7 @@
     11.8
    ],
    "empties": [],
-   "issues": [
-    "bldg_dome: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -1355,26 +1312,23 @@
    ],
    "bounds_unity": {
     "min": [
-     -7.1584,
-     -0.0,
+     -6.1,
+     0.0,
      -6.1
     ],
     "max": [
      6.1,
      8.32,
-     6.85
+     6.1
     ]
    },
    "size_m": [
-    13.258,
+    12.2,
     8.32,
-    12.95
+    12.2
    ],
    "empties": [],
-   "issues": [
-    "bldg_courtyard: rotation not applied (90.0, -0.0, 0.0)",
-    "building footprint 13.26 x 12.95 exceeds 12 m"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -1430,7 +1384,7 @@
    "bounds_unity": {
     "min": [
      -6.1,
-     -0.0,
+     0.0,
      -6.1
     ],
     "max": [
@@ -1455,9 +1409,7 @@
      "yaw_unity_deg": -0.0
     }
    ],
-   "issues": [
-    "bldg_depot: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "ANCHOR_cell_dock under the solar canopy at the front-right (viewer facing the door; Unity -X side)."
    ]
@@ -1534,7 +1486,7 @@
    "bounds_unity": {
     "min": [
      -5.93,
-     -0.0,
+     0.0,
      -2.68
     ],
     "max": [
@@ -1559,10 +1511,7 @@
      "yaw_unity_deg": -0.0
     }
    ],
-   "issues": [
-    "PowerLights: rotation not applied (90.0, -0.0, 0.0)",
-    "bldg_substation: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "SOCKET_cell sits inside the recessed housing on the north face (~1.1 m). PowerLights is a separate object (light bar + roof beacon, SKY_TealGlow)."
    ]
@@ -1622,7 +1571,7 @@
    "bounds_unity": {
     "min": [
      -7.1,
-     -0.0,
+     0.0,
      -5.08
     ],
     "max": [
@@ -1647,9 +1596,7 @@
      "yaw_unity_deg": -0.0
     }
    ],
-   "issues": [
-    "bldg_terminal: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "ANCHOR_convoy_stop on the road side of the north drop-off kerb (Unity z +7.0)."
    ]
@@ -1711,7 +1658,7 @@
    "bounds_unity": {
     "min": [
      -3.3,
-     -0.0,
+     0.0,
      -3.1
     ],
     "max": [
@@ -1736,9 +1683,7 @@
      "yaw_unity_deg": -0.0
     }
    ],
-   "issues": [
-    "bldg_tower_control: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "ANCHOR_lever at ground level just right of the door (viewer facing the door)."
    ]
@@ -1786,7 +1731,7 @@
    "bounds_unity": {
     "min": [
      -11.45,
-     -0.0,
+     0.0,
      -8.0
     ],
     "max": [
@@ -1801,9 +1746,7 @@
     16.125
    ],
    "empties": [],
-   "issues": [
-    "bldg_hangar: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Footprint 22.5 x 16 m (spans more than one cell in X); pivot at its own ground centre."
    ]
@@ -1873,7 +1816,7 @@
    "bounds_unity": {
     "min": [
      -1.05,
-     -0.0,
+     0.0,
      -0.65
     ],
     "max": [
@@ -1898,10 +1841,7 @@
      "yaw_unity_deg": 180.0
     }
    ],
-   "issues": [
-    "LensRing: rotation not applied (90.0, -0.0, 0.0)",
-    "foldstation_kiosk: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "LensRing pivot at the ring centre (Blender (0,-0.39,1.72)). ANCHOR_player is yawed 180 deg so its forward faces the kiosk."
    ]
@@ -1958,9 +1898,7 @@
     17.949
    ],
    "empties": [],
-   "issues": [
-    "atelier_platform: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Top of deck at Z0, radius 7 m; balustrade gap + 4 steps on the Unity-north edge."
    ]
@@ -2004,7 +1942,7 @@
    "bounds_unity": {
     "min": [
      -5.984,
-     -0.0,
+     0.0,
      -6.8425
     ],
     "max": [
@@ -2019,9 +1957,7 @@
     4.993
    ],
    "empties": [],
-   "issues": [
-    "atelier_pergola: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Shares the terrace origin with atelier_platform (centre, Z0)."
    ]
@@ -2099,7 +2035,7 @@
    "bounds_unity": {
     "min": [
      -0.825,
-     -0.0,
+     0.0,
      -0.625
     ],
     "max": [
@@ -2133,10 +2069,7 @@
      "yaw_unity_deg": -0.0
     }
    ],
-   "issues": [
-    "PlinthRim: rotation not applied (90.0, -0.0, 0.0)",
-    "plinth: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Top surface Z0.9, 1.6 x 1.2 m. ANCHOR_player 0.55 m south of the south edge, facing north."
    ]
@@ -2306,9 +2239,7 @@
      "yaw_unity_deg": -0.0
     }
    ],
-   "issues": [
-    "plinth_tray: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Shares the plinth origin. SOCKET_slot_1..6 at each slot floor, west->east in Blender +X order."
    ]
@@ -2356,7 +2287,7 @@
    "bounds_unity": {
     "min": [
      -0.2217,
-     -0.0,
+     0.0,
      -0.2217
     ],
     "max": [
@@ -2381,9 +2312,7 @@
      "yaw_unity_deg": -0.0
     }
    ],
-   "issues": [
-    "street_lamp: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -2421,7 +2350,7 @@
    "bounds_unity": {
     "min": [
      -1.0,
-     -0.0,
+     0.0,
      -0.265
     ],
     "max": [
@@ -2436,9 +2365,7 @@
     0.53
    ],
    "empties": [],
-   "issues": [
-    "bench: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -2472,7 +2399,7 @@
    "bounds_unity": {
     "min": [
      -0.1571,
-     -0.0,
+     0.0,
      -0.1571
     ],
     "max": [
@@ -2487,9 +2414,7 @@
     0.314
    ],
    "empties": [],
-   "issues": [
-    "bollard: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -2527,7 +2452,7 @@
    "bounds_unity": {
     "min": [
      -1.0,
-     -0.0,
+     0.0,
      -0.4
     ],
     "max": [
@@ -2542,9 +2467,7 @@
     0.8
    ],
    "empties": [],
-   "issues": [
-    "barrier_coral: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -2580,7 +2503,7 @@
    "bounds_unity": {
     "min": [
      -0.21,
-     -0.0,
+     0.0,
      -0.21
     ],
     "max": [
@@ -2595,9 +2518,7 @@
     0.42
    ],
    "empties": [],
-   "issues": [
-    "traffic_cone: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -2662,7 +2583,7 @@
    "bounds_unity": {
     "min": [
      -0.2,
-     -0.0,
+     0.0,
      -0.1902
     ],
     "max": [
@@ -2687,10 +2608,7 @@
      "yaw_unity_deg": -0.0
     }
    ],
-   "issues": [
-    "Lens: rotation not applied (90.0, -0.0, 0.0)",
-    "runway_beacon: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -2747,7 +2665,7 @@
    "bounds_unity": {
     "min": [
      -0.28,
-     -0.0,
+     0.0,
      -0.22
     ],
     "max": [
@@ -2762,10 +2680,7 @@
     0.5
    ],
    "empties": [],
-   "issues": [
-    "Lever: rotation not applied (90.0, -0.0, 0.0)",
-    "switch_box: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": [
     "Lever pivot = hinge (Blender (0,-0.235,0.72)); modelled up = OFF."
    ]
@@ -2815,7 +2730,7 @@
    "bounds_unity": {
     "min": [
      -0.3,
-     -0.0,
+     0.0,
      -0.2853
     ],
     "max": [
@@ -2840,9 +2755,7 @@
      "yaw_unity_deg": -0.0
     }
    ],
-   "issues": [
-    "cell_dock: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -2893,10 +2806,7 @@
     1.1
    ],
    "empties": [],
-   "issues": [
-    "awning_striped: rotation not applied (90.0, -0.0, 0.0)",
-    "geometry below ground: min z -0.780"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -2932,7 +2842,7 @@
    "bounds_unity": {
     "min": [
      -2.638,
-     -0.0,
+     0.0,
      -2.956
     ],
     "max": [
@@ -2947,9 +2857,7 @@
     4.534
    ],
    "empties": [],
-   "issues": [
-    "shade_sail: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -2987,7 +2895,7 @@
    "bounds_unity": {
     "min": [
      -0.64,
-     -0.0,
+     0.0,
      -0.3424
     ],
     "max": [
@@ -3002,9 +2910,7 @@
     0.685
    ],
    "empties": [],
-   "issues": [
-    "planter_box: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -3055,10 +2961,7 @@
     6.108
    ],
    "empties": [],
-   "issues": [
-    "palm_date_a: rotation not applied (90.0, -0.0, 0.0)",
-    "geometry below ground: min z -0.010"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -3109,10 +3012,7 @@
     5.226
    ],
    "empties": [],
-   "issues": [
-    "palm_date_b: rotation not applied (90.0, -0.0, 0.0)",
-    "geometry below ground: min z -0.037"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -3161,9 +3061,7 @@
     2.681
    ],
    "empties": [],
-   "issues": [
-    "palm_small: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {
@@ -3210,9 +3108,7 @@
     1.428
    ],
    "empties": [],
-   "issues": [
-    "shrub_round: rotation not applied (90.0, -0.0, 0.0)"
-   ],
+   "issues": [],
    "notes": []
   },
   {

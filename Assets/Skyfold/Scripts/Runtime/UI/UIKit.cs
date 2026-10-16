@@ -151,6 +151,7 @@ namespace Skyfold
                 var sh = Image(root, "Shadow", UIStyle.Shadow);
                 Stretch(sh.rectTransform, -10f);
                 sh.rectTransform.anchoredPosition = new Vector2(0f, -8f);
+                sh.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
             }
             var bg = root.gameObject.AddComponent<Image>();
             bg.sprite = Rounded;

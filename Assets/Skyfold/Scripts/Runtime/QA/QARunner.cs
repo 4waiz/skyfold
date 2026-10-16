@@ -95,14 +95,16 @@ namespace Skyfold
             Check(cond(), what + $" (within {timeout:0}s)");
         }
 
-        static void PressKey(Key key)
+        /// <summary>A real key press through the Input System: down for two frames, then up.</summary>
+        static IEnumerator Press(Key key)
         {
             var kb = Keyboard.current;
-            if (kb == null) return;
+            if (kb == null) yield break;
             InputSystem.QueueStateEvent(kb, new KeyboardState(key));
-            InputSystem.Update();
+            yield return null;
+            yield return null;
             InputSystem.QueueStateEvent(kb, new KeyboardState());
-            InputSystem.Update();
+            yield return null;
         }
 
         IEnumerator HoldKeys(float seconds, params Key[] keys)
@@ -196,11 +198,11 @@ namespace Skyfold
             Check(MD.State == MissionState.Active, "episode 1 active");
             Check(FoldController.Instance.InAtelier, "starts in the Atelier");
             yield return Shot("02_atelier");
-            PressKey(Key.Escape);
+            yield return Press(Key.Escape);
             yield return new WaitForSeconds(0.5f);
             Check(Root.IsPaused, "Escape pauses");
             yield return Shot("03_pause");
-            PressKey(Key.Escape);
+            yield return Press(Key.Escape);
             yield return new WaitForSeconds(0.5f);
             Check(!Root.IsPaused, "Escape resumes");
         }
@@ -236,7 +238,7 @@ namespace Skyfold
             yield return Shot("e1_03_route");
 
             yield return WaitUntil(() => MD.CurrentObjective != null && MD.CurrentObjective.Id == "t.fold", 20f, "fold objective reached");
-            PressKey(Key.Q);
+            yield return Press(Key.Q);
             yield return WaitUntil(() => FoldController.Instance.InStreet && !FoldController.Instance.Busy, 5f, "Q folds down into the street");
             yield return new WaitForSeconds(0.6f);
             yield return Shot("e1_04_street");
@@ -270,7 +272,7 @@ namespace Skyfold
             yield return PlacePiece("piece.bridge", "bridge_east", 0);
             Check(Root.City.HasRoute("depot", "substation"), "demo route complete");
             yield return WaitUntil(() => MD.CurrentObjective != null && MD.CurrentObjective.Id == "t.fold", 20f, "demo fold objective");
-            PressKey(Key.Q);
+            yield return Press(Key.Q);
             yield return WaitUntil(() => FoldController.Instance.InStreet && !FoldController.Instance.Busy, 5f, "folded");
             var cell = PowerCell.Instance;
             var car = CourierVehicle.Instance;
@@ -285,7 +287,7 @@ namespace Skyfold
             car.RequestEnter();
             yield return WaitUntil(() => car.HasDriver && !car.Busy, 5f, "entered car");
             yield return DriveTo("substation.park", 60f);
-            PressKey(Key.E);
+            yield return Press(Key.E);
             yield return WaitUntil(() => !car.HasDriver && !car.Busy, 5f, "E exits the stopped car");
             car.cradle.Interact(InteractorKind.Desktop);
             Check(cell.HeldOnDesktop, "took cell from cradle");
@@ -380,15 +382,42 @@ namespace Skyfold
 
         IEnumerator Tour()
         {
-            // Beauty shots for the delivery report.
+            // Views for art review and the delivery report (real build, real renderer).
             Root.ChooseDesktop();
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(2.5f);
             yield return Shot("tour_01_title");
             Root.StartMission(MissionCatalog.Demo);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(2.5f);
             yield return Shot("tour_02_atelier");
+            var fold = FoldController.Instance;
+            var views = new (string name, Vector3 pos, float yaw, float pitch)[]
+            {
+                ("tour_03_depot", new Vector3(122f, 0.15f, 36f), 75f, 4f),
+                ("tour_04_avenue", new Vector3(52f, 0.15f, 30f), 70f, 2f),
+                ("tour_05_causeway_east", new Vector3(156f, 0.15f, 54f), 300f, 4f),
+                ("tour_06_causeway_west", new Vector3(20f, 0.15f, 54f), 35f, 6f),
+                ("tour_07_island", new Vector3(110f, 0.15f, 94f), 75f, 2f),
+                ("tour_08_airfield", new Vector3(118f, 0.15f, 112f), 300f, 6f),
+                ("tour_09_substation", new Vector3(158f, 0.15f, 92f), 30f, 4f),
+                ("tour_10_atelier_from_city", new Vector3(96f, 0.15f, 12f), 180f, -8f)
+            };
+            fold.SetLocationImmediate(false, fold.Station("kiosk.A"), new Anchor(views[0].pos, views[0].yaw));
+            foreach (var v in views)
+            {
+                PlayerRigs.Instance.TeleportTo(v.pos, v.yaw);
+                PlayerRigs.Instance.desktop.SetPitch(v.pitch);
+                yield return new WaitForSeconds(1.2f);
+                yield return Shot(v.name);
+            }
+            // Overlook (VR comfort remote-drive viewpoint) seen from the desktop camera.
+            var cam = PlayerRigs.Instance.desktop;
+            var ov = Root.Layout.GetAnchor("overlook.mainland");
+            PlayerRigs.Instance.TeleportTo(ov.Position + Vector3.up * 0.1f, ov.Yaw);
+            cam.SetPitch(14f);
+            yield return new WaitForSeconds(1.2f);
+            yield return Shot("tour_11_overlook");
+            Check(true, "tour captured");
         }
-
         void Finish()
         {
             Log($"QA finished: {m_Checks - m_Failures}/{m_Checks} checks passed");

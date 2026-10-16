@@ -86,11 +86,9 @@ Shader "Skyfold/Water"
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 float3 ws = TransformObjectToWorld(v.positionOS.xyz);
                 float3 n;
-                // Waves only matter at full scale; the tiny miniature basin stays flat.
-                float scale = length(float3(UNITY_MATRIX_M[0].x, UNITY_MATRIX_M[1].x, UNITY_MATRIX_M[2].x));
-                ws += WaveOffset(ws, n) * saturate(scale * 4.0);
+                ws += WaveOffset(ws, n);
                 o.positionWS = ws;
-                o.normalWS = lerp(float3(0, 1, 0), n, saturate(scale * 4.0));
+                o.normalWS = n;
                 o.positionCS = TransformWorldToHClip(ws);
                 o.fogFactor = ComputeFogFactor(o.positionCS.z);
                 return o;
