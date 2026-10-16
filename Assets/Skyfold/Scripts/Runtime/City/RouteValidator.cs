@@ -153,36 +153,61 @@ namespace Skyfold
             return seen;
         }
 
-        /// <summary>Converts a cell path into a smooth world-space driving line on the right-hand lane.</summary>
+        static Vector3 RightOf(Vector3 dir) => new Vector3(dir.z, 0f, -dir.x);
+
+        /// <summary>
+        /// Converts a cell path into a world-space driving line on the right-hand lane, with
+        /// quarter-circle arcs through corner cells.
+        /// </summary>
         public static List<Vector3> PathToWorld(List<Vector2Int> cells, float laneOffset = 2f, float y = 0.05f)
         {
             var pts = new List<Vector3>();
             if (cells == null || cells.Count == 0) return pts;
-            for (int i = 0; i < cells.Count; i++)
+            float half = CityLayout.CellSize * 0.5f;
+            if (cells.Count == 1)
+            {
+                pts.Add(CityLayout.CellCenter(cells[0]) + Vector3.up * y);
+                return pts;
+            }
+
+            Vector3 Dir(int i) => (CityLayout.CellCenter(cells[i + 1]) - CityLayout.CellCenter(cells[i])).normalized;
+
+            Vector3 first = Dir(0);
+            pts.Add(CityLayout.CellCenter(cells[0]) + RightOf(first) * laneOffset);
+
+            for (int i = 1; i < cells.Count; i++)
             {
                 Vector3 c = CityLayout.CellCenter(cells[i]);
-                Vector3 dirIn = i > 0 ? (CityLayout.CellCenter(cells[i]) - CityLayout.CellCenter(cells[i - 1])).normalized : Vector3.zero;
-                Vector3 dirOut = i < cells.Count - 1 ? (CityLayout.CellCenter(cells[i + 1]) - c).normalized : dirIn;
-                if (dirIn == Vector3.zero) dirIn = dirOut;
-                Vector3 avg = (dirIn + dirOut);
-                if (avg.sqrMagnitude < 0.01f) avg = dirOut;
-                avg.Normalize();
-                Vector3 right = Vector3.Cross(Vector3.up, avg);
-                // Entry and exit points on cell edges keep the line on the road through corners.
-                if (i > 0)
+                Vector3 dirIn = Dir(i - 1);
+                Vector3 entry = c - dirIn * half + RightOf(dirIn) * laneOffset;
+                pts.Add(entry);
+                if (i == cells.Count - 1)
                 {
-                    Vector3 entry = c - dirIn * (CityLayout.CellSize * 0.5f) + Vector3.Cross(Vector3.up, dirIn) * laneOffset;
-                    pts.Add(new Vector3(entry.x, y, entry.z));
+                    pts.Add(c + RightOf(dirIn) * laneOffset);
+                    break;
                 }
-                Vector3 mid = c + right * laneOffset;
-                if (Vector3.Dot(dirIn, dirOut) < 0.5f)
+                Vector3 dirOut = Dir(i);
+                if (Vector3.Dot(dirIn, dirOut) > 0.5f) continue; // straight through
+                if (Vector3.Dot(dirIn, dirOut) < -0.5f)
                 {
-                    // Corner: pull the midpoint toward the inside of the turn for a smooth arc.
-                    Vector3 inner = c + (dirOut - dirIn) * (CityLayout.CellSize * 0.12f);
-                    mid = inner + right * laneOffset;
+                    // U-turn inside a dead end: go round the cell centre.
+                    pts.Add(c + dirIn * (half * 0.5f));
+                    continue;
                 }
-                pts.Add(new Vector3(mid.x, y, mid.z));
+                Vector3 pivot = c - dirIn * half + dirOut * half;
+                Vector3 exit = c + dirOut * half + RightOf(dirOut) * laneOffset;
+                Vector3 a = entry - pivot;
+                Vector3 b = exit - pivot;
+                float radius = a.magnitude;
+                for (int k = 1; k <= 3; k++)
+                {
+                    float t = k / 4f;
+                    Vector3 v = Vector3.Slerp(a.normalized, b.normalized, t) * radius;
+                    pts.Add(pivot + v);
+                }
             }
+
+            for (int i = 0; i < pts.Count; i++) pts[i] = new Vector3(pts[i].x, y, pts[i].z);
             return pts;
         }
     }
