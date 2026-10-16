@@ -75,11 +75,23 @@ Not installed on purpose: com.unity.xr.meta-openxr (AR Foundation features for Q
 | Unity project (non-synced) | `C:\UnityProjects\SKYFOLD` |
 | Original session folder | `C:\Users\awaiz\OneDrive\Desktop\skyfold` (empty git clone of the same remote; not used for the project, to keep Unity's Library out of OneDrive) |
 
+## Project scripts
+
+| Script | What it does |
+| --- | --- |
+| `tools\build.ps1` | One command: configure the project, build the scene from code, validate, build the release player. `-QA smoke demo ...` adds QA runs, `-Package` adds packaging |
+| `tools\qa\run_qa.ps1` | Runs QA scenarios against the built player (`smoke`, `menus`, `demo`, `episode1`, `episode1east`, `fullcampaign`, `campaign`, `fail`, `restarts`, `perf`, `tour`, `soak`, `lookdev`). Writes reports and screenshots to `qa\_captures\` |
+| `tools\qa\launch_test.ps1` | Launches the game through a shortcut, captures only the game window, prints the log lines, closes the game |
+| `tools\package.ps1` | Stages `Release\SKYFOLD\` (game, README, licences, docs, icons, launchers), writes `Release\SKYFOLD_v<version>_win64.zip`, creates the two Desktop shortcuts |
+| `tools\autosync.ps1` | Commits and pushes to `origin` every 3 minutes (your request) |
+| `tools\icons\make_icons.py` | Draws the app and shortcut icons |
+| `tools\blender\*.py`, `tools\audio\*.py` | Rebuild every model and sound from scripts |
+
 ## Agent tools and skills
 
 | Tool / skill | Status |
 | --- | --- |
-| Claude in Chrome (your real Chrome) | **Not connected**: the extension isn't reachable. This blocks ChatGPT image generation until it is connected. |
+| Claude in Chrome (your real Chrome) | **Not connected** (re-checked 2026-10-17 03:30: no connected browsers). This blocks ChatGPT image generation until it is connected. |
 | Built-in browser pane | Available, isolated; it has no ChatGPT sign-in, so I'm not relying on it for your ChatGPT session |
 | chrome-devtools MCP | Headless, unauthenticated |
 | Unity MCP | None found. Automation uses Unity batch mode plus C# editor scripts (`Assets/Skyfold/Editor`) |

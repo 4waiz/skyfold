@@ -137,7 +137,7 @@ namespace Skyfold
                 panel.anchorMin = panel.anchorMax = new Vector2(0f, 1f);
                 panel.pivot = new Vector2(0f, 1f);
                 panel.anchoredPosition = new Vector2(110f, -262f);
-                panel.sizeDelta = new Vector2(600f, 0f);
+                panel.sizeDelta = new Vector2(m_Screen == "launcher" ? 700f : 600f, 0f);
                 var vlg = panel.GetComponent<VerticalLayoutGroup>();
                 vlg.spacing = 8f;
                 vlg.padding = new RectOffset(24, 24, 24, 24);
@@ -196,14 +196,23 @@ namespace Skyfold
             s.rectTransform.offsetMin = s.rectTransform.offsetMax = Vector2.zero;
             s.gameObject.AddComponent<Shadow>().effectColor = new Color(0.05f, 0.12f, 0.14f, 0.5f);
 
-            var foot = UIKit.Text(root, SkyfoldInfo.Credit + "   ·   " + SkyfoldInfo.ProjectLabel + "   ·   v" + Application.version, UIStyle.SmallSize, UIStyle.Pearl, false, TextAlignmentOptions.BottomLeft, "Footer");
-            foot.alignment = TextAlignmentOptions.BottomRight;
-            foot.rectTransform.anchorMin = new Vector2(0f, 0f);
-            foot.rectTransform.anchorMax = new Vector2(1f, 0f);
-            foot.rectTransform.pivot = new Vector2(1f, 0f);
-            foot.rectTransform.anchoredPosition = new Vector2(-48f, 28f);
-            foot.rectTransform.sizeDelta = new Vector2(-96f, 40f);
-            foot.gameObject.AddComponent<Shadow>().effectColor = new Color(0f, 0f, 0f, 0.6f);
+            // Credit line on a small dark pill so it stays readable over the bright terrace.
+            var footBg = UIKit.Rect(root, "Footer");
+            footBg.anchorMin = footBg.anchorMax = new Vector2(1f, 0f);
+            footBg.pivot = new Vector2(1f, 0f);
+            footBg.anchoredPosition = new Vector2(-40f, 24f);
+            var footImg = footBg.gameObject.AddComponent<Image>();
+            footImg.sprite = UIKit.Rounded;
+            footImg.type = Image.Type.Sliced;
+            footImg.color = new Color(0.1f, 0.16f, 0.19f, 0.62f);
+            var footRow = footBg.gameObject.AddComponent<HorizontalLayoutGroup>();
+            footRow.padding = new RectOffset(18, 18, 8, 8);
+            footRow.childControlWidth = footRow.childControlHeight = true;
+            footRow.childForceExpandWidth = footRow.childForceExpandHeight = false;
+            var footFit = footBg.gameObject.AddComponent<ContentSizeFitter>();
+            footFit.horizontalFit = footFit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            var foot = UIKit.Text(footBg, SkyfoldInfo.Credit + "   ·   " + SkyfoldInfo.ProjectLabel + "   ·   v" + Application.version, UIStyle.SmallSize, UIStyle.Pearl, false, TextAlignmentOptions.Center, "Footer Text");
+            foot.textWrappingMode = TextWrappingModes.NoWrap;
         }
 
         void PlaceVR()
@@ -347,6 +356,15 @@ namespace Skyfold
             }
             void Line(RectTransform col, string text, bool head = false)
             {
+                // Keep each "key  action" pair on one line; wrap only between pairs.
+                var lines = text.Split('\n');
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    var parts = lines[i].Split(new[] { "    ·    " }, System.StringSplitOptions.None);
+                    for (int k = 0; k < parts.Length; k++) parts[k] = "<nobr>" + parts[k] + "</nobr>";
+                    lines[i] = string.Join("    ·    ", parts);
+                }
+                text = string.Join("\n", lines);
                 var t = UIKit.Text(col, text, head ? UIStyle.BodySize : UIStyle.SmallSize, head ? UIStyle.Teal : UIStyle.Ink, head);
                 if (head) t.fontStyle = FontStyles.Bold;
             }

@@ -23,8 +23,9 @@ namespace Skyfold.EditorTools
             var center = L.GetAnchor("atelier.center");
             var plinthA = L.GetAnchor("atelier.plinth");
 
-            // Headland and terrace.
-            var cliff = ModelLibrary.Spawn("cliff_headland", c.Atelier, new Vector3(center.Position.x, CityLayout.WaterLevel - 2f, center.Position.z), 20f);
+            // Headland and terrace. The cliff model's pivot is the terrace deck height: its plateau sits
+            // 2.4 m under the deck (inside the platform's 3.5 m base) and its foot stands in the sea.
+            var cliff = ModelLibrary.Spawn("cliff_headland", c.Atelier, center.Position, 20f);
             if (!ModelLibrary.Has("cliff_headland"))
             {
                 cliff.transform.localPosition = new Vector3(center.Position.x, center.Position.y * 0.5f - 2f, center.Position.z);
