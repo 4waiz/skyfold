@@ -2,11 +2,9 @@
  "summary": {
   "model": "small.en",
   "n": 52,
-  "mean_wer": 0.026886538461538458,
-  "max_wer": 1.0,
-  "failing": [
-   "g.checkpoint"
-  ]
+  "mean_wer": 0.00765576923076923,
+  "max_wer": 0.0909,
+  "failing": []
  },
  "lines": [
   {
@@ -856,16 +854,16 @@
   {
    "id": "g.checkpoint",
    "mode": "any",
-   "duration_s": 1.122,
-   "wps": 1.07,
-   "lufs": -16.02,
+   "duration_s": 1.156,
+   "wps": 2.07,
+   "lufs": -16.04,
    "tp_dbtp": -1.55,
-   "wer": 1.0,
+   "wer": 0.0,
    "letters": [],
    "letters_ok": true,
    "caption": "Checkpoint.",
-   "tts": "Checkpoint.",
-   "transcript": "in Checkpoint."
+   "tts": "Check point.",
+   "transcript": "Checkpoint."
   }
  ]
 }

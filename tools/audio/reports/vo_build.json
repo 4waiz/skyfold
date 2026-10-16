@@ -618,14 +618,14 @@
   {
    "id": "g.checkpoint",
    "file": "VO/g.checkpoint.wav",
-   "duration_s": 1.122,
-   "speech_s": 0.932,
-   "wps": 1.07,
-   "lufs": -16.02,
+   "duration_s": 1.156,
+   "speech_s": 0.966,
+   "wps": 2.07,
+   "lufs": -16.04,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "Checkpoint."
+   "tts": "Check point."
   }
  ]
 }

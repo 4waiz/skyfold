@@ -948,20 +948,45 @@ def render_to(path):
 FL_BR = (("fl", 38, 20), ("br", -142, 22))   # front-left, back-right 3/4 views
 
 
+DEBUG_DIR = os.path.join(os.environ.get("TEMP", PROJECT), "skyfold_chars_debug")
+
+
+def clear_studio():
+    for o in list(bpy.context.scene.objects):
+        if o.get("_studio"):
+            data = o.data
+            bpy.data.objects.remove(o)
+            if data is not None and data.users == 0:
+                if isinstance(data, bpy.types.Light):
+                    bpy.data.lights.remove(data)
+                elif isinstance(data, bpy.types.Mesh):
+                    bpy.data.meshes.remove(data)
+
+
+def _tag_studio(rig):
+    for k in ('sun', 'rim'):
+        rig[k]["_studio"] = True
+    g = bpy.context.scene.objects.get("Ground")
+    if g:
+        g["_studio"] = True
+
+
 def render_previews(name, root, views=FL_BR, res=(960, 720), samples=96, ground_z=0.0,
-                    lens=55.0, margin=1.12, sun_rel=42.0, sun_el=30.0, objs=None):
+                    lens=55.0, margin=1.12, sun_rel=42.0, sun_el=30.0, objs=None, out_dir=None):
     """3/4 previews. The warm sun sits sun_rel degrees to the camera's left-front so every
     view gets the same late-afternoon key/rim relationship."""
     objs = objs or [o for o in descendants(root) if o.type == 'MESH']
+    clear_studio()
     setup_render(res, samples)
     mn, mx = world_bbox(objs)
     size = (mx - mn).length
     rig = studio((mn + mx) / 2, size, ground_z=ground_z, sun_el=sun_el)
+    _tag_studio(rig)
     out = []
     for (tag, az, el) in views:
         aim_lights(rig, az + sun_rel, sun_el)
         cam = frame_camera(objs, az, el, lens=lens, margin=margin)
-        p = os.path.join(RENDERS, "%s_%s.png" % (name, tag))
+        p = os.path.join(out_dir or RENDERS, "%s_%s.png" % (name, tag))
         render_to(p)
         out.append(p)
         bpy.data.objects.remove(cam)
@@ -969,19 +994,21 @@ def render_previews(name, root, views=FL_BR, res=(960, 720), samples=96, ground_
 
 
 def render_ortho(name, root, views, res=(800, 800), samples=64, ground_z=None, margin=1.1,
-                 objs=None):
+                 objs=None, out_dir=None):
     """Clean orthographic views: views = [(tag, az, el), ...]."""
     objs = objs or [o for o in descendants(root) if o.type == 'MESH']
+    clear_studio()
     setup_render(res, samples)
     mn, mx = world_bbox(objs)
     size = (mx - mn).length
     rig = studio((mn + mx) / 2, size, ground_z=(ground_z if ground_z is not None else mn.z - size),
                  backdrop=ground_z is not None)
+    _tag_studio(rig)
     out = []
     for (tag, az, el) in views:
         aim_lights(rig, az + 35, 35)
         cam = frame_camera(objs, az, el, margin=margin, ortho=True)
-        p = os.path.join(RENDERS, "%s_%s.png" % (name, tag))
+        p = os.path.join(out_dir or RENDERS, "%s_%s.png" % (name, tag))
         render_to(p)
         out.append(p)
         bpy.data.objects.remove(cam)
