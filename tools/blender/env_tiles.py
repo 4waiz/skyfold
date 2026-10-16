@@ -51,10 +51,21 @@ def swapxy(pts):
     return [(y, x) for (x, y) in pts]
 
 
-def side_strip(side):
+def sw_joint(pts):
+    return reg(pts, SWZ, 'SKY_SandstoneDeep', 1.5)
+
+
+def side_strip(side, joints=True, y_lo=-H, y_hi=H):
     """Straight sidewalk + kerb along a closed side. side in 'W' (+X) or 'E' (-X) for N-S roads."""
     s = 1 if side == 'W' else -1
-    return [sidewalk(rect(s * RW, s * H, -H, H)), kerb(rect(s * RW, s * (RW + KW), -H, H))]
+    out = [sidewalk(rect(s * RW, s * H, y_lo, y_hi)), kerb(rect(s * RW, s * (RW + KW), y_lo, y_hi))]
+    if joints:
+        for y in (-7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0):
+            if y_lo < y < y_hi:
+                out.append(sw_joint(rect(s * (RW + KW), s * H, y - 0.03, y + 0.03)))
+        # longitudinal joint 1.6 m from the cell edge (building line band)
+        out.append(sw_joint(rect(s * (H - 1.6) - 0.03, s * (H - 1.6) + 0.03, y_lo, y_hi)))
+    return out
 
 
 def corner_block(sx, sy, R=2.0):
@@ -63,7 +74,19 @@ def corner_block(sx, sy, R=2.0):
     blk = [(H, RW), (c, RW)] + arc(c, c, R, 270, 180, 6)[1:-1] + [(RW, c), (RW, H), (H, H)]
     kb = [(H, RW), (c, RW)] + arc(c, c, R, 270, 180, 6)[1:-1] + [(RW, c), (RW, H), (RW + KW, H), (RW + KW, c)] + \
         arc(c, c, R - KW, 180, 270, 6)[1:-1] + [(c, RW + KW), (H, RW + KW)]
-    return [sidewalk(mapq(blk, sx, sy)), kerb(mapq(kb, sx, sy))]
+    out = [sidewalk(mapq(blk, sx, sy)), kerb(mapq(kb, sx, sy))]
+    # paving joints continuing the straight-tile rhythm (2 m) + building-line joint
+    for v in (5.0, 7.0):
+        if v >= c:
+            st = RW + KW
+        else:
+            rr = R - KW
+            st = c - math.sqrt(max(0.0, rr * rr - (c - v) ** 2)) + 0.03
+        out.append(sw_joint(mapq(rect(st, H, v - 0.03, v + 0.03), sx, sy)))
+        out.append(sw_joint(mapq(rect(v - 0.03, v + 0.03, st, H), sx, sy)))
+    out.append(sw_joint(mapq(rect(H - 1.6 - 0.03, H - 1.6 + 0.03, RW + KW, H), sx, sy)))
+    out.append(sw_joint(mapq(rect(RW + KW, H, H - 1.6 - 0.03, H - 1.6 + 0.03), sx, sy)))
+    return out
 
 
 def dashes_y(spans, x=0.0, w=LW):
@@ -198,7 +221,7 @@ def road_plaza(a):
         R.append(reg([(cx - 0.55, cy), (cx, cy - 0.55), (cx + 0.55, cy), (cx, cy + 0.55)], 0.0, 'SKY_SandstoneDeep', 3))
     # kerb ring island (raised)
     R.append(reg(circle(2.6, 36), SWZ, 'SKY_Pearl', 6))
-    R.append(reg(circle(2.25, 36), SWZ + 0.05, 'SKY_PalmLeaf', 7, side='SKY_Pearl'))
+    R.append(reg(circle(2.25, 36), SWZ - 0.03, 'SKY_PalmLeaf', 7, side='SKY_Pearl'))
     # edge border so the plaza reads as a field
     tile_surface(a, R)
 
@@ -479,7 +502,7 @@ def bridge_fascia(a, y0, y1, broken_end=None):
     a.part(mb, name="glow")
 
 
-def balustrade(a, y0, y1, posts, x_side, cap='SKY_Brass'):
+def balustrade(a, y0, y1, posts, x_side, cap='SKY_Brass', ends=()):
     """Pearl balustrade on the fascia top: posts with brass caps, top rail, slim balusters."""
     s = x_side
     xc = s * (DECK_HW + 0.12)
@@ -497,14 +520,16 @@ def balustrade(a, y0, y1, posts, x_side, cap='SKY_Brass'):
     mbr.box(xc - 0.07, xc + 0.07, y0, y1, zt, zt + 0.1, 'SKY_Pearl')
     a.part(mbr, bevel=0.02, seg=1, name="rails")
     mbb = MB()
-    ps = sorted(posts)
+    ps = sorted(list(posts) + list(ends))
     for k in range(len(ps) - 1):
-        p, q = ps[k] + 0.13, ps[k + 1] - 0.13
-        n = max(1, int((q - p) / 0.36))
+        p, q = ps[k] + (0.3 if ps[k] in ends else 0.13), ps[k + 1] - (0.3 if ps[k + 1] in ends else 0.13)
+        n = max(1, int((q - p) / 0.4))
         for i in range(n):
             by = p + (q - p) * (i + 0.5) / n
-            mbb.lathe([(0.035, zt + 0.1), (0.05, zt + 0.3), (0.03, zt + 0.6), (0.035, zt + 0.86)], 4, 'SKY_Pearl',
-                      cx=xc, cy=by, a0=45)
+            r0, r1 = 0.045, 0.03
+            ring0 = [(xc - r0, by - r0, zt + 0.1), (xc + r0, by - r0, zt + 0.1), (xc + r0, by + r0, zt + 0.1), (xc - r0, by + r0, zt + 0.1)]
+            ring1 = [(xc - r1, by - r1, zt + 0.86), (xc + r1, by - r1, zt + 0.86), (xc + r1, by + r1, zt + 0.86), (xc - r1, by + r1, zt + 0.86)]
+            mbb.loft([ring0, ring1], 'SKY_Pearl', cap0=False, cap1=False, recalc=False)
     a.part(mbb, name="balusters")
 
 
@@ -534,8 +559,6 @@ def bridge_abutment(a, sgn):
         a.part(mb, bevel=0.04, seg=2, name="acope")
         mb = MB(); mb.box(xa, xb, yb, sgn * H, -0.3, 0.0, 'SKY_Sandstone')
         a.part(mb, bevel=0.03, seg=1, name="atop")
-    # under-deck fill between deck soffit and courses (hidden mostly)
-    mb = MB(); mb.box(-DECK_HW - 0.3, DECK_HW + 0.3, min(ABUT * sgn, H * sgn), max(ABUT * sgn, H * sgn), -0.3, -DECK_T - 0.001 + 0.0, 'SKY_SandstoneDeep')
     # piers protruding from the abutment face carrying the arch springing
     mb2 = MB()
     for s in (-1, 1):
@@ -619,13 +642,17 @@ def bridge_span(a):
     bridge_deck_surface(a)
     bridge_fascia(a, -H, H)
     for s in (-1, 1):
-        balustrade(a, -H + 0.45, H - 0.45, [-H + 0.45, -4.0, 0.0, 4.0, H - 0.45], s)
+        balustrade(a, -H + 0.45, H - 0.45, [-4.0, 0.0, 4.0], s, ends=(-H + 0.45, H - 0.45))
     for sg in (-1, 1):
         bridge_abutment(a, sg)
     bridge_arch(a)
+    k = 0
     for s in (-1, 1):
         for sg in (-1, 1):
-            pass
+            x, y = s * (DECK_HW + 0.12), sg * (H - 0.45)
+            pylon(a, x, y)
+            a.empty(f"LIGHT_lantern_{k}", (x, y, 1.92))
+            k += 1
     a.notes.append("Deck top Z0: 8 m asphalt + 1 m walkways (Z0.15). Abutments fill the 1.5 m channel margins at "
                    "both cell edges, matching the quay wall line.")
 
@@ -668,7 +695,7 @@ def bridge_stub(a):
             x1 = min(DECK_HW + 0.25, x0 + 2.1)
             out = jag_outline(x0, x1, y_break, sg, depth=0.55 + 0.35 * rnd.random(), n=3, seed=k + 10 * sg)
             poly = [(x0, y_break + sg * 0.02), (x1, y_break + sg * 0.02)] + list(reversed(out)) if sg < 0 else \
-                [(x1, y_break - sg * 0.02), (x0, y_break - sg * 0.02)] + out
+                [(x1, y_break + sg * 0.02), (x0, y_break + sg * 0.02)] + out
             # outline must step outward from the break, i.e. toward the channel centre
             poly = [(p[0], p[1]) for p in poly]
             top = -0.04 - 0.12 * rnd.random()

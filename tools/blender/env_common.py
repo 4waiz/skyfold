@@ -949,10 +949,10 @@ def bbox_of(objs):
 
 
 def render_preview(objs, out_path, ground_z=None, water=False, az=35.0, el=30.0, res=900, samples=64,
-                   lens=50.0, margin=1.1, seabed=None, ground_rgb=(0.62, 0.57, 0.50), target=None):
+                   lens=50.0, margin=1.04, seabed=None, ground_rgb=(0.20, 0.24, 0.25), target=None):
     sc = bpy.context.scene
     _setup_cycles(sc, res, samples)
-    _world(sc, 0.9)
+    _world(sc, 0.65)
     lo, hi = bbox_of(objs)
     if ground_z is None:
         ground_z = lo.z
@@ -961,12 +961,12 @@ def render_preview(objs, out_path, ground_z=None, water=False, az=35.0, el=30.0,
         _plane("PreviewWater", -1.2, 600, (0.10, 0.36, 0.40), rough=0.05, water=True)
     # sun - warm late afternoon from front-left
     sd = bpy.data.lights.new("Sun", 'SUN')
-    sd.energy = 3.6
-    sd.color = (1.0, 0.83, 0.64)
-    sd.angle = math.radians(2.0)
+    sd.energy = 4.6
+    sd.color = (1.0, 0.80, 0.58)
+    sd.angle = math.radians(2.5)
     sun = bpy.data.objects.new("Sun", sd)
     link(sun)
-    saz, sel = math.radians(55.0), math.radians(33.0)
+    saz, sel = math.radians(58.0), math.radians(30.0)
     sdir = Vector((-math.sin(saz) * math.cos(sel), -math.cos(saz) * math.cos(sel), math.sin(sel)))
     sun.rotation_euler = sdir.to_track_quat('Z', 'Y').to_euler()
     # camera
