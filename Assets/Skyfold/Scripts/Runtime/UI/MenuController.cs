@@ -189,7 +189,7 @@ namespace Skyfold
             s.rectTransform.offsetMin = s.rectTransform.offsetMax = Vector2.zero;
             s.gameObject.AddComponent<Shadow>().effectColor = new Color(0.05f, 0.12f, 0.14f, 0.5f);
 
-            var foot = UIKit.Text(root, SkyfoldInfo.Credit + "   Â·   " + SkyfoldInfo.ProjectLabel + "   Â·   v" + Application.version, UIStyle.SmallSize, UIStyle.Pearl, false, TextAlignmentOptions.BottomLeft, "Footer");
+            var foot = UIKit.Text(root, SkyfoldInfo.Credit + "   ·   " + SkyfoldInfo.ProjectLabel + "   ·   v" + Application.version, UIStyle.SmallSize, UIStyle.Pearl, false, TextAlignmentOptions.BottomLeft, "Footer");
             foot.rectTransform.anchorMin = new Vector2(0f, 0f);
             foot.rectTransform.anchorMax = new Vector2(1f, 0f);
             foot.rectTransform.pivot = new Vector2(0f, 0f);
@@ -343,15 +343,15 @@ namespace Skyfold
                 if (head) t.fontStyle = FontStyles.Bold;
             }
             Line(left, "Laptop: on foot", true);
-            Line(left, "W A S D  move    Â·    Mouse  look\nE  use / pick up    Â·    Q  fold (at a Fold Station)\nTab  objectives    Â·    Esc  pause    Â·    Shift  walk slowly");
+            Line(left, "W A S D  move    ·    Mouse  look\nE  use / pick up    ·    Q  fold (at a Fold Station)\nTab  objectives    ·    Esc  pause    ·    Shift  walk slowly");
             Line(left, "Laptop: at the plinth", true);
-            Line(left, "Hold left mouse  pick up and drag a piece\nR  turn the held piece    Â·    release  set it down\nRight-drag or W A S D  orbit    Â·    Wheel  zoom\nQ  fold down into the street");
+            Line(left, "Hold left mouse  pick up and drag a piece\nR  turn the held piece    ·    release  set it down\nRight-drag or W A S D  orbit    ·    Wheel  zoom\nQ  fold down into the street");
             Line(left, "Laptop: in the car", true);
-            Line(left, "W  accelerate    Â·    S  brake, hold to reverse\nA / D  steer    Â·    Space  brake\nE  climb out when stopped    Â·    H  horn    Â·    C  camera");
+            Line(left, "W  accelerate    ·    S  brake, hold to reverse\nA / D  steer    ·    Space  brake\nE  climb out when stopped    ·    H  horn    ·    C  camera");
             Line(right, "Quest 3: on foot and at the plinth", true);
-            Line(right, "Left stick  move (smooth mode)\nRight stick  turn (snap by default)\nHold A  aim teleport, release to jump\nGrip  grab    Â·    Trigger  use / press UI\nX  fold (at a Fold Station)    Â·    Y  wrist objectives\nB  back    Â·    Left menu button  pause");
+            Line(right, "Left stick  move (smooth mode)\nRight stick  turn (snap by default)\nHold A  aim teleport, release to jump\nGrip  grab    ·    Trigger  use / press UI\nX  fold (at a Fold Station)    ·    Y  wrist objectives\nB  back    ·    Left menu button  pause");
             Line(right, "Quest 3: in the car", true);
-            Line(right, "Left stick  steer\nRight trigger  accelerate\nLeft trigger  brake, hold at a stop to reverse\nB  climb out when stopped    Â·    A  horn\nY  objectives    Â·    Menu  pause");
+            Line(right, "Left stick  steer\nRight trigger  accelerate\nLeft trigger  brake, hold at a stop to reverse\nB  climb out when stopped    ·    A  horn\nY  objectives    ·    Menu  pause");
             Line(right, "The Meta button stays reserved for the headset.", false);
             b.Space(4f);
             b.Toggle("Show input diagnostics panel", SettingsStore.Current.showDiagnostics, v => { SettingsStore.Current.showDiagnostics = v; SettingsStore.Save(); });
@@ -365,8 +365,8 @@ namespace Skyfold
             b.Choice("Movement", new[] { "Smooth (left stick)", "Teleport only (A)" }, (int)s.moveMode, i => { s.moveMode = (MoveMode)i; Apply(); });
             b.Choice("Turning", new[] { "Snap turns", "Smooth turning" }, (int)s.turnMode, i => { s.turnMode = (TurnMode)i; Apply(); });
             int[] angles = { 30, 45, 60, 90 };
-            b.Choice("Snap angle", angles.Select(a => a + "Â°").ToArray(), Array.IndexOf(angles, s.snapAngle) < 0 ? 1 : Array.IndexOf(angles, s.snapAngle), i => { s.snapAngle = angles[i]; Apply(); });
-            b.Slider("Smooth turn speed", s.smoothTurnSpeed, v => { s.smoothTurnSpeed = v; Apply(); }, 30f, 150f, v => Mathf.RoundToInt(v) + "Â°/s");
+            b.Choice("Snap angle", angles.Select(a => a + "°").ToArray(), Array.IndexOf(angles, s.snapAngle) < 0 ? 1 : Array.IndexOf(angles, s.snapAngle), i => { s.snapAngle = angles[i]; Apply(); });
+            b.Slider("Smooth turn speed", s.smoothTurnSpeed, v => { s.smoothTurnSpeed = v; Apply(); }, 30f, 150f, v => Mathf.RoundToInt(v) + "°/s");
             b.Slider("Walking speed", s.moveSpeed, v => { s.moveSpeed = v; Apply(); }, 1f, 3.5f, v => v.ToString("0.0") + " m/s");
             b.Toggle("Comfort vignette", s.vignette, v => { s.vignette = v; Apply(); });
             b.Slider("Vignette strength", s.vignetteStrength, v => { s.vignetteStrength = v; Apply(); });
@@ -406,10 +406,10 @@ namespace Skyfold
             b.Choice("Window", new[] { "Fullscreen", "Windowed" }, s.fullscreen ? 0 : 1, i => { s.fullscreen = i == 0; Root.ApplyDisplay(); Apply(); });
             var res = DisplayResolutions();
             int cur = Mathf.Clamp(s.resolutionIndex < 0 ? res.Count - 1 : s.resolutionIndex, 0, res.Count - 1);
-            b.Choice("Resolution", res.Select(r => r.x + " Ã— " + r.y).ToArray(), cur, i => { s.resolutionIndex = i; Root.ApplyDisplay(); Apply(); });
-            b.Slider("Mouse sensitivity", s.mouseSensitivity, v => { s.mouseSensitivity = v; Apply(); }, 0.2f, 4f, v => v.ToString("0.0") + "Ã—");
+            b.Choice("Resolution", res.Select(r => r.x + " × " + r.y).ToArray(), cur, i => { s.resolutionIndex = i; Root.ApplyDisplay(); Apply(); });
+            b.Slider("Mouse sensitivity", s.mouseSensitivity, v => { s.mouseSensitivity = v; Apply(); }, 0.2f, 4f, v => v.ToString("0.0") + "×");
             b.Toggle("Invert mouse Y", s.invertY, v => { s.invertY = v; Apply(); });
-            b.Slider("Field of view", s.fov, v => { s.fov = v; Apply(); }, 55f, 95f, v => Mathf.RoundToInt(v) + "Â°", true);
+            b.Slider("Field of view", s.fov, v => { s.fov = v; Apply(); }, 55f, 95f, v => Mathf.RoundToInt(v) + "°", true);
             b.Button("Back", Back);
         }
 
@@ -448,7 +448,7 @@ namespace Skyfold
             if (md != null && md.Current != null)
             {
                 var o = md.CurrentObjective;
-                b.Para((md.Current.IsDemo ? "Demo" : "Episode " + md.Current.Episode) + " Â· " + md.Current.Title + (o != null ? "\nNow: " + o.CardText(PlayerRigs.Instance.Mode) : ""), UIStyle.SmallSize + 2f);
+                b.Para((md.Current.IsDemo ? "Demo" : "Episode " + md.Current.Episode) + " · " + md.Current.Title + (o != null ? "\nNow: " + o.CardText(PlayerRigs.Instance.Mode) : ""), UIStyle.SmallSize + 2f);
             }
             b.Button("Resume", () => Root.Resume(), true);
             if (md?.CurrentObjective?.Hints != null && md.CurrentObjective.Hints.Length > 0)
@@ -493,8 +493,8 @@ namespace Skyfold
             }
             int mm = Mathf.FloorToInt(r.TimeLeft / 60f), ss = Mathf.FloorToInt(r.TimeLeft % 60f);
             b.Para($"Storm time left: <b>{mm}:{ss:00}</b> of {Mathf.RoundToInt(r.StormSeconds / 60f)} min\n" +
-                   $"Pieces placed: {r.PlacementAttempts - r.Rejected}   Â·   rejected tries: {r.Rejected}\n" +
-                   $"Hints shown: {r.HintsShown}   Â·   retries: {r.Retries}" +
+                   $"Pieces placed: {r.PlacementAttempts - r.Rejected}   ·   rejected tries: {r.Rejected}\n" +
+                   $"Hints shown: {r.HintsShown}   ·   retries: {r.Retries}" +
                    (def.Episode == 1 ? $"\nRoute: {(r.UsedShortcut ? "the east shortcut" : "the west causeway")} ({r.RouteLength} blocks)" : "") +
                    $"\nScore: {r.Score}", UIStyle.SmallSize + 2f, UIStyle.Ink);
             if (!string.IsNullOrEmpty(def.MedalRulesText)) b.Para(def.MedalRulesText, UIStyle.SmallSize - 2f);
@@ -512,8 +512,8 @@ namespace Skyfold
 
         void BuildVRStart(Builder b)
         {
-            b.Heading("Starting VRâ€¦");
-            b.Para("1. Connect the Quest 3 with a USB-C cable (or turn on Air Link).\n2. In the headset: Quick Settings â†’ Link â†’ choose this PC.\n3. Wait for the Link home screen, then look for SKYFOLD.", UIStyle.SmallSize + 2f, UIStyle.Ink);
+            b.Heading("Starting VR…");
+            b.Para("1. Connect the Quest 3 with a USB-C cable (or turn on Air Link).\n2. In the headset: Quick Settings, then Link, then choose this PC.\n3. Wait for the Link home screen, then look for SKYFOLD.", UIStyle.SmallSize + 2f, UIStyle.Ink);
             b.Para("SKYFOLD cannot press those headset buttons for you.", UIStyle.SmallSize);
             b.Button("Play on this laptop instead", () => Root.CancelVR());
         }
@@ -523,7 +523,7 @@ namespace Skyfold
             var xr = XRBootstrap.Instance;
             b.Heading("VR did not start", UIStyle.Coral);
             b.Para(xr != null ? xr.LastError : "Unknown error.", UIStyle.BodySize, UIStyle.Ink);
-            b.Para("Checklist: Meta Horizon Link app open on this PC Â· headset connected (cable or Air Link) Â· Link enabled in the headset Â· Meta set as the active OpenXR runtime.\nLog file: " + Application.consoleLogPath, UIStyle.SmallSize);
+            b.Para("Checklist: Meta Horizon Link app open on this PC · headset connected (cable or Air Link) · Link enabled in the headset · Meta set as the active OpenXR runtime.\nLog file: " + Application.consoleLogPath, UIStyle.SmallSize);
             b.Button("Retry", () => Root.EnterVR(), true);
             b.Button("Play on this laptop", () => Root.ChooseDesktop());
             b.Para("If Retry keeps failing, close SKYFOLD and start it with the \"SKYFOLD - Quest 3\" shortcut once Link is running. Your progress is kept.", UIStyle.SmallSize);

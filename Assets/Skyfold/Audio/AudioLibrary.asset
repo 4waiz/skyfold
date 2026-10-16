@@ -18,14 +18,14 @@ MonoBehaviour:
     category: 3
     loop: 1
     spatial: 0
-    volumeDb: -6
+    volumeDb: -7
     caption: 
   - id: amb_city_loop
     clip: {fileID: 8300000, guid: dcf520d4fd818ef499013295faf23a3e, type: 3}
     category: 3
     loop: 1
     spatial: 0
-    volumeDb: -6
+    volumeDb: -8
     caption: 
   - id: amb_coast_loop
     clip: {fileID: 8300000, guid: 69ecebd769fa58e4cb67d6c32e9b5620, type: 3}
@@ -39,174 +39,174 @@ MonoBehaviour:
     category: 3
     loop: 1
     spatial: 0
-    volumeDb: -6
+    volumeDb: -4
     caption: 
   - id: music_architect_loop
     clip: {fileID: 8300000, guid: 0cdbde72106c60b4097a18dd44e3a9c9, type: 3}
     category: 0
     loop: 1
     spatial: 0
-    volumeDb: -4
+    volumeDb: -5
     caption: 
   - id: music_drive_loop
     clip: {fileID: 8300000, guid: a69b7d5ed440c324badff0251cf8bd54, type: 3}
     category: 0
     loop: 1
     spatial: 0
-    volumeDb: -4
+    volumeDb: -5
     caption: 
   - id: music_finale
     clip: {fileID: 8300000, guid: 372f9d937fcc09e4bb8730fc233d9a88, type: 3}
     category: 0
     loop: 0
     spatial: 0
-    volumeDb: -4
+    volumeDb: -1
     caption: 
   - id: music_menu_loop
     clip: {fileID: 8300000, guid: cac109b83e317ff44a9f9449267341e1, type: 3}
     category: 0
     loop: 1
     spatial: 0
-    volumeDb: -4
+    volumeDb: -5
     caption: 
   - id: music_storm_loop
     clip: {fileID: 8300000, guid: f1f37615699662f47bd91c8591ff3fd0, type: 3}
     category: 0
     loop: 1
     spatial: 0
-    volumeDb: -4
+    volumeDb: -8
     caption: 
   - id: music_street_loop
     clip: {fileID: 8300000, guid: 53f708615f2f139419a5df1e8b35f51e, type: 3}
     category: 0
     loop: 1
     spatial: 0
-    volumeDb: -4
+    volumeDb: -5
     caption: 
   - id: stinger_episode
     clip: {fileID: 8300000, guid: 455e6522b8e0fbd45a487941609eb642, type: 3}
     category: 0
     loop: 0
     spatial: 0
-    volumeDb: -4
+    volumeDb: 0
     caption: 
   - id: stinger_fail
     clip: {fileID: 8300000, guid: 5294664fdba4ded45bfd00afb4cba913, type: 3}
     category: 0
     loop: 0
     spatial: 0
-    volumeDb: -4
+    volumeDb: -3
     caption: 
   - id: stinger_success
     clip: {fileID: 8300000, guid: 73e1925d4908ad94698b550decde9043, type: 3}
     category: 0
     loop: 0
     spatial: 0
-    volumeDb: -4
+    volumeDb: -1
     caption: 
   - id: beacon_on
     clip: {fileID: 8300000, guid: ee3fd8a9aed88eb4d84979f8fd55fd11, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -8.5
     caption: 
   - id: bridge_assemble
     clip: {fileID: 8300000, guid: 5891be89f586513449c973db41fde5c3, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: 1
     caption: 
   - id: car_bump
     clip: {fileID: 8300000, guid: 545dcb8135b637b4f9dd6bc982c21d54, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -1.5
     caption: 
   - id: car_enter
     clip: {fileID: 8300000, guid: 5fd3f478737735c49bc7b10ec2326f74, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -0.5
     caption: 
   - id: car_horn
     clip: {fileID: 8300000, guid: f1e4d669019c3c64ca878ab921a7b1aa, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -9.5
     caption: 
   - id: car_motor_loop
     clip: {fileID: 8300000, guid: 6efa654eda459fb40a3a48939d8b7bf3, type: 3}
     category: 1
     loop: 1
     spatial: 1
-    volumeDb: -3
+    volumeDb: -15
     caption: 
   - id: car_roll_loop
     clip: {fileID: 8300000, guid: 355184d903db92a4bbf8b7fe20907468, type: 3}
     category: 1
     loop: 1
     spatial: 1
-    volumeDb: -3
+    volumeDb: -11
     caption: 
   - id: car_start
     clip: {fileID: 8300000, guid: 6294d3e26c63aa943aafbf24f1da22ce, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -9.5
     caption: 
   - id: cell_insert
     clip: {fileID: 8300000, guid: 0d495feadcecc90449b9fde184e62df0, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -6.5
     caption: 
   - id: cell_pickup
     clip: {fileID: 8300000, guid: 5bab99a8bf4e8af479aa9719d21dca20, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -5.5
     caption: 
   - id: checkpoint
     clip: {fileID: 8300000, guid: ffbd298209924b44bb6a94f5832b152c, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -3
+    spatial: 0
+    volumeDb: -7.5
     caption: 
   - id: convoy_beep
     clip: {fileID: 8300000, guid: 108c17c1885563a42915944c3fcb3983, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -10.5
     caption: 
   - id: door_chime
     clip: {fileID: 8300000, guid: 799334158657530468fa458ae8c25325, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -6.5
     caption: 
   - id: fold_in
     clip: {fileID: 8300000, guid: f2abdc4f40b8c7f4b99663f32bf0ea9a, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -3
+    spatial: 0
+    volumeDb: -4
     caption: 
   - id: fold_out
     clip: {fileID: 8300000, guid: 9ed4d61e842a7274d9b91b8a4d70d9f1, type: 3}
     category: 1
     loop: 0
-    spatial: 1
+    spatial: 0
     volumeDb: -3
     caption: 
   - id: footstep_stone_01
@@ -214,314 +214,314 @@ MonoBehaviour:
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -7.5
     caption: 
   - id: footstep_stone_02
     clip: {fileID: 8300000, guid: 4738b453ff38c6b4a8fa0b76283a6098, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -6.5
     caption: 
   - id: footstep_stone_03
     clip: {fileID: 8300000, guid: e4770fba0dfc7374294fd05466547720, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -8
     caption: 
   - id: footstep_stone_04
     clip: {fileID: 8300000, guid: c683c4533eb025248b33dc4714bd1879, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -7
     caption: 
   - id: hint_ping
     clip: {fileID: 8300000, guid: c123c35349f82ac4688305f7163178c6, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -3
+    spatial: 0
+    volumeDb: -13
     caption: 
   - id: nuri_celebrate_01
     clip: {fileID: 8300000, guid: a1be963e9368e794f9243bd18af1e629, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -13
     caption: 
   - id: nuri_celebrate_02
     clip: {fileID: 8300000, guid: 18dc455ff2fc621469c54a9570463f50, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -12.5
     caption: 
   - id: nuri_concern_01
     clip: {fileID: 8300000, guid: a95cf049d8cb14f47a0f4fcb0e0a5166, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -16.5
     caption: 
   - id: nuri_concern_02
     clip: {fileID: 8300000, guid: 82a8c220443de99479e26f53df0325e6, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -13.5
     caption: 
   - id: nuri_concern_03
     clip: {fileID: 8300000, guid: 049f512bd077ae444872f6601371fab2, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -16
     caption: 
   - id: nuri_curious_01
     clip: {fileID: 8300000, guid: 3ca2595488901ed47a92fb35564b5e5e, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -14
     caption: 
   - id: nuri_curious_02
     clip: {fileID: 8300000, guid: 8a46d54c85086834d8527b7f34a49a7e, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -13.5
     caption: 
   - id: nuri_curious_03
     clip: {fileID: 8300000, guid: 41aaaa610f8d6164d85111197a0ed166, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -15.5
     caption: 
   - id: nuri_happy_01
     clip: {fileID: 8300000, guid: a158fc47ea7151b43b5341a18096bbe0, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -14.5
     caption: 
   - id: nuri_happy_02
     clip: {fileID: 8300000, guid: c68b535c87738d942a7c6e8e4a782aae, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -13.5
     caption: 
   - id: nuri_happy_03
     clip: {fileID: 8300000, guid: 1d3031766c3a1f3489840f9646e0c1f1, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -14
     caption: 
   - id: nuri_happy_04
     clip: {fileID: 8300000, guid: 0d976feede2a57940818b5b2e9617b76, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -15.5
     caption: 
   - id: nuri_point_01
     clip: {fileID: 8300000, guid: cce2bd569afeaa24faba875ec0cd4d03, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -11.5
     caption: 
   - id: nuri_point_02
     clip: {fileID: 8300000, guid: 30ddd5df51cad0943b8604ac071fb05a, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -15
     caption: 
   - id: objective_complete
     clip: {fileID: 8300000, guid: cc5066996cfdf3c4cb36bc210c772277, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -3
+    spatial: 0
+    volumeDb: -5.5
     caption: 
   - id: piece_drop
     clip: {fileID: 8300000, guid: aaaf9a3874a0f334ea194776898748b4, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -0.5
     caption: 
   - id: piece_pickup
     clip: {fileID: 8300000, guid: 78dc73315ffd2d649a05d1718a3d0d45, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -6.5
     caption: 
   - id: piece_rotate
     clip: {fileID: 8300000, guid: 633936f081e732c4889fe55c6bec2439, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -5
     caption: 
   - id: plane_flyby
     clip: {fileID: 8300000, guid: 91510fb549c1ba5488abfa1ba7fa5b2a, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: 1
     caption: 
   - id: plane_idle_loop
     clip: {fileID: 8300000, guid: 3ac5a78340908d848a10965870919b35, type: 3}
     category: 1
     loop: 1
     spatial: 1
-    volumeDb: -3
+    volumeDb: -8
     caption: 
   - id: plane_spoolup
     clip: {fileID: 8300000, guid: 6a72c0c8e6df2a94e908ecd210840253, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -1
     caption: 
   - id: plane_takeoff
     clip: {fileID: 8300000, guid: eba0207727f9cdd4eb66a1e3b148ce01, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: 2
     caption: 
   - id: power_transfer
     clip: {fileID: 8300000, guid: c0be34e0641381648982bd62cf69456e, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -4
     caption: 
   - id: respawn
     clip: {fileID: 8300000, guid: 23b0e3df78e91cb4eb67b845103539f4, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -3
+    spatial: 0
+    volumeDb: -7
     caption: 
   - id: route_complete
     clip: {fileID: 8300000, guid: 567730ceb40794b478e743266e9e1e34, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -3
+    spatial: 0
+    volumeDb: -5
     caption: 
   - id: socket_reject
     clip: {fileID: 8300000, guid: 92afc16cfcbcbbd4db1f5fd2b8e66970, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -10
     caption: 
   - id: socket_snap
     clip: {fileID: 8300000, guid: bcc68fc367df8f74eaba030946703ef3, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: 0
     caption: 
   - id: splash
     clip: {fileID: 8300000, guid: 6dd94584d583f934b933ce4122e3b551, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: 2
     caption: 
   - id: substation_on
     clip: {fileID: 8300000, guid: 7a79bd497c037b74c91ac1fffc33f74a, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: 1.5
     caption: 
   - id: switch_lever
     clip: {fileID: 8300000, guid: 7ebbb1c68ddd05942b0206f08f3a0116, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -0.5
     caption: 
   - id: teleport
     clip: {fileID: 8300000, guid: 10fa6b59f8a967b46aa64d9df0498d54, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -3
+    spatial: 0
+    volumeDb: -6.5
     caption: 
   - id: thunder_far_01
     clip: {fileID: 8300000, guid: 2f63aa5704e1ffd4683ceb2cd331bc17, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -3.5
     caption: 
   - id: thunder_far_02
     clip: {fileID: 8300000, guid: 78f5979ee855bb64cb20a2b6e4e69812, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -0.5
     caption: 
   - id: thunder_far_03
     clip: {fileID: 8300000, guid: 89b0c4d3270650840af89df4f4fe8a78, type: 3}
     category: 1
     loop: 0
     spatial: 1
-    volumeDb: -3
+    volumeDb: -4.5
     caption: 
   - id: ui_back
     clip: {fileID: 8300000, guid: 58aeda2e4a9d25e4d93ec1cbf23e235e, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -8
+    spatial: 0
+    volumeDb: -14.5
     caption: 
   - id: ui_click
     clip: {fileID: 8300000, guid: 702c9a67d97bc654a8377f4917adc0d2, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -8
+    spatial: 0
+    volumeDb: -9.5
     caption: 
   - id: ui_hover
     clip: {fileID: 8300000, guid: 2317a0a9f15c2a74f93ec25391befc90, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -8
+    spatial: 0
+    volumeDb: -18.5
     caption: 
   - id: ui_slider_tick
     clip: {fileID: 8300000, guid: 945f2b8c671dff3418c87d8ef3135665, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -8
+    spatial: 0
+    volumeDb: -18
     caption: 
   - id: ui_toggle
     clip: {fileID: 8300000, guid: c3e4eee176e06e44b8681dd7bdd72dea, type: 3}
     category: 1
     loop: 0
-    spatial: 1
-    volumeDb: -8
+    spatial: 0
+    volumeDb: -6.5
     caption: 
   - id: warning_chime
     clip: {fileID: 8300000, guid: 65317b599f111f945a6c1c1e1b60f793, type: 3}
     category: 1
     loop: 0
-    spatial: 1
+    spatial: 0
     volumeDb: -3
     caption: 
   - id: d.beacons.desktop
@@ -530,361 +530,361 @@ MonoBehaviour:
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Press E on the beacon switch beside the substation to light the runway.
   - id: d.beacons.vr
     clip: {fileID: 8300000, guid: a2276f190512834448a2940bd1db7124, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Pull the beacon switch beside the substation to light the runway.
   - id: d.clear.desktop
     clip: {fileID: 8300000, guid: cf8324053d64a6f42a159bf6c4637d18, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The runway is lit. Press E on the departure lever.
   - id: d.clear.vr
     clip: {fileID: 8300000, guid: 96ac86fa39e3743488c1dcbe946188f3, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The runway is lit. Pull the departure lever.
   - id: d.welcome
     clip: {fileID: 8300000, guid: ad408cc04f826074795866bd7925dcea, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Welcome to Nacre Bay. One bridge, one power cell, one last flight. Let's go.
   - id: e1.choice
     clip: {fileID: 8300000, guid: 3628c2f09fc4b964098ba541d9b00028, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: We only have one spare bridge. The west crossing is a long drive. The east one is shorter, but its harbour corner is broken too.
   - id: e1.crossed
     clip: {fileID: 8300000, guid: c2082146e1733f7459bfb8a7961ed720, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: You built that bridge with your own hands, and now you've driven across it. Nicely done.
   - id: e1.east_needs_corner
     clip: {fileID: 8300000, guid: 0b102985829185c4d9dcf0f141ce35a7, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Nearly there. The harbour corner beside it is broken. Find the right piece and turn it to fit.
   - id: e1.plinth
     clip: {fileID: 8300000, guid: a91618e00ff746141b683e0ca2f90fc2, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: This model is the real city below us. Change one, and you change the other.
   - id: e1.route_east
     clip: {fileID: 8300000, guid: 29058442dd2104a4b845ec8926406db4, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The shortcut is open! That bridge is real at both scales now.
   - id: e1.route_west
     clip: {fileID: 8300000, guid: 90d85a95afadb6f47a939d2da86438d9, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The road is through. That bridge is real at both scales now.
   - id: e1.welcome
     clip: {fileID: 8300000, guid: cc7053bd4bc3baf4e9f60d999e8286ca, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Welcome to Nacre Bay. I'm Noor, the city engineer. A storm is coming, and it has broken our roads.
   - id: e2.brief
     clip: {fileID: 8300000, guid: b9987c5be86a02644ab111116b54479e, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The airfield substation is dark. Carry a power cell across your causeway and wake it up. The storm won't wait.
   - id: e2.convoy
     clip: {fileID: 8300000, guid: 0a3fb637c4c22874dbddb7f996012c27, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The passenger convoy is rolling out along your route.
   - id: e2.deliver.desktop
     clip: {fileID: 8300000, guid: 21ac071218f087e4fae1edac84bad974, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Take the cell from the cradle with E, and press E again at the substation socket.
   - id: e2.deliver.vr
     clip: {fileID: 8300000, guid: d493b0762301ae4439c8f63f1e210441, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Take the cell from the cradle and set it into the substation socket.
   - id: e2.drive
     clip: {fileID: 8300000, guid: f52afbcdbe5b8884f93e7d3eeae9f85c, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Follow the guide lights to the substation. Checkpoints will catch you if you leave the road.
   - id: e2.powered
     clip: {fileID: 8300000, guid: 4fdb32d3bbd63614f901f8cb5d3f33e2, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Power is back on the island. Look at those lights!
   - id: e3.beacons.desktop
     clip: {fileID: 8300000, guid: f74c78b656a550c46b75a8cfb13904e6, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Now restore the runway beacons. Press E at each switch.
   - id: e3.beacons.vr
     clip: {fileID: 8300000, guid: 7431617a85ba1004dbc11d817c35f221, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Now restore the runway beacons. Point at each switch and pull the trigger.
   - id: e3.brief
     clip: {fileID: 8300000, guid: 3b02cb90bbdf7b045ac0767f0e6e1bf5, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: One flight left before the storm closes the sky. The terminal road is still broken, so the convoy can't reach the plane.
   - id: e3.clear.desktop
     clip: {fileID: 8300000, guid: e79c6fc497f75704483f4da67dcd3444, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Everything is ready. Press E on the departure lever in the tower.
   - id: e3.clear.vr
     clip: {fileID: 8300000, guid: e2a93825697722e42a725bbd0679f179, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Everything is ready. Pull the departure lever in the tower.
   - id: e3.convoy_arrived
     clip: {fileID: 8300000, guid: bcd7091d78f5c234ead98cf524154bec, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The convoy is at the terminal. Passengers are boarding.
   - id: e3.end
     clip: {fileID: 8300000, guid: 9cd7a11b24a205448bd1c216250e511e, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The city is safe. And it's still the one you built.
   - id: e3.fold.desktop
     clip: {fileID: 8300000, guid: 3903bf13197f6e9469936b9bfc765b77, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Use the airfield Fold Station. Press Q.
   - id: e3.fold.vr
     clip: {fileID: 8300000, guid: 6618e6161a8cab44492ddd17a024a3cb, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Use the airfield Fold Station. Press X.
   - id: e3.link
     clip: {fileID: 8300000, guid: e52edfe4d6e0aba4fbea2d6c6bfcb9fe, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Repair the terminal access link. Watch which way the roads meet.
   - id: e3.takeoff
     clip: {fileID: 8300000, guid: 4b7310a24437b744f9ba88ba1557fdc0, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: 'Nacre tower: last flight, you are clear. Thank you, courier. Look at her go!'
   - id: g.car_respawn
     clip: {fileID: 8300000, guid: f2dd28387d4faa84abc91b872cf68048, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Let's put you back on the road.
   - id: g.cell_respawn
     clip: {fileID: 8300000, guid: 633a01cd9bfb92649bc60b3286d41a2e, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: No harm done. A fresh cell is waiting at the dock.
   - id: g.checkpoint
     clip: {fileID: 8300000, guid: 50397445102442d428575822711b1574, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Checkpoint.
   - id: g.fail
     clip: {fileID: 8300000, guid: f30c07d73e6ec064e83af64b5b186305, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The storm reached us. That's alright. Let's try again from the last checkpoint.
   - id: g.hint_socket
     clip: {fileID: 8300000, guid: bbfd71441c686d84f954b8d95a7464f1, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Look for the sockets glowing teal on the model.
   - id: g.remote_drive
     clip: {fileID: 8300000, guid: 658d5d25b404e4c4c8334050fc04ee07, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Remote drive is on. You'll steer the car from right here.
   - id: g.retry
     clip: {fileID: 8300000, guid: 2a0ba9d0c9325ca44abd5bf6d1481d37, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Back at the checkpoint. You've got this.
   - id: g.storm_final
     clip: {fileID: 8300000, guid: 3ae4283b3a00cd741822070a93512424, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Thirty seconds!
   - id: g.storm_warning
     clip: {fileID: 8300000, guid: 6674d4bef6368834b8b4d7728cdbfb5b, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The storm is close. Two minutes left.
   - id: t.cell.desktop
     clip: {fileID: 8300000, guid: 4d711db8fc53444429f9013cd5e05f29, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Press E to pick up the power cell, then press E at the car to load it.
   - id: t.cell.vr
     clip: {fileID: 8300000, guid: e7348741a19bb664e88836f90b4e6e86, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Grab the power cell from the dock and set it in the car's cradle.
   - id: t.drive.desktop
     clip: {fileID: 8300000, guid: 5f81afa06b5ce2a438840ad8dd3257ce, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: W accelerates, S brakes and reverses, and A and D steer.
   - id: t.drive.vr
     clip: {fileID: 8300000, guid: 467443682c1f2714b8c1b35f469fa0ea, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: The left stick steers. The right trigger accelerates, and the left trigger brakes.
   - id: t.enter.desktop
     clip: {fileID: 8300000, guid: b1606a55b86d0e0498b6c4a6b3d2fc9c, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Press E at the car door to climb in.
   - id: t.enter.vr
     clip: {fileID: 8300000, guid: 2b54e1f3fa8a4304f8b9a79f22b4fe7f, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Point at the car door and pull the trigger to climb in.
   - id: t.fold.desktop
     clip: {fileID: 8300000, guid: ad62022ac78a3b84cbee40864e35ebd2, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Press Q to fold down into the street.
   - id: t.fold.vr
     clip: {fileID: 8300000, guid: 186e375320fa8124ab58a148dc2e1b1b, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Press X to fold down into the street.
   - id: t.grab.desktop
     clip: {fileID: 8300000, guid: ae471b0c98bc31b438241163c44ce6e8, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Click and hold the bridge piece on the tray to pick it up.
   - id: t.grab.vr
     clip: {fileID: 8300000, guid: d112e3abfe322e6458d1f4c8568ae6ac, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Reach for the bridge piece on the tray and squeeze the grip to pick it up.
   - id: t.place.desktop
     clip: {fileID: 8300000, guid: 88d57087aea61b14187f32578344012b, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Press R to turn it until its ends meet the road, then let go over a glowing socket.
   - id: t.place.vr
     clip: {fileID: 8300000, guid: cb79647296364bd4e841c66476c26e4c, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Turn it until its ends meet the road, then let go over a glowing socket.
   - id: t.walk.desktop
     clip: {fileID: 8300000, guid: d67b75d9710473b49934e1c67a694700, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Walk with W, A, S and D, and look around with the mouse. The courier car is just ahead.
   - id: t.walk.vr
     clip: {fileID: 8300000, guid: d720b37a17cacb843a87d1cd28788f93, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 
+    caption: Move with the left stick, or hold A to aim a teleport and let go to jump. The courier car is just ahead.

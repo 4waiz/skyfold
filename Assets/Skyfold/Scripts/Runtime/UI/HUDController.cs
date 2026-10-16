@@ -155,7 +155,7 @@ namespace Skyfold
             cv.childForceExpandHeight = false;
             cv.spacing = 2;
             UIKit.Layout(col, -1f, -1f, 0f, 1100f);
-            m_SubSpeaker = UIKit.Text(col, "Noor Â· radio", 20f, UIStyle.TealGlow);
+            m_SubSpeaker = UIKit.Text(col, "Noor · radio", 20f, UIStyle.TealGlow);
             m_SubSpeaker.fontStyle = FontStyles.Bold;
             m_SubText = UIKit.Text(col, "", 30f, UIStyle.Pearl);
 
@@ -171,7 +171,7 @@ namespace Skyfold
             m_SpeedText.alignment = TextAlignmentOptions.Center;
 
             m_Badge = Card("Spectator Badge", new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(-40f, 48f), 330f, new Color(0.06f, 0.43f, 0.45f, 0.92f), out var badgeText, 22f);
-            badgeText.text = "<b>LIVE Â· VR</b>   SKYFOLD\n<size=16>Hobby build Â· F5 operator reset (demo)</size>";
+            badgeText.text = "<b>LIVE · VR</b>   SKYFOLD\n<size=16>Hobby build · F5 operator reset (demo)</size>";
             badgeText.color = UIStyle.Pearl;
 
             m_CursorHint = Card("Cursor Hint", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 220f), 620f, UIStyle.PanelGlass, out m_CursorText, 22f);
@@ -251,7 +251,7 @@ namespace Skyfold
         // ------------------------------------------------------------------ events
         void OnToast(string text, bool warning)
         {
-            m_Toast.text = (warning ? "<color=#F2714B>âœ•</color>  " : "") + text;
+            m_Toast.text = (warning ? "<color=#F2714B><b>Not quite.</b></color>  " : "") + text;
             m_ToastTime = warning ? 4.5f : 3.2f;
             m_ToastCard.gameObject.SetActive(true);
             if (m_VRHint != null) { m_VRHint.text = text; m_HintTime = Mathf.Max(m_HintTime, m_ToastTime); }
@@ -281,7 +281,7 @@ namespace Skyfold
         void OnLine(VoLine line, float duration)
         {
             if (!SettingsStore.Current.subtitles) return;
-            string speaker = line.speaker == "nuri" ? "NURI" : "Noor Â· radio";
+            string speaker = line.speaker == "nuri" ? "NURI" : "Noor · radio";
             m_SubSpeaker.text = speaker;
             m_SubText.text = line.text;
             m_SubText.fontSize = 30f * SettingsStore.Current.subtitleScale;
@@ -333,7 +333,7 @@ namespace Skyfold
             var o = md.CurrentObjective;
             if (md.Current != null)
             {
-                m_ObjEpisode.text = (md.Current.IsDemo ? "DEMO" : "EPISODE " + md.Current.Episode) + "  Â·  " + md.Current.Title.ToUpperInvariant();
+                m_ObjEpisode.text = (md.Current.IsDemo ? "DEMO" : "EPISODE " + md.Current.Episode) + "  ·  " + md.Current.Title.ToUpperInvariant();
                 string text = o != null ? o.CardText(rigs.Mode) : (md.State == MissionState.Success ? "Complete!" : "");
                 if (o?.Progress != null) text += "  <color=#0F6F73>" + o.Progress(md.Ctx) + "</color>";
                 m_ObjText.text = text;
@@ -374,9 +374,9 @@ namespace Skyfold
         {
             switch (input.Context)
             {
-                case InputContext.Architect: return "Hold left mouse: move a piece   Â·   R: turn   Â·   Q: fold down   Â·   Tab: hide";
-                case InputContext.Driving: return "W/S: drive & brake   Â·   A/D: steer   Â·   E: climb out   Â·   Tab: hide";
-                default: return "WASD: walk   Â·   E: use   Â·   Q: fold at a station   Â·   Tab: hide";
+                case InputContext.Architect: return "Hold left mouse: move a piece   ·   R: turn   ·   Q: fold down   ·   Tab: hide";
+                case InputContext.Driving: return "W/S: drive & brake   ·   A/D: steer   ·   E: climb out   ·   Tab: hide";
+                default: return "WASD: walk   ·   E: use   ·   Q: fold at a station   ·   Tab: hide";
             }
         }
 
@@ -477,7 +477,7 @@ namespace Skyfold
                 string text = o != null ? o.CardText(PlayMode.VR) : "";
                 if (o?.Progress != null) text += "  " + o.Progress(MissionDirector.Instance.Ctx);
                 m_WristObj.text = text;
-                m_WristKeys.text = input.Context == InputContext.Driving ? "B: climb out (stopped) Â· Menu: pause" : "X: fold at a station Â· Y: hide Â· Menu: pause";
+                m_WristKeys.text = input.Context == InputContext.Driving ? "B: climb out (stopped) · Menu: pause" : "X: fold at a station · Y: hide · Menu: pause";
             }
         }
     }

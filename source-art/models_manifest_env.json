@@ -1,0 +1,3228 @@
+{
+ "generated": "2026-10-17",
+ "tool": "Blender 5.2 (headless), tools/blender/build_env.py",
+ "axes": "Unity: x=-x_blender, y=z_blender, z=-y_blender",
+ "files": [
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/road_straight.fbx",
+   "name": "road_straight",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "road_straight",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 488,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Kerb",
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Ink",
+      "SKY_Road",
+      "SKY_RoadLine"
+     ]
+    }
+   ],
+   "tris": 488,
+   "materials": [
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Road",
+    "SKY_RoadLine",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -0.3,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     0.15,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    0.45,
+    16.0
+   ],
+   "empties": [],
+   "issues": [
+    "road_straight: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/road_corner.fbx",
+   "name": "road_corner",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "road_corner",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 666,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Kerb",
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Road",
+      "SKY_RoadLine"
+     ]
+    }
+   ],
+   "tris": 666,
+   "materials": [
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Road",
+    "SKY_RoadLine",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0141,
+     -0.3,
+     -8.0141
+    ],
+    "max": [
+     8.0,
+     0.15,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.014,
+    0.45,
+    16.014
+   ],
+   "empties": [],
+   "issues": [
+    "road_corner: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/road_tee.fbx",
+   "name": "road_tee",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "road_tee",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 502,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Road",
+      "SKY_Pearl",
+      "SKY_Kerb",
+      "SKY_RoadLine",
+      "SKY_SandstoneDeep",
+      "SKY_Ink"
+     ]
+    }
+   ],
+   "tris": 502,
+   "materials": [
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Road",
+    "SKY_RoadLine",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -0.3,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     0.15,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    0.45,
+    16.0
+   ],
+   "empties": [],
+   "issues": [
+    "road_tee: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/road_cross.fbx",
+   "name": "road_cross",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "road_cross",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 604,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Kerb",
+      "SKY_Pearl",
+      "SKY_Road",
+      "SKY_RoadLine",
+      "SKY_SandstoneDeep"
+     ]
+    }
+   ],
+   "tris": 604,
+   "materials": [
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Road",
+    "SKY_RoadLine",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -0.3,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     0.15,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    0.45,
+    16.0
+   ],
+   "empties": [],
+   "issues": [
+    "road_cross: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/road_end.fbx",
+   "name": "road_end",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "road_end",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 604,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Kerb",
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Road",
+      "SKY_RoadLine",
+      "SKY_Ink"
+     ]
+    }
+   ],
+   "tris": 604,
+   "materials": [
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Road",
+    "SKY_RoadLine",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -0.3,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     0.15,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    0.45,
+    16.0
+   ],
+   "empties": [],
+   "issues": [
+    "road_end: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/road_plaza.fbx",
+   "name": "road_plaza",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "road_plaza",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 732,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Sandstone",
+      "SKY_SandstoneDeep",
+      "SKY_PalmLeaf",
+      "SKY_Pearl"
+     ]
+    }
+   ],
+   "tris": 732,
+   "materials": [
+    "SKY_PalmLeaf",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -0.3,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     0.15,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    0.45,
+    16.0
+   ],
+   "empties": [],
+   "issues": [
+    "road_plaza: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/ground_paving.fbx",
+   "name": "ground_paving",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "ground_paving",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 460,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Sandstone"
+     ]
+    }
+   ],
+   "tris": 460,
+   "materials": [
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -0.3,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     0.0,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    0.3,
+    16.0
+   ],
+   "empties": [],
+   "issues": [
+    "ground_paving: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/runway_section.fbx",
+   "name": "runway_section",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "runway_section",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 88,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Road",
+      "SKY_Kerb",
+      "SKY_RoadLine",
+      "SKY_SandstoneDeep"
+     ]
+    }
+   ],
+   "tris": 88,
+   "materials": [
+    "SKY_Kerb",
+    "SKY_Road",
+    "SKY_RoadLine",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -0.3,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     0.0,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    0.3,
+    16.0
+   ],
+   "empties": [],
+   "issues": [
+    "runway_section: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/runway_end.fbx",
+   "name": "runway_end",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "runway_end",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 214,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_RoadLine",
+      "SKY_Road",
+      "SKY_Kerb",
+      "SKY_SandstoneDeep",
+      "SKY_Coral"
+     ]
+    }
+   ],
+   "tris": 214,
+   "materials": [
+    "SKY_Coral",
+    "SKY_Kerb",
+    "SKY_Road",
+    "SKY_RoadLine",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -0.3,
+     -8.25
+    ],
+    "max": [
+     8.0,
+     0.0,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    0.3,
+    16.25
+   ],
+   "empties": [],
+   "issues": [
+    "runway_end: rotation not applied (90.0, -0.0, 0.0)",
+    "tile footprint 16.00 x 16.25 != 16 x 16"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/apron_tile.fbx",
+   "name": "apron_tile",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "apron_tile",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 300,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Kerb",
+      "SKY_Ink"
+     ]
+    }
+   ],
+   "tris": 300,
+   "materials": [
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -0.3,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     0.0,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    0.3,
+    16.0
+   ],
+   "empties": [],
+   "issues": [
+    "apron_tile: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/quay_straight.fbx",
+   "name": "quay_straight",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "quay_straight",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 984,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Sandstone",
+      "SKY_Kerb",
+      "SKY_Ink",
+      "SKY_Wood"
+     ]
+    }
+   ],
+   "tris": 984,
+   "materials": [
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -4.0,
+     -9.66
+    ],
+    "max": [
+     8.0,
+     0.58,
+     -8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    4.58,
+    1.66
+   ],
+   "empties": [],
+   "issues": [
+    "quay_straight: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Wall occupies Blender y 8..9.5 (Unity z -8..-9.5), i.e. the 1.5 m water margin outside the cell's south edge; top flush at Z0; face drops to Z-4."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/quay_corner_outer.fbx",
+   "name": "quay_corner_outer",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "quay_corner_outer",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1792,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Sandstone",
+      "SKY_Ink",
+      "SKY_Wood"
+     ]
+    }
+   ],
+   "tris": 1792,
+   "materials": [
+    "SKY_Ink",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -4.0,
+     -9.66
+    ],
+    "max": [
+     9.66,
+     0.58,
+     8.0
+    ]
+   },
+   "size_m": [
+    17.66,
+    4.58,
+    17.66
+   ],
+   "empties": [],
+   "issues": [
+    "quay_corner_outer: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Walls lie outside the cell on the Unity S and E sides plus the rounded corner square."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/quay_corner_inner.fbx",
+   "name": "quay_corner_inner",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "quay_corner_inner",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 764,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Sandstone",
+      "SKY_Ink",
+      "SKY_Wood",
+      "SKY_Brass"
+     ]
+    }
+   ],
+   "tris": 764,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Ink",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -4.0,
+     -9.66
+    ],
+    "max": [
+     6.5,
+     0.58,
+     -8.0
+    ]
+   },
+   "size_m": [
+    14.5,
+    4.58,
+    1.66
+   ],
+   "empties": [],
+   "issues": [
+    "quay_corner_inner: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Use on the land cell whose wall runs into the concave corner at its local Unity-east end; the neighbouring cell keeps a quay_straight."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/bridge_span.fbx",
+   "name": "bridge_span",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "LIGHT_lantern_0",
+     "type": "EMPTY",
+     "position_unity": [
+      5.125,
+      1.9,
+      7.55
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "LIGHT_lantern_1",
+     "type": "EMPTY",
+     "position_unity": [
+      5.125,
+      1.9,
+      -7.55
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "LIGHT_lantern_2",
+     "type": "EMPTY",
+     "position_unity": [
+      -5.125,
+      1.9,
+      7.55
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "LIGHT_lantern_3",
+     "type": "EMPTY",
+     "position_unity": [
+      -5.125,
+      1.9,
+      -7.55
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "bridge_span",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 2860,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Road",
+      "SKY_RoadLine",
+      "SKY_Kerb",
+      "SKY_Pearl",
+      "SKY_SandstoneDeep",
+      "SKY_TealGlow",
+      "SKY_Brass",
+      "SKY_Sandstone",
+      "SKY_Light"
+     ]
+    }
+   ],
+   "tris": 2860,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Kerb",
+    "SKY_Light",
+    "SKY_Pearl",
+    "SKY_Road",
+    "SKY_RoadLine",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -4.0,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     2.3,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    6.3,
+    16.0
+   ],
+   "empties": [
+    {
+     "name": "LIGHT_lantern_0",
+     "position_unity": [
+      5.125,
+      1.9,
+      7.55
+     ],
+     "yaw_unity_deg": -0.0
+    },
+    {
+     "name": "LIGHT_lantern_1",
+     "position_unity": [
+      5.125,
+      1.9,
+      -7.55
+     ],
+     "yaw_unity_deg": -0.0
+    },
+    {
+     "name": "LIGHT_lantern_2",
+     "position_unity": [
+      -5.125,
+      1.9,
+      7.55
+     ],
+     "yaw_unity_deg": -0.0
+    },
+    {
+     "name": "LIGHT_lantern_3",
+     "position_unity": [
+      -5.125,
+      1.9,
+      -7.55
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [
+    "bridge_span: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Deck top Z0 (8 m asphalt + 1 m walkways at Z0.15). Abutments fill the 1.5 m channel margins at both cell edges, continuing the quay line; arch springs from piers at |y|=5.8."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/bridge_stub.fbx",
+   "name": "bridge_stub",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "bridge_stub",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 2904,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Kerb",
+      "SKY_Pearl",
+      "SKY_Road",
+      "SKY_SandstoneDeep",
+      "SKY_TealGlow",
+      "SKY_Brass",
+      "SKY_Coral",
+      "SKY_Ink",
+      "SKY_Sandstone"
+     ]
+    }
+   ],
+   "tris": 2904,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Road",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -4.0,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     1.47,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    5.47,
+    16.0
+   ],
+   "empties": [],
+   "issues": [
+    "bridge_stub: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Broken deck ends reach ~2.2-2.8 m from each cell edge; coral/pearl barriers at |y|=6.65."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_house_a.fbx",
+   "name": "bldg_house_a",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "bldg_house_a",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 4430,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Sandstone",
+      "SKY_Kerb",
+      "SKY_Wood",
+      "SKY_Glass",
+      "SKY_Terracotta",
+      "SKY_PalmLeaf",
+      "SKY_Ink",
+      "SKY_Fabric",
+      "SKY_TealGlow"
+     ]
+    }
+   ],
+   "tris": 4430,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Fabric",
+    "SKY_Glass",
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_PalmLeaf",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_TealGlow",
+    "SKY_Terracotta",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -5.6,
+     -0.0,
+     -5.6
+    ],
+    "max": [
+     5.6,
+     10.9,
+     6.35
+    ]
+   },
+   "size_m": [
+    11.2,
+    10.9,
+    11.95
+   ],
+   "empties": [],
+   "issues": [
+    "bldg_house_a: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_house_b.fbx",
+   "name": "bldg_house_b",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "bldg_house_b",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 4922,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Sandstone",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Kerb",
+      "SKY_Teal",
+      "SKY_Glass",
+      "SKY_TealLight",
+      "SKY_Ink",
+      "SKY_Terracotta",
+      "SKY_PalmLeaf",
+      "SKY_TealGlow"
+     ]
+    }
+   ],
+   "tris": 4922,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Glass",
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_PalmLeaf",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_Teal",
+    "SKY_TealGlow",
+    "SKY_TealLight",
+    "SKY_Terracotta"
+   ],
+   "bounds_unity": {
+    "min": [
+     -4.9,
+     -0.0,
+     -5.1
+    ],
+    "max": [
+     4.9,
+     15.02,
+     6.0
+    ]
+   },
+   "size_m": [
+    9.8,
+    15.02,
+    11.1
+   ],
+   "empties": [],
+   "issues": [
+    "bldg_house_b: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_shoprow.fbx",
+   "name": "bldg_shoprow",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "bldg_shoprow",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 5159,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Sandstone",
+      "SKY_Glass",
+      "SKY_Wood",
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_Kerb",
+      "SKY_TealGlow",
+      "SKY_Coral",
+      "SKY_Brass",
+      "SKY_Fabric",
+      "SKY_Terracotta",
+      "SKY_PalmLeaf"
+     ]
+    }
+   ],
+   "tris": 5159,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Fabric",
+    "SKY_Glass",
+    "SKY_Kerb",
+    "SKY_PalmLeaf",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealGlow",
+    "SKY_Terracotta",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -6.1,
+     -0.098,
+     -4.6
+    ],
+    "max": [
+     6.1,
+     10.3,
+     5.35
+    ]
+   },
+   "size_m": [
+    12.2,
+    10.398,
+    9.95
+   ],
+   "empties": [],
+   "issues": [
+    "bldg_shoprow: rotation not applied (90.0, -0.0, 0.0)",
+    "geometry below ground: min z -0.098"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_tower.fbx",
+   "name": "bldg_tower",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "bldg_tower",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 4728,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_TealLight",
+      "SKY_Kerb",
+      "SKY_TealGlow",
+      "SKY_Glass",
+      "SKY_Wood",
+      "SKY_Fabric",
+      "SKY_Terracotta",
+      "SKY_PalmLeaf"
+     ]
+    }
+   ],
+   "tris": 4728,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Fabric",
+    "SKY_Glass",
+    "SKY_Kerb",
+    "SKY_PalmLeaf",
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_TealGlow",
+    "SKY_TealLight",
+    "SKY_Terracotta",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -5.6,
+     -0.0,
+     -5.6
+    ],
+    "max": [
+     5.6,
+     20.6,
+     6.9
+    ]
+   },
+   "size_m": [
+    11.2,
+    20.6,
+    12.5
+   ],
+   "empties": [],
+   "issues": [
+    "bldg_tower: rotation not applied (90.0, -0.0, 0.0)",
+    "building footprint 11.20 x 12.50 exceeds 12 m"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_dome.fbx",
+   "name": "bldg_dome",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "bldg_dome",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 4298,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Sandstone",
+      "SKY_Brass",
+      "SKY_Pearl",
+      "SKY_Kerb",
+      "SKY_Wood",
+      "SKY_Glass",
+      "SKY_TealGlow",
+      "SKY_TealLight"
+     ]
+    }
+   ],
+   "tris": 4298,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Glass",
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_TealGlow",
+    "SKY_TealLight",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -4.7,
+     -0.0,
+     -5.7
+    ],
+    "max": [
+     4.7,
+     12.0925,
+     6.1
+    ]
+   },
+   "size_m": [
+    9.4,
+    12.092,
+    11.8
+   ],
+   "empties": [],
+   "issues": [
+    "bldg_dome: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_courtyard.fbx",
+   "name": "bldg_courtyard",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "bldg_courtyard",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 5736,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Sandstone",
+      "SKY_Kerb",
+      "SKY_Glass",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Wood",
+      "SKY_TealLight",
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_Fabric",
+      "SKY_Terracotta"
+     ]
+    }
+   ],
+   "tris": 5736,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Fabric",
+    "SKY_Glass",
+    "SKY_Kerb",
+    "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_TealLight",
+    "SKY_Terracotta",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -7.1584,
+     -0.0,
+     -6.1
+    ],
+    "max": [
+     6.1,
+     8.32,
+     6.85
+    ]
+   },
+   "size_m": [
+    13.258,
+    8.32,
+    12.95
+   ],
+   "empties": [],
+   "issues": [
+    "bldg_courtyard: rotation not applied (90.0, -0.0, 0.0)",
+    "building footprint 13.26 x 12.95 exceeds 12 m"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_depot.fbx",
+   "name": "bldg_depot",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "ANCHOR_cell_dock",
+     "type": "EMPTY",
+     "position_unity": [
+      -4.4,
+      0.0,
+      4.8
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "bldg_depot",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 2736,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Sandstone",
+      "SKY_Kerb",
+      "SKY_Glass",
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_TealGlow",
+      "SKY_Ink"
+     ]
+    }
+   ],
+   "tris": 2736,
+   "materials": [
+    "SKY_Glass",
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -6.1,
+     -0.0,
+     -6.1
+    ],
+    "max": [
+     6.1,
+     7.92,
+     5.98
+    ]
+   },
+   "size_m": [
+    12.2,
+    7.92,
+    12.08
+   ],
+   "empties": [
+    {
+     "name": "ANCHOR_cell_dock",
+     "position_unity": [
+      -4.4,
+      0.0,
+      4.8
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [
+    "bldg_depot: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "ANCHOR_cell_dock under the solar canopy at the front-right (viewer facing the door; Unity -X side)."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_substation.fbx",
+   "name": "bldg_substation",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "PowerLights",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 60,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_TealGlow"
+     ]
+    },
+    {
+     "name": "SOCKET_cell",
+     "type": "EMPTY",
+     "position_unity": [
+      -1.2,
+      1.1,
+      1.32
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "bldg_substation",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 3128,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Kerb",
+      "SKY_Metal",
+      "SKY_Ink",
+      "SKY_Teal",
+      "SKY_Coral",
+      "SKY_Brass",
+      "SKY_Sandstone"
+     ]
+    }
+   ],
+   "tris": 3188,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -5.93,
+     -0.0,
+     -2.68
+    ],
+    "max": [
+     5.93,
+     4.62,
+     1.77
+    ]
+   },
+   "size_m": [
+    11.86,
+    4.62,
+    4.45
+   ],
+   "empties": [
+    {
+     "name": "SOCKET_cell",
+     "position_unity": [
+      -1.2,
+      1.1,
+      1.32
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [
+    "PowerLights: rotation not applied (90.0, -0.0, 0.0)",
+    "bldg_substation: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "SOCKET_cell sits inside the recessed housing on the north face (~1.1 m). PowerLights is a separate object (light bar + roof beacon, SKY_TealGlow)."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_terminal.fbx",
+   "name": "bldg_terminal",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "ANCHOR_convoy_stop",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.0,
+      0.0,
+      7.0
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "bldg_terminal",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 3380,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Sandstone",
+      "SKY_Kerb",
+      "SKY_Pearl",
+      "SKY_Glass",
+      "SKY_Teal",
+      "SKY_Brass",
+      "SKY_TealGlow",
+      "SKY_TealLight"
+     ]
+    }
+   ],
+   "tris": 3380,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Glass",
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealGlow",
+    "SKY_TealLight"
+   ],
+   "bounds_unity": {
+    "min": [
+     -7.1,
+     -0.0,
+     -5.08
+    ],
+    "max": [
+     7.1,
+     7.25,
+     6.55
+    ]
+   },
+   "size_m": [
+    14.2,
+    7.25,
+    11.63
+   ],
+   "empties": [
+    {
+     "name": "ANCHOR_convoy_stop",
+     "position_unity": [
+      -0.0,
+      0.0,
+      7.0
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [
+    "bldg_terminal: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "ANCHOR_convoy_stop on the road side of the north drop-off kerb (Unity z +7.0)."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_tower_control.fbx",
+   "name": "bldg_tower_control",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "ANCHOR_lever",
+     "type": "EMPTY",
+     "position_unity": [
+      -1.0,
+      0.0,
+      3.75
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "bldg_tower_control",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1696,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Brass",
+      "SKY_Pearl",
+      "SKY_Kerb",
+      "SKY_Teal",
+      "SKY_Glass",
+      "SKY_Sandstone",
+      "SKY_TealLight",
+      "SKY_TealGlow",
+      "SKY_Coral"
+     ]
+    }
+   ],
+   "tris": 1696,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Glass",
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealGlow",
+    "SKY_TealLight"
+   ],
+   "bounds_unity": {
+    "min": [
+     -3.3,
+     -0.0,
+     -3.1
+    ],
+    "max": [
+     3.3,
+     16.58,
+     3.9
+    ]
+   },
+   "size_m": [
+    6.6,
+    16.58,
+    7.0
+   ],
+   "empties": [
+    {
+     "name": "ANCHOR_lever",
+     "position_unity": [
+      -1.0,
+      0.0,
+      3.75
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [
+    "bldg_tower_control: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "ANCHOR_lever at ground level just right of the door (viewer facing the door)."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Buildings/bldg_hangar.fbx",
+   "name": "bldg_hangar",
+   "category": "Buildings",
+   "objects": [
+    {
+     "name": "bldg_hangar",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 2288,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Metal",
+      "SKY_Glass",
+      "SKY_Sandstone",
+      "SKY_Pearl",
+      "SKY_TealGlow",
+      "SKY_Teal",
+      "SKY_Kerb",
+      "SKY_RoadLine"
+     ]
+    }
+   ],
+   "tris": 2288,
+   "materials": [
+    "SKY_Glass",
+    "SKY_Kerb",
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_RoadLine",
+    "SKY_Sandstone",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -11.45,
+     -0.0,
+     -8.0
+    ],
+    "max": [
+     11.45,
+     9.25,
+     8.125
+    ]
+   },
+   "size_m": [
+    22.9,
+    9.25,
+    16.125
+   ],
+   "empties": [],
+   "issues": [
+    "bldg_hangar: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Footprint 22.5 x 16 m (spans more than one cell in X); pivot at its own ground centre."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Atelier/foldstation_kiosk.fbx",
+   "name": "foldstation_kiosk",
+   "category": "Atelier",
+   "objects": [
+    {
+     "name": "ANCHOR_player",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.0,
+      0.0,
+      1.8
+     ],
+     "yaw_deg_blender": -180.0
+    },
+    {
+     "name": "LensRing",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      1.72,
+      0.39
+     ],
+     "tris": 512,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_TealGlow"
+     ]
+    },
+    {
+     "name": "foldstation_kiosk",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1464,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Sandstone",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Teal",
+      "SKY_TealGlow"
+     ]
+    }
+   ],
+   "tris": 1976,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -1.05,
+     -0.0,
+     -0.65
+    ],
+    "max": [
+     1.05,
+     3.31,
+     2.35
+    ]
+   },
+   "size_m": [
+    2.1,
+    3.31,
+    3.0
+   ],
+   "empties": [
+    {
+     "name": "ANCHOR_player",
+     "position_unity": [
+      -0.0,
+      0.0,
+      1.8
+     ],
+     "yaw_unity_deg": 180.0
+    }
+   ],
+   "issues": [
+    "LensRing: rotation not applied (90.0, -0.0, 0.0)",
+    "foldstation_kiosk: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "LensRing pivot at the ring centre (Blender (0,-0.39,1.72)). ANCHOR_player is yawed 180 deg so its forward faces the kiosk."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Atelier/atelier_platform.fbx",
+   "name": "atelier_platform",
+   "category": "Atelier",
+   "objects": [
+    {
+     "name": "atelier_platform",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 4244,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Sandstone",
+      "SKY_Ivory",
+      "SKY_Brass",
+      "SKY_SandstoneDeep"
+     ]
+    }
+   ],
+   "tris": 4244,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Ivory",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.405,
+     -3.5461,
+     -8.3493
+    ],
+    "max": [
+     8.3719,
+     1.75,
+     9.6
+    ]
+   },
+   "size_m": [
+    16.777,
+    5.296,
+    17.949
+   ],
+   "empties": [],
+   "issues": [
+    "atelier_platform: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Top of deck at Z0, radius 7 m; balustrade gap + 4 steps on the Unity-north edge."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Atelier/atelier_pergola.fbx",
+   "name": "atelier_pergola",
+   "category": "Atelier",
+   "objects": [
+    {
+     "name": "atelier_pergola",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 2474,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Wood",
+      "SKY_Fabric",
+      "SKY_Terracotta",
+      "SKY_PalmLeaf"
+     ]
+    }
+   ],
+   "tris": 2474,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Fabric",
+    "SKY_PalmLeaf",
+    "SKY_Pearl",
+    "SKY_Terracotta",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -5.984,
+     -0.0,
+     -6.8425
+    ],
+    "max": [
+     5.984,
+     3.47,
+     -1.8494
+    ]
+   },
+   "size_m": [
+    11.968,
+    3.47,
+    4.993
+   ],
+   "empties": [],
+   "issues": [
+    "atelier_pergola: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Shares the terrace origin with atelier_platform (centre, Z0)."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Atelier/plinth.fbx",
+   "name": "plinth",
+   "category": "Atelier",
+   "objects": [
+    {
+     "name": "ANCHOR_minicity",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.0,
+      0.9,
+      -0.0
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "ANCHOR_player",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -1.15
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "PlinthRim",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 60,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_TealGlow"
+     ]
+    },
+    {
+     "name": "plinth",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 808,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Ivory",
+      "SKY_Brass",
+      "SKY_Pearl",
+      "SKY_SandstoneDeep",
+      "SKY_TealGlow"
+     ]
+    }
+   ],
+   "tris": 868,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Ivory",
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.825,
+     -0.0,
+     -0.625
+    ],
+    "max": [
+     0.825,
+     0.9,
+     0.625
+    ]
+   },
+   "size_m": [
+    1.65,
+    0.9,
+    1.25
+   ],
+   "empties": [
+    {
+     "name": "ANCHOR_minicity",
+     "position_unity": [
+      -0.0,
+      0.9,
+      -0.0
+     ],
+     "yaw_unity_deg": -0.0
+    },
+    {
+     "name": "ANCHOR_player",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -1.15
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [
+    "PlinthRim: rotation not applied (90.0, -0.0, 0.0)",
+    "plinth: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Top surface Z0.9, 1.6 x 1.2 m. ANCHOR_player 0.55 m south of the south edge, facing north."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Atelier/plinth_tray.fbx",
+   "name": "plinth_tray",
+   "category": "Atelier",
+   "objects": [
+    {
+     "name": "SOCKET_slot_1",
+     "type": "EMPTY",
+     "position_unity": [
+      0.4583,
+      0.875,
+      -0.715
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "SOCKET_slot_2",
+     "type": "EMPTY",
+     "position_unity": [
+      0.275,
+      0.875,
+      -0.715
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "SOCKET_slot_3",
+     "type": "EMPTY",
+     "position_unity": [
+      0.0917,
+      0.875,
+      -0.715
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "SOCKET_slot_4",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.0917,
+      0.875,
+      -0.715
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "SOCKET_slot_5",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.275,
+      0.875,
+      -0.715
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "SOCKET_slot_6",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.4583,
+      0.875,
+      -0.715
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "plinth_tray",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 476,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Ink",
+      "SKY_Brass",
+      "SKY_TealGlow"
+     ]
+    }
+   ],
+   "tris": 476,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Ink",
+    "SKY_Pearl",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.565,
+     0.72,
+     -0.82
+    ],
+    "max": [
+     0.565,
+     0.9,
+     -0.595
+    ]
+   },
+   "size_m": [
+    1.13,
+    0.18,
+    0.225
+   ],
+   "empties": [
+    {
+     "name": "SOCKET_slot_1",
+     "position_unity": [
+      0.4583,
+      0.875,
+      -0.715
+     ],
+     "yaw_unity_deg": -0.0
+    },
+    {
+     "name": "SOCKET_slot_2",
+     "position_unity": [
+      0.275,
+      0.875,
+      -0.715
+     ],
+     "yaw_unity_deg": -0.0
+    },
+    {
+     "name": "SOCKET_slot_3",
+     "position_unity": [
+      0.0917,
+      0.875,
+      -0.715
+     ],
+     "yaw_unity_deg": -0.0
+    },
+    {
+     "name": "SOCKET_slot_4",
+     "position_unity": [
+      -0.0917,
+      0.875,
+      -0.715
+     ],
+     "yaw_unity_deg": -0.0
+    },
+    {
+     "name": "SOCKET_slot_5",
+     "position_unity": [
+      -0.275,
+      0.875,
+      -0.715
+     ],
+     "yaw_unity_deg": -0.0
+    },
+    {
+     "name": "SOCKET_slot_6",
+     "position_unity": [
+      -0.4583,
+      0.875,
+      -0.715
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [
+    "plinth_tray: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Shares the plinth origin. SOCKET_slot_1..6 at each slot floor, west->east in Blender +X order."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/street_lamp.fbx",
+   "name": "street_lamp",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "LIGHT_lamp",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.0,
+      3.98,
+      0.92
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "street_lamp",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 386,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Light"
+     ]
+    }
+   ],
+   "tris": 386,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Light",
+    "SKY_Pearl"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.2217,
+     -0.0,
+     -0.2217
+    ],
+    "max": [
+     0.2217,
+     4.6899,
+     1.1105
+    ]
+   },
+   "size_m": [
+    0.443,
+    4.69,
+    1.332
+   ],
+   "empties": [
+    {
+     "name": "LIGHT_lamp",
+     "position_unity": [
+      -0.0,
+      3.98,
+      0.92
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [
+    "street_lamp: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/bench.fbx",
+   "name": "bench",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "bench",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 376,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_SandstoneDeep",
+      "SKY_Wood",
+      "SKY_Brass"
+     ]
+    }
+   ],
+   "tris": 376,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -1.0,
+     -0.0,
+     -0.265
+    ],
+    "max": [
+     1.0,
+     0.45,
+     0.265
+    ]
+   },
+   "size_m": [
+    2.0,
+    0.45,
+    0.53
+   ],
+   "empties": [],
+   "issues": [
+    "bench: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/bollard.fbx",
+   "name": "bollard",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "bollard",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 192,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Brass"
+     ]
+    }
+   ],
+   "tris": 192,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Pearl"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.1571,
+     -0.0,
+     -0.1571
+    ],
+    "max": [
+     0.1571,
+     0.93,
+     0.1571
+    ]
+   },
+   "size_m": [
+    0.314,
+    0.93,
+    0.314
+   ],
+   "empties": [],
+   "issues": [
+    "bollard: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/barrier_coral.fbx",
+   "name": "barrier_coral",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "barrier_coral",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 296,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Coral",
+      "SKY_Pearl",
+      "SKY_Ink",
+      "SKY_Light"
+     ]
+    }
+   ],
+   "tris": 296,
+   "materials": [
+    "SKY_Coral",
+    "SKY_Ink",
+    "SKY_Light",
+    "SKY_Pearl"
+   ],
+   "bounds_unity": {
+    "min": [
+     -1.0,
+     -0.0,
+     -0.4
+    ],
+    "max": [
+     1.0,
+     1.12,
+     0.4
+    ]
+   },
+   "size_m": [
+    2.0,
+    1.12,
+    0.8
+   ],
+   "empties": [],
+   "issues": [
+    "barrier_coral: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/traffic_cone.fbx",
+   "name": "traffic_cone",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "traffic_cone",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 164,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Ink",
+      "SKY_Coral",
+      "SKY_Pearl"
+     ]
+    }
+   ],
+   "tris": 164,
+   "materials": [
+    "SKY_Coral",
+    "SKY_Ink",
+    "SKY_Pearl"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.21,
+     -0.0,
+     -0.21
+    ],
+    "max": [
+     0.21,
+     0.7,
+     0.21
+    ]
+   },
+   "size_m": [
+    0.42,
+    0.7,
+    0.42
+   ],
+   "empties": [],
+   "issues": [
+    "traffic_cone: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/runway_beacon.fbx",
+   "name": "runway_beacon",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "LIGHT_beacon",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.0,
+      0.42,
+      -0.0
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "Lens",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.4,
+      -0.0
+     ],
+     "tris": 60,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Light"
+     ]
+    },
+    {
+     "name": "runway_beacon",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 164,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Ink",
+      "SKY_Metal",
+      "SKY_Coral",
+      "SKY_Brass"
+     ]
+    }
+   ],
+   "tris": 224,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Ink",
+    "SKY_Light",
+    "SKY_Metal"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.2,
+     -0.0,
+     -0.1902
+    ],
+    "max": [
+     0.2,
+     0.47,
+     0.1902
+    ]
+   },
+   "size_m": [
+    0.4,
+    0.47,
+    0.38
+   ],
+   "empties": [
+    {
+     "name": "LIGHT_beacon",
+     "position_unity": [
+      -0.0,
+      0.42,
+      -0.0
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [
+    "Lens: rotation not applied (90.0, -0.0, 0.0)",
+    "runway_beacon: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/switch_box.fbx",
+   "name": "switch_box",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "Lever",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.72,
+      0.235
+     ],
+     "tris": 88,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Brass",
+      "SKY_Coral"
+     ]
+    },
+    {
+     "name": "switch_box",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 288,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Teal",
+      "SKY_Coral"
+     ]
+    }
+   ],
+   "tris": 376,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_Teal"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.28,
+     -0.0,
+     -0.22
+    ],
+    "max": [
+     0.28,
+     1.125,
+     0.28
+    ]
+   },
+   "size_m": [
+    0.56,
+    1.125,
+    0.5
+   ],
+   "empties": [],
+   "issues": [
+    "Lever: rotation not applied (90.0, -0.0, 0.0)",
+    "switch_box: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": [
+    "Lever pivot = hinge (Blender (0,-0.235,0.72)); modelled up = OFF."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/cell_dock.fbx",
+   "name": "cell_dock",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "SOCKET_cell",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.0,
+      0.44,
+      -0.0
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "cell_dock",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 336,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Teal",
+      "SKY_TealGlow"
+     ]
+    }
+   ],
+   "tris": 336,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Pearl",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.3,
+     -0.0,
+     -0.2853
+    ],
+    "max": [
+     0.3,
+     0.6011,
+     0.2853
+    ]
+   },
+   "size_m": [
+    0.6,
+    0.601,
+    0.571
+   ],
+   "empties": [
+    {
+     "name": "SOCKET_cell",
+     "position_unity": [
+      -0.0,
+      0.44,
+      -0.0
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [
+    "cell_dock: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/awning_striped.fbx",
+   "name": "awning_striped",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "awning_striped",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 204,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Coral",
+      "SKY_Pearl",
+      "SKY_Brass"
+     ]
+    }
+   ],
+   "tris": 204,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Pearl"
+   ],
+   "bounds_unity": {
+    "min": [
+     -1.24,
+     -0.78,
+     -0.0005
+    ],
+    "max": [
+     1.24,
+     0.06,
+     1.1
+    ]
+   },
+   "size_m": [
+    2.48,
+    0.84,
+    1.1
+   ],
+   "empties": [],
+   "issues": [
+    "awning_striped: rotation not applied (90.0, -0.0, 0.0)",
+    "geometry below ground: min z -0.780"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/shade_sail.fbx",
+   "name": "shade_sail",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "shade_sail",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 320,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Brass",
+      "SKY_Pearl",
+      "SKY_Fabric"
+     ]
+    }
+   ],
+   "tris": 320,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Fabric",
+    "SKY_Pearl"
+   ],
+   "bounds_unity": {
+    "min": [
+     -2.638,
+     -0.0,
+     -2.956
+    ],
+    "max": [
+     2.638,
+     3.77,
+     1.578
+    ]
+   },
+   "size_m": [
+    5.276,
+    3.77,
+    4.534
+   ],
+   "empties": [],
+   "issues": [
+    "shade_sail: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/planter_box.fbx",
+   "name": "planter_box",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "planter_box",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 324,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Sandstone",
+      "SKY_Pearl",
+      "SKY_SandstoneDeep",
+      "SKY_PalmLeaf"
+     ]
+    }
+   ],
+   "tris": 324,
+   "materials": [
+    "SKY_PalmLeaf",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.64,
+     -0.0,
+     -0.3424
+    ],
+    "max": [
+     0.64,
+     1.004,
+     0.3424
+    ]
+   },
+   "size_m": [
+    1.28,
+    1.004,
+    0.685
+   ],
+   "empties": [],
+   "issues": [
+    "planter_box: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/palm_date_a.fbx",
+   "name": "palm_date_a",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "palm_date_a",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1520,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_Terracotta"
+     ]
+    }
+   ],
+   "tris": 1520,
+   "materials": [
+    "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
+    "SKY_Terracotta"
+   ],
+   "bounds_unity": {
+    "min": [
+     -3.5848,
+     -0.0104,
+     -2.681
+    ],
+    "max": [
+     2.7863,
+     7.7335,
+     3.4275
+    ]
+   },
+   "size_m": [
+    6.371,
+    7.744,
+    6.108
+   ],
+   "empties": [],
+   "issues": [
+    "palm_date_a: rotation not applied (90.0, -0.0, 0.0)",
+    "geometry below ground: min z -0.010"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/palm_date_b.fbx",
+   "name": "palm_date_b",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "palm_date_b",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1416,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_Terracotta"
+     ]
+    }
+   ],
+   "tris": 1416,
+   "materials": [
+    "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
+    "SKY_Terracotta"
+   ],
+   "bounds_unity": {
+    "min": [
+     -3.6444,
+     -0.0367,
+     -2.9569
+    ],
+    "max": [
+     1.2926,
+     5.7802,
+     2.2692
+    ]
+   },
+   "size_m": [
+    4.937,
+    5.817,
+    5.226
+   ],
+   "empties": [],
+   "issues": [
+    "palm_date_b: rotation not applied (90.0, -0.0, 0.0)",
+    "geometry below ground: min z -0.037"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/palm_small.fbx",
+   "name": "palm_small",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "palm_small",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1084,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf"
+     ]
+    }
+   ],
+   "tris": 1084,
+   "materials": [
+    "SKY_PalmLeaf",
+    "SKY_PalmTrunk"
+   ],
+   "bounds_unity": {
+    "min": [
+     -1.4717,
+     -0.0086,
+     -1.3274
+    ],
+    "max": [
+     1.348,
+     2.8256,
+     1.3538
+    ]
+   },
+   "size_m": [
+    2.82,
+    2.834,
+    2.681
+   ],
+   "empties": [],
+   "issues": [
+    "palm_small: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/shrub_round.fbx",
+   "name": "shrub_round",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "shrub_round",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 450,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_PalmLeaf"
+     ]
+    }
+   ],
+   "tris": 450,
+   "materials": [
+    "SKY_PalmLeaf"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.8,
+     0.023,
+     -0.7042
+    ],
+    "max": [
+     0.7335,
+     1.077,
+     0.7242
+    ]
+   },
+   "size_m": [
+    1.533,
+    1.054,
+    1.428
+   ],
+   "empties": [],
+   "issues": [
+    "shrub_round: rotation not applied (90.0, -0.0, 0.0)"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/bougainvillea_clump.fbx",
+   "name": "bougainvillea_clump",
+   "category": "Nature",
+   "issues": [
+    "missing file"
+   ],
+   "notes": []
+  }
+ ]
+}

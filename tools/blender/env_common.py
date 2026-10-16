@@ -712,7 +712,7 @@ def box_uv(ob, scale=1.0):
 
 def tile_surface(asset, regions, base_z=-0.3, target=None, side_mat="SKY_SandstoneDeep",
                  kerb_bevel=0.04, kerb_seg=1, half=8.0, name="surface", skirt=True, extra_pts=(),
-                 bounds=None):
+                 bounds=None, bottom='quad'):
     """Build a watertight ground tile from 2D regions using constrained Delaunay.
 
     regions: list of dicts {pts, z, mat, prio, (kerb: bool)} - highest prio wins where they overlap.
@@ -816,10 +816,22 @@ def tile_surface(asset, regions, base_z=-0.3, target=None, side_mat="SKY_Sandsto
             A_hi, B_hi = bv(a, r['z']), bv(b, r['z'])
             A_lo, B_lo = bv(a, base_z), bv(b, base_z)
             mb.f([A_hi, A_lo, B_lo, B_hi], side_mat)
-        # bottom: a single quad over the bounds (never visible; avoids a large n-gon fan)
-        bx0, bx1, by0, by1 = bounds if bounds else (-half, half, -half, half)
-        q = [mb.v((bx0, by0, base_z)), mb.v((bx0, by1, base_z)), mb.v((bx1, by1, base_z)), mb.v((bx1, by0, base_z))]
-        mb.f(q, side_mat)
+        if bottom == 'loop':
+            nxt = {a_: b_ for (a_, b_, r_) in boundary}
+            start = boundary[0][0]
+            loop = [start]
+            cur = nxt[start]
+            guard = 0
+            while cur != start and guard < 100000:
+                loop.append(cur)
+                cur = nxt[cur]
+                guard += 1
+            mb.f([bv(i, base_z) for i in reversed(loop)], side_mat)
+        else:
+            # bottom: a single quad over the bounds (never visible; avoids a large n-gon fan)
+            bx0, bx1, by0, by1 = bounds if bounds else (-half, half, -half, half)
+            q = [mb.v((bx0, by0, base_z)), mb.v((bx0, by1, base_z)), mb.v((bx1, by1, base_z)), mb.v((bx1, by0, base_z))]
+            mb.f(q, side_mat)
     bm.edges.ensure_lookup_table()
     # bevel weights on kerb top edges (step edges, upper side) but never on cell boundary
     if kerb_bevel > 0:
@@ -980,7 +992,7 @@ def bbox_of(objs):
 
 
 def render_preview(objs, out_path, ground_z=None, water=False, az=35.0, el=30.0, res=900, samples=64,
-                   lens=50.0, margin=1.04, seabed=None, ground_rgb=(0.20, 0.24, 0.25), target=None):
+                   lens=50.0, margin=1.04, seabed=None, ground_rgb=(0.20, 0.24, 0.25), target=None, dist=None):
     sc = bpy.context.scene
     _setup_cycles(sc, res, samples)
     _world(sc, 0.65)
@@ -1021,6 +1033,8 @@ def render_preview(objs, out_path, ground_z=None, water=False, az=35.0, el=30.0,
             for z in (lo.z, hi.z):
                 rel = Vector((x, y, z)) - tgt
                 D = max(D, abs(rel.dot(u)) / tan_h + rel.dot(c), abs(rel.dot(v)) / tan_h + rel.dot(c))
+    if dist is not None:
+        D = dist
     cam.location = tgt + c * D
     cd.clip_end = max(1000, D * 4)
     cd.clip_start = 0.05

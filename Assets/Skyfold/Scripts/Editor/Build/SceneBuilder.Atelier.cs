@@ -144,6 +144,7 @@ namespace Skyfold.EditorTools
             piece.ghost = ghost.transform;
             piece.ghostRenderers = ghostRenderers;
             piece.homeSlot = slot;
+            Named(root, id);
             return piece;
         }
     }

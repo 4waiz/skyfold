@@ -304,7 +304,14 @@ namespace Skyfold.EditorTools
             ca.postExposure.Override(0.1f);
             ca.contrast.Override(8f);
             ca.saturation.Override(6f);
-            foreach (var comp in profile.components) EditorUtility.SetDirty(comp);
+            foreach (var comp in profile.components)
+            {
+                if (comp == null) continue;
+                if (!AssetDatabase.IsSubAsset(comp) && !AssetDatabase.Contains(comp)) AssetDatabase.AddObjectToAsset(comp, profile);
+                comp.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
+                EditorUtility.SetDirty(comp);
+            }
+            profile.components.RemoveAll(x => x == null);
             EditorUtility.SetDirty(profile);
             return profile;
         }

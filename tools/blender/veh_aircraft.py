@@ -50,12 +50,9 @@ def section(y):
         a = A_CAB * (1 - u ** 2.3) ** (1 / 2.3)
         top = (ZC_CAB + HT_CAB) - 0.95 * u ** 1.7          # windscreen slope
         bot = (ZC_CAB - HB_CAB) + 0.62 * u ** 2.2          # chin
-        k = (1 - u ** 2.6) ** (1 / 2.6)
+        k = (1 - u ** 2.3) ** (1 / 2.3)
         zc = (top + bot) / 2
-        h = (top - bot) / 2 * max(k, 0.0) / max(k, 1e-6) if k > 0 else 0.0
-        ht = (top - zc) * (k ** 0.15 if k > 0 else 0)
-        hb = (zc - bot) * (k ** 0.15 if k > 0 else 0)
-        return zc, a, ht, hb
+        return zc, a, (top - zc) * k, (zc - bot) * k
     if y <= Y_CAB1:
         return ZC_CAB, A_CAB, HT_CAB, HB_CAB
     u = min(1.0, (y - Y_CAB1) / (Y_TAIL - Y_CAB1))
@@ -93,6 +90,34 @@ def phi_at_z(y, z, side=1):
     return ph if side > 0 else pi - ph
 
 
+LIVERY_Y = (-5.05, 6.90)      # cheatline runs from under the cockpit to the fin root
+
+
+def ring_angles(y):
+    """36 column angles per ring. Columns follow the cheatline / pinstripe heights on both
+    flanks so the livery is exact face colouring (no floating decals)."""
+    lo, hi = CHEAT_LO(y), CHEAT_HI(y)
+    a1 = phi_at_z(y, lo, 1)
+    a2 = phi_at_z(y, hi, 1)
+    a3 = phi_at_z(y, hi + 0.035, 1)
+    a4 = phi_at_z(y, hi + 0.075, 1)
+    lim0, lim1 = radians(-62), radians(70)
+    a1 = min(max(a1, lim0), lim1 - 0.20)
+    a2 = min(max(a2, a1 + 0.05), lim1 - 0.10)
+    a3 = max(a3, a2 + 0.02)
+    a4 = max(a4, a3 + 0.02)
+
+    def arc(a, b, n):
+        return [a + (b - a) * k / n for k in range(n)]
+    left = arc(-pi / 2, a1, 8) + arc(a1, a2, 2) + arc(a2, a3, 1) + arc(a3, a4, 1) + arc(a4, pi / 2, 6)
+    right = arc(pi / 2, pi - a4, 6) + arc(pi - a4, pi - a3, 1) + arc(pi - a3, pi - a2, 1) + \
+        arc(pi - a2, pi - a1, 2) + arc(pi - a1, 1.5 * pi, 8)
+    return left + right
+
+
+TEAL_COLS, GOLD_COLS = (8, 9, 26, 27), (11, 24)
+
+
 def fuselage(part):
     ys = []
     # dense at the nose and the tail, coarse along the cabin
@@ -104,11 +129,21 @@ def fuselage(part):
     for k in range(1, 13):
         u = (k / 12) ** 1.15
         ys.append(Y_CAB1 + (Y_TAIL - Y_CAB1) * u * 0.985)
-    nphi = 36
-    rings = [[fus_pt(y, 2 * pi * j / nphi) for j in range(nphi)] for y in ys]
+    # make sure a ring sits exactly where the livery starts / ends
+    ys = sorted(set([round(y, 5) for y in ys] + list(LIVERY_Y)))
+    rings = [[fus_pt(y, ph) for ph in ring_angles(y)] for y in ys]
+    nphi = len(rings[0])
     zc0 = section(Y_NOSE + 0.001)[0]
     zc1 = section(Y_TAIL - 0.02)[0]
-    part.grid(rings, PEARL, True, Vector((0, Y_NOSE, zc0)), Vector((0, Y_TAIL, zc1)))
+    vr, fs = part.grid(rings, PEARL, True, Vector((0, Y_NOSE, zc0)), Vector((0, Y_TAIL, zc1)))
+    for i in range(len(rings) - 1):
+        ym = (ys[i] + ys[i + 1]) / 2
+        if not (LIVERY_Y[0] <= ym <= LIVERY_Y[1]):
+            continue
+        for j in TEAL_COLS:
+            part.assign([fs[i * nphi + j]], TEAL)
+        for j in GOLD_COLS:
+            part.assign([fs[i * nphi + j]], GOLD)
 
 
 def strip(part, y0, y1, z_lo, z_hi, mat, side, off, ny=24):
@@ -161,7 +196,7 @@ def cockpit(part):
         fs = []
         for i in range(ny):
             for j in range(npx):
-                fs.append(bm.faces.new((vr[i][j], vr[i][j + 1], vr[i + 1][j + 1], vr[i + 1][j])))
+                fs.append(bm.faces.new((vr[i][j], vr[i + 1][j], vr[i + 1][j + 1], vr[i][j + 1])))
         part.assign(fs, mat)
     patch(-5.30, -3.80, radians(18), radians(162), INK, 0.006, ny=8, npx=14)
     for (p0, p1) in ((radians(94), radians(140)), (radians(40), radians(86))):
@@ -175,6 +210,9 @@ AIRFOIL = [(0.0, 0.0), (0.015, 0.040), (0.07, 0.078), (0.18, 0.104), (0.33, 0.11
            (0.52, 0.100), (0.72, 0.068), (0.90, 0.030), (1.0, 0.006), (0.90, -0.012),
            (0.72, -0.024), (0.52, -0.034), (0.33, -0.040), (0.18, -0.040), (0.07, -0.032),
            (0.015, -0.020)]
+SYM = [(0.0, 0.0), (0.02, 0.035), (0.08, 0.064), (0.20, 0.084), (0.36, 0.090), (0.56, 0.080),
+       (0.76, 0.054), (0.92, 0.022), (1.0, 0.004), (0.92, -0.022), (0.76, -0.054), (0.56, -0.080),
+       (0.36, -0.090), (0.20, -0.084), (0.08, -0.064), (0.02, -0.035)]
 WING_Z = 2.80
 WING_LE = -1.22
 
@@ -216,27 +254,33 @@ def wing(part):
 def tail(part):
     # vertical fin (teal), swept, airfoil section in the XY plane
     fin = []
-    for (z, le, ch, th) in ((2.55, 4.15, 2.70, 0.22), (2.95, 4.75, 2.25, 0.20),
-                            (4.10, 5.55, 1.62, 0.16), (4.98, 6.02, 1.30, 0.14)):
-        fin.append([Vector((v * ch * th / 0.11 * 0.5, le + u * ch, z)) for (u, v) in AIRFOIL])
+
+    def fin_sec(z):
+        t = (z - 2.95) / (4.98 - 2.95)
+        return 4.75 + (6.02 - 4.75) * t, 2.25 + (1.30 - 2.25) * t
+    levels = [(2.55, 4.15, 2.70), (2.95,) + fin_sec(2.95), (3.62,) + fin_sec(3.62),
+              (3.78,) + fin_sec(3.78), (4.98,) + fin_sec(4.98)]
+    for (z, le, ch) in levels:
+        th = 0.11 if z < 4.9 else 0.10
+        fin.append([Vector((v * ch * th / 0.18, le + u * ch, z)) for (u, v) in SYM])
     vr, fs = part.grid(fin, TEAL, True, None, None)
-    n = len(AIRFOIL)
+    n = len(SYM)
     c = sum((v.co for v in vr[-1]), Vector()) / n
     cv = part.bm.verts.new(c)
     for i in range(n):
         part.assign([part.bm.faces.new((vr[-1][i], vr[-1][(i + 1) % n], cv))], TEAL)
     # restrained gold band across the fin
-    part.assign(fs[1 * n:2 * n], GOLD)
+    part.assign(fs[2 * n:3 * n], GOLD)
     # horizontal stabiliser on top of the fin (pearl, teal tips)
     stab = []
     for x in (-2.9, -2.6, -1.5, -0.5, 0.0, 0.5, 1.5, 2.6, 2.9):
         t = abs(x) / 2.9
         ch = 1.30 - 0.50 * t
         le = 6.00 + 0.38 * t
-        th = 0.11 if abs(x) < 2.6 else 0.06
+        th = 0.12 if abs(x) < 2.6 else 0.07
         k = 1.0 if abs(x) < 2.6 else 0.7
-        stab.append([Vector((x, le + ch * (u * k + (1 - k) * 0.3), 5.02 + v * ch * th / 0.11))
-                     for (u, v) in AIRFOIL])
+        stab.append([Vector((x, le + ch * (u * k + (1 - k) * 0.3), 5.02 + v * ch * th / 0.18))
+                     for (u, v) in SYM])
     vr, fs = part.grid(stab, PEARL, True, None, None)
     for ring in (vr[0], vr[-1]):
         c = sum((v.co for v in ring), Vector()) / n
@@ -325,10 +369,15 @@ DOOR = dict(y0=-2.95, y1=-2.17, z0=0.98, z1=2.50)
 def build_door(body):
     p = C.Part()
     d = DOOR
-    ny, nz = 6, 8
+    ny = 6
+    yc = (d['y0'] + d['y1']) / 2
+    lo, hi = CHEAT_LO(yc), CHEAT_HI(yc)
+    zs = sorted(set([round(d['z0'] + (d['z1'] - d['z0']) * j / 6, 4) for j in range(7)] +
+                    [lo, hi, hi + 0.035, hi + 0.075]))
+    nz = len(zs) - 1
     outer, inner = [], []
     for j in range(nz + 1):
-        z = d['z0'] + (d['z1'] - d['z0']) * j / nz
+        z = zs[j]
         ro, ri = [], []
         for i in range(ny + 1):
             y = d['y0'] + (d['y1'] - d['y0']) * i / ny
@@ -356,14 +405,10 @@ def build_door(body):
     # livery on the door follows the fuselage cheatline heights
     for f in fs:
         c = f.calc_center_median()
-        if c.x > 0.9 and CHEAT_LO(c.y) <= c.z <= CHEAT_HI(c.y):
+        if f.normal.x > 0.5 and lo < c.z < hi:
             p.assign([f], TEAL)
-        elif c.x > 0.9 and CHEAT_HI(c.y) < c.z <= CHEAT_HI(c.y) + 0.06:
+        elif f.normal.x > 0.5 and hi + 0.035 < c.z < hi + 0.075:
             p.assign([f], GOLD)
-    # small door window
-    window(p, (d['y0'] + d['y1']) / 2, 2.05, 0.30, 0.34, 1, r=0.10)
-    for f in p.bm.faces:
-        pass
     # airstair steps on the inner face (they become treads when the door is lowered)
     for k in range(4):
         z = d['z0'] + 0.30 + k * 0.32
@@ -375,8 +420,11 @@ def build_door(body):
     hb = fus_pt(yb, phi_at_z(yb, d['z0'], 1), 0.012)
     p.tube([Vector((hb.x, d['y0'] + 0.04, hb.z)), Vector((hb.x, d['y1'] - 0.04, hb.z))], 0.03, 8,
            METAL, caps='flat')
-    temp = p.to_temp(recalc=False)
-    door = C.merge_to_object("Door", [temp], pivot=hb, parent=body, sharp_deg=50)
+    w = C.Part()
+    window(w, (d['y0'] + d['y1']) / 2, 2.05, 0.30, 0.34, 1, r=0.10)
+    w.transform(w.bm.verts, Matrix.Translation((0.034, 0, 0)))   # sit on the door's outer skin
+    temps = [p.to_temp(recalc=True), w.to_temp(recalc=False)]
+    door = C.merge_to_object("Door", temps, pivot=hb, parent=body, sharp_deg=50)
     return door, hb
 
 
@@ -387,8 +435,7 @@ def build_prop(name, sx, body):
     M = Matrix.Translation(hub) @ Matrix.Rotation(radians(90), 4, 'X')   # local +Z -> -Y
     vr, fs = p.lathe([(0.0, 0.42), (0.10, 0.36), (0.20, 0.24), (0.27, 0.10), (0.29, -0.02),
                       (0.29, -0.14), (0.0, -0.14)], 16, PEARL, matrix=M)
-    p.assign(fs[0:16], GOLD)
-    p.assign(fs[(7 - 3) * 16:(7 - 2) * 16], GOLD)       # tip pole fan
+    p.assign(fs[(7 - 3) * 16:(7 - 2) * 16], GOLD)       # gold tip cap (pole fan)
     # four twisted blades (ink, coral tips) in the prop disc (XZ plane)
     for k in range(4):
         a = radians(45 + 90 * k)
@@ -427,11 +474,7 @@ def build():
         nacelle(shell, sx)
     gear(shell)
     gear_wheels(shell)
-    # livery: teal cheatline + gold pinstripe on both flanks, sweeping up into the fin
-    for side in (1, -1):
-        strip(skin, -5.05, 6.85, CHEAT_LO, CHEAT_HI, TEAL, side, 0.004, ny=40)
-        strip(skin, -4.95, 6.80, lambda y: CHEAT_HI(y) + 0.035, lambda y: CHEAT_HI(y) + 0.075,
-              GOLD, side, 0.004, ny=40)
+    # livery (teal cheatline + gold pinstripe) is coloured directly on the fuselage faces
     cockpit(skin)
     # cabin windows
     for side in (1, -1):
@@ -457,7 +500,7 @@ def build():
     beacon = fus_pt(2.30, pi / 2, 0.0)
     shell.lathe([(0.0, 0.10), (0.06, 0.085), (0.08, 0.03), (0.09, -0.02), (0.0, -0.02)], 12, CORAL,
                 matrix=Matrix.Translation(beacon))
-    land = fus_pt(-5.55, radians(272), 0.0)
+    land = fus_pt(-5.55, radians(270), 0.0)
     V.lamp(shell, land, (0, -0.8, -0.6), 0.10, LIGHT, bezel=PEARL, depth=0.05, segs=12)
     temps = [shell.to_temp(), skin.to_temp(recalc=False)]
     body = C.merge_to_object("Body", temps, pivot=(0, 0, 0), parent=root, sharp_deg=48)

@@ -83,27 +83,32 @@ namespace Skyfold.EditorTools
         {
             var font = AssetDatabase.LoadAssetAtPath<Font>(ttfPath);
             if (font == null) { Debug.LogError("[SKYFOLD] Font missing: " + ttfPath); return null; }
-            var existing = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(assetPath);
-            if (existing != null) { existing.TryAddCharacters(Prefill); EditorUtility.SetDirty(existing); return existing; }
-
-            var fa = TMP_FontAsset.CreateFontAsset(font, 90, 9, GlyphRenderMode.SDFAA, 2048, 2048, AtlasPopulationMode.Dynamic, true);
-            fa.name = Path.GetFileNameWithoutExtension(assetPath);
-            AssetDatabase.CreateAsset(fa, assetPath);
-            fa.material.name = fa.name + " Material";
-            AssetDatabase.AddObjectToAsset(fa.material, fa);
-            foreach (var tex in fa.atlasTextures)
+            var fa = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(assetPath);
+            if (fa == null)
             {
-                tex.name = fa.name + " Atlas";
-                AssetDatabase.AddObjectToAsset(tex, fa);
+                fa = TMP_FontAsset.CreateFontAsset(font, 90, 9, GlyphRenderMode.SDFAA, 2048, 2048, AtlasPopulationMode.Dynamic, false);
+                fa.name = Path.GetFileNameWithoutExtension(assetPath);
+                AssetDatabase.CreateAsset(fa, assetPath);
+                fa.material.name = fa.name + " Material";
+                AssetDatabase.AddObjectToAsset(fa.material, fa);
+                foreach (var tex in fa.atlasTextures)
+                {
+                    tex.name = fa.name + " Atlas";
+                    AssetDatabase.AddObjectToAsset(tex, fa);
+                }
             }
-            fa.TryAddCharacters(Prefill);
+            // Bake every glyph the game uses, then freeze the atlas (no runtime glyph generation).
+            fa.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+            fa.TryAddCharacters(Prefill + UsedCharacters(), out string missing);
+            if (!string.IsNullOrEmpty(missing)) Debug.LogWarning($"[SKYFOLD] {fa.name}: font file lacks {missing.Length} glyph(s): \"{missing}\"");
+            fa.atlasPopulationMode = AtlasPopulationMode.Static;
             EditorUtility.SetDirty(fa);
             AssetDatabase.SaveAssets();
             return fa;
         }
 
-        /// <summary>Scans captions, credits and C# UI strings for characters the fonts lack.</summary>
-        public static int CheckCoverage(TMP_FontAsset heading, TMP_FontAsset body)
+        /// <summary>Every character in captions, credits and runtime C# string literals.</summary>
+        public static string UsedCharacters()
         {
             var text = new StringBuilder();
             var vo = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Skyfold/Resources/Dialogue/vo_lines.json");
@@ -112,21 +117,24 @@ namespace Skyfold.EditorTools
             foreach (var cs in Directory.GetFiles("Assets/Skyfold/Scripts/Runtime", "*.cs", SearchOption.AllDirectories))
                 foreach (System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches(File.ReadAllText(cs), "\"([^\"\\\\]|\\\\.)*\""))
                     text.Append(m.Value);
-            var chars = new string(text.ToString().Where(c => c >= 32 && c != '\\').Distinct().ToArray());
+            return new string(text.ToString().Where(c => c >= 32 && c != '\\').Distinct().ToArray());
+        }
+        /// <summary>Checks that every used character is in the baked atlases (no missing-glyph boxes).</summary>
+        public static int CheckCoverage(TMP_FontAsset heading, TMP_FontAsset body)
+        {
+            string chars = UsedCharacters();
             int missingCount = 0;
             foreach (var fa in new[] { body, heading })
             {
                 if (fa == null) continue;
-                fa.TryAddCharacters(chars, out string missing);
-                if (!string.IsNullOrEmpty(missing))
+                fa.HasCharacters(chars, out System.Collections.Generic.List<char> missing);
+                if (missing != null && missing.Count > 0)
                 {
-                    missingCount += missing.Length;
-                    Debug.LogWarning($"[SKYFOLD] Font {fa.name} is missing glyphs: \"{missing}\" ({string.Join(" ", missing.Select(c => "U+" + ((int)c).ToString("X4")))})");
+                    missingCount += missing.Count;
+                    Debug.LogWarning($"[SKYFOLD] Font {fa.name} is missing glyphs: \"{new string(missing.ToArray())}\" ({string.Join(" ", missing.Select(c => "U+" + ((int)c).ToString("X4")))})");
                 }
                 else Debug.Log($"[SKYFOLD] Font {fa.name}: all {chars.Length} UI characters present.");
-                EditorUtility.SetDirty(fa);
             }
-            AssetDatabase.SaveAssets();
             return missingCount;
         }
     }

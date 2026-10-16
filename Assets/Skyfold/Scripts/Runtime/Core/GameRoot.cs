@@ -69,7 +69,8 @@ namespace Skyfold
             City.OccupancyCheck = Occupancy;
             m_PendingDemo = opts.Demo;
             LogSystem(opts);
-            ApplyDisplay();
+            // QA runs keep Unity's own -screen-width/-screen-height/-screen-fullscreen values.
+            if (string.IsNullOrEmpty(opts.QaScenario)) ApplyDisplay();
         }
 
         /// <summary>Connects every system to the one CityState. Runs after all Awake calls.</summary>

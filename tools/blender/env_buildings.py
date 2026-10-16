@@ -665,7 +665,7 @@ def loft_outline(a, outline, profile, cap_top='SKY_Kerb', name="shell", bevel=0.
 @asset("bldg_tower", "Buildings", "buildings", ao=BLD_AO, render=dict(BLD_RENDER, el=20.0))
 def bldg_tower(a):
     """5-storey residential tower: rounded corners, pearl slab bands with brass trims, recessed teal glass."""
-    W, D, R = 11.0, 11.0, 2.6
+    W, D, R = 11.0, 10.4, 2.6
     outline = ccw(rrect(W, D, R, seg=6))
     prof = [(0.1, 0.0, 'SKY_SandstoneDeep'), (0.1, 0.55, 'SKY_SandstoneDeep'), (0.0, 0.55, 'SKY_Pearl')]
     fh = 3.4
@@ -683,13 +683,14 @@ def bldg_tower(a):
     loft_outline(a, outline, prof, cap_top='SKY_Kerb', name="shell")
     # vertical pearl fins across the glass bands (straight runs only)
     mb = MB()
-    hw = W / 2
+    hw = D / 2
     for f in range(5):
         zs = z + f * fh
         z0, z1 = zs + 0.95, zs + fh
-        for uu in (-2.0, -0.7, 0.7, 2.0):
-            for face in 'NSEW':
-                pl = {'N': -hw, 'S': hw, 'E': -hw, 'W': hw}[face]
+        for face in 'NSEW':
+            pl = {'N': -D / 2, 'S': D / 2, 'E': -W / 2, 'W': W / 2}[face]
+            us = (-2.0, -0.7, 0.7, 2.0) if face in 'NS' else (-1.7, -0.6, 0.6, 1.7)
+            for uu in us:
                 fbox(mb, face, pl, uu - 0.07, uu + 0.07, z0, z1, -0.28, 0.0, 'SKY_Pearl')
     a.part(mb, name="fins")
     # entrance portal on the north side
@@ -698,11 +699,11 @@ def bldg_tower(a):
     fprism(mb, 'N', -hw, band, 0.0, 0.7, 'SKY_Pearl')
     a.part(mb, bevel=0.04, seg=1, name="portal")
     mb = MB()
-    fbox(mb, 'N', -hw, -1.2, 1.2, 0.0, 0.12, 0.0, 1.4, 'SKY_Pearl')
-    fbox(mb, 'N', -hw, -1.75, 1.75, 3.65, 3.85, -0.1, 0.9, 'SKY_Brass')
+    fbox(mb, 'N', -hw, -1.2, 1.2, 0.0, 0.12, 0.0, 0.78, 'SKY_Pearl')
+    fbox(mb, 'N', -hw, -1.75, 1.75, 3.65, 3.85, -0.1, 0.78, 'SKY_Brass')
     a.part(mb, bevel=0.02, seg=1, name="canopy")
     mb = MB()
-    fbox(mb, 'N', -hw, -1.6, 1.6, 3.6, 3.65, 0.0, 0.85, 'SKY_TealGlow')
+    fbox(mb, 'N', -hw, -1.6, 1.6, 3.6, 3.65, 0.0, 0.74, 'SKY_TealGlow')
     a.part(mb, name="glow")
     # rooftop pavilion with pergola and planters
     rz = ztop + 0.3
@@ -849,11 +850,12 @@ def bldg_courtyard(a):
     mb.lathe([(0, 1.05), (0.4, 1.05), (0, 1.1)], 10, 'SKY_TealLight', cx=fx, cy=fy)
     a.part(mb, name="fountain_bowl_water")
     # palm (separate shell parts merged into the building mesh)
-    palm(a, x=4.6, y=0.0, z=0.12, height=4.4, lean=(0.5, -0.4), fronds=9, frond_len=2.6, r0=0.26, r1=0.18,
+    palm(a, x=3.7, y=-0.6, z=0.12, height=4.4, lean=(0.3, -0.3), fronds=9, frond_len=2.25, r0=0.26, r1=0.18,
          seed=21, dates=False, frond_seg=6, trunk_seg=8, sides=7)
     a.set_target(a.name, weighted=True, smooth=48.0)
     mb = MB()
-    mb.lathe([(0, 0.12), (0.55, 0.12), (0.55, 0.45), (0, 0.45)], 10, 'SKY_SandstoneDeep', cx=4.6, cy=0.0)
+    mb.lathe([(0, 0.12), (0.55, 0.12), (0.55, 0.45), (0, 0.45)], 10, 'SKY_SandstoneDeep', cx=3.7, cy=-0.6)
+
     a.part(mb, name="palm_bed")
     # shade sail from the wing corners to a brass mast
     mb = MB()

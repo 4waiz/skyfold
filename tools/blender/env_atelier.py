@@ -167,7 +167,8 @@ def atelier_platform(a):
         pts = [(u * ca - v * sa, u * sa + v * ca) for (u, v) in ((2.15, -0.06), (5.2, -0.06), (5.2, 0.06), (2.15, 0.06))]
         regions.append(reg(pts, 0.0, 'SKY_Sandstone', 3))
     tile_surface(a, regions, base_z=-0.55, side_mat='SKY_Pearl', bounds=(-99, 99, -99, 99), name="deck",
-                 kerb_bevel=0.0)
+                 kerb_bevel=0.0, bottom='loop')
+
     # rim band
     mb = MB()
     mb.lathe([(R_ - 0.02, -0.6), (R_ + 0.12, -0.6), (R_ + 0.12, -0.42), (R_ - 0.02, -0.42)], 48, 'SKY_Brass',

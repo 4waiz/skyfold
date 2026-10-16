@@ -154,7 +154,8 @@ def road_corner(a):
         ca, sa = math.cos(math.radians(ang)), math.sin(math.radians(ang))
         nx, ny = -sa * jw, ca * jw
         r0 = r_out + KW + 0.02
-        r1 = min(2 * H / max(ca, 1e-6), 2 * H / max(sa, 1e-6)) - 0.01
+        r1 = min(2 * H / max(ca, 1e-6), 2 * H / max(sa, 1e-6)) - 0.08
+
         R.append(sw_joint([(P[0] + ca * r0 - nx, P[1] + sa * r0 - ny), (P[0] + ca * r1 - nx, P[1] + sa * r1 - ny),
                            (P[0] + ca * r1 + nx, P[1] + sa * r1 + ny), (P[0] + ca * r0 + nx, P[1] + sa * r0 + ny)]))
     tile_surface(a, R)
@@ -298,7 +299,7 @@ def runway_end(a):
     # threshold bar
     R.append(line(rect(-5.5, 5.5, 3.8, 4.6)))
     # blast pad chevrons (coral = hazard)
-    for y0 in (5.4, 6.9):
+    for y0 in (5.25, 6.45):
         pts = [(-5.2, y0 + 0.9), (0.0, y0), (5.2, y0 + 0.9), (5.2, y0 + 1.35), (0.0, y0 + 0.45), (-5.2, y0 + 1.35)]
         R.append(reg(pts, 0.0, 'SKY_Coral', 6))
     tile_surface(a, R)
