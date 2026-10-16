@@ -54,6 +54,7 @@ namespace Skyfold
                 case "tour": body = Tour(); break;
                 case "perf": body = Perf(); break;
                 case "fullcampaign": body = FullCampaign(); break;
+                case "lookdev": body = LookDev(); break;
                 default: Check(false, "unknown scenario " + scenario); body = null; break;
             }
             if (body != null) yield return StartCoroutine(Guard(body));
@@ -612,6 +613,71 @@ namespace Skyfold
             var r = MD.LastResult;
             Check(r != null && r.Success, "episode 3 result recorded");
             if (r != null) Log($"episode 3 result medal={r.Medal} timeLeft={r.TimeLeft:0} rejected={r.Rejected} hints={r.HintsShown}");
+        }
+
+        /// <summary>Look-dev probe: one fixed street view, re-shot with one suspect removed at a time.</summary>
+        IEnumerator LookDev()
+        {
+            Root.ChooseDesktop();
+            yield return new WaitForSecondsRealtime(0.5f);
+            Root.StartMission(MissionCatalog.Episode1);
+            yield return new WaitForSecondsRealtime(1f);
+            var fold = FoldController.Instance;
+            var pose = new Anchor(new Vector3(134.3f, 0.15f, 30.5f), 90f);
+            fold.SetLocationImmediate(false, fold.Station("kiosk.A"), pose);
+            PlayerRigs.Instance.TeleportTo(pose.Position, pose.Yaw);
+            PlayerRigs.Instance.desktop.SetPitch(0f);
+            yield return new WaitForSecondsRealtime(2f);
+            yield return Shot("look_a_baseline");
+
+            var cam = PlayerRigs.Instance.ActiveCamera;
+            var ray = cam.ScreenPointToRay(new Vector3(460f / 1920f * Screen.width, (1f - 270f / 1080f) * Screen.height, 0f));
+            var block = new MaterialPropertyBlock();
+            foreach (var r in FindObjectsByType<Renderer>())
+            {
+                if (!r.enabled || !r.bounds.IntersectRay(ray, out float dist)) continue;
+                r.GetPropertyBlock(block);
+                var m = r.sharedMaterial;
+                string path = r.name; for (var p = r.transform.parent; p != null; p = p.parent) path = p.name + "/" + path;
+                Log($"LOOK hit {path} dist {dist:0} layer {LayerMask.LayerToName(r.gameObject.layer)} mat {(m != null ? m.name : "null")} shader {(m != null ? m.shader.name : "-")} " +
+                    $"mpbEmpty {block.isEmpty} mpbHighlight {block.GetFloat("_Highlight"):0.00} matHighlight {(m != null && m.HasProperty("_Highlight") ? m.GetFloat("_Highlight") : -1f):0.00} " +
+                    $"kw [{(m != null ? string.Join(",", m.shaderKeywords) : "")}] lightProbes {r.lightProbeUsage} probeAnchor {(r.probeAnchor != null ? r.probeAnchor.name : "-")}");
+            }
+            var dirs = new[] { Vector3.up, Vector3.down, Vector3.forward };
+            var cols = new Color[3];
+            RenderSettings.ambientProbe.Evaluate(dirs, cols);
+            Log($"LOOK ambient mode {RenderSettings.ambientMode} probe up {cols[0]} down {cols[1]} fwd {cols[2]} sky {RenderSettings.ambientSkyColor} ground {RenderSettings.ambientGroundColor} fog {RenderSettings.fogColor}");
+            Log($"LOOK global keywords: cluster {Shader.IsKeywordEnabled("_CLUSTER_LIGHT_LOOP")} addLights {Shader.IsKeywordEnabled("_ADDITIONAL_LIGHTS")} probeVolumesL1 {Shader.IsKeywordEnabled("PROBE_VOLUMES_L1")} L2 {Shader.IsKeywordEnabled("PROBE_VOLUMES_L2")}");
+            var lights = FindObjectsByType<Light>();
+            var turnedOff = new List<Light>();
+            foreach (var l in lights)
+            {
+                if (!l.isActiveAndEnabled) continue;
+                Log($"LOOK light {l.name} {l.type} colour {l.color} intensity {l.intensity:0.00} range {l.range:0} at {l.transform.position}");
+                if (l != RenderSettings.sun) { l.enabled = false; turnedOff.Add(l); }
+            }
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Shot("look_b_sun_only");
+            foreach (var l in turnedOff) l.enabled = true;
+
+            var probe = RenderSettings.ambientProbe;
+            var grey = new UnityEngine.Rendering.SphericalHarmonicsL2();
+            grey.AddAmbientLight(new Color(0.5f, 0.5f, 0.5f));
+            RenderSettings.ambientProbe = grey;
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Shot("look_c_grey_ambient");
+            RenderSettings.ambientProbe = probe;
+
+            var pearl = Resources.FindObjectsOfTypeAll<Material>();
+            foreach (var mat in pearl)
+            {
+                if (mat.name != "SKY_Pearl") continue;
+                Log($"LOOK SKY_Pearl runtime: wrap {mat.GetFloat("_Wrap"):0.00} tint {mat.GetColor("_ShadowTint")} highlight {mat.GetFloat("_Highlight"):0.00} hcol {mat.GetColor("_HighlightColor")} emission {mat.GetColor("_EmissionColor")} smooth {mat.GetFloat("_Smoothness"):0.00}");
+                mat.SetColor("_HighlightColor", Color.black);
+            }
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Shot("look_d_no_highlight_colour");
+            Check(true, "look-dev probe captured");
         }
 
         IEnumerator Tour()

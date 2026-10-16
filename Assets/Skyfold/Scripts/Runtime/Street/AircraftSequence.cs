@@ -35,6 +35,8 @@ namespace Skyfold
         float m_BoardTimer;
         float m_StateTime;
         float m_Pitch, m_Bank;
+        bool m_Cinematic;
+        Transform m_CinePoint;
         AudioSource m_Engine;
         bool? m_LightsPowered;
         static readonly int EmissionId = Shader.PropertyToID("_EmissionColor");
@@ -83,8 +85,39 @@ namespace Skyfold
             return string.Join(", ", parts);
         }
 
+        /// <summary>
+        /// Laptop only: a side-on shot from over the water north of the runway that follows the roll
+        /// and climb. VR never takes the camera away from the player.
+        /// </summary>
+        void BeginDesktopCinematic()
+        {
+            var rigs = PlayerRigs.Instance;
+            var input = InputRouter.Instance;
+            if (rigs == null || input == null || rigs.Mode != PlayMode.Desktop || rigs.IsDriving || input.Context != InputContext.OnFoot) return;
+            if (m_CinePoint == null) m_CinePoint = new GameObject("Takeoff Camera Point").transform;
+            m_CinePoint.position = new Vector3(104f, 6.5f, 156f);
+            rigs.desktop.SetOverlook(m_CinePoint);
+            rigs.desktop.chaseTarget = transform;
+            rigs.desktop.SetView(DesktopView.Overlook);
+            input.SetContext(InputContext.Cutscene);
+            m_Cinematic = true;
+        }
+
+        void EndDesktopCinematic()
+        {
+            if (!m_Cinematic) return;
+            m_Cinematic = false;
+            var rigs = PlayerRigs.Instance;
+            var input = InputRouter.Instance;
+            if (rigs == null || rigs.desktop == null) return;
+            rigs.desktop.SetView(DesktopView.FirstPerson);
+            if (input != null && input.Context == InputContext.Cutscene) input.SetContext(InputContext.OnFoot);
+            rigs.desktop.UpdateCursor();
+        }
+
         public void ResetToPark()
         {
+            EndDesktopCinematic();
             transform.SetPositionAndRotation(m_Park.Position, m_Park.Rotation);
             m_Pitch = m_Bank = 0f;
             m_Speed = 0f;
@@ -112,8 +145,8 @@ namespace Skyfold
                 AudioDirector.Instance?.PlayAt("plane_spoolup", transform.position, 1f, 1f, 15f);
                 AudioDirector.Instance?.SetMusic("music_finale", 1.5f);
             }
-            if (s == AircraftState.TakeoffRoll) AudioDirector.Instance?.PlayAt("plane_takeoff", transform.position, 1f, 1f, 25f);
-            if (s == AircraftState.Departed) Debug.Log("[SKYFOLD] The last flight has departed.");
+            if (s == AircraftState.TakeoffRoll) { AudioDirector.Instance?.PlayAt("plane_takeoff", transform.position, 1f, 1f, 25f); BeginDesktopCinematic(); }
+            if (s == AircraftState.Departed) { Debug.Log("[SKYFOLD] The last flight has departed."); EndDesktopCinematic(); }
         }
 
         void Update()

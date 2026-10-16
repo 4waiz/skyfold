@@ -89,7 +89,8 @@ namespace Skyfold
             var head = rigs.Head;
             Vector3 fwd = rigs.Forward;
             Vector3 right = Vector3.Cross(Vector3.up, fwd);
-            float scale = rigs.IsDriving ? 1.6f : 1f;
+            // A little further out on a flat screen, where the narrower view makes NURI look bigger.
+            float scale = rigs.IsDriving ? 1.6f : (rigs.Mode == PlayMode.Desktop ? 1.45f : 1f);
             return head.position + fwd * followDistance * scale + right * sideOffset * scale + Vector3.up * heightOffset;
         }
 
