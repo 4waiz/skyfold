@@ -6,7 +6,7 @@ Fronts face Unity north (+Z) = Blender -Y. Face names use Unity directions:
 """
 from env_common import *
 
-BLD_AO = dict(ground_z=0.0, dist=2.2, rays=28, strength=0.82, floor=0.4, inset=0.25)
+BLD_AO = dict(ground_z=0.0, dist=1.8, rays=28, strength=0.72, floor=0.48, inset=0.25, power=1.25)
 BLD_RENDER = dict(az=35.0, el=24.0)
 
 # --------------------------------------------------------------------------- facade frames

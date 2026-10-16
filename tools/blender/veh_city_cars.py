@@ -60,7 +60,7 @@ def build_a():
     cabin.build(shell, 28, SAND, band_mats={1: V.INK})
     # bumpers (pearl) + headlights / tail lights
     for sy in (-1, 1):
-        shell.rbox(Vector((0, sy * 1.88, 0.50)), (1.56, 0.14, 0.20), 0.07, 2, V.PEARL)
+        shell.rbox(Vector((0, sy * 1.835, 0.50)), (1.56, 0.13, 0.20), 0.065, 2, V.PEARL)
     common_details(shell, lower, 0.74, 0.55, 0.60, SAND)
     # glass
     zg0, zg1 = 0.97, 1.30
@@ -104,7 +104,7 @@ def build_b():
     # rear door seam (ink) + bumpers + lamps
     shell.box(Vector((0, 1.905, 1.10)), (0.018, 0.012, 0.86), V.INK)
     for sy in (-1, 1):
-        shell.rbox(Vector((0, sy * 1.89, 0.50)), (1.56, 0.14, 0.20), 0.07, 2, V.PEARL)
+        shell.rbox(Vector((0, sy * 1.84, 0.50)), (1.56, 0.13, 0.20), 0.065, 2, V.PEARL)
     common_details(shell, body, 0.76, 0.56, 0.62, TEAL)
     # roof rack (pearl)
     for sy in (0.0, 0.9):

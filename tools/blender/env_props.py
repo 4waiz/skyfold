@@ -5,7 +5,7 @@ Pivot at ground centre unless noted. Fronts face Unity north (+Z) = Blender -Y.
 from env_common import *
 from env_buildings import sail_quad, fbox
 
-PROP_AO = dict(ground_z=0.0, dist=0.5, rays=24, strength=0.75, floor=0.45, inset=0.04)
+PROP_AO = dict(ground_z=0.0, dist=0.5, rays=24, strength=0.68, floor=0.5, inset=0.04, power=1.2)
 PROP_RENDER = dict(az=35.0, el=22.0)
 
 

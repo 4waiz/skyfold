@@ -1,0 +1,2521 @@
+{
+ "stream": "chars",
+ "generated": "2026-10-17",
+ "axes": "Unity: x_u = -x_blender, y_u = z_blender, z_u = -y_blender; metres; Y up; +Z forward",
+ "export": "Blender 5.2 FBX, ART_SPEC settings (bake_space_transform=True, -Z forward, Y up, FBX_SCALE_ALL, colors_type=SRGB); nested-hierarchy matrix bug patched at export time in chars_common._patch_fbx_exporter",
+ "vertex_color": "Col (soft AO, white = open)",
+ "licence": "Original work for SKYFOLD (Awaiz Ahmed / Team Kanban); procedural Blender 5.2 scripts; not AI-generated",
+ "files": [
+  {
+   "path": "Assets/Skyfold/Art/Models/Characters/nuri.fbx",
+   "source": "tools/blender/chars_nuri.py",
+   "purpose": "NURI companion (hovering mechanical falcon)",
+   "root": "Nuri",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 5900,
+   "tri_budget": 6000,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Ink",
+    "SKY_Ivory",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -0.29027,
+     -0.054,
+     -0.21673
+    ],
+    "max": [
+     0.29027,
+     0.08782,
+     0.14479
+    ],
+    "size": [
+     0.58053,
+     0.14182,
+     0.36152
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "Beak",
+     "type": "Mesh",
+     "parent": "Head",
+     "local_position": [
+      -0.0,
+      0.0035,
+      0.063
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0225,
+      0.117
+     ],
+     "tris": 272,
+     "materials": [
+      "SKY_Brass",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Body",
+     "type": "Mesh",
+     "parent": "Nuri",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1080,
+     "materials": [
+      "SKY_Ivory",
+      "SKY_Ink",
+      "SKY_Brass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Head",
+     "type": "Mesh",
+     "parent": "Body",
+     "local_position": [
+      -0.0,
+      0.019,
+      0.054
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.019,
+      0.054
+     ],
+     "tris": 1048,
+     "materials": [
+      "SKY_Ivory",
+      "SKY_Ink",
+      "SKY_Brass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Lens",
+     "type": "Mesh",
+     "parent": "Head",
+     "local_position": [
+      -0.0,
+      0.0265,
+      0.0665
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0455,
+      0.1205
+     ],
+     "tris": 396,
+     "materials": [
+      "SKY_TealGlow",
+      "SKY_Teal"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Nuri",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    },
+    {
+     "name": "Tail",
+     "type": "Mesh",
+     "parent": "Body",
+     "local_position": [
+      -0.0,
+      0.004,
+      -0.086
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.004,
+      -0.086
+     ],
+     "tris": 1068,
+     "materials": [
+      "SKY_Ivory",
+      "SKY_Brass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Thruster",
+     "type": "Mesh",
+     "parent": "Body",
+     "local_position": [
+      -0.0,
+      -0.0495,
+      -0.006
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      -0.0495,
+      -0.006
+     ],
+     "tris": 128,
+     "materials": [
+      "SKY_TealGlow"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wing_L",
+     "type": "Mesh",
+     "parent": "Body",
+     "local_position": [
+      -0.04,
+      0.025,
+      0.028
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.04,
+      0.025,
+      0.028
+     ],
+     "tris": 954,
+     "materials": [
+      "SKY_Ivory",
+      "SKY_Brass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wing_R",
+     "type": "Mesh",
+     "parent": "Body",
+     "local_position": [
+      0.04,
+      0.025,
+      0.028
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      0.04,
+      0.025,
+      0.028
+     ],
+     "tris": 954,
+     "materials": [
+      "SKY_Ivory",
+      "SKY_Brass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    }
+   ],
+   "empties": [],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Characters/glove_L.fbx",
+   "source": "tools/blender/chars_gloves.py",
+   "purpose": "Left courier glove + folding-city bracer",
+   "root": "glove_L",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 7520,
+   "tri_budget": null,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Ink",
+    "SKY_Ivory",
+    "SKY_Pearl",
+    "SKY_Sandstone",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -0.07082,
+     -0.04026,
+     -0.1078
+    ],
+    "max": [
+     0.03502,
+     0.0509,
+     0.07749
+    ],
+    "size": [
+     0.10584,
+     0.09116,
+     0.18529
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "ANCHOR_wristui",
+     "type": "Empty",
+     "parent": "glove_L",
+     "local_position": [
+      -0.06952,
+      0.0,
+      -0.081
+     ],
+     "local_rotation_euler": [
+      0.0,
+      90.0,
+      180.0
+     ],
+     "local_axes_unity": {
+      "right": [
+       0.0,
+       -0.0,
+       1.0
+      ],
+      "up": [
+       0.0,
+       -1.0,
+       -0.0
+      ],
+      "forward": [
+       1.0,
+       0.0,
+       0.0
+      ]
+     },
+     "world_position": [
+      -0.06952,
+      -0.0,
+      -0.081
+     ]
+    },
+    {
+     "name": "Grip",
+     "type": "Mesh",
+     "parent": "glove_L",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 3760,
+     "materials": [
+      "SKY_Ivory",
+      "SKY_Teal",
+      "SKY_Ink",
+      "SKY_Brass",
+      "SKY_Sandstone",
+      "SKY_TealGlow",
+      "SKY_Pearl"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Open",
+     "type": "Mesh",
+     "parent": "glove_L",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 3760,
+     "materials": [
+      "SKY_Ivory",
+      "SKY_Teal",
+      "SKY_Ink",
+      "SKY_Brass",
+      "SKY_Sandstone",
+      "SKY_TealGlow",
+      "SKY_Pearl"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "glove_L",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    }
+   ],
+   "empties": [
+    {
+     "name": "ANCHOR_wristui",
+     "parent": "glove_L",
+     "local_position": [
+      -0.06952,
+      0.0,
+      -0.081
+     ],
+     "world_position": [
+      -0.06952,
+      -0.0,
+      -0.081
+     ],
+     "local_rotation_euler": [
+      0.0,
+      90.0,
+      180.0
+     ],
+     "local_axes_unity": {
+      "right": [
+       0.0,
+       -0.0,
+       1.0
+      ],
+      "up": [
+       0.0,
+       -1.0,
+       -0.0
+      ],
+      "forward": [
+       1.0,
+       0.0,
+       0.0
+      ]
+     }
+    }
+   ],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Characters/glove_R.fbx",
+   "source": "tools/blender/chars_gloves.py",
+   "purpose": "Right courier glove",
+   "root": "glove_R",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 5976,
+   "tri_budget": null,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Ink",
+    "SKY_Ivory",
+    "SKY_Sandstone",
+    "SKY_Teal"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -0.03502,
+     -0.03878,
+     -0.1078
+    ],
+    "max": [
+     0.06064,
+     0.0509,
+     0.07749
+    ],
+    "size": [
+     0.09566,
+     0.08968,
+     0.18529
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "Grip",
+     "type": "Mesh",
+     "parent": "glove_R",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 2988,
+     "materials": [
+      "SKY_Ivory",
+      "SKY_Teal",
+      "SKY_Ink",
+      "SKY_Brass",
+      "SKY_Sandstone"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Open",
+     "type": "Mesh",
+     "parent": "glove_R",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 2988,
+     "materials": [
+      "SKY_Ivory",
+      "SKY_Teal",
+      "SKY_Ink",
+      "SKY_Brass",
+      "SKY_Sandstone"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "glove_R",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    }
+   ],
+   "empties": [],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Vehicles/courier_car.fbx",
+   "source": "tools/blender/veh_courier_car.py",
+   "purpose": "Player courier buggy (Episode 2)",
+   "root": "courier_car",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 7680,
+   "tri_budget": 8000,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Glass",
+    "SKY_Ink",
+    "SKY_Light",
+    "SKY_Pearl",
+    "SKY_Rubber",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -0.817,
+     -0.002,
+     -1.79248
+    ],
+    "max": [
+     0.817,
+     1.65,
+     1.71936
+    ],
+    "size": [
+     1.634,
+     1.652,
+     3.51184
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "ANCHOR_door",
+     "type": "Empty",
+     "parent": "Body",
+     "local_position": [
+      -0.64,
+      0.9,
+      -0.05
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.64,
+      0.9,
+      -0.05
+     ]
+    },
+    {
+     "name": "ANCHOR_driver_eye",
+     "type": "Empty",
+     "parent": "Body",
+     "local_position": [
+      -0.0,
+      1.15,
+      -0.1
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      1.15,
+      -0.1
+     ]
+    },
+    {
+     "name": "ANCHOR_exit_left",
+     "type": "Empty",
+     "parent": "courier_car",
+     "local_position": [
+      -1.4,
+      0.0,
+      -0.1
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -1.4,
+      -0.0,
+      -0.1
+     ]
+    },
+    {
+     "name": "ANCHOR_exit_right",
+     "type": "Empty",
+     "parent": "courier_car",
+     "local_position": [
+      1.4,
+      0.0,
+      -0.1
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      1.4,
+      -0.0,
+      -0.1
+     ]
+    },
+    {
+     "name": "Body",
+     "type": "Mesh",
+     "parent": "courier_car",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 4920,
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_Ink",
+      "SKY_Coral",
+      "SKY_Light",
+      "SKY_Brass",
+      "SKY_TealGlow",
+      "SKY_Glass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "SOCKET_cargo",
+     "type": "Empty",
+     "parent": "Body",
+     "local_position": [
+      -0.0,
+      0.875,
+      -1.12
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.875,
+      -1.12
+     ]
+    },
+    {
+     "name": "SteeringWheel",
+     "type": "Mesh",
+     "parent": "Body",
+     "local_position": [
+      -0.0,
+      0.9,
+      0.27
+     ],
+     "local_rotation_euler": [
+      35.0,
+      0.0,
+      0.0
+     ],
+     "local_axes_unity": {
+      "right": [
+       1.0,
+       -0.0,
+       0.0
+      ],
+      "up": [
+       0.0,
+       0.81915,
+       0.57358
+      ],
+      "forward": [
+       -0.0,
+       -0.57358,
+       0.81915
+      ]
+     },
+     "world_position": [
+      -0.0,
+      0.9,
+      0.27
+     ],
+     "tris": 472,
+     "materials": [
+      "SKY_Ink",
+      "SKY_Coral",
+      "SKY_Pearl",
+      "SKY_Brass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_FL",
+     "type": "Mesh",
+     "parent": "courier_car",
+     "local_position": [
+      -0.665,
+      0.32,
+      1.1
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.665,
+      0.32,
+      1.1
+     ],
+     "tris": 572,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_FR",
+     "type": "Mesh",
+     "parent": "courier_car",
+     "local_position": [
+      0.665,
+      0.32,
+      1.1
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      0.665,
+      0.32,
+      1.1
+     ],
+     "tris": 572,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_RL",
+     "type": "Mesh",
+     "parent": "courier_car",
+     "local_position": [
+      -0.665,
+      0.32,
+      -1.1
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.665,
+      0.32,
+      -1.1
+     ],
+     "tris": 572,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_RR",
+     "type": "Mesh",
+     "parent": "courier_car",
+     "local_position": [
+      0.665,
+      0.32,
+      -1.1
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      0.665,
+      0.32,
+      -1.1
+     ],
+     "tris": 572,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "courier_car",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    }
+   ],
+   "empties": [
+    {
+     "name": "ANCHOR_door",
+     "parent": "Body",
+     "local_position": [
+      -0.64,
+      0.9,
+      -0.05
+     ],
+     "world_position": [
+      -0.64,
+      0.9,
+      -0.05
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "ANCHOR_driver_eye",
+     "parent": "Body",
+     "local_position": [
+      -0.0,
+      1.15,
+      -0.1
+     ],
+     "world_position": [
+      -0.0,
+      1.15,
+      -0.1
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "ANCHOR_exit_left",
+     "parent": "courier_car",
+     "local_position": [
+      -1.4,
+      0.0,
+      -0.1
+     ],
+     "world_position": [
+      -1.4,
+      -0.0,
+      -0.1
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "ANCHOR_exit_right",
+     "parent": "courier_car",
+     "local_position": [
+      1.4,
+      0.0,
+      -0.1
+     ],
+     "world_position": [
+      1.4,
+      -0.0,
+      -0.1
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_cargo",
+     "parent": "Body",
+     "local_position": [
+      -0.0,
+      0.875,
+      -1.12
+     ],
+     "world_position": [
+      -0.0,
+      0.875,
+      -1.12
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Vehicles/convoy_shuttle.fbx",
+   "source": "tools/blender/veh_convoy_shuttle.py",
+   "purpose": "Convoy minibus (Episodes 2-3)",
+   "root": "convoy_shuttle",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 4800,
+   "tri_budget": 8000,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Glass",
+    "SKY_Ink",
+    "SKY_Light",
+    "SKY_Pearl",
+    "SKY_Rubber",
+    "SKY_Teal"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -1.00678,
+     -0.0024,
+     -2.6
+    ],
+    "max": [
+     1.04,
+     2.59,
+     2.6
+    ],
+    "size": [
+     2.04678,
+     2.5924,
+     5.2
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "Body",
+     "type": "Mesh",
+     "parent": "convoy_shuttle",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 2512,
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_Ink",
+      "SKY_Light",
+      "SKY_Coral",
+      "SKY_Glass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_FL",
+     "type": "Mesh",
+     "parent": "convoy_shuttle",
+     "local_position": [
+      -0.84,
+      0.4,
+      1.65
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.84,
+      0.4,
+      1.65
+     ],
+     "tris": 572,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_FR",
+     "type": "Mesh",
+     "parent": "convoy_shuttle",
+     "local_position": [
+      0.84,
+      0.4,
+      1.65
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      0.84,
+      0.4,
+      1.65
+     ],
+     "tris": 572,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_RL",
+     "type": "Mesh",
+     "parent": "convoy_shuttle",
+     "local_position": [
+      -0.84,
+      0.4,
+      -1.65
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.84,
+      0.4,
+      -1.65
+     ],
+     "tris": 572,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_RR",
+     "type": "Mesh",
+     "parent": "convoy_shuttle",
+     "local_position": [
+      0.84,
+      0.4,
+      -1.65
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      0.84,
+      0.4,
+      -1.65
+     ],
+     "tris": 572,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "convoy_shuttle",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    }
+   ],
+   "empties": [],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Vehicles/city_car_a.fbx",
+   "source": "tools/blender/veh_city_cars.py",
+   "purpose": "Ambient traffic",
+   "root": "city_car_a",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 2460,
+   "tri_budget": 4000,
+   "materials": [
+    "SKY_Coral",
+    "SKY_Glass",
+    "SKY_Ink",
+    "SKY_Light",
+    "SKY_Pearl",
+    "SKY_Rubber",
+    "SKY_Sandstone"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -0.85,
+     -0.0,
+     -1.95
+    ],
+    "max": [
+     0.85,
+     1.50406,
+     1.95
+    ],
+    "size": [
+     1.7,
+     1.50406,
+     3.9
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "Body",
+     "type": "Mesh",
+     "parent": "city_car_a",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1596,
+     "materials": [
+      "SKY_Ink",
+      "SKY_Sandstone",
+      "SKY_Pearl",
+      "SKY_Light",
+      "SKY_Coral",
+      "SKY_Glass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_FL",
+     "type": "Mesh",
+     "parent": "city_car_a",
+     "local_position": [
+      -0.7,
+      0.31,
+      1.225
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.7,
+      0.31,
+      1.225
+     ],
+     "tris": 216,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_FR",
+     "type": "Mesh",
+     "parent": "city_car_a",
+     "local_position": [
+      0.7,
+      0.31,
+      1.225
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      0.7,
+      0.31,
+      1.225
+     ],
+     "tris": 216,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_RL",
+     "type": "Mesh",
+     "parent": "city_car_a",
+     "local_position": [
+      -0.7,
+      0.31,
+      -1.225
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.7,
+      0.31,
+      -1.225
+     ],
+     "tris": 216,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_RR",
+     "type": "Mesh",
+     "parent": "city_car_a",
+     "local_position": [
+      0.7,
+      0.31,
+      -1.225
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      0.7,
+      0.31,
+      -1.225
+     ],
+     "tris": 216,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "city_car_a",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    }
+   ],
+   "empties": [],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Vehicles/city_car_b.fbx",
+   "source": "tools/blender/veh_city_cars.py",
+   "purpose": "Ambient traffic",
+   "root": "city_car_b",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 2400,
+   "tri_budget": 4000,
+   "materials": [
+    "SKY_Coral",
+    "SKY_Glass",
+    "SKY_Ink",
+    "SKY_Light",
+    "SKY_Pearl",
+    "SKY_Rubber",
+    "SKY_Teal"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -0.856,
+     -0.0,
+     -1.96
+    ],
+    "max": [
+     0.856,
+     1.89905,
+     1.96
+    ],
+    "size": [
+     1.712,
+     1.89905,
+     3.92
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "Body",
+     "type": "Mesh",
+     "parent": "city_car_b",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1536,
+     "materials": [
+      "SKY_Ink",
+      "SKY_Teal",
+      "SKY_Pearl",
+      "SKY_Light",
+      "SKY_Coral",
+      "SKY_Glass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_FL",
+     "type": "Mesh",
+     "parent": "city_car_b",
+     "local_position": [
+      -0.7,
+      0.3,
+      1.2
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.7,
+      0.3,
+      1.2
+     ],
+     "tris": 216,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_FR",
+     "type": "Mesh",
+     "parent": "city_car_b",
+     "local_position": [
+      0.7,
+      0.3,
+      1.2
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      0.7,
+      0.3,
+      1.2
+     ],
+     "tris": 216,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_RL",
+     "type": "Mesh",
+     "parent": "city_car_b",
+     "local_position": [
+      -0.7,
+      0.3,
+      -1.2
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.7,
+      0.3,
+      -1.2
+     ],
+     "tris": 216,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Wheel_RR",
+     "type": "Mesh",
+     "parent": "city_car_b",
+     "local_position": [
+      0.7,
+      0.3,
+      -1.2
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      0.7,
+      0.3,
+      -1.2
+     ],
+     "tris": 216,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Ink"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "city_car_b",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    }
+   ],
+   "empties": [],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Vehicles/aircraft.fbx",
+   "source": "tools/blender/veh_aircraft.py",
+   "purpose": "'The last flight' aircraft (Episode 3)",
+   "root": "aircraft",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 9124,
+   "tri_budget": 15000,
+   "materials": [
+    "SKY_Coral",
+    "SKY_Glass",
+    "SKY_Gold",
+    "SKY_Ink",
+    "SKY_Light",
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_Rubber",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -8.1,
+     0.00752,
+     -7.5
+    ],
+    "max": [
+     8.1,
+     5.15,
+     5.82
+    ],
+    "size": [
+     16.2,
+     5.14248,
+     13.32
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "ANCHOR_door",
+     "type": "Empty",
+     "parent": "aircraft",
+     "local_position": [
+      -2.45,
+      0.0,
+      2.56
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -2.45,
+      0.0,
+      2.56
+     ]
+    },
+    {
+     "name": "Body",
+     "type": "Mesh",
+     "parent": "aircraft",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 7500,
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_Gold",
+      "SKY_Ink",
+      "SKY_Rubber",
+      "SKY_Coral",
+      "SKY_TealGlow",
+      "SKY_Light",
+      "SKY_Glass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Door",
+     "type": "Mesh",
+     "parent": "Body",
+     "local_position": [
+      -0.61571,
+      0.97067,
+      2.56
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.61571,
+      0.97067,
+      2.56
+     ],
+     "tris": 408,
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Ink",
+      "SKY_Metal",
+      "SKY_Glass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "LIGHT_beacon",
+     "type": "Empty",
+     "parent": "Body",
+     "local_position": [
+      -0.0,
+      2.84,
+      -2.3
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      2.84,
+      -2.3
+     ]
+    },
+    {
+     "name": "LIGHT_landing",
+     "type": "Empty",
+     "parent": "Body",
+     "local_position": [
+      0.0,
+      1.37665,
+      5.58
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      0.0,
+      1.37665,
+      5.58
+     ]
+    },
+    {
+     "name": "LIGHT_nav_L",
+     "type": "Empty",
+     "parent": "Body",
+     "local_position": [
+      -8.08,
+      3.03346,
+      0.605
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -8.08,
+      3.03346,
+      0.605
+     ]
+    },
+    {
+     "name": "LIGHT_nav_R",
+     "type": "Empty",
+     "parent": "Body",
+     "local_position": [
+      8.08,
+      3.03346,
+      0.605
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      8.08,
+      3.03346,
+      0.605
+     ]
+    },
+    {
+     "name": "Prop_L",
+     "type": "Mesh",
+     "parent": "Body",
+     "local_position": [
+      -2.6,
+      2.62,
+      3.18
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -2.6,
+      2.62,
+      3.18
+     ],
+     "tris": 608,
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Gold",
+      "SKY_Ink",
+      "SKY_Coral"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "Prop_R",
+     "type": "Mesh",
+     "parent": "Body",
+     "local_position": [
+      2.6,
+      2.62,
+      3.18
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      2.6,
+      2.62,
+      3.18
+     ],
+     "tris": 608,
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Gold",
+      "SKY_Ink",
+      "SKY_Coral"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "aircraft",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    }
+   ],
+   "empties": [
+    {
+     "name": "ANCHOR_door",
+     "parent": "aircraft",
+     "local_position": [
+      -2.45,
+      0.0,
+      2.56
+     ],
+     "world_position": [
+      -2.45,
+      0.0,
+      2.56
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "LIGHT_beacon",
+     "parent": "Body",
+     "local_position": [
+      -0.0,
+      2.84,
+      -2.3
+     ],
+     "world_position": [
+      -0.0,
+      2.84,
+      -2.3
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "LIGHT_landing",
+     "parent": "Body",
+     "local_position": [
+      0.0,
+      1.37665,
+      5.58
+     ],
+     "world_position": [
+      0.0,
+      1.37665,
+      5.58
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "LIGHT_nav_L",
+     "parent": "Body",
+     "local_position": [
+      -8.08,
+      3.03346,
+      0.605
+     ],
+     "world_position": [
+      -8.08,
+      3.03346,
+      0.605
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "LIGHT_nav_R",
+     "parent": "Body",
+     "local_position": [
+      8.08,
+      3.03346,
+      0.605
+     ],
+     "world_position": [
+      8.08,
+      3.03346,
+      0.605
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Props/power_cell.fbx",
+   "source": "tools/blender/veh_power_cell.py",
+   "purpose": "Grabbable power cell (Episode 2)",
+   "root": "PowerCell",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 492,
+   "tri_budget": 500,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Glass",
+    "SKY_Ink",
+    "SKY_Pearl",
+    "SKY_Rubber",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -0.0695,
+     -0.0,
+     -0.06776
+    ],
+    "max": [
+     0.0695,
+     0.34915,
+     0.06875
+    ],
+    "size": [
+     0.139,
+     0.34915,
+     0.13651
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "ANCHOR_handle",
+     "type": "Empty",
+     "parent": "PowerCell",
+     "local_position": [
+      -0.0,
+      0.336,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.336,
+      -0.0
+     ]
+    },
+    {
+     "name": "Core",
+     "type": "Mesh",
+     "parent": "PowerCell",
+     "local_position": [
+      -0.0,
+      0.155,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.155,
+      -0.0
+     ],
+     "tris": 32,
+     "materials": [
+      "SKY_TealGlow"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "PowerCell",
+     "type": "Mesh",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 460,
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Brass",
+      "SKY_Ink",
+      "SKY_Teal",
+      "SKY_Coral",
+      "SKY_Glass",
+      "SKY_Rubber"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    }
+   ],
+   "empties": [
+    {
+     "name": "ANCHOR_handle",
+     "parent": "PowerCell",
+     "local_position": [
+      -0.0,
+      0.336,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.336,
+      -0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Characters/passenger_a.fbx",
+   "source": "tools/blender/chars_passengers.py",
+   "purpose": "Terminal queue figure (P1)",
+   "root": "passenger_a",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 1644,
+   "tri_budget": null,
+   "materials": [
+    "SKY_Coral",
+    "SKY_Ink",
+    "SKY_Rubber",
+    "SKY_SandstoneDeep",
+    "SKY_Teal"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -0.30484,
+     -0.0,
+     -0.25
+    ],
+    "max": [
+     0.30484,
+     1.70389,
+     0.16
+    ],
+    "size": [
+     0.60968,
+     1.70389,
+     0.41
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "Body",
+     "type": "Mesh",
+     "parent": "passenger_a",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1644,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Ink",
+      "SKY_Teal",
+      "SKY_SandstoneDeep",
+      "SKY_Coral"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "passenger_a",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    }
+   ],
+   "empties": [],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Characters/passenger_b.fbx",
+   "source": "tools/blender/chars_passengers.py",
+   "purpose": "Terminal queue figure (P1)",
+   "root": "passenger_b",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 1620,
+   "tri_budget": null,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Ink",
+    "SKY_Rubber",
+    "SKY_Teal",
+    "SKY_Wood"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -0.31398,
+     -0.0,
+     -0.2163
+    ],
+    "max": [
+     0.3811,
+     1.75295,
+     0.2163
+    ],
+    "size": [
+     0.69508,
+     1.75295,
+     0.4326
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "Body",
+     "type": "Mesh",
+     "parent": "passenger_b",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1620,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Ink",
+      "SKY_Coral",
+      "SKY_Wood",
+      "SKY_Teal",
+      "SKY_Brass"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "passenger_b",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    }
+   ],
+   "empties": [],
+   "ok": true,
+   "issues": []
+  },
+  {
+   "path": "Assets/Skyfold/Art/Models/Characters/passenger_c.fbx",
+   "source": "tools/blender/chars_passengers.py",
+   "purpose": "Terminal queue figure (P1)",
+   "root": "passenger_c",
+   "fbx_version": 7400,
+   "fbx_unit_scale_to_m": 1.0,
+   "tris_total": 1776,
+   "tri_budget": null,
+   "materials": [
+    "SKY_PalmTrunk",
+    "SKY_Pearl",
+    "SKY_Rubber",
+    "SKY_Sandstone",
+    "SKY_Teal",
+    "SKY_TealLight"
+   ],
+   "vertex_color_attribute": "Col",
+   "bounds_unity": {
+    "min": [
+     -0.2896,
+     -0.0,
+     -0.13362
+    ],
+    "max": [
+     0.2896,
+     1.6245,
+     0.152
+    ],
+    "size": [
+     0.57919,
+     1.6245,
+     0.28562
+    ]
+   },
+   "hierarchy": [
+    {
+     "name": "Body",
+     "type": "Mesh",
+     "parent": "passenger_c",
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1776,
+     "materials": [
+      "SKY_Rubber",
+      "SKY_Teal",
+      "SKY_TealLight",
+      "SKY_Pearl",
+      "SKY_Sandstone",
+      "SKY_PalmTrunk"
+     ],
+     "color_attributes": [
+      "Col"
+     ]
+    },
+    {
+     "name": "passenger_c",
+     "type": "Empty",
+     "parent": null,
+     "local_position": [
+      -0.0,
+      0.0,
+      0.0
+     ],
+     "local_rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "world_position": [
+      -0.0,
+      0.0,
+      -0.0
+     ]
+    }
+   ],
+   "empties": [],
+   "ok": true,
+   "issues": []
+  }
+ ]
+}

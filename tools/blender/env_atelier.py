@@ -7,7 +7,7 @@ Unity north (+Z) = Blender -Y. The atelier pieces share one origin: the terrace 
 from env_common import *
 from env_buildings import fbox, fpt, fprism, arch_band, shift_uv, loft_outline, sail_quad, sail_mesh
 
-AT_AO = dict(ground_z=0.0, dist=1.0, rays=28, strength=0.8, floor=0.42, inset=0.12)
+AT_AO = dict(ground_z=0.0, dist=1.0, rays=28, strength=0.7, floor=0.48, inset=0.12, power=1.2)
 AT_RENDER = dict(az=35.0, el=24.0)
 
 

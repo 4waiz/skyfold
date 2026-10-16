@@ -51,9 +51,9 @@ def build():
         V.lamp(shell, body.point(body.t_of_x(sx * 0.70, 1.02, 1), 1.02) - Vector((0, 0.01, 0)),
                (sx * 0.15, 1, 0), 0.085, V.CORAL, bezel=V.PEARL, depth=0.04, segs=12)
     # roof pod (air conditioning) with a teal stripe
-    vs, fs = shell.superellipsoid(Vector((0, 0.30, 2.47)), (0.58, 0.95, 0.12), 0.45, 0.45, 18, 8,
+    vs, fs = shell.superellipsoid(Vector((0, 0.30, 2.445)), (0.58, 0.95, 0.10), 0.45, 0.45, 18, 8,
                                   V.PEARL)
-    shell.assign([f for f in fs if 2.50 < f.calc_center_median().z < 2.535], V.TEAL)
+    shell.assign([f for f in fs if 2.47 < f.calc_center_median().z < 2.50], V.TEAL)
     # glass: windscreen, rear window, side windows; passenger door on the right flank
     body.panel_end(glass, -1, -0.86, 0.86, WIN[0] + 0.06, WIN[1] - 0.04, V.GLASS, nt=10, nz=3)
     body.panel_end(glass, 1, -0.72, 0.72, WIN[0] + 0.14, WIN[1] - 0.06, V.GLASS, nt=8, nz=3)

@@ -71,17 +71,17 @@ def build_body(root):
     plates = C.Part()    # flat-faced parts that get a small bevel
     nu = 20
     # nose pod: rounded friendly front with a sloping bonnet
-    nose = [(0.24, -1.50, -0.50, 0.55), (0.30, -1.56, -0.50, 0.575), (STRIPE[0], -1.585, -0.50, 0.585),
-            (STRIPE[1], -1.585, -0.50, 0.585), (0.70, -1.575, -0.50, 0.58), (0.79, -1.52, -0.50, 0.565),
-            (0.86, -1.40, -0.50, 0.54), (0.905, -1.22, -0.505, 0.50), (0.935, -0.98, -0.52, 0.42)]
+    nose = [(0.24, -1.45, -0.50, 0.55), (0.30, -1.51, -0.50, 0.575), (STRIPE[0], -1.535, -0.50, 0.585),
+            (STRIPE[1], -1.535, -0.50, 0.585), (0.70, -1.525, -0.50, 0.58), (0.79, -1.47, -0.50, 0.565),
+            (0.86, -1.36, -0.50, 0.54), (0.905, -1.19, -0.505, 0.50), (0.935, -0.97, -0.52, 0.42)]
     C.loft_z(shell, nose, nu, PEARL, n=3.4, band_mats={2: TEAL})
     # rear pod with a flat deck for the cargo cradle
-    rear = [(0.24, 0.66, 1.58, 0.55), (0.30, 0.64, 1.64, 0.575), (STRIPE[0], 0.64, 1.665, 0.585),
-            (STRIPE[1], 0.64, 1.665, 0.585), (0.72, 0.64, 1.655, 0.58), (0.80, 0.645, 1.62, 0.56),
-            (0.845, 0.66, 1.55, 0.52), (0.865, 0.70, 1.46, 0.46)]
+    rear = [(0.24, 0.66, 1.52, 0.55), (0.30, 0.64, 1.58, 0.575), (STRIPE[0], 0.64, 1.605, 0.585),
+            (STRIPE[1], 0.64, 1.605, 0.585), (0.72, 0.64, 1.595, 0.58), (0.80, 0.645, 1.56, 0.56),
+            (0.845, 0.66, 1.49, 0.52), (0.865, 0.70, 1.40, 0.46)]
     C.loft_z(shell, rear, nu, PEARL, n=3.6, band_mats={2: TEAL})
     # chassis tub (dark underbody + cabin floor)
-    shell.rbox(Vector((0, 0.06, 0.315)), (1.10, 3.0, 0.17), 0.07, 2, INK)
+    shell.rbox(Vector((0, 0.05, 0.315)), (1.10, 2.90, 0.17), 0.07, 2, INK)
     # teal sills along the open cabin (the stripe continues between the pods)
     for sx in (1, -1):
         shell.tube([Vector((sx * 0.535, -0.62, 0.468)), Vector((sx * 0.545, 0.05, 0.47)),
@@ -95,20 +95,20 @@ def build_body(root):
                 a = radians(-18 + 216 * k / 6)          # from rear-low over the top to front-low
                 path.append(c + Vector((0, cos(a) * 0.408, sin(a) * 0.408)))
             up = (path[0] - c).normalized()
-            shell.tube(C.spline3(path, 2), 0.152, 8, PEARL, caps='round', cap_segs=1,
+            shell.tube(C.spline3(path, 2), 0.142, 8, PEARL, caps='round', cap_segs=1,
                        scale_xy=(1.0, 0.21), up=up)
     # bumpers (coral) wrapping the nose and the tail
-    fb = [Vector((0.47, -1.30, 0.355)), Vector((0.56, -1.47, 0.36)), Vector((0.36, -1.625, 0.36)),
-          Vector((-0.36, -1.625, 0.36)), Vector((-0.56, -1.47, 0.36)), Vector((-0.47, -1.30, 0.355))]
+    fb = [Vector((0.47, -1.26, 0.355)), Vector((0.56, -1.42, 0.36)), Vector((0.36, -1.552, 0.36)),
+          Vector((-0.36, -1.552, 0.36)), Vector((-0.56, -1.42, 0.36)), Vector((-0.47, -1.26, 0.355))]
     shell.tube(C.spline3(fb, 2), 0.075, 10, CORAL, caps='round', cap_segs=2, scale_xy=(1.0, 1.15))
-    rb = [Vector((0.47, 1.40, 0.355)), Vector((0.56, 1.56, 0.36)), Vector((0.36, 1.70, 0.36)),
-          Vector((-0.36, 1.70, 0.36)), Vector((-0.56, 1.56, 0.36)), Vector((-0.47, 1.40, 0.355))]
+    rb = [Vector((0.47, 1.34, 0.355)), Vector((0.56, 1.50, 0.36)), Vector((0.36, 1.622, 0.36)),
+          Vector((-0.36, 1.622, 0.36)), Vector((-0.56, 1.50, 0.36)), Vector((-0.47, 1.34, 0.355))]
     shell.tube(C.spline3(rb, 2), 0.075, 10, CORAL, caps='round', cap_segs=2, scale_xy=(1.0, 1.15))
     # big round headlights + small coral tail lights
     for sx in (1, -1):
-        lamp(shell, Vector((sx * 0.31, -1.585, 0.675)), (sx * 0.22, -1, 0.05), 0.112, LIGHT,
+        lamp(shell, Vector((sx * 0.31, -1.535, 0.675)), (sx * 0.22, -1, 0.05), 0.112, LIGHT,
              depth=0.045, segs=16)
-        lamp(shell, Vector((sx * 0.37, 1.668, 0.68)), (sx * 0.15, 1, 0.0), 0.058, CORAL,
+        lamp(shell, Vector((sx * 0.37, 1.608, 0.68)), (sx * 0.15, 1, 0.0), 0.058, CORAL,
              bezel=PEARL, depth=0.03, segs=10)
     # seat: teal cushions on an ink pedestal
     shell.rbox(Vector((0, 0.20, 0.405)), (0.34, 0.34, 0.07), 0.02, 1, INK)
