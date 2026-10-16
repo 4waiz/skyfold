@@ -697,7 +697,7 @@ def box_uv(ob, scale=1.0):
 # --------------------------------------------------------------------------- 2.5D tile surface
 
 def tile_surface(asset, regions, base_z=-0.3, target=None, side_mat="SKY_SandstoneDeep",
-                 kerb_bevel=0.04, kerb_seg=2, half=8.0, name="surface", skirt=True, extra_pts=(),
+                 kerb_bevel=0.04, kerb_seg=1, half=8.0, name="surface", skirt=True, extra_pts=(),
                  bounds=None):
     """Build a watertight ground tile from 2D regions using constrained Delaunay.
 
@@ -802,17 +802,10 @@ def tile_surface(asset, regions, base_z=-0.3, target=None, side_mat="SKY_Sandsto
             A_hi, B_hi = bv(a, r['z']), bv(b, r['z'])
             A_lo, B_lo = bv(a, base_z), bv(b, base_z)
             mb.f([A_hi, A_lo, B_lo, B_hi], side_mat)
-        # bottom polygon: chain boundary loop
-        nxt = {a: b for (a, b, r) in boundary}
-        start = boundary[0][0]
-        loop = [start]
-        cur = nxt[start]
-        guard = 0
-        while cur != start and guard < 10000:
-            loop.append(cur)
-            cur = nxt[cur]
-            guard += 1
-        mb.f([bv(i, base_z) for i in reversed(loop)], side_mat)
+        # bottom: a single quad over the bounds (never visible; avoids a large n-gon fan)
+        bx0, bx1, by0, by1 = bounds if bounds else (-half, half, -half, half)
+        q = [mb.v((bx0, by0, base_z)), mb.v((bx0, by1, base_z)), mb.v((bx1, by1, base_z)), mb.v((bx1, by0, base_z))]
+        mb.f(q, side_mat)
     bm.edges.ensure_lookup_table()
     # bevel weights on kerb top edges (step edges, upper side) but never on cell boundary
     if kerb_bevel > 0:

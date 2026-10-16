@@ -464,6 +464,41 @@ class Part:
         return ob
 
 
+def spline3(points, n_per=3, closed=False):
+    """Catmull-Rom through 3D points (passes through every point)."""
+    P = [Vector(p) for p in points]
+    m = len(P)
+    out = []
+    rng = range(m) if closed else range(m - 1)
+    for i in rng:
+        if closed:
+            p0, p1, p2, p3 = P[(i - 1) % m], P[i], P[(i + 1) % m], P[(i + 2) % m]
+        else:
+            p1, p2 = P[i], P[i + 1]
+            p0 = P[i - 1] if i > 0 else p1 + (p1 - p2)
+            p3 = P[i + 2] if i + 2 < m else p2 + (p2 - p1)
+        for k in range(n_per):
+            t = k / n_per
+            out.append(0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
+                              (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t))
+    if not closed:
+        out.append(P[-1].copy())
+    return out
+
+
+def resample(values, n_out):
+    """Linear resample of a list of floats to n_out values."""
+    if len(values) == n_out:
+        return list(values)
+    out = []
+    for i in range(n_out):
+        t = i / (n_out - 1) * (len(values) - 1)
+        k = min(int(t), len(values) - 2)
+        f = t - k
+        out.append(values[k] * (1 - f) + values[k + 1] * f)
+    return out
+
+
 def apply_modifiers(ob):
     dg = bpy.context.evaluated_depsgraph_get()
     dg.update()

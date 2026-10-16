@@ -186,7 +186,7 @@ namespace Skyfold
 
         public static LayoutElement Layout(Component c, float preferredHeight = -1f, float minHeight = -1f, float flexibleWidth = -1f, float preferredWidth = -1f)
         {
-            var le = c.gameObject.GetComponent<LayoutElement>() ?? c.gameObject.AddComponent<LayoutElement>();
+            if (!c.TryGetComponent(out LayoutElement le)) le = c.gameObject.AddComponent<LayoutElement>();
             if (preferredHeight >= 0f) le.preferredHeight = preferredHeight;
             if (minHeight >= 0f) le.minHeight = minHeight;
             if (flexibleWidth >= 0f) le.flexibleWidth = flexibleWidth;

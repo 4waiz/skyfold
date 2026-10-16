@@ -1,0 +1,376 @@
+{
+ "beacon_on": {
+  "duration_s": 1.4,
+  "kenney": [],
+  "loop": false
+ },
+ "bridge_assemble": {
+  "duration_s": 2.3,
+  "kenney": [
+   "interface/click_002.ogg",
+   "interface/click_003.ogg",
+   "interface/click_005.ogg",
+   "impact/impactPlank_medium_001.ogg",
+   "impact/impactPlank_medium_002.ogg",
+   "impact/impactPlank_medium_003.ogg",
+   "impact/impactSoft_heavy_001.ogg",
+   "impact/impactWood_medium_000.ogg"
+  ],
+  "loop": false
+ },
+ "car_bump": {
+  "duration_s": 0.541,
+  "kenney": [
+   "impact/impactSoft_heavy_003.ogg",
+   "impact/impactTin_medium_001.ogg",
+   "impact/impactSoft_medium_003.ogg"
+  ],
+  "loop": false
+ },
+ "car_enter": {
+  "duration_s": 0.75,
+  "kenney": [
+   "impact/impactSoft_heavy_004.ogg",
+   "impact/impactMetal_medium_001.ogg"
+  ],
+  "loop": false
+ },
+ "car_horn": {
+  "duration_s": 0.32,
+  "kenney": [],
+  "loop": false
+ },
+ "car_motor_loop": {
+  "duration_s": 2.0,
+  "kenney": [],
+  "loop": true
+ },
+ "car_roll_loop": {
+  "duration_s": 3.0,
+  "kenney": [],
+  "loop": true
+ },
+ "car_start": {
+  "duration_s": 1.76,
+  "kenney": [],
+  "loop": false
+ },
+ "cell_insert": {
+  "duration_s": 1.3,
+  "kenney": [
+   "impact/impactMetal_medium_000.ogg",
+   "interface/switch_007.ogg"
+  ],
+  "loop": false
+ },
+ "cell_pickup": {
+  "duration_s": 0.51,
+  "kenney": [
+   "impact/impactGlass_light_001.ogg"
+  ],
+  "loop": false
+ },
+ "checkpoint": {
+  "duration_s": 1.2,
+  "kenney": [],
+  "loop": false
+ },
+ "convoy_beep": {
+  "duration_s": 0.27,
+  "kenney": [],
+  "loop": false
+ },
+ "door_chime": {
+  "duration_s": 2.4,
+  "kenney": [],
+  "loop": false
+ },
+ "fold_in": {
+  "duration_s": 1.15,
+  "kenney": [
+   "casino/card-slide-1.ogg"
+  ],
+  "loop": false
+ },
+ "fold_out": {
+  "duration_s": 1.151,
+  "kenney": [
+   "casino/card-slide-1.ogg",
+   "casino/card-fan-1.ogg",
+   "impact/impactSoft_medium_000.ogg"
+  ],
+  "loop": false
+ },
+ "footstep_stone_01": {
+  "duration_s": 0.087,
+  "kenney": [
+   "impact/footstep_concrete_000.ogg"
+  ],
+  "loop": false
+ },
+ "footstep_stone_02": {
+  "duration_s": 0.094,
+  "kenney": [
+   "impact/footstep_concrete_001.ogg"
+  ],
+  "loop": false
+ },
+ "footstep_stone_03": {
+  "duration_s": 0.085,
+  "kenney": [
+   "impact/footstep_concrete_003.ogg"
+  ],
+  "loop": false
+ },
+ "footstep_stone_04": {
+  "duration_s": 0.096,
+  "kenney": [
+   "impact/footstep_concrete_004.ogg"
+  ],
+  "loop": false
+ },
+ "hint_ping": {
+  "duration_s": 0.8,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_celebrate_01": {
+  "duration_s": 0.68,
+  "energy_1k5_5k": 0.985,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_celebrate_02": {
+  "duration_s": 0.695,
+  "energy_1k5_5k": 0.983,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_concern_01": {
+  "duration_s": 0.33,
+  "energy_1k5_5k": 0.988,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_concern_02": {
+  "duration_s": 0.44,
+  "energy_1k5_5k": 0.993,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_concern_03": {
+  "duration_s": 0.54,
+  "energy_1k5_5k": 0.998,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_curious_01": {
+  "duration_s": 0.38,
+  "energy_1k5_5k": 0.996,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_curious_02": {
+  "duration_s": 0.35,
+  "energy_1k5_5k": 0.99,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_curious_03": {
+  "duration_s": 0.42,
+  "energy_1k5_5k": 0.986,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_happy_01": {
+  "duration_s": 0.225,
+  "energy_1k5_5k": 0.988,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_happy_02": {
+  "duration_s": 0.415,
+  "energy_1k5_5k": 0.981,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_happy_03": {
+  "duration_s": 0.365,
+  "energy_1k5_5k": 0.992,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_happy_04": {
+  "duration_s": 0.36,
+  "energy_1k5_5k": 0.989,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_point_01": {
+  "duration_s": 0.16,
+  "energy_1k5_5k": 0.982,
+  "kenney": [],
+  "loop": false
+ },
+ "nuri_point_02": {
+  "duration_s": 0.15,
+  "energy_1k5_5k": 0.986,
+  "kenney": [],
+  "loop": false
+ },
+ "objective_complete": {
+  "duration_s": 1.3,
+  "kenney": [],
+  "loop": false
+ },
+ "piece_drop": {
+  "duration_s": 0.175,
+  "kenney": [
+   "impact/impactSoft_medium_002.ogg",
+   "impact/impactWood_light_001.ogg",
+   "interface/click_003.ogg"
+  ],
+  "loop": false
+ },
+ "piece_pickup": {
+  "duration_s": 0.174,
+  "kenney": [
+   "impact/impactWood_light_002.ogg"
+  ],
+  "loop": false
+ },
+ "piece_rotate": {
+  "duration_s": 0.22,
+  "kenney": [
+   "interface/click_002.ogg",
+   "interface/click_003.ogg",
+   "interface/click_005.ogg"
+  ],
+  "loop": false
+ },
+ "plane_flyby": {
+  "duration_s": 4.5,
+  "kenney": [],
+  "loop": false
+ },
+ "plane_idle_loop": {
+  "duration_s": 4.0,
+  "kenney": [],
+  "loop": true
+ },
+ "plane_spoolup": {
+  "duration_s": 3.2,
+  "kenney": [],
+  "loop": false
+ },
+ "plane_takeoff": {
+  "duration_s": 7.411,
+  "kenney": [],
+  "loop": false
+ },
+ "power_transfer": {
+  "duration_s": 2.3,
+  "kenney": [],
+  "loop": false
+ },
+ "respawn": {
+  "duration_s": 1.9,
+  "kenney": [],
+  "loop": false
+ },
+ "route_complete": {
+  "duration_s": 1.7,
+  "kenney": [],
+  "loop": false
+ },
+ "socket_reject": {
+  "duration_s": 0.37,
+  "kenney": [
+   "impact/impactSoft_medium_001.ogg"
+  ],
+  "loop": false
+ },
+ "socket_snap": {
+  "duration_s": 1.0,
+  "kenney": [
+   "impact/impactMetal_medium_002.ogg"
+  ],
+  "loop": false
+ },
+ "splash": {
+  "duration_s": 1.82,
+  "kenney": [],
+  "loop": false
+ },
+ "substation_on": {
+  "duration_s": 2.597,
+  "kenney": [
+   "impact/impactSoft_heavy_002.ogg",
+   "impact/impactMetal_heavy_000.ogg",
+   "interface/click_001.ogg"
+  ],
+  "loop": false
+ },
+ "switch_lever": {
+  "duration_s": 0.31,
+  "kenney": [
+   "interface/switch_007.ogg",
+   "impact/impactMetal_heavy_004.ogg"
+  ],
+  "loop": false
+ },
+ "teleport": {
+  "duration_s": 0.65,
+  "kenney": [],
+  "loop": false
+ },
+ "thunder_far_01": {
+  "duration_s": 4.956,
+  "kenney": [],
+  "loop": false
+ },
+ "thunder_far_02": {
+  "duration_s": 5.96,
+  "kenney": [],
+  "loop": false
+ },
+ "thunder_far_03": {
+  "duration_s": 4.186,
+  "kenney": [],
+  "loop": false
+ },
+ "ui_back": {
+  "duration_s": 0.13,
+  "kenney": [],
+  "loop": false
+ },
+ "ui_click": {
+  "duration_s": 0.08,
+  "kenney": [
+   "interface/click_003.ogg"
+  ],
+  "loop": false
+ },
+ "ui_hover": {
+  "duration_s": 0.055,
+  "kenney": [],
+  "loop": false
+ },
+ "ui_slider_tick": {
+  "duration_s": 0.03,
+  "kenney": [],
+  "loop": false
+ },
+ "ui_toggle": {
+  "duration_s": 0.167,
+  "kenney": [
+   "interface/switch_007.ogg"
+  ],
+  "loop": false
+ },
+ "warning_chime": {
+  "duration_s": 1.5,
+  "kenney": [],
+  "loop": false
+ }
+}
