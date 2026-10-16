@@ -537,9 +537,9 @@ def seam_report(x, sr=SR, win=0.05, boundaries=None):
             return abs(20 * np.log10(rms(X[k:k + w_]) / rms(X[k - w_:k])))
         b50 = [jump_at(int(k), w) for k in boundaries]
         b10 = [jump_at(int(k), w10) for k in boundaries]
-        bar_jumps = {"max_50ms_db": float(max(b50)), "max_10ms_db": float(max(b10))}
-        lim = max(lim, bar_jumps["max_50ms_db"] + 1.0)
-        lim10 = max(lim10, bar_jumps["max_10ms_db"] + 1.0)
+        bar_jumps = {"p90_50ms_db": float(np.percentile(b50, 90)), "p90_10ms_db": float(np.percentile(b10, 90))}
+        lim = max(lim, bar_jumps["p90_50ms_db"] + 1.0)
+        lim10 = max(lim10, bar_jumps["p90_10ms_db"] + 1.0)
     ok = bool(np.all(seam1 <= np.maximum(p1, 2e-4)) and np.all(seam2 <= np.maximum(p2, 2e-4))
               and jump <= lim and jump10 <= lim10)
     return {

@@ -675,13 +675,14 @@ def main():
         x, _, _, _ = sa.read_wav(OUT / f"{pid}.wav")
         d = sa.describe(x)
         info = {"desc": desc, "bpm": tr.bpm, "bars": tr.bars, "loop": tr.loop, "duration_s": round(d["dur"], 3),
-                "lufs": round(d["lufs"], 2), "tp_dbtp": round(d["tp"], 2), "bus_rms_db": levels}
+                "lufs": round(d["lufs"], 2), "tp_dbtp": round(d["tp"], 2), "buses": levels}
         if tr.loop:
             info["bar_s"] = round(tr.bar, 6)
-            info["seam"] = sa.seam_report(x)
+            info["seam"] = sa.seam_report(x, boundaries=[round(k * tr.bar * SR) for k in range(1, tr.bars)])
         rep[pid] = info
         seam = f" seam {'OK' if info.get('seam', {}).get('ok') else 'CHECK'}" if tr.loop else ""
-        print(f"  {pid:22s} {d['dur']:6.2f}s  {d['lufs']:6.2f} LUFS  {d['tp']:6.2f} dBTP{seam}  buses {levels}",
+        gains = {k: v["gain_db"] for k, v in levels.items()}
+        print(f"  {pid:22s} {d['dur']:6.2f}s  {d['lufs']:6.2f} LUFS  {d['tp']:6.2f} dBTP{seam}  bus gains {gains}",
               file=sys.stderr)
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(rep, indent=1), encoding="utf-8")
