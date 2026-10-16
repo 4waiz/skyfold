@@ -56,7 +56,10 @@ namespace Skyfold
             PickUps = 0;
             var inventory = new HashSet<string>();
             foreach (var d in m_City.Inventory) inventory.Add(d.Id);
-            int slot = 0;
+            // Centre the pieces in use on the tray.
+            int ownedCount = 0;
+            foreach (var p in pieces) if (p != null && inventory.Contains(p.pieceId)) ownedCount++;
+            int slot = mini.traySlots != null ? Mathf.Max(0, (mini.traySlots.Length - ownedCount) / 2) : 0;
             foreach (var p in pieces)
             {
                 if (p == null) continue;

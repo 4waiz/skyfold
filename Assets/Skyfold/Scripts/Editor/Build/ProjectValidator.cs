@@ -103,7 +103,7 @@ namespace Skyfold.EditorTools
 
             // Game action bindings exist for every documented control.
             var game = SkyfoldInput.Create();
-            string[] required = { "Global/Pause", "Global/Objectives", "Global/Back", "Desktop/Move", "Desktop/Interact", "Desktop/Fold", "DesktopArchitect/Rotate", "DesktopArchitect/Drag", "Driving/Steer", "Driving/Throttle", "Driving/Brake", "Driving/Exit", "VR/Fold", "VR/UseRight" };
+            string[] required = { "Global/Pause", "Global/Objectives", "Global/Back", "Desktop/Move", "Desktop/Interact", "Desktop/Fold", "DesktopArchitect/Rotate", "DesktopArchitect/Drag", "Driving/Steer", "Driving/Throttle", "Driving/Brake", "Driving/Exit", "Driving/Handbrake", "Driving/ResetCar", "VR/Fold", "VR/UseRight" };
             foreach (var r in required) { var a = game.FindAction(r); Ok(a != null && a.bindings.Count > 0, "binding: " + r); }
             Object.DestroyImmediate(game);
 

@@ -95,7 +95,11 @@ namespace Skyfold.EditorTools
                 var controller = FindDeep(originGo.transform, side + " Controller");
                 var visual = FindDeep(originGo.transform, side + " Controller Visual");
                 if (controller == null) continue;
-                var glove = ModelLibrary.Spawn(side == "Left" ? "glove_L" : "glove_R", controller, new Vector3(0f, -0.025f, -0.085f));
+                // The glove root is the grip point with the handle along its +Y (thumb up). The OpenXR grip
+                // pose runs the handle along +Z (little finger to thumb), so tip the glove 90 deg about X.
+                var glove = ModelLibrary.Spawn(side == "Left" ? "glove_L" : "glove_R", controller, Vector3.zero);
+                if (ModelLibrary.Has(side == "Left" ? "glove_L" : "glove_R")) glove.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+                else glove.transform.localPosition = new Vector3(0f, -0.025f, -0.085f);
                 glove.name = "Courier Glove " + side;
                 var anim = glove.AddComponent<GloveAnimator>();
                 anim.hand = side == "Left" ? Hand.Left : Hand.Right;

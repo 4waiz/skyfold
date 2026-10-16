@@ -119,6 +119,15 @@ namespace Skyfold.EditorTools
             EditorUtility.SetDirty(miniWater);
 
             var sky = Ensure("SKY_Sky", Shader.Find("Skyfold/Sky"));
+            // Warm coastal late afternoon: deep blue overhead, pale haze, peach horizon, scattered cloud.
+            sky.SetColor("_Zenith", new Color(0.2f, 0.47f, 0.76f));
+            sky.SetColor("_Haze", new Color(0.78f, 0.87f, 0.93f));
+            sky.SetColor("_Horizon", new Color(1f, 0.83f, 0.64f));
+            sky.SetColor("_Below", new Color(0.55f, 0.66f, 0.68f));
+            sky.SetColor("_CloudColor", new Color(1f, 0.96f, 0.9f));
+            sky.SetFloat("_CloudAmount", 0.3f);
+            sky.SetFloat("_SunSize", 0.024f);
+            sky.SetFloat("_SunGlow", 1.2f);
             EditorUtility.SetDirty(sky);
 
             var ghost = Ensure("SKY_Ghost", Unlit);

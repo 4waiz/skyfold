@@ -65,14 +65,22 @@ namespace Skyfold.EditorTools
             if (anchor != null) c.PlinthTop.position = anchor.position;
             Named(c.PlinthTop.gameObject, "plinth");
 
-            var tray = ModelLibrary.Spawn("plinth_tray", c.Atelier, c.PlinthTop.position + new Vector3(0f, -0.02f, -0.69f));
+            // The tray model shares the plinth origin; its SOCKET_slot_1..6 empties mark each slot floor.
+            bool trayModel = ModelLibrary.Has("plinth_tray");
+            var tray = ModelLibrary.Spawn("plinth_tray", c.Atelier, trayModel ? plinthA.Position : c.PlinthTop.position + new Vector3(0f, -0.02f, -0.69f));
+            SetStatic(tray);
             c.Tray = tray.transform;
-            c.TraySlots = new Transform[6];
-            for (int i = 0; i < 6; i++)
+            var slots = new System.Collections.Generic.List<Transform>();
+            for (int i = 1; i <= 6; i++)
             {
-                var s = Child(c.Tray, "Slot " + i, new Vector3(-0.45f + i * 0.18f, 0.03f, 0f));
-                c.TraySlots[i] = s.transform;
+                var e = FindDeep(tray.transform, "SOCKET_slot_" + i);
+                Vector3 local = e != null ? tray.transform.InverseTransformPoint(e.position) + new Vector3(0f, 0.004f, 0f) : new Vector3(-0.45f + (i - 1) * 0.18f, 0.03f, 0f);
+                slots.Add(Child(c.Tray, "Slot " + i, local).transform);
             }
+            // Order left to right as the player sees them from the standing spot (facing north).
+            slots.Sort((a, b) => a.position.x.CompareTo(b.position.x));
+            c.TraySlots = slots.ToArray();
+            for (int i = 0; i < c.TraySlots.Length; i++) c.TraySlots[i].name = "Slot " + i;
             Named(tray, "tray");
 
             // The miniature city at 1:160, oriented exactly like the real city below.

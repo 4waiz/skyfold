@@ -21,8 +21,8 @@ namespace Skyfold
         public Color sunCalm = new Color(1f, 0.86f, 0.68f);
         public Color sunStorm = new Color(0.55f, 0.58f, 0.78f);
         public float sunCalmIntensity = 2.2f, sunStormIntensity = 0.9f;
-        public Color ambientCalm = new Color(0.58f, 0.6f, 0.62f), ambientStorm = new Color(0.3f, 0.33f, 0.42f);
-        public Color fogCalm = new Color(0.84f, 0.8f, 0.74f), fogStorm = new Color(0.36f, 0.38f, 0.48f);
+        public Color ambientCalm = new Color(0.62f, 0.71f, 0.8f), ambientStorm = new Color(0.3f, 0.33f, 0.42f);
+        public Color fogCalm = new Color(0.93f, 0.85f, 0.74f), fogStorm = new Color(0.36f, 0.38f, 0.48f);
 
         float m_Progress;
         float m_NextThunder = 8f;

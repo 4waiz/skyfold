@@ -186,9 +186,9 @@ namespace Skyfold.EditorTools
             RenderSettings.ambientGroundColor = new Color(0.42f, 0.38f, 0.33f);
             RenderSettings.fog = true;
             RenderSettings.fogMode = FogMode.Linear;
-            RenderSettings.fogColor = new Color(0.86f, 0.81f, 0.74f);
-            RenderSettings.fogStartDistance = 160f;
-            RenderSettings.fogEndDistance = 950f;
+            RenderSettings.fogColor = new Color(0.93f, 0.85f, 0.74f);
+            RenderSettings.fogStartDistance = 180f;
+            RenderSettings.fogEndDistance = 1200f;
             RenderSettings.defaultReflectionMode = DefaultReflectionMode.Skybox;
 
             // Sea: a subdivided plane so the gentle waves have vertices to move.
