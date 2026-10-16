@@ -799,7 +799,7 @@ def _preview_mat(name, rgb, rough=0.8):
     return m
 
 
-def studio(center, size, ground_z=0.0, sun_az=-40.0, sun_el=32.0, sun_strength=4.2,
+def studio(center, size, ground_z=0.0, sun_az=-40.0, sun_el=32.0, sun_strength=5.0,
            backdrop=True):
     """Warm late-afternoon studio: warm low sun, cool sky fill, pale sandstone ground."""
     sc = bpy.context.scene
@@ -817,12 +817,12 @@ def studio(center, size, ground_z=0.0, sun_az=-40.0, sun_el=32.0, sun_strength=4
     ramp = nt.nodes.new('ShaderNodeValToRGB')
     nt.links.new(tc.outputs['Generated'], sep.inputs[0])
     nt.links.new(sep.outputs['Z'], ramp.inputs[0])
-    ramp.color_ramp.elements[0].position = 0.45
-    ramp.color_ramp.elements[0].color = (0.95, 0.80, 0.62, 1)
-    ramp.color_ramp.elements[1].position = 0.75
-    ramp.color_ramp.elements[1].color = (0.50, 0.66, 0.78, 1)
+    ramp.color_ramp.elements[0].position = 0.02
+    ramp.color_ramp.elements[0].color = (0.80, 0.62, 0.45, 1)
+    ramp.color_ramp.elements[1].position = 0.45
+    ramp.color_ramp.elements[1].color = (0.28, 0.42, 0.55, 1)
     nt.links.new(ramp.outputs['Color'], bg.inputs['Color'])
-    bg.inputs['Strength'].default_value = 0.85
+    bg.inputs['Strength'].default_value = 0.65
     # sun
     sd = bpy.data.lights.new("Sun", 'SUN')
     sd.energy = sun_strength
@@ -849,7 +849,7 @@ def studio(center, size, ground_z=0.0, sun_az=-40.0, sun_el=32.0, sun_strength=4
         g = bpy.data.objects.new("Ground", me)
         g.location = (center[0], center[1], ground_z)
         sc.collection.objects.link(g)
-        me.materials.append(_preview_mat("PreviewGround", (0.62, 0.50, 0.36), 0.9))
+        me.materials.append(_preview_mat("PreviewGround", (0.46, 0.36, 0.26), 0.9))
     return rig
 
 
@@ -873,7 +873,18 @@ def frame_camera(objs, az_deg, el_deg, lens=55.0, margin=1.12, ortho=False, targ
     res = res or (sc.render.resolution_x, sc.render.resolution_y)
     mn, mx = world_bbox(objs)
     c = (mn + mx) / 2 if target is None else Vector(target)
-    corners = [Vector((x, y, z)) for x in (mn.x, mx.x) for y in (mn.y, mx.y) for z in (mn.z, mx.z)]
+    # fit to real silhouette points (subsampled vertices), not the AABB corners
+    corners = []
+    for o in objs:
+        if o.type != 'MESH':
+            continue
+        vs = o.data.vertices
+        step = max(1, len(vs) // 600)
+        mw = o.matrix_world
+        corners += [mw @ vs[i].co for i in range(0, len(vs), step)]
+    if not corners:
+        corners = [Vector((x, y, z)) for x in (mn.x, mx.x) for y in (mn.y, mx.y)
+                   for z in (mn.z, mx.z)]
     az, el = radians(az_deg), radians(el_deg)
     d = Vector((sin(az) * cos(el), -cos(az) * cos(el), sin(el))).normalized()
     cd = bpy.data.cameras.new("Cam")
@@ -904,13 +915,13 @@ def frame_camera(objs, az_deg, el_deg, lens=55.0, margin=1.12, ortho=False, targ
         return cam
     tx = 18.0 / lens  # tan(half fov x) for 36 mm sensor
     ty = tx / aspect
-    D = (mx - mn).length
-    for _ in range(30):
+    D = (mx - mn).length * 1.5
+    for _ in range(40):
         pos = c + d * D
         xs, ys = [], []
         for p in corners:
             v = Rt @ (p - pos)
-            z = -v.z
+            z = max(-v.z, 1e-6)
             xs.append(v.x / z / tx)
             ys.append(v.y / z / ty)
         ext = max(max(xs) - min(xs), max(ys) - min(ys)) / 2
@@ -918,7 +929,7 @@ def frame_camera(objs, az_deg, el_deg, lens=55.0, margin=1.12, ortho=False, targ
         cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
         dist_c = (c - pos).length
         c = c + Rm @ Vector((cx * tx * dist_c, cy * ty * dist_c, 0)) * 0.9
-        D *= (ext * margin) ** 0.8
+        D *= (ext * margin) ** 0.7
     cam.location = c + d * D
     cam.rotation_euler = q.to_euler()
     cd.clip_start = D * 0.01

@@ -134,9 +134,10 @@ def circle(r, seg, cx=0.0, cy=0.0, a0=0.0):
 def arch_pts(w, h, kind='round', seg=8, base=0.0):
     """Opening outline in (u, v): width w centred on u=0, from v=base to apex base+h."""
     hw = w / 2.0
-    if kind == 'flat' or h <= hw + 1e-3 and kind != 'segment':
-        if kind == 'flat':
-            return [(-hw, base), (hw, base), (hw, base + h), (-hw, base + h)]
+    if kind == 'flat':
+        return [(-hw, base), (hw, base), (hw, base + h), (-hw, base + h)]
+    if kind == 'round' and h < hw + 0.05:
+        kind = 'segment'
     if kind == 'round':
         sp = base + h - hw
         pts = [(-hw, base), (hw, base)]
@@ -525,12 +526,6 @@ def assemble(asset, ao=True, ao_kw=None):
             bpy.data.objects.remove(p, do_unlink=True)
         for m in meshes:
             bpy.data.meshes.remove(m)
-        # weld coincident verts inside each part set (tiny tolerance)
-        bm = bmesh.new(); bm.from_mesh(me)
-        bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-5)
-        # drop degenerate faces
-        bmesh.ops.dissolve_degenerate(bm, dist=1e-6, edges=bm.edges)
-        bm.to_mesh(me); bm.free()
         ob = bpy.data.objects.new(target, me)
         link(ob)
         # smooth + sharp by angle
@@ -702,7 +697,8 @@ def box_uv(ob, scale=1.0):
 # --------------------------------------------------------------------------- 2.5D tile surface
 
 def tile_surface(asset, regions, base_z=-0.3, target=None, side_mat="SKY_SandstoneDeep",
-                 kerb_bevel=0.04, kerb_seg=2, half=8.0, name="surface", skirt=True, extra_pts=()):
+                 kerb_bevel=0.04, kerb_seg=2, half=8.0, name="surface", skirt=True, extra_pts=(),
+                 bounds=None):
     """Build a watertight ground tile from 2D regions using constrained Delaunay.
 
     regions: list of dicts {pts, z, mat, prio, (kerb: bool)} - highest prio wins where they overlap.
@@ -796,7 +792,12 @@ def tile_surface(asset, regions, base_z=-0.3, target=None, side_mat="SKY_Sandsto
     bm.edges.ensure_lookup_table()
     # bevel weights on kerb top edges (step edges, upper side) but never on cell boundary
     if kerb_bevel > 0:
-        lim = half - 1e-4
+        bx0, bx1, by0, by1 = bounds if bounds else (-half, half, -half, half)
+        eps = 1e-4
+        bm.normal_update()
+
+        def on_b(c):
+            return (abs(c.x - bx0) < eps, abs(c.x - bx1) < eps, abs(c.y - by0) < eps, abs(c.y - by1) < eps)
         for e in bm.edges:
             if len(e.link_faces) != 2:
                 continue
@@ -807,10 +808,8 @@ def tile_surface(asset, regions, base_z=-0.3, target=None, side_mat="SKY_Sandsto
             z = e.verts[0].co.z
             if abs(e.verts[1].co.z - z) > 1e-5 or z <= base_z + 1e-4:
                 continue
-            onb = all(abs(v.co.x) >= lim or abs(v.co.y) >= lim for v in e.verts) and \
-                (abs(e.verts[0].co.x - e.verts[1].co.x) < 1e-5 or abs(e.verts[0].co.y - e.verts[1].co.y) < 1e-5) and \
-                ((abs(e.verts[0].co.x) >= lim and abs(e.verts[1].co.x) >= lim) or (abs(e.verts[0].co.y) >= lim and abs(e.verts[1].co.y) >= lim))
-            if onb:
+            ba, bb = on_b(e.verts[0].co), on_b(e.verts[1].co)
+            if any(ba[k] and bb[k] for k in range(4)):
                 continue
             # only top edges of steps (convex)
             c1 = f1.calc_center_median(); c2 = f2.calc_center_median()

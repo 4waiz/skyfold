@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Skyfold
@@ -33,11 +33,4 @@ namespace Skyfold
         public static int Count => s_Targets.Count;
     }
 
-    public sealed class NamedTarget : MonoBehaviour
-    {
-        public string targetName;
-
-        void OnEnable() => SceneRegistry.Register(targetName, transform);
-        void OnDisable() => SceneRegistry.Unregister(targetName, transform);
-    }
 }

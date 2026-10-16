@@ -25,7 +25,6 @@ namespace Skyfold
         CityState m_City;
         GameObject m_Shown;
         float m_BuildT = 1f;
-        bool m_AnimateNext;
         Vector3 m_ShownBase;
 
         public bool IsBuilt => m_City != null && !m_City.GetPlacement(socketId).IsEmpty;
@@ -43,14 +42,13 @@ namespace Skyfold
             if (m_City != null) m_City.SocketChanged -= OnChanged;
         }
 
-        /// <summary>Animate the next change (player action). Resets and checkpoints apply instantly.</summary>
-        public void AnimateNextChange() => m_AnimateNext = true;
+        /// <summary>Set while missions reset or restore checkpoints so changes apply instantly.</summary>
+        public static bool SuppressAnimation;
 
         void OnChanged(string id)
         {
             if (id != socketId) return;
-            Refresh(m_AnimateNext);
-            m_AnimateNext = false;
+            Refresh(!SuppressAnimation);
         }
 
         public void Refresh(bool animate)
@@ -108,3 +106,4 @@ namespace Skyfold
             }
         }
     }
+}

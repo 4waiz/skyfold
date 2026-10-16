@@ -57,6 +57,6 @@
     { "id": "g.cell_respawn", "speaker": "noor", "mode": "any", "text": "No harm done. A fresh cell is waiting at the dock." },
     { "id": "g.car_respawn", "speaker": "noor", "mode": "any", "text": "Let's put you back on the road." },
     { "id": "g.remote_drive", "speaker": "noor", "mode": "any", "text": "Remote drive is on. You'll steer the car from right here." },
-    { "id": "g.checkpoint", "speaker": "noor", "mode": "any", "text": "Checkpoint." }
+    { "id": "g.checkpoint", "speaker": "noor", "mode": "any", "text": "Checkpoint.", "spoken": "Check point." }
   ]
 }

@@ -1,0 +1,871 @@
+{
+ "summary": {
+  "model": "small.en",
+  "n": 52,
+  "mean_wer": 0.026886538461538458,
+  "max_wer": 1.0,
+  "failing": [
+   "g.checkpoint"
+  ]
+ },
+ "lines": [
+  {
+   "id": "e1.welcome",
+   "mode": "any",
+   "duration_s": 7.809,
+   "wps": 2.49,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Welcome to Nacre Bay. I'm Noor, the city engineer. A storm is coming, and it has broken our roads.",
+   "tts": "Welcome to Nay-ker Bay. I'm Nuur, the city engineer. A storm is coming, and it has broken our roads.",
+   "transcript": "Welcome to Naker Bay. I'm Newer, the city engineer. A storm is coming and it has broken our roads."
+  },
+  {
+   "id": "e1.plinth",
+   "mode": "any",
+   "duration_s": 5.776,
+   "wps": 2.69,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "This model is the real city below us. Change one, and you change the other.",
+   "tts": "This model is the real city below us. Change one, and you change the other.",
+   "transcript": "This model is the real city below us. Change one and you change the other."
+  },
+  {
+   "id": "t.grab.vr",
+   "mode": "vr",
+   "duration_s": 4.735,
+   "wps": 3.52,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0625,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Reach for the bridge piece on the tray and squeeze the grip to pick it up.",
+   "tts": "Reach for the bridge piece on the tray and squeeze the grip to pick it up.",
+   "transcript": "Reach for the bridged piece on the tray and squeeze, the grip to pick it up."
+  },
+  {
+   "id": "t.grab.desktop",
+   "mode": "desktop",
+   "duration_s": 3.608,
+   "wps": 3.8,
+   "lufs": -16.02,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Click and hold the bridge piece on the tray to pick it up.",
+   "tts": "Click and hold the bridge piece on the tray to pick it up.",
+   "transcript": "Click and hold the bridge piece on the tray to pick it up."
+  },
+  {
+   "id": "t.place.vr",
+   "mode": "vr",
+   "duration_s": 5.366,
+   "wps": 2.9,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Turn it until its ends meet the road, then let go over a glowing socket.",
+   "tts": "Turn it until its ends meet the road, then let go over a glowing socket.",
+   "transcript": "Turn it until its ends meet the road, then let go over a glowing socket."
+  },
+  {
+   "id": "t.place.desktop",
+   "mode": "desktop",
+   "duration_s": 6.391,
+   "wps": 2.9,
+   "lufs": -16.02,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "R",
+     "heard": "R",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Press R to turn it until its ends meet the road, then let go over a glowing socket.",
+   "tts": "Press R to turn it until its ends meet the road, then let go over a glowing socket.",
+   "transcript": "Press R to turn it until its ends meet the road, then let go over a glowing socket."
+  },
+  {
+   "id": "e1.choice",
+   "mode": "any",
+   "duration_s": 9.79,
+   "wps": 2.6,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "We only have one spare bridge. The west crossing is a long drive. The east one is shorter, but its harbour corner is broken too.",
+   "tts": "We only have one spare bridge. The west crossing is a long drive. The east one is shorter, but its harbour corner is broken too.",
+   "transcript": "We only have one spare bridge. The west crossing is a long drive. The east one is shorter, but its harbor corner is broken too."
+  },
+  {
+   "id": "e1.east_needs_corner",
+   "mode": "any",
+   "duration_s": 6.595,
+   "wps": 2.81,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Nearly there. The harbour corner beside it is broken. Find the right piece and turn it to fit.",
+   "tts": "Nearly there. The harbour corner beside it is broken. Find the right piece and turn it to fit.",
+   "transcript": "Nearly there, the harbor corner beside it is broken. Find the right piece and turn it to fit."
+  },
+  {
+   "id": "e1.route_west",
+   "mode": "any",
+   "duration_s": 4.448,
+   "wps": 2.82,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "The road is through. That bridge is real at both scales now.",
+   "tts": "The road is through. That bridge is real at both scales now.",
+   "transcript": "The road is through. That bridge is real at both scales now."
+  },
+  {
+   "id": "e1.route_east",
+   "mode": "any",
+   "duration_s": 4.82,
+   "wps": 2.59,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "The shortcut is open! That bridge is real at both scales now.",
+   "tts": "The shortcut is open! That bridge is real at both scales now.",
+   "transcript": "The shortcut is open. That bridge is real at both scales now."
+  },
+  {
+   "id": "t.fold.vr",
+   "mode": "vr",
+   "duration_s": 2.674,
+   "wps": 3.22,
+   "lufs": -16.04,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "X",
+     "heard": "X",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Press X to fold down into the street.",
+   "tts": "Press ex to fold down into the street.",
+   "transcript": "Press X to fold down into the street."
+  },
+  {
+   "id": "t.fold.desktop",
+   "mode": "desktop",
+   "duration_s": 2.674,
+   "wps": 3.22,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "Q",
+     "heard": "Q",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Press Q to fold down into the street.",
+   "tts": "Press cue to fold down into the street.",
+   "transcript": "Press Q to fold down into the street."
+  },
+  {
+   "id": "t.walk.vr",
+   "mode": "vr",
+   "duration_s": 8.212,
+   "wps": 2.87,
+   "lufs": -16.03,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "A",
+     "heard": "A",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Move with the left stick, or hold A to aim a teleport and let go to jump. The courier car is just ahead.",
+   "tts": "Move with the left stick, or hold eh to aim a teleport, and let go to jump. The courier car is just ahead.",
+   "transcript": "Move with the left stick or hold A to aim a teleport and let go to jump. The courier car is just ahead."
+  },
+  {
+   "id": "t.walk.desktop",
+   "mode": "desktop",
+   "duration_s": 7.312,
+   "wps": 2.67,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "W",
+     "heard": "W",
+     "ok": true
+    },
+    {
+     "letter": "A",
+     "heard": "A",
+     "ok": true
+    },
+    {
+     "letter": "S",
+     "heard": "S",
+     "ok": true
+    },
+    {
+     "letter": "D",
+     "heard": "D",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Walk with W, A, S and D, and look around with the mouse. The courier car is just ahead.",
+   "tts": "Walk with double-you, eh, ess and dee, and look around with the mouse. The courier car is just ahead.",
+   "transcript": "Walk with W, A, S, and D and look around with the mouse. The courier car is just ahead."
+  },
+  {
+   "id": "t.enter.vr",
+   "mode": "vr",
+   "duration_s": 3.648,
+   "wps": 3.47,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Point at the car door and pull the trigger to climb in.",
+   "tts": "Point at the car door and pull the trigger to climb in.",
+   "transcript": "point at the car door and pull the trigger to climb in."
+  },
+  {
+   "id": "t.enter.desktop",
+   "mode": "desktop",
+   "duration_s": 2.81,
+   "wps": 3.43,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "E",
+     "heard": "E",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Press E at the car door to climb in.",
+   "tts": "Press ee at the car door to climb in.",
+   "transcript": "Press E at the car door to climb in."
+  },
+  {
+   "id": "t.drive.vr",
+   "mode": "vr",
+   "duration_s": 5.613,
+   "wps": 2.4,
+   "lufs": -16.03,
+   "tp_dbtp": -1.55,
+   "wer": 0.0769,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "The left stick steers. The right trigger accelerates, and the left trigger brakes.",
+   "tts": "The left stick steers. The right trigger accelerates, and the left trigger brakes.",
+   "transcript": "The left stick steers, the right trigger accelerates, and the left trigger breaks."
+  },
+  {
+   "id": "t.drive.desktop",
+   "mode": "desktop",
+   "duration_s": 4.859,
+   "wps": 2.36,
+   "lufs": -16.03,
+   "tp_dbtp": -1.55,
+   "wer": 0.0909,
+   "letters": [
+    {
+     "letter": "W",
+     "heard": "W",
+     "ok": true
+    },
+    {
+     "letter": "S",
+     "heard": "S",
+     "ok": true
+    },
+    {
+     "letter": "A",
+     "heard": "A",
+     "ok": true
+    },
+    {
+     "letter": "D",
+     "heard": "D",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "W accelerates, S brakes and reverses, and A and D steer.",
+   "tts": "Double-you accelerates, ess brakes and reverses, and eh and dee steer.",
+   "transcript": "W accelerates, S breaks and reverses, and A and D steer."
+  },
+  {
+   "id": "e1.crossed",
+   "mode": "any",
+   "duration_s": 6.211,
+   "wps": 2.66,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "You built that bridge with your own hands, and now you've driven across it. Nicely done.",
+   "tts": "You built that bridge with your own hands, and now you've driven across it. Nicely done.",
+   "transcript": "You built that bridge with your own hands, and now you've driven across it. Nicely done."
+  },
+  {
+   "id": "e2.brief",
+   "mode": "any",
+   "duration_s": 8.385,
+   "wps": 2.44,
+   "lufs": -16.02,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "The airfield substation is dark. Carry a power cell across your causeway and wake it up. The storm won't wait.",
+   "tts": "The airfield substation is dark. Carry a power cell across your causeway and wake it up. The storm won't wait.",
+   "transcript": "The airfield substation is dark. Carry a power cell across your causeway and wake it up. The storm won't wait."
+  },
+  {
+   "id": "t.cell.vr",
+   "mode": "vr",
+   "duration_s": 4.663,
+   "wps": 3.13,
+   "lufs": -16.04,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Grab the power cell from the dock and set it in the car's cradle.",
+   "tts": "Grab the power cell from the dock and set it in the car's cradle.",
+   "transcript": "Grab the power cell from the dock and set it in the car's cradle."
+  },
+  {
+   "id": "t.cell.desktop",
+   "mode": "desktop",
+   "duration_s": 4.983,
+   "wps": 3.55,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "E",
+     "heard": "E",
+     "ok": true
+    },
+    {
+     "letter": "E",
+     "heard": "E",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Press E to pick up the power cell, then press E at the car to load it.",
+   "tts": "Press ee to pick up the power cell, then press ee at the car to load it.",
+   "transcript": "Press E to pick up the power cell, then press E at the car to load it."
+  },
+  {
+   "id": "e2.drive",
+   "mode": "any",
+   "duration_s": 6.346,
+   "wps": 2.6,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Follow the guide lights to the substation. Checkpoints will catch you if you leave the road.",
+   "tts": "Follow the guide lights to the substation. Checkpoints will catch you if you leave the road.",
+   "transcript": "Follow the guide lights to the substation. Checkpoints will catch you if you leave the road."
+  },
+  {
+   "id": "e2.deliver.vr",
+   "mode": "vr",
+   "duration_s": 4.619,
+   "wps": 2.94,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Take the cell from the cradle and set it into the substation socket.",
+   "tts": "Take the cell from the cradle and set it into the substation socket.",
+   "transcript": "Take the cell from the cradle and set it into the substation socket."
+  },
+  {
+   "id": "e2.deliver.desktop",
+   "mode": "desktop",
+   "duration_s": 5.812,
+   "wps": 2.85,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "E",
+     "heard": "E",
+     "ok": true
+    },
+    {
+     "letter": "E",
+     "heard": "E",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Take the cell from the cradle with E, and press E again at the substation socket.",
+   "tts": "Take the cell from the cradle with ee, and press ee again at the substation socket.",
+   "transcript": "Take the cell from the cradle with E and press E again at the substation socket."
+  },
+  {
+   "id": "e2.powered",
+   "mode": "any",
+   "duration_s": 3.567,
+   "wps": 2.96,
+   "lufs": -16.03,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Power is back on the island. Look at those lights!",
+   "tts": "Power is back on the island. Look at those lights!",
+   "transcript": "Power is back on the island. Look at those lights."
+  },
+  {
+   "id": "e2.convoy",
+   "mode": "any",
+   "duration_s": 3.671,
+   "wps": 2.59,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "The passenger convoy is rolling out along your route.",
+   "tts": "The passenger convoy is rolling out along your route.",
+   "transcript": "The passenger convoy is rolling out along your route."
+  },
+  {
+   "id": "e3.brief",
+   "mode": "any",
+   "duration_s": 9.403,
+   "wps": 2.39,
+   "lufs": -16.04,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "One flight left before the storm closes the sky. The terminal road is still broken, so the convoy can't reach the plane.",
+   "tts": "One flight left before the storm closes the sky. The terminal road is still broken, so the convoy can't reach the plane.",
+   "transcript": "One flight left before the storm closes the sky. The terminal road is still broken, so the convoy can't reach the plane."
+  },
+  {
+   "id": "e3.fold.vr",
+   "mode": "vr",
+   "duration_s": 3.555,
+   "wps": 2.08,
+   "lufs": -16.04,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "X",
+     "heard": "X",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Use the airfield Fold Station. Press X.",
+   "tts": "Use the airfield Fold Station. Press ex.",
+   "transcript": "Use the airfield fold station. Press X."
+  },
+  {
+   "id": "e3.fold.desktop",
+   "mode": "desktop",
+   "duration_s": 3.43,
+   "wps": 2.16,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "Q",
+     "heard": "Q",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Use the airfield Fold Station. Press Q.",
+   "tts": "Use the airfield Fold Station. Press cue.",
+   "transcript": "Use the airfield fold station. Press Q."
+  },
+  {
+   "id": "e3.link",
+   "mode": "any",
+   "duration_s": 4.728,
+   "wps": 2.42,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Repair the terminal access link. Watch which way the roads meet.",
+   "tts": "Repair the terminal access link. Watch which way the roads meet.",
+   "transcript": "Repair the terminal access link. Watch which way the roads meet."
+  },
+  {
+   "id": "e3.beacons.vr",
+   "mode": "vr",
+   "duration_s": 5.269,
+   "wps": 2.56,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Now restore the runway beacons. Point at each switch and pull the trigger.",
+   "tts": "Now restore the runway beacons. Point at each switch and pull the trigger.",
+   "transcript": "Now restore the runway beacons. Point at each switch and pull the trigger."
+  },
+  {
+   "id": "e3.beacons.desktop",
+   "mode": "desktop",
+   "duration_s": 4.288,
+   "wps": 2.44,
+   "lufs": -16.02,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "E",
+     "heard": "E",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Now restore the runway beacons. Press E at each switch.",
+   "tts": "Now restore the runway beacons. Press ee at each switch.",
+   "transcript": "Now restore the runway beacons. Press E at each switch."
+  },
+  {
+   "id": "e3.convoy_arrived",
+   "mode": "any",
+   "duration_s": 4.104,
+   "wps": 2.3,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "The convoy is at the terminal. Passengers are boarding.",
+   "tts": "The convoy is at the terminal. Passengers are boarding.",
+   "transcript": "The convoy is at the terminal, passengers are boarding."
+  },
+  {
+   "id": "e3.clear.vr",
+   "mode": "vr",
+   "duration_s": 4.091,
+   "wps": 2.56,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Everything is ready. Pull the departure lever in the tower.",
+   "tts": "Everything is ready. Pull the departure lever in the tower.",
+   "transcript": "Everything is ready. Pull the departure lever in the tower."
+  },
+  {
+   "id": "e3.clear.desktop",
+   "mode": "desktop",
+   "duration_s": 4.769,
+   "wps": 2.62,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "E",
+     "heard": "E",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Everything is ready. Press E on the departure lever in the tower.",
+   "tts": "Everything is ready. Press ee on the departure lever in the tower.",
+   "transcript": "Everything is ready. Press E on the departure lever in the tower."
+  },
+  {
+   "id": "e3.takeoff",
+   "mode": "any",
+   "duration_s": 5.483,
+   "wps": 2.65,
+   "lufs": -16.02,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Nacre tower: last flight, you are clear. Thank you, courier. Look at her go!",
+   "tts": "Nay-ker tower. Last flight, you are clear. Thank you, courier. Look at her go!",
+   "transcript": "Naker Tower. Last flight, you are clear. Thank you, courier. Look at her go."
+  },
+  {
+   "id": "e3.end",
+   "mode": "any",
+   "duration_s": 3.168,
+   "wps": 3.69,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "The city is safe. And it's still the one you built.",
+   "tts": "The city is safe. And it's still the one you built.",
+   "transcript": "The city is safe, and it's still the one you built."
+  },
+  {
+   "id": "d.welcome",
+   "mode": "any",
+   "duration_s": 6.452,
+   "wps": 2.24,
+   "lufs": -16.03,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Welcome to Nacre Bay. One bridge, one power cell, one last flight. Let's go.",
+   "tts": "Welcome to Nay-ker Bay. One bridge, one power cell, one last flight. Let's go.",
+   "transcript": "Welcome to Naker Bay. One bridge, one power cell, one last flight. Let's go!"
+  },
+  {
+   "id": "d.beacons.vr",
+   "mode": "vr",
+   "duration_s": 4.621,
+   "wps": 2.48,
+   "lufs": -16.04,
+   "tp_dbtp": -1.55,
+   "wer": 0.0909,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Pull the beacon switch beside the substation to light the runway.",
+   "tts": "Pull the beacon switch beside the substation to light the runway.",
+   "transcript": "Pull the beacon switched beside the substation to light the runway."
+  },
+  {
+   "id": "d.beacons.desktop",
+   "mode": "desktop",
+   "duration_s": 5.315,
+   "wps": 2.54,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0769,
+   "letters": [
+    {
+     "letter": "E",
+     "heard": "E",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "Press E on the beacon switch beside the substation to light the runway.",
+   "tts": "Press ee on the beacon switch beside the substation to light the runway.",
+   "transcript": "Press E on the beacon switched beside the substation to light the runway."
+  },
+  {
+   "id": "d.clear.vr",
+   "mode": "vr",
+   "duration_s": 3.399,
+   "wps": 2.49,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "The runway is lit. Pull the departure lever.",
+   "tts": "The runway is lit. Pull the departure lever.",
+   "transcript": "The runway is lit. Pull the departure lever."
+  },
+  {
+   "id": "d.clear.desktop",
+   "mode": "desktop",
+   "duration_s": 3.986,
+   "wps": 2.63,
+   "lufs": -16.02,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [
+    {
+     "letter": "E",
+     "heard": "E",
+     "ok": true
+    }
+   ],
+   "letters_ok": true,
+   "caption": "The runway is lit. Press E on the departure lever.",
+   "tts": "The runway is lit. Press ee on the departure lever.",
+   "transcript": "The runway is lit. Press E on the departure lever."
+  },
+  {
+   "id": "g.storm_warning",
+   "mode": "any",
+   "duration_s": 2.775,
+   "wps": 2.71,
+   "lufs": -16.02,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "The storm is close. Two minutes left.",
+   "tts": "The storm is close. Two minutes left.",
+   "transcript": "The storm is close. Two minutes left."
+  },
+  {
+   "id": "g.storm_final",
+   "mode": "any",
+   "duration_s": 1.359,
+   "wps": 1.71,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Thirty seconds!",
+   "tts": "Thirty seconds!",
+   "transcript": "30 seconds."
+  },
+  {
+   "id": "g.fail",
+   "mode": "any",
+   "duration_s": 5.551,
+   "wps": 2.61,
+   "lufs": -16.04,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "The storm reached us. That's alright. Let's try again from the last checkpoint.",
+   "tts": "The storm reached us. That's alright. Let's try again from the last checkpoint.",
+   "transcript": "The storm reached us. That's all right. Let's try again from the last checkpoint."
+  },
+  {
+   "id": "g.retry",
+   "mode": "any",
+   "duration_s": 2.758,
+   "wps": 2.73,
+   "lufs": -16.04,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Back at the checkpoint. You've got this.",
+   "tts": "Back at the checkpoint. You've got this.",
+   "transcript": "Back at the checkpoint, you've got this."
+  },
+  {
+   "id": "g.hint_socket",
+   "mode": "any",
+   "duration_s": 3.059,
+   "wps": 3.14,
+   "lufs": -16.02,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Look for the sockets glowing teal on the model.",
+   "tts": "Look for the sockets glowing teal on the model.",
+   "transcript": "Look for the sockets glowing teal on the model."
+  },
+  {
+   "id": "g.cell_respawn",
+   "mode": "any",
+   "duration_s": 3.885,
+   "wps": 2.98,
+   "lufs": -16.04,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "No harm done. A fresh cell is waiting at the dock.",
+   "tts": "No harm done. A fresh cell is waiting at the dock.",
+   "transcript": "No harm done. A fresh cell is waiting at the dock."
+  },
+  {
+   "id": "g.car_respawn",
+   "mode": "any",
+   "duration_s": 1.913,
+   "wps": 4.06,
+   "lufs": -16.03,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Let's put you back on the road.",
+   "tts": "Let's put you back on the road.",
+   "transcript": "Let's put you back on the road."
+  },
+  {
+   "id": "g.remote_drive",
+   "mode": "any",
+   "duration_s": 3.917,
+   "wps": 2.95,
+   "lufs": -16.02,
+   "tp_dbtp": -1.55,
+   "wer": 0.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Remote drive is on. You'll steer the car from right here.",
+   "tts": "Remote drive is on. You'll steer the car from right here.",
+   "transcript": "Remote drive is on. You'll steer the car from right here."
+  },
+  {
+   "id": "g.checkpoint",
+   "mode": "any",
+   "duration_s": 1.122,
+   "wps": 1.07,
+   "lufs": -16.02,
+   "tp_dbtp": -1.55,
+   "wer": 1.0,
+   "letters": [],
+   "letters_ok": true,
+   "caption": "Checkpoint.",
+   "tts": "Checkpoint.",
+   "transcript": "in Checkpoint."
+  }
+ ]
+}
