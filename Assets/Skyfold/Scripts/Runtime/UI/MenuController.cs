@@ -355,11 +355,11 @@ namespace Skyfold
             Line(left, "Laptop: at the plinth", true);
             Line(left, "Hold left mouse  pick up and drag a piece\nR  turn the held piece    ·    release  set it down\nRight-drag or W A S D  orbit    ·    Wheel  zoom\nQ  fold down into the street");
             Line(left, "Laptop: in the car", true);
-            Line(left, "W  accelerate    ·    S  brake, hold to reverse\nA / D  steer    ·    Space  brake\nE  climb out when stopped    ·    H  horn    ·    C  camera");
+            Line(left, "W  accelerate    ·    S  brake, hold to reverse\nA / D  steer    ·    Space  parking brake\nE  climb out when stopped    ·    H  horn    ·    C  camera\nHold R  put the car back on the road");
             Line(right, "Quest 3: on foot and at the plinth", true);
             Line(right, "Left stick  move (smooth mode)\nRight stick  turn (snap by default)\nHold A  aim teleport, release to jump\nGrip  grab    ·    Trigger  use / press UI\nX  fold (at a Fold Station)    ·    Y  wrist objectives\nB  back    ·    Left menu button  pause");
             Line(right, "Quest 3: in the car", true);
-            Line(right, "Left stick  steer\nRight trigger  accelerate\nLeft trigger  brake, hold at a stop to reverse\nB  climb out when stopped    ·    A  horn\nY  objectives    ·    Menu  pause");
+            Line(right, "Left stick  steer\nRight trigger  accelerate\nLeft trigger  brake, hold at a stop to reverse\nB  climb out when stopped    ·    A  horn\nHold X  put the car back on the road\nY  objectives    ·    Menu  pause");
             Line(right, "The Meta button stays reserved for the headset.", false);
             b.Space(4f);
             b.Toggle("Show input diagnostics panel", SettingsStore.Current.showDiagnostics, v => { SettingsStore.Current.showDiagnostics = v; SettingsStore.Save(); });
