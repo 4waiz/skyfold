@@ -184,6 +184,9 @@ def verify(rel, src, budget, required, purpose):
                 mats_used.update(node['materials'])
                 cols = [a.name for a in me.color_attributes]
                 node['color_attributes'] = cols
+                ngons = sum(1 for poly in me.polygons if poly.loop_total > 4)
+                if ngons:
+                    issues.append("%d n-gons on %s" % (ngons, m['name']))
                 if 'Col' not in cols:
                     col_ok = False
                     issues.append("no Col attribute on " + m['name'])

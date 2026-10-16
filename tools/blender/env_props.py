@@ -20,28 +20,28 @@ def street_lamp(a):
     mb.lathe([(0, 0), (0.24, 0), (0.24, 0.12), (0.19, 0.18), (0.19, 0.55), (0.13, 0.62), (0.0, 0.62)], 8, 'SKY_Pearl',
              a0=22.5)
     a.part(mb, name="base")
+    dz = 0.33                      # lifts the head so the crook top reaches 5.0 m
     mb = MB()
-    mb.lathe([(0.075, 0.62), (0.055, 4.25), (0.0, 4.25)], 6, 'SKY_Brass', a0=30)
+    mb.lathe([(0.075, 0.62), (0.055, 4.25 + dz), (0.0, 4.25 + dz)], 6, 'SKY_Brass', a0=30)
     for z in (1.4, 3.1):
         mb.lathe([(0.062, z), (0.085, z), (0.085, z + 0.07), (0.062, z + 0.07)], 6, 'SKY_Brass', a0=30, closed=True)
-    # crook arm toward Unity north (Blender -Y)
-    path = [(0, 0, 4.15)] + [(0, -0.42 * math.sin(math.radians(t)), 4.15 + 0.45 * (1 - math.cos(math.radians(t))) * 0.9)
-                             for t in range(30, 181, 30)]
+    a.part(mb, name="pole")
+    # crook arm toward Unity north (Blender -Y) + lantern hanging from its end
+    mb = MB()
     path = [Vector((0, 0, 4.15)), Vector((0, -0.18, 4.5)), Vector((0, -0.48, 4.66)), Vector((0, -0.78, 4.6)),
             Vector((0, -0.92, 4.42))]
     mb.sweep(path, circle(0.035, 6), 'SKY_Brass')
     mb.sphere(0.07, 6, 3, 'SKY_Brass', c=(0, 0, 4.3))
-    a.part(mb, name="pole")
-    # lantern hanging from the arm end
     lx, ly = 0.0, -0.92
-    mb = MB()
     mb.lathe([(0, 4.36), (0.05, 4.36), (0.05, 4.3), (0.2, 4.24), (0.22, 4.18), (0.0, 4.18)], 6, 'SKY_Brass', cx=lx, cy=ly)
     mb.lathe([(0, 3.8), (0.17, 3.8), (0.14, 3.72), (0.05, 3.66), (0, 3.64)], 6, 'SKY_Brass', cx=lx, cy=ly)
+    mb.transform(M_tr(0, 0, dz))
     a.part(mb, name="lantern_frame")
     mb = MB()
     mb.lathe([(0, 3.8), (0.15, 3.8), (0.19, 4.18), (0, 4.18)], 6, 'SKY_Light', cx=lx, cy=ly)
+    mb.transform(M_tr(0, 0, dz))
     a.part(mb, name="lamp")
-    a.empty("LIGHT_lamp", (lx, ly, 3.98))
+    a.empty("LIGHT_lamp", (lx, ly, 3.98 + dz))
 
 
 @asset("bench", "Props", "props", ao=PROP_AO, render=PROP_RENDER)
@@ -174,20 +174,21 @@ def cell_dock(a):
     mb.lathe([(0, 0), (0.3, 0), (0.3, 0.06), (0.24, 0.1), (0.2, 0.36), (0.24, 0.4), (0, 0.4)], 10, 'SKY_Pearl')
     a.part(mb, name="pedestal")
     mb = MB()
-    mb.lathe([(0, 0.4), (0.2, 0.4), (0.2, 0.44), (0, 0.44)], 10, 'SKY_Brass')
+    mb.lathe([(0, 0.4), (0.15, 0.4), (0.15, 0.44), (0, 0.44)], 10, 'SKY_Brass')
     a.part(mb, name="seat")
     mb = MB()
-    # three-claw cradle (open, so the cell stays visible)
+    # three-claw cradle sized for the courier power cell (0.14 m dia, pivot at its bottom centre)
     for k in range(3):
         ang = math.radians(90 + 120 * k)
         c, s = math.cos(ang), math.sin(ang)
-        p0 = Vector((0.2 * c, 0.2 * s, 0.42)); p1 = Vector((0.205 * c, 0.205 * s, 0.6))
-        mb.sweep([p0, p1], [(-0.035, -0.025), (0.035, -0.025), (0.035, 0.025), (-0.035, 0.025)], 'SKY_Teal')
+        p0 = Vector((0.1 * c, 0.1 * s, 0.42)); p1 = Vector((0.1 * c, 0.1 * s, 0.6))
+        mb.sweep([p0, p1], [(-0.03, -0.022), (0.03, -0.022), (0.03, 0.022), (-0.03, 0.022)], 'SKY_Teal')
     a.part(mb, name="cradle")
     mb = MB()
-    mb.lathe([(0.2, 0.47), (0.215, 0.47), (0.215, 0.5), (0.2, 0.5)], 10, 'SKY_TealGlow', closed=True)
+    mb.lathe([(0.15, 0.405), (0.165, 0.405), (0.165, 0.435), (0.15, 0.435)], 10, 'SKY_TealGlow', closed=True)
     mb.lathe([(0.205, 0.22), (0.22, 0.22), (0.22, 0.25), (0.205, 0.25)], 10, 'SKY_TealGlow', closed=True)
     a.part(mb, name="glow")
+
     a.empty("SOCKET_cell", (0.0, 0.0, 0.44))
 
 

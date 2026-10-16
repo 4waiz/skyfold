@@ -975,38 +975,47 @@ def bldg_substation(a):
     X0, X1, Y0, Y1 = -2.8, 2.8, -1.6, 2.6
     zr = 3.6
     plinth(a, X0, X1, Y0, Y1, h=0.3, mat='SKY_SandstoneDeep')
+    # recess sized for the courier power cell (0.14 m dia x 0.35 m, pivot at its bottom centre)
     sock_u, sock_z = 1.2, 1.02
-    socket = Op('N', sock_u, sock_z, 0.85, 0.72, 'flat', depth=0.5, back='SKY_Ink', sill=False, reveal='SKY_Metal')
+    sw, sh, fw = 0.42, 0.52, 0.12
+    socket = Op('N', sock_u, sock_z, sw, sh, 'flat', depth=0.42, back='SKY_Ink', sill=False, reveal='SKY_Metal')
     ops = [socket, Op('N', -1.0, 0.3, 1.4, 2.4, 'segment', back='SKY_Teal', sill=False, frame='SKY_Coral', frame_t=0.1),
            Op('E', 0.5, 1.3, 1.6, 0.9, 'flat', back='SKY_Ink', sill=False),
            Op('W', 0.5, 1.3, 1.6, 0.9, 'flat', back='SKY_Ink', sill=False)]
     block(a, X0, X1, Y0, Y1, 0.0, zr, 'SKY_Pearl', ops, name="house", fm={'top': 'SKY_Kerb'})
     # socket housing frame (brass) + coral warning chevrons beside it
+    hu = sw / 2 + fw
     mb = MB()
-    fbox(mb, 'N', Y0, sock_u - 0.62, sock_u + 0.62, sock_z - 0.2, sock_z - 0.06, 0.0, 0.16, 'SKY_Brass')
-    fbox(mb, 'N', Y0, sock_u - 0.62, sock_u + 0.62, sock_z + 0.78, sock_z + 0.92, 0.0, 0.16, 'SKY_Brass')
-    fbox(mb, 'N', Y0, sock_u - 0.62, sock_u - 0.48, sock_z - 0.06, sock_z + 0.78, 0.0, 0.16, 'SKY_Brass')
-    fbox(mb, 'N', Y0, sock_u + 0.48, sock_u + 0.62, sock_z - 0.06, sock_z + 0.78, 0.0, 0.16, 'SKY_Brass')
+    fbox(mb, 'N', Y0, sock_u - hu, sock_u + hu, sock_z - fw, sock_z, 0.0, 0.16, 'SKY_Brass')
+    fbox(mb, 'N', Y0, sock_u - hu, sock_u + hu, sock_z + sh, sock_z + sh + fw, 0.0, 0.16, 'SKY_Brass')
+    fbox(mb, 'N', Y0, sock_u - hu, sock_u - sw / 2, sock_z, sock_z + sh, 0.0, 0.16, 'SKY_Brass')
+    fbox(mb, 'N', Y0, sock_u + sw / 2, sock_u + hu, sock_z, sock_z + sh, 0.0, 0.16, 'SKY_Brass')
     a.part(mb, bevel=0.015, seg=1, name="socket_frame")
     mb = MB()
     for k in range(4):
-        z0 = 0.38 + k * 0.14
+        z0 = 0.4 + k * 0.13
         m = 'SKY_Coral' if k % 2 == 0 else 'SKY_Ink'
-        fbox(mb, 'N', Y0, sock_u - 0.62, sock_u + 0.62, z0, z0 + 0.1, 0.0, 0.04, m)
+        fbox(mb, 'N', Y0, sock_u - hu, sock_u + hu, z0, z0 + 0.09, 0.0, 0.04, m)
     a.part(mb, name="socket_stripes")
-    # seat inside the recess
+    # seat (cradle ring) inside the recess - SOCKET_cell is the seat point (cell pivot = bottom centre)
     mb = MB()
-    fbox(mb, 'N', Y0, sock_u - 0.3, sock_u + 0.3, sock_z, sock_z + 0.08, -0.48, -0.08, 'SKY_Metal')
+    fbox(mb, 'N', Y0, sock_u - 0.15, sock_u + 0.15, sock_z, sock_z + 0.08, -0.4, -0.06, 'SKY_Metal')
+    seat_c = fpt('N', Y0, sock_u, sock_z + 0.08, -0.23)
+    mb.lathe([(0.075, seat_c[2]), (0.1, seat_c[2]), (0.1, seat_c[2] + 0.06), (0.075, seat_c[2] + 0.06)], 10, 'SKY_Teal',
+             cx=seat_c[0], cy=seat_c[1], closed=True)
     a.part(mb, name="socket_seat")
-    a.empty("SOCKET_cell", fpt('N', Y0, sock_u, sock_z + 0.08, -0.28))
+    a.empty("SOCKET_cell", seat_c)
     # PowerLights: separate light bar above the socket + roof beacon (game makes them emissive)
     mb = MB()
-    fbox(mb, 'N', Y0, sock_u - 0.55, sock_u + 0.55, sock_z + 1.02, sock_z + 1.16, 0.04, 0.14, 'SKY_TealGlow')
+    fbox(mb, 'N', Y0, sock_u - hu, sock_u + hu, sock_z + sh + fw + 0.12, sock_z + sh + fw + 0.24, 0.04, 0.14,
+         'SKY_TealGlow')
     mb.lathe([(0, zr + 0.75), (0.16, zr + 0.75), (0.16, zr + 0.88), (0.12, zr + 0.98), (0, zr + 1.02)], 8,
              'SKY_TealGlow', cx=X1 - 0.6, cy=Y0 + 0.6)
     a.part(mb, target="PowerLights", name="lights")
     mb = MB()
-    fbox(mb, 'N', Y0, sock_u - 0.62, sock_u + 0.62, sock_z + 0.98, sock_z + 1.02, 0.0, 0.17, 'SKY_Brass')
+    fbox(mb, 'N', Y0, sock_u - hu - 0.04, sock_u + hu + 0.04, sock_z + sh + fw + 0.08, sock_z + sh + fw + 0.12, 0.0, 0.17,
+         'SKY_Brass')
+
     mb.lathe([(0, zr + 0.6), (0.2, zr + 0.6), (0.2, zr + 0.75), (0, zr + 0.75)], 8, 'SKY_Brass', cx=X1 - 0.6, cy=Y0 + 0.6)
     a.part(mb, name="light_mounts")
     ring_band(a, X0, X1, Y0, Y1, zr - 0.4, zr - 0.25, 0.05, 'SKY_Teal', name="teal_band")

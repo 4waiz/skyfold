@@ -41,7 +41,7 @@ EXPECTED = {
 
 
 def to_unity(v):
-    return [round(-v[0], 4), round(v[2], 4), round(-v[1], 4)]
+    return [round(-v[0], 4) + 0.0, round(v[2], 4) + 0.0, round(-v[1], 4) + 0.0]
 
 
 def bounds_unity(lo, hi):
@@ -119,7 +119,7 @@ def check_one(name, info):
     size = hi - lo
     rec['size_m'] = [round(size.x, 3), round(size.z, 3), round(size.y, 3)]   # Unity x, y, z extents
     rec['empties'] = [dict(name=o.name, position_unity=to_unity(o.matrix_world.translation),
-                           yaw_unity_deg=round(-math.degrees(o.matrix_world.to_euler().z), 2))
+                           yaw_unity_deg=round(-math.degrees(o.matrix_world.to_euler().z), 2) + 0.0)
                       for o in empties]
     # sanity: pivot / footprint per category
     if info['group'] in ('roads', 'runway'):
@@ -145,8 +145,8 @@ def write_md(records):
              "`SKY_*` palette names from `docs/ART_SPEC.md`; vertex colour attribute `Col` holds a soft AO bake.",
              "", "Axes: Unity north (+Z) = Blender -Y, Unity east (+X) = Blender -X. Empty positions and bounds "
              "below are in Unity axes (metres).", "",
-             "| Filename | Source / provider | Licence | Date | Modifications | AI status | Where used |",
-             "| --- | --- | --- | --- | --- | --- | --- |"]
+             "| Filename | Source / provider | Licence | Date | Modifications | AI status | Prompt / script | Where used |",
+             "| --- | --- | --- | --- | --- | --- | --- | --- |"]
     for r in records:
         script = SCRIPT_FOR.get(r.get('module', ''), "tools/blender/")
         mods = "Built from script; bevels, AO vertex colours (Col), triangulated n-gons"
@@ -154,7 +154,8 @@ def write_md(records):
             mods += "; " + " ".join(r['notes'])
         lines.append(f"| `{r['file']}` | Original procedural model, Blender 5.2 script {script} | "
                      f"Original work for SKYFOLD (Awaiz Ahmed / Team Kanban) | 2026-10-17 | {mods} | "
-                     f"Not AI-generated (procedural script) | {WHERE_USED.get(r['category'], '')} |")
+                     f"Not AI-generated (procedural script) | `build_env.py -- build {r['name']}` | "
+                     f"{WHERE_USED.get(r['category'], '')} |")
     lines += ["", "## Gameplay empties (Unity axes)", "", "| File | Empty / part | Position (x, y, z) | Yaw |",
               "| --- | --- | --- | --- |"]
     for r in records:

@@ -39,7 +39,7 @@ namespace Skyfold
 
         IEnumerator Scenario(string scenario)
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSecondsRealtime(1.5f);
             IEnumerator body;
             switch (scenario)
             {
@@ -141,7 +141,7 @@ namespace Skyfold
             }
             piece.EndDesktopHold();
             tt.Release(piece);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
         }
 
         IEnumerator DriveTo(string target, float timeout)
@@ -183,36 +183,36 @@ namespace Skyfold
         {
             // Walking is tested elsewhere; here we stand where a player would after walking.
             PlayerRigs.Instance.TeleportTo(feet, yaw);
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSecondsRealtime(0.3f);
         }
 
         // ------------------------------------------------------------------ scenarios
         IEnumerator Smoke()
         {
             Root.ChooseDesktop();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             yield return Shot("01_title");
             Check(MenuController.Instance.Screen == "title", "title menu is open");
             Root.StartMission(MissionCatalog.Episode1);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSecondsRealtime(2f);
             Check(MD.State == MissionState.Active, "episode 1 active");
             Check(FoldController.Instance.InAtelier, "starts in the Atelier");
             yield return Shot("02_atelier");
             yield return Press(Key.Escape);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
             Check(Root.IsPaused, "Escape pauses");
             yield return Shot("03_pause");
             yield return Press(Key.Escape);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
             Check(!Root.IsPaused, "Escape resumes");
         }
 
         IEnumerator Episode1(bool east)
         {
             Root.ChooseDesktop();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
             Root.StartMission(MissionCatalog.Episode1);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             yield return Shot("e1_01_start");
             var city = Root.City;
             Check(!city.HasRoute("depot", "substation"), "no route at start");
@@ -234,13 +234,13 @@ namespace Skyfold
             }
             else yield return PlacePiece("piece.bridge", "bridge_west", 0);
             Check(city.HasRoute("depot", "substation"), "route complete after placement");
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSecondsRealtime(2.5f);
             yield return Shot("e1_03_route");
 
             yield return WaitUntil(() => MD.CurrentObjective != null && MD.CurrentObjective.Id == "t.fold", 20f, "fold objective reached");
             yield return Press(Key.Q);
             yield return WaitUntil(() => FoldController.Instance.InStreet && !FoldController.Instance.Busy, 5f, "Q folds down into the street");
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSecondsRealtime(0.6f);
             yield return Shot("e1_04_street");
 
             var car = CourierVehicle.Instance;
@@ -253,7 +253,7 @@ namespace Skyfold
             yield return DriveTo("substation.park", 120f);
             yield return Shot("e1_06_island");
             yield return WaitUntil(() => MD.State == MissionState.Results || MD.State == MissionState.Success, 30f, "episode 1 success");
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSecondsRealtime(4f);
             yield return Shot("e1_07_results");
             var r = MD.LastResult;
             Check(r != null && r.Success, "result recorded");
@@ -264,10 +264,10 @@ namespace Skyfold
         IEnumerator Demo()
         {
             Root.ChooseDesktop();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
             Root.StartMission(MissionCatalog.Demo);
             float start = Time.realtimeSinceStartup;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             yield return Shot("d_01_start");
             yield return PlacePiece("piece.bridge", "bridge_east", 0);
             Check(Root.City.HasRoute("depot", "substation"), "demo route complete");
@@ -303,7 +303,7 @@ namespace Skyfold
             yield return WaitUntil(() => AircraftSequence.Instance.ConditionsMet, 15f, "aircraft ready (boarded)");
             var lever = FindAnyObjectByType<DepartureLever>();
             lever.Interact(InteractorKind.Desktop);
-            yield return new WaitForSeconds(6f);
+            yield return new WaitForSecondsRealtime(6f);
             yield return Shot("d_04_taxi");
             yield return WaitUntil(() => AircraftSequence.Instance.State == AircraftState.Climb, 40f, "takeoff roll to climb");
             yield return Shot("d_05_takeoff");
@@ -317,14 +317,14 @@ namespace Skyfold
         {
             Root.ChooseDesktop();
             Root.StartMission(MissionCatalog.Episode2);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             Check(MD.State == MissionState.Active, "episode 2 active");
             // Fast-forward the storm through the public timer path by waiting with time scale.
             SettingsStore.Current.guidance = Guidance.Off;
             Time.timeScale = 20f;
             yield return WaitUntil(() => MD.State == MissionState.Failed, 30f, "storm failure reached");
             Time.timeScale = 1f;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             yield return Shot("f_01_failed");
             Check(MenuController.Instance.Screen == "failed", "failure screen shown");
             MD.Retry();
@@ -341,11 +341,11 @@ namespace Skyfold
             for (int i = 0; i < count; i++)
             {
                 Root.StartMission(i % 2 == 0 ? MissionCatalog.Demo : MissionCatalog.Episode1);
-                yield return new WaitForSeconds(0.8f);
+                yield return new WaitForSecondsRealtime(0.8f);
                 if (i % 3 == 0) MD.Restart();
-                yield return new WaitForSeconds(0.8f);
+                yield return new WaitForSecondsRealtime(0.8f);
                 Root.QuitToMenu();
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSecondsRealtime(0.4f);
                 int listeners = Root.City.ListenerCount;
                 if (listeners0 < 0) listeners0 = listeners;
                 Check(listeners == listeners0, $"restart {i + 1}: CityState listeners stable ({listeners})");
@@ -364,7 +364,7 @@ namespace Skyfold
                 yield return Demo();
                 loops++;
                 Root.QuitToMenu();
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSecondsRealtime(1f);
                 Log($"soak loop {loops}: managed heap {GC.GetTotalMemory(false) / (1024 * 1024)} MB, fps ~{1f / Mathf.Max(0.0001f, Time.smoothDeltaTime):0}");
             }
             Check(loops > 0, $"soak completed {loops} demo loops in {seconds / 60f:0} min");
@@ -375,7 +375,7 @@ namespace Skyfold
         {
             yield return Episode1(true);
             Root.QuitToMenu();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             Check(ProgressStore.Campaign.unlockedEpisode >= 2, "episode 2 unlocked");
             Check(ProgressStore.Campaign.placements.Count > 0, "route saved for later episodes");
         }
@@ -384,10 +384,10 @@ namespace Skyfold
         {
             // Views for art review and the delivery report (real build, real renderer).
             Root.ChooseDesktop();
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSecondsRealtime(2.5f);
             yield return Shot("tour_01_title");
             Root.StartMission(MissionCatalog.Demo);
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSecondsRealtime(2.5f);
             yield return Shot("tour_02_atelier");
             var fold = FoldController.Instance;
             var views = new (string name, Vector3 pos, float yaw, float pitch)[]
@@ -406,7 +406,7 @@ namespace Skyfold
             {
                 PlayerRigs.Instance.TeleportTo(v.pos, v.yaw);
                 PlayerRigs.Instance.desktop.SetPitch(v.pitch);
-                yield return new WaitForSeconds(1.2f);
+                yield return new WaitForSecondsRealtime(1.2f);
                 yield return Shot(v.name);
             }
             // Overlook (VR comfort remote-drive viewpoint) seen from the desktop camera.
@@ -414,7 +414,7 @@ namespace Skyfold
             var ov = Root.Layout.GetAnchor("overlook.mainland");
             PlayerRigs.Instance.TeleportTo(ov.Position + Vector3.up * 0.1f, ov.Yaw);
             cam.SetPitch(14f);
-            yield return new WaitForSeconds(1.2f);
+            yield return new WaitForSecondsRealtime(1.2f);
             yield return Shot("tour_11_overlook");
             Check(true, "tour captured");
         }

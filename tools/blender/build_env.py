@@ -11,6 +11,7 @@ Commands:
   check                        re-import every exported FBX, validate, write manifests
 """
 import sys, os, json, time, importlib, traceback
+sys.dont_write_bytecode = True      # keep tools/blender free of __pycache__
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:

@@ -3115,9 +3115,671 @@
    "file": "Assets/Skyfold/Art/Models/Nature/bougainvillea_clump.fbx",
    "name": "bougainvillea_clump",
    "category": "Nature",
-   "issues": [
-    "missing file"
+   "objects": [
+    {
+     "name": "bougainvillea_clump",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 834,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_PalmLeaf",
+      "SKY_Flower"
+     ]
+    }
    ],
+   "tris": 834,
+   "materials": [
+    "SKY_Flower",
+    "SKY_PalmLeaf"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.95,
+     0.015,
+     -0.8636
+    ],
+    "max": [
+     0.9011,
+     1.2343,
+     0.8439
+    ]
+   },
+   "size_m": [
+    1.851,
+    1.219,
+    1.708
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Sky/cloud_puff_a.fbx",
+   "name": "cloud_puff_a",
+   "category": "Sky",
+   "objects": [
+    {
+     "name": "cloud_puff_a",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 600,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl"
+     ]
+    }
+   ],
+   "tris": 600,
+   "materials": [
+    "SKY_Pearl"
+   ],
+   "bounds_unity": {
+    "min": [
+     -14.7,
+     -0.165,
+     -7.5749
+    ],
+    "max": [
+     12.0,
+     10.1,
+     7.3749
+    ]
+   },
+   "size_m": [
+    26.7,
+    10.265,
+    14.95
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Sky/cloud_puff_b.fbx",
+   "name": "cloud_puff_b",
+   "category": "Sky",
+   "objects": [
+    {
+     "name": "cloud_puff_b",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 600,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl"
+     ]
+    }
+   ],
+   "tris": 600,
+   "materials": [
+    "SKY_Pearl"
+   ],
+   "bounds_unity": {
+    "min": [
+     -17.3,
+     -0.135,
+     -6.5063
+    ],
+    "max": [
+     14.6,
+     8.1,
+     6.4238
+    ]
+   },
+   "size_m": [
+    31.9,
+    8.235,
+    12.93
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Sky/cloud_puff_c.fbx",
+   "name": "cloud_puff_c",
+   "category": "Sky",
+   "objects": [
+    {
+     "name": "cloud_puff_c",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 400,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl"
+     ]
+    }
+   ],
+   "tris": 400,
+   "materials": [
+    "SKY_Pearl"
+   ],
+   "bounds_unity": {
+    "min": [
+     -7.2,
+     -0.111,
+     -4.8727
+    ],
+    "max": [
+     6.9,
+     6.74,
+     4.1846
+    ]
+   },
+   "size_m": [
+    14.1,
+    6.851,
+    9.057
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Sky/storm_cloud.fbx",
+   "name": "storm_cloud",
+   "category": "Sky",
+   "objects": [
+    {
+     "name": "storm_cloud",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 1388,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Ink"
+     ]
+    }
+   ],
+   "tris": 1388,
+   "materials": [
+    "SKY_Ink"
+   ],
+   "bounds_unity": {
+    "min": [
+     -27.5,
+     -0.3075,
+     -16.9084
+    ],
+    "max": [
+     27.2367,
+     34.36,
+     16.9084
+    ]
+   },
+   "size_m": [
+    54.737,
+    34.667,
+    33.817
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Sky/skyline_ring_piece.fbx",
+   "name": "skyline_ring_piece",
+   "category": "Sky",
+   "objects": [
+    {
+     "name": "skyline_ring_piece",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 192,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Sandstone",
+      "SKY_Pearl"
+     ]
+    }
+   ],
+   "tris": 192,
+   "materials": [
+    "SKY_Pearl",
+    "SKY_Sandstone"
+   ],
+   "bounds_unity": {
+    "min": [
+     -82.5456,
+     0.0,
+     298.3279
+    ],
+    "max": [
+     83.0295,
+     69.8104,
+     338.4926
+    ]
+   },
+   "size_m": [
+    165.575,
+    69.81,
+    40.165
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": [
+    "Pivot at the ring centre; geometry spans a 30 deg arc at r~320 m centred on Unity north."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/rock_sea_a.fbx",
+   "name": "rock_sea_a",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "rock_sea_a",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 138,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Sandstone"
+     ]
+    }
+   ],
+   "tris": 138,
+   "materials": [
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -4.6907,
+     -0.3337,
+     -3.6281
+    ],
+    "max": [
+     3.3335,
+     5.5573,
+     3.6123
+    ]
+   },
+   "size_m": [
+    8.024,
+    5.891,
+    7.24
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/rock_sea_b.fbx",
+   "name": "rock_sea_b",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "rock_sea_b",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 172,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Sandstone"
+     ]
+    }
+   ],
+   "tris": 172,
+   "materials": [
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -3.7533,
+     -0.3805,
+     -3.6384
+    ],
+    "max": [
+     4.829,
+     4.6634,
+     3.8011
+    ]
+   },
+   "size_m": [
+    8.582,
+    5.044,
+    7.439
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/cliff_headland.fbx",
+   "name": "cliff_headland",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "cliff_headland",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 748,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Sandstone",
+      "SKY_SandstoneDeep",
+      "SKY_PalmLeaf"
+     ]
+    }
+   ],
+   "tris": 748,
+   "materials": [
+    "SKY_PalmLeaf",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -19.1525,
+     -26.5477,
+     -19.0125
+    ],
+    "max": [
+     18.9576,
+     -2.36,
+     23.5598
+    ]
+   },
+   "size_m": [
+    38.11,
+    24.188,
+    42.572
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": [
+    "Plateau at Z-2.8 around the pivot; cliff foot at about Z-26."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/dhow_small.fbx",
+   "name": "dhow_small",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "dhow_small",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 454,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Wood",
+      "SKY_Kerb",
+      "SKY_Pearl",
+      "SKY_Fabric",
+      "SKY_Brass"
+     ]
+    }
+   ],
+   "tris": 454,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Fabric",
+    "SKY_Kerb",
+    "SKY_Pearl",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -1.2198,
+     -0.75,
+     -4.0
+    ],
+    "max": [
+     1.2198,
+     7.239,
+     4.0
+    ]
+   },
+   "size_m": [
+    2.44,
+    7.989,
+    8.0
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": [
+    "Pivot on the waterline (Z0) at mid-length; hull draft ~0.75 m."
+   ]
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/buoy.fbx",
+   "name": "buoy",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "LIGHT_buoy",
+     "type": "EMPTY",
+     "position_unity": [
+      -0.0,
+      1.4,
+      -0.0
+     ],
+     "yaw_deg_blender": 0.0
+    },
+    {
+     "name": "buoy",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 232,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Ink",
+      "SKY_Coral",
+      "SKY_Pearl",
+      "SKY_Light",
+      "SKY_Brass"
+     ]
+    }
+   ],
+   "tris": 232,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Ink",
+    "SKY_Light",
+    "SKY_Pearl"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.62,
+     -0.6,
+     -0.62
+    ],
+    "max": [
+     0.62,
+     1.66,
+     0.62
+    ]
+   },
+   "size_m": [
+    1.24,
+    2.26,
+    1.24
+   ],
+   "empties": [
+    {
+     "name": "LIGHT_buoy",
+     "position_unity": [
+      -0.0,
+      1.4,
+      -0.0
+     ],
+     "yaw_unity_deg": -0.0
+    }
+   ],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/fountain_small.fbx",
+   "name": "fountain_small",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "fountain_small",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 444,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_TealLight",
+      "SKY_Brass"
+     ]
+    }
+   ],
+   "tris": 444,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Pearl",
+    "SKY_TealLight"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.8777,
+     0.0,
+     -0.8777
+    ],
+    "max": [
+     0.8777,
+     1.38,
+     0.8777
+    ]
+   },
+   "size_m": [
+    1.755,
+    1.38,
+    1.755
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Props/crate_stack.fbx",
+   "name": "crate_stack",
+   "category": "Props",
+   "objects": [
+    {
+     "name": "crate_stack",
+     "type": "MESH",
+     "position_unity": [
+      -0.0,
+      0.0,
+      -0.0
+     ],
+     "tris": 204,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Wood",
+      "SKY_Brass"
+     ]
+    }
+   ],
+   "tris": 204,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Wood"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.8706,
+     0.0,
+     -0.5006
+    ],
+    "max": [
+     0.83,
+     1.6,
+     0.4431
+    ]
+   },
+   "size_m": [
+    1.701,
+    1.6,
+    0.944
+   ],
+   "empties": [],
+   "issues": [],
    "notes": []
   }
  ]
