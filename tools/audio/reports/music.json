@@ -1,0 +1,55 @@
+{
+ "music_menu_loop": {
+  "desc": "calm wonder, D lydian, 72 BPM",
+  "bpm": 72,
+  "bars": 24,
+  "loop": true,
+  "duration_s": 80.0,
+  "lufs": -20.0,
+  "tp_dbtp": -5.9,
+  "bus_rms_db": {
+   "pad": {
+    "target_lu": -10,
+    "measured_lufs": -2.1,
+    "gain_db": -27.9
+   },
+   "kanun": {
+    "target_lu": -10,
+    "measured_lufs": -18.2,
+    "gain_db": -11.8
+   },
+   "mar": {
+    "target_lu": -7,
+    "measured_lufs": -16.2,
+    "gain_db": -10.8
+   },
+   "bell": {
+    "target_lu": -18,
+    "measured_lufs": -17.6,
+    "gain_db": -20.4
+   },
+   "bass": {
+    "target_lu": -13,
+    "measured_lufs": -11.8,
+    "gain_db": -21.2
+   },
+   "perc": {
+    "target_lu": -17,
+    "measured_lufs": -27.2,
+    "gain_db": -9.8
+   }
+  },
+  "bar_s": 3.333333,
+  "seam": {
+   "seam_step": 0.011260986328125,
+   "p999_step": 0.04913330078125,
+   "seam_curv": 0.014984130859375,
+   "p999_curv": 0.036041259765625,
+   "rms_jump_50ms_db": 3.1871610812422704,
+   "rms_jump_50ms_limit": 4.402311364295403,
+   "rms_jump_10ms_db": 5.463045643809804,
+   "rms_jump_10ms_limit": 4.100127904083909,
+   "ok": false
+  }
+ }
+}

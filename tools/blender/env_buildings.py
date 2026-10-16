@@ -63,7 +63,7 @@ def arch_band(w, h, t, kind='round', seg=8):
 # --------------------------------------------------------------------------- openings
 
 class Op:
-    def __init__(self, face, u, z, w, h, kind='round', depth=0.3, back='SKY_Glass', seg=8,
+    def __init__(self, face, u, z, w, h, kind='round', depth=0.3, back='SKY_Glass', seg=6,
                  sill=True, frame=None, frame_t=0.12, through=False, reveal=None, mullion=False, key=False):
         self.__dict__.update(locals())
         del self.__dict__['self']
@@ -78,7 +78,7 @@ def make_cutter(a, op, plane, wall_mat):
     return a.cutter(mb, "cut")
 
 
-def block(a, x0, x1, y0, y1, z0, z1, mat, ops=(), bevel=0.06, seg=2, name="block", target=None, fm=None):
+def block(a, x0, x1, y0, y1, z0, z1, mat, ops=(), bevel=0.06, seg=1, name="block", target=None, fm=None):
     planes = {'N': y0, 'S': y1, 'E': x0, 'W': x1}
     cutters = [make_cutter(a, op, planes[op.face], mat) for op in ops]
     mb = MB()
@@ -108,7 +108,7 @@ def deco(a, ops, planes, target=None):
                  -op.depth + 0.02, -op.depth + 0.1, op.mullion)
             any_m = True
     if any_s:
-        a.part(mbs, bevel=0.02, seg=1, name="sills", target=target)
+        a.part(mbs, name="sills", target=target)
     if any_f:
         a.part(mbf, bevel=0.02, seg=1, name="frames", target=target)
     if any_m:
@@ -137,14 +137,13 @@ def merlons(a, face, plane, u0, u1, z, h=0.55, w=0.6, gap=0.45, t=0.3, mat='SKY_
         c = s0 + i * (w + gap) + w / 2
         if stepped:
             hw = w / 2
-            pts = [(c - hw, z), (c + hw, z), (c + hw, z + h * 0.45), (c + hw * 0.6, z + h * 0.45),
-                   (c + hw * 0.6, z + h * 0.78), (c + hw * 0.25, z + h * 0.78), (c + hw * 0.25, z + h),
-                   (c - hw * 0.25, z + h), (c - hw * 0.25, z + h * 0.78), (c - hw * 0.6, z + h * 0.78),
-                   (c - hw * 0.6, z + h * 0.45), (c - hw, z + h * 0.45)]
+            pts = [(c - hw, z), (c + hw, z), (c + hw, z + h * 0.5), (c + hw * 0.45, z + h * 0.5),
+                   (c + hw * 0.45, z + h), (c - hw * 0.45, z + h), (c - hw * 0.45, z + h * 0.5),
+                   (c - hw, z + h * 0.5)]
         else:
             pts = [(c - w / 2, z), (c + w / 2, z), (c + w / 2, z + h), (c - w / 2, z + h)]
         fprism(mb, face, plane, pts, -inset - t, -inset, mat)
-    a.part(mb, bevel=0.02, seg=1, name="merlons")
+    a.part(mb, name="merlons")
 
 
 def parapet(a, x0, x1, y0, y1, z, h, t, mat, cap='SKY_Pearl', faces='NSEW', cap_p=0.05):
@@ -158,7 +157,7 @@ def parapet(a, x0, x1, y0, y1, z, h, t, mat, cap='SKY_Pearl', faces='NSEW', cap_
         mb.box(x0, x0 + t, y0 + t, y1 - t, z, z + h, mat); mbc.box(x0 - cap_p, x0 + t + cap_p, y0 + t + cap_p, y1 - t - cap_p, z + h, z + h + 0.12, cap)
     if 'W' in faces:
         mb.box(x1 - t, x1, y0 + t, y1 - t, z, z + h, mat); mbc.box(x1 - t - cap_p, x1 + cap_p, y0 + t + cap_p, y1 - t - cap_p, z + h, z + h + 0.12, cap)
-    a.part(mb, bevel=0.04, seg=1, name="parapet")
+    a.part(mb, name="parapet")
     a.part(mbc, bevel=0.03, seg=1, name="coping")
 
 
@@ -212,138 +211,141 @@ def pergola(a, x0, x1, y0, y1, z, h=2.5, post=0.18, beam_dir='x', slats=8, sail=
         for i in range(slats):
             y = y0 + (y1 - y0) * (i + 0.5) / slats
             mb.box(x0 - 0.35, x1 + 0.35, y - 0.05, y + 0.05, z + h + 0.22, z + h + 0.34, mat)
-    a.part(mb, bevel=0.015, seg=1, name="pergola_beams")
+    a.part(mb, name="pergola_beams")
     if sail:
         sail_quad(a, [(x0 + 0.1, y0 + 0.1, z + h - 0.05), (x1 - 0.1, y0 + 0.1, z + h - 0.25),
                       (x1 - 0.1, y1 - 0.1, z + h - 0.05), (x0 + 0.1, y1 - 0.1, z + h - 0.25)], sail)
 
 
-def sail_quad(a, corners, mat='SKY_Fabric', sag=0.25, n=4, t=0.03, target=None):
-    """Tensioned shade sail (3 or 4 corners), slightly sagging, with thickness so both sides render."""
-    mb = MB()
-    if len(corners) == 4:
-        A, B, C, D = [Vector(c) for c in corners]
-        grid = []
+def sail_mesh(mb, corners, mat='SKY_Fabric', sag=0.25, n=4, t=0.03):
+    """Tensioned shade sail over 3 or 4 corner points: sagging surface with thickness (closed solid)."""
+    C = [Vector(c) for c in corners]
+    top_idx = {}
+    pts = {}
+    faces = []
+    if len(C) == 4:
         for i in range(n + 1):
-            row = []
             for j in range(n + 1):
                 u, v = i / n, j / n
-                p = A.lerp(B, u).lerp(D.lerp(C, u), v)
-                s = 4 * u * (1 - u) * 4 * v * (1 - v)
-                p = p - Vector((0, 0, sag * s))
-                row.append(p)
-            grid.append(row)
+                p = C[0].lerp(C[1], u).lerp(C[3].lerp(C[2], u), v)
+                p = p - Vector((0, 0, sag * 16 * u * (1 - u) * v * (1 - v)))
+                pts[(i, j)] = p
+        for i in range(n):
+            for j in range(n):
+                faces.append([(i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1)])
     else:
-        A, B, C = [Vector(c) for c in corners]
-        grid = []
         for i in range(n + 1):
-            row = []
-            for j in range(n + 1):
+            for j in range(n + 1 - i):
                 u, v = i / n, j / n
-                # map square to triangle (collapsed edge at C)
-                p = (A.lerp(B, u)).lerp(C, v)
-                s = 4 * u * (1 - u) * 4 * v * (1 - v) * 0.6
-                row.append(p - Vector((0, 0, sag * s)))
-            grid.append(row)
-    top = [[mb.v(p) for p in row] for row in grid]
-    bot = [[mb.v(p - Vector((0, 0, t))) for p in row] for row in grid]
+                w = 1 - u - v
+                p = C[0] + (C[1] - C[0]) * u + (C[2] - C[0]) * v
+                p = p - Vector((0, 0, sag * 27 * u * v * w))
+                pts[(i, j)] = p
+        for i in range(n):
+            for j in range(n - i):
+                faces.append([(i, j), (i + 1, j), (i, j + 1)])
+                if i + j + 2 <= n:
+                    faces.append([(i + 1, j), (i + 1, j + 1), (i, j + 1)])
+    T = {k: mb.v(p) for k, p in pts.items()}
+    B = {k: mb.v(p - Vector((0, 0, t))) for k, p in pts.items()}
     fs = []
-    for i in range(n):
-        for j in range(n):
-            q = [top[i][j], top[i + 1][j], top[i + 1][j + 1], top[i][j + 1]]
-            r = [bot[i][j + 1], bot[i + 1][j + 1], bot[i + 1][j], bot[i][j]]
-            if len(set(q)) == 4 and len(set(v.co.to_tuple(5) for v in q)) == 4:
-                fs.append(mb.f(q, mat)); fs.append(mb.f(r, mat))
-            else:
-                qq = []
-                for v in q:
-                    if v.co.to_tuple(5) not in [w.co.to_tuple(5) for w in qq]:
-                        qq.append(v)
-                rr_ = []
-                for v in r:
-                    if v.co.to_tuple(5) not in [w.co.to_tuple(5) for w in rr_]:
-                        rr_.append(v)
-                if len(qq) >= 3:
-                    fs.append(mb.f(qq, mat)); fs.append(mb.f(rr_, mat))
-    # rim
-    loop = [(i, 0) for i in range(n)] + [(n, j) for j in range(n)] + [(i, n) for i in range(n, 0, -1)] + \
-           [(0, j) for j in range(n, 0, -1)]
-    for k in range(len(loop)):
-        i0, j0 = loop[k]; i1, j1 = loop[(k + 1) % len(loop)]
-        a0, a1 = top[i0][j0], top[i1][j1]
-        b0, b1 = bot[i0][j0], bot[i1][j1]
-        if (a0.co - a1.co).length < 1e-5:
-            continue
-        fs.append(mb.f([a1, a0, b0, b1], mat))
-    bmesh.ops.remove_doubles(mb.bm, verts=mb.bm.verts, dist=1e-5)
+    edge_count = {}
+    for f in faces:
+        fs.append(mb.f([T[k] for k in f], mat))
+        fs.append(mb.f([B[k] for k in reversed(f)], mat))
+        for k in range(len(f)):
+            e = (f[k], f[(k + 1) % len(f)])
+            key = tuple(sorted(e))
+            edge_count[key] = edge_count.get(key, 0) + 1
+    for f in faces:
+        for k in range(len(f)):
+            a_, b_ = f[k], f[(k + 1) % len(f)]
+            if edge_count[tuple(sorted((a_, b_)))] == 1:
+                fs.append(mb.f([T[b_], T[a_], B[a_], B[b_]], mat))
+    mb._recalc(fs)
+    return fs
+
+
+def sail_quad(a, corners, mat='SKY_Fabric', sag=0.25, n=4, t=0.03, target=None):
+    mb = MB()
+    sail_mesh(mb, corners, mat, sag, n, t)
     a.part(mb, name="sail", target=target)
-    a.set_target(target or a.name)
 
 
 def door(a, face, plane, u, w=1.4, h=2.6, kind='round', frame='SKY_Pearl', leaf='SKY_Wood', depth=0.3,
-         wall='SKY_Sandstone'):
-    """Arched door: returns an Op for the wall + adds brass ring and step."""
-    op = Op(face, u, 0.12, w, h, kind, depth=depth, back=leaf, sill=False, frame=frame, frame_t=0.16)
+         wall='SKY_Sandstone', z=0.45, steps=True):
+    """Raised arched entrance: returns the Op for the wall cut, adds pearl steps and a brass knob."""
+    op = Op(face, u, z, w, h, kind, depth=depth, back=leaf, sill=False, frame=frame, frame_t=0.16)
+    if steps and z > 0.05:
+        mb = MB()
+        fbox(mb, face, plane, u - w / 2 - 0.35, u + w / 2 + 0.35, 0.0, z * 0.5, 0.05, 0.85, 'SKY_Pearl')
+        fbox(mb, face, plane, u - w / 2 - 0.2, u + w / 2 + 0.2, 0.0, z, 0.05, 0.45, 'SKY_Pearl')
+        a.part(mb, bevel=0.02, seg=1, name="steps")
     mb = MB()
-    fbox(mb, face, plane, u - w / 2 - 0.25, u + w / 2 + 0.25, 0.0, 0.14, -0.05, 0.45, 'SKY_Pearl')
-    a.part(mb, bevel=0.02, seg=1, name="step")
-    mb = MB()
-    c = fpt(face, plane, u + w * 0.22, 1.15, -depth + 0.04)
-    mb.cbox(c[0], c[1], c[2], 0.09 if face in 'NS' else 0.05, 0.05 if face in 'NS' else 0.09, 0.09, 'SKY_Brass')
+    c = fpt(face, plane, u + w * 0.22, z + 1.05, -depth + 0.04)
+    mb.cbox(c[0], c[1], c[2], 0.09 if face in 'NS' else 0.06, 0.06 if face in 'NS' else 0.09, 0.09, 'SKY_Brass')
     a.part(mb, name="knob")
     return op
 
 
-def lattice(a, face, plane, u, z, w, h, d=0.45, mat='SKY_Wood', frame='SKY_Pearl', n=5):
-    """Projecting lattice screen box (mashrabiya-like, original geometric slats)."""
-    mb = MB()
-    fbox(mb, face, plane, u - w / 2, u + w / 2, z - 0.12, z, 0.0, d + 0.08, frame)       # base shelf
-    fbox(mb, face, plane, u - w / 2, u + w / 2, z + h, z + h + 0.12, 0.0, d + 0.08, frame)  # top cap
-    fbox(mb, face, plane, u - w / 2, u - w / 2 + 0.08, z, z + h, 0.0, d, frame)
-    fbox(mb, face, plane, u + w / 2 - 0.08, u + w / 2, z, z + h, 0.0, d, frame)
-    a.part(mb, bevel=0.02, seg=1, name="lattice_frame")
-    mb = MB()
-    # diagonal lattice: two families of thin bars in the front plane
-    import itertools
-    inner_w = w - 0.16
-    for k in range(-n, n + 1):
-        for sgn in (-1, 1):
-            # bar from bottom to top at 45 deg, clipped to the panel
-            x0 = k * inner_w / n * 0.5
-            p0 = (x0, 0.0); p1 = (x0 + sgn * h, h)
-            # clip to [-inner_w/2, inner_w/2]
-            def clip(p0, p1):
-                (xa, ya), (xb, yb) = p0, p1
-                lo, hi = -inner_w / 2, inner_w / 2
-                t0, t1 = 0.0, 1.0
-                dx = xb - xa
-                if abs(dx) < 1e-9:
-                    return None
-                for bound in (lo, hi):
-                    t = (bound - xa) / dx
-                    if dx > 0:
-                        if bound == lo: t0 = max(t0, t)
-                        else: t1 = min(t1, t)
-                    else:
-                        if bound == lo: t1 = min(t1, t)
-                        else: t0 = max(t0, t)
-                if t1 - t0 < 0.05:
-                    return None
-                return (xa + dx * t0, ya + (yb - ya) * t0), (xa + dx * t1, ya + (yb - ya) * t1)
-            seg_ = clip(p0, p1)
+def clip_seg(p0, p1, r):
+    x0, y0 = p0; x1, y1 = p1
+    dx, dy = x1 - x0, y1 - y0
+    t0, t1 = 0.0, 1.0
+    for p, q in ((-dx, x0 - r[0]), (dx, r[1] - x0), (-dy, y0 - r[2]), (dy, r[3] - y0)):
+        if abs(p) < 1e-12:
+            if q < 0:
+                return None
+        else:
+            tt = q / p
+            if p < 0:
+                t0 = max(t0, tt)
+            else:
+                t1 = min(t1, tt)
+    if t1 - t0 < 1e-3:
+        return None
+    return (x0 + dx * t0, y0 + dy * t0), (x0 + dx * t1, y0 + dy * t1)
+
+
+def lattice_bars(mb, face, plane, rect_uv, d0, d1, mat, spacing=0.3, bw=0.045):
+    """Two families of diagonal bars clipped to a (u,v) rectangle: original geometric screen."""
+    u0, u1, v0, v1 = rect_uv
+    hgt = v1 - v0
+    k0 = int(math.floor((u0 - hgt - u1) / spacing)) - 1
+    k1 = int(math.ceil((u1 + hgt - u0) / spacing)) + 1
+    for fam, (dd0, dd1) in ((1, (d0, d1)), (-1, (d0 + 0.012, d1 + 0.012))):
+        for k in range(k0, k1 + 1):
+            c = (u0 + u1) / 2 + k * spacing
+            p0 = (c - fam * hgt, v0 - 0.0)
+            p1 = (c + fam * hgt * 0.0, v0 + hgt)
+            p0 = (c - fam * hgt / 2, v0)
+            p1 = (c + fam * hgt / 2, v1)
+            seg_ = clip_seg(p0, p1, rect_uv)
             if not seg_:
                 continue
             (xa, ya), (xb, yb) = seg_
-            dirv = Vector((xb - xa, yb - ya)).normalized()
-            nv = Vector((-dirv.y, dirv.x)) * 0.03
-            pts = [(xa - nv.x + u, ya - nv.y + z), (xb - nv.x + u, yb - nv.y + z), (xb + nv.x + u, yb + nv.y + z),
-                   (xa + nv.x + u, ya + nv.y + z)]
-            pts = [(p[0], min(max(p[1], z), z + h)) for p in pts]
-            fprism(mb, face, plane, pts, d - 0.06 - (0.02 if sgn > 0 else 0.0), d - (0.02 if sgn > 0 else 0.0), mat)
-    a.part(mb, name="lattice")
-    # dark backing so the screen reads
+            L = math.hypot(xb - xa, yb - ya)
+            if L < 0.08:
+                continue
+            nx, ny = -(yb - ya) / L * bw / 2, (xb - xa) / L * bw / 2
+            pts = [(xa - nx, ya - ny), (xb - nx, yb - ny), (xb + nx, yb + ny), (xa + nx, ya + ny)]
+            fprism(mb, face, plane, pts, dd0, dd1, mat)
+
+
+def lattice(a, face, plane, u, z, w, h, d=0.45, mat='SKY_Wood', frame='SKY_Pearl', spacing=0.32):
+    """Projecting lattice oriel (screened bay) with pearl frame and dark backing."""
     mb = MB()
-    fbox(mb, face, plane, u - w / 2 + 0.08, u + w / 2 - 0.08, z, z + h, 0.02, 0.06, 'SKY_Ink')
+    fbox(mb, face, plane, u - w / 2 - 0.06, u + w / 2 + 0.06, z - 0.16, z, 0.0, d + 0.1, frame)
+    fbox(mb, face, plane, u - w / 2 - 0.06, u + w / 2 + 0.06, z + h, z + h + 0.16, 0.0, d + 0.1, frame)
+    fbox(mb, face, plane, u - w / 2, u - w / 2 + 0.1, z, z + h, 0.0, d, frame)
+    fbox(mb, face, plane, u + w / 2 - 0.1, u + w / 2, z, z + h, 0.0, d, frame)
+    a.part(mb, bevel=0.025, seg=1, name="lattice_frame")
+    mb = MB()
+    lattice_bars(mb, face, plane, (u - w / 2 + 0.1, u + w / 2 - 0.1, z, z + h), d - 0.07, d - 0.02, mat, spacing)
+    a.part(mb, name="lattice")
+    mb = MB()
+    fbox(mb, face, plane, u - w / 2 + 0.1, u + w / 2 - 0.1, z, z + h, d - 0.32, d - 0.28, 'SKY_Ink')
+    fbox(mb, face, plane, u - w / 2 + 0.1, u + w / 2 - 0.1, z, z + 0.04, 0.0, d - 0.28, frame)
     a.part(mb, name="lattice_back")
 
 
@@ -392,28 +394,22 @@ def dome(a, cx, cy, z, r, mat='SKY_Pearl', seg=16, rings=6, finial=True, drum_h=
         a.part(mb, name="finial")
 
 
-def awning(a, face, plane, u, z, w, depth=1.0, drop=0.45, mats=('SKY_Coral', 'SKY_Pearl'), stripes=6, target=None):
-    """Sloped striped fabric awning with a scalloped-free valance (stripes along the slope)."""
+def awning(a, face, plane, u, z, w, depth=1.0, drop=0.45, mats=('SKY_Coral', 'SKY_Pearl'), stripes=6,
+           target=None, valance=0.26, t=0.04):
+    """Sloped striped fabric awning: stripes run down the slope, with a front valance and a brass rail."""
     mb = MB()
+    uax, vax, out = faxes(face)
+    origin = fpt(face, plane, 0.0, 0.0, 0.0)
+    origin = (origin[0] if face in ('E', 'W') else 0.0, origin[1] if face in ('N', 'S') else 0.0, 0.0)
+    prof = [(0.0, z), (depth, z - drop), (depth, z - drop - valance), (depth - t, z - drop - valance),
+            (depth - t, z - drop - t), (0.0, z - t)]
     for i in range(stripes):
         u0 = u - w / 2 + w * i / stripes
         u1 = u - w / 2 + w * (i + 1) / stripes
-        m = mats[i % len(mats)]
-        p00 = fpt(face, plane, u0, z, 0.02); p10 = fpt(face, plane, u1, z, 0.02)
-        p01 = fpt(face, plane, u0, z - drop, depth); p11 = fpt(face, plane, u1, z - drop, depth)
-        p02 = fpt(face, plane, u0, z - drop - 0.25, depth); p12 = fpt(face, plane, u1, z - drop - 0.25, depth)
-        t = 0.03
-        q0 = fpt(face, plane, u0, z - t, 0.02); q1 = fpt(face, plane, u1, z - t, 0.02)
-        q2 = fpt(face, plane, u0, z - drop - t, depth - t); q3 = fpt(face, plane, u1, z - drop - t, depth - t)
-        mb.loft([[p00, p10, q1, q0], [p01, p11, q3, q2]], m)
-        mb.box(*sorted((p01[0], p12[0])), *sorted((p01[1], p12[1])), p02[2], p01[2], m) if False else None
-        # valance
-        va = fpt(face, plane, u0, z - drop, depth); vb = fpt(face, plane, u1, z - drop - 0.25, depth + 0.03)
-        mb.box(min(va[0], vb[0]), max(va[0], vb[0]), min(va[1], vb[1]), max(va[1], vb[1]), vb[2], va[2], m)
+        mb.prism_frame(prof, origin, out, (0, 0, 1), uax, u0, u1, mats[i % len(mats)])
     a.part(mb, name="awning", target=target)
     mb = MB()
-    pa = fpt(face, plane, u - w / 2, z, 0.0); pb = fpt(face, plane, u + w / 2, z + 0.12, 0.12)
-    mb.box(min(pa[0], pb[0]), max(pa[0], pb[0]), min(pa[1], pb[1]), max(pa[1], pb[1]), pa[2], pb[2], 'SKY_Brass')
+    fbox(mb, face, plane, u - w / 2 - 0.05, u + w / 2 + 0.05, z - 0.02, z + 0.1, 0.0, 0.1, 'SKY_Brass')
     a.part(mb, name="awning_rail", target=target)
 
 
@@ -475,8 +471,9 @@ def bldg_house_a(a):
     planes = {'N': Y0, 'S': Y1, 'E': X0, 'W': X1}
     cutters = [make_cutter(a, op, planes[op.face], wall) for op in ops] + [court]
     # courtyard-side loggia arches (cut into the inner faces) - inner faces are created by the court cutter
-    mb = MB(); mb.box(X0, X1, Y0, Y1, 0.0, zr, wall)
-    a.part(mb, bevel=0.06, seg=2, cutters=cutters, name="mass")
+    mb = MB(); mb.box(X0, X1, Y0, Y1, 0.0, zr, wall, fm={'top': 'SKY_Kerb'})
+    a.part(mb, bevel=0.06, seg=1, cutters=cutters, name="mass")
+
     deco(a, [o for o in ops if o is not dop], planes)
     deco(a, [dop], planes)
     # string course between floors and the brass/teal futurist trim
@@ -493,8 +490,8 @@ def bldg_house_a(a):
     # lattice oriel above the door
     lattice(a, 'N', Y0, 0.0, 3.85, 2.2, 1.9, d=0.55)
     # roof: terrace floor, parapets with stepped merlons on the front
-    roof_slab(a, X0 + 0.3, X1 - 0.3, Y0 + 0.3, Y1 - 0.3, zr + 0.05)
     parapet(a, X0, X1, Y0, Y1, zr, 0.75, 0.28, wall)
+
     merlons(a, 'N', Y0, X0 + 0.4, X1 - 0.4, zr + 0.87, h=0.55, w=0.55, gap=0.42, t=0.24, inset=0.02)
     # inner courtyard parapet
     parapet(a, cx0 - 0.25, cx1 + 0.25, cy0 - 0.25, cy1 + 0.25, zr, 0.45, 0.25, 'SKY_Pearl', faces='NSEW')

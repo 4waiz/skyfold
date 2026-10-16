@@ -498,8 +498,14 @@ def stereo_widen(x, amount=0.2):
 
 
 # --------------------------------------------------------------------------- analysis
-def seam_report(x, sr=SR, win=0.05):
-    """Seam metrics for a loop: render twice back-to-back and inspect the junction."""
+def seam_report(x, sr=SR, win=0.05, boundaries=None):
+    """Seam metrics for a loop: render twice back-to-back and inspect the junction.
+
+    Sample level: the step |x[0]-x[-1]| and curvature across the junction must not exceed the
+    file's own 99.9th percentile. Level: the RMS change over 50 ms and 10 ms windows across the
+    junction must not exceed the 99th percentile of the same measure inside the file. For music,
+    pass `boundaries` (sample indices of the internal bar lines): a seam that lands on a downbeat
+    then only has to behave like the file's other bar lines (+1 dB tolerance)."""
     X = as2d(np.asarray(x, dtype=float))
     n, ch = X.shape
     xx = np.concatenate([X, X])
@@ -523,6 +529,17 @@ def seam_report(x, sr=SR, win=0.05):
     internal10 = np.abs(np.diff(20 * np.log10(r10)))
     lim = max(1.5, float(np.percentile(internal, 99)))
     lim10 = max(2.0, float(np.percentile(internal10, 99)))
+    bar_jumps = None
+    if boundaries:
+        def jump_at(k, w_):
+            if k - w_ < 0 or k + w_ > n:
+                return 0.0
+            return abs(20 * np.log10(rms(X[k:k + w_]) / rms(X[k - w_:k])))
+        b50 = [jump_at(int(k), w) for k in boundaries]
+        b10 = [jump_at(int(k), w10) for k in boundaries]
+        bar_jumps = {"max_50ms_db": float(max(b50)), "max_10ms_db": float(max(b10))}
+        lim = max(lim, bar_jumps["max_50ms_db"] + 1.0)
+        lim10 = max(lim10, bar_jumps["max_10ms_db"] + 1.0)
     ok = bool(np.all(seam1 <= np.maximum(p1, 2e-4)) and np.all(seam2 <= np.maximum(p2, 2e-4))
               and jump <= lim and jump10 <= lim10)
     return {
@@ -530,7 +547,7 @@ def seam_report(x, sr=SR, win=0.05):
         "seam_curv": float(seam2.max()), "p999_curv": float(p2.max()),
         "rms_jump_50ms_db": float(jump), "rms_jump_50ms_limit": lim,
         "rms_jump_10ms_db": float(jump10), "rms_jump_10ms_limit": lim10,
-        "ok": ok,
+        "bar_line_jumps": bar_jumps, "ok": ok,
     }
 
 

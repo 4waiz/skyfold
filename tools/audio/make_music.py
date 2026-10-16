@@ -78,8 +78,10 @@ class Track:
         self.buses = {}
         self.rt60, self.verb_gain = rt60, verb_gain
 
-    def bus(self, name, gain_db=0.0, verb=0.2, delay=None):
-        self.buses[name] = {"buf": np.zeros((self.n, 2)), "gain": gain_db, "verb": verb, "delay": delay}
+    def bus(self, name, level=-10.0, verb=0.2, delay=None):
+        """level: target loudness of this bus in LU relative to the mix reference (gated BS.1770, so a
+        part that only plays in one section is judged while it plays)."""
+        self.buses[name] = {"buf": np.zeros((self.n, 2)), "level": level, "verb": verb, "delay": delay}
 
     def s(self, bar, beat=0.0):
         return (bar * self.bar + beat * self.beat) * SR
@@ -164,11 +166,16 @@ class Track:
         send = np.zeros((n, 2))
         levels = {}
         for name, b in self.buses.items():
-            x = b["buf"] * sa.db2a(b["gain"])
+            x = b["buf"]
             if b["delay"]:
                 t_s, fb, taps, lp = b["delay"]
                 x = x + sa.delay(x, t_s, fb=fb, taps=taps, lp_hz=lp, pingpong=True, circular=self.loop)
-            levels[name] = round(float(sa.a2db(np.sqrt(np.mean(x ** 2)) + 1e-12)), 1)
+            if not np.any(x):
+                continue
+            L = sa.lufs(x)
+            g = (b["level"] - 20.0) - L
+            x = x * sa.db2a(g)
+            levels[name] = {"target_lu": b["level"], "measured_lufs": round(L, 1), "gain_db": round(g, 1)}
             dry += x
             send += x * b["verb"]
         ir = sa.reverb_ir(self.rt60, seed=ir_seed)
@@ -220,12 +227,12 @@ def noise_swell(tr, dur_s, rng, lo=300, hi=2500, rise=True):
 # --------------------------------------------------------------------------- 1. menu
 def music_menu_loop():
     tr = Track("music_menu_loop", 72, 24, loop=True, seed=101, rt60=2.6)
-    tr.bus("pad", -9, 0.4)
-    tr.bus("kanun", -9, 0.3, delay=(0.75 * tr.beat, 0.28, 4, 3200))
+    tr.bus("pad", -10, 0.4)
+    tr.bus("kanun", -10, 0.3, delay=(0.75 * tr.beat, 0.28, 4, 3200))
     tr.bus("mar", -7, 0.3)
-    tr.bus("bell", -17, 0.6)
+    tr.bus("bell", -18, 0.6)
     tr.bus("bass", -13, 0.05)
-    tr.bus("perc", -15, 0.2)
+    tr.bus("perc", -17, 0.2)
     C = {
         "Dmaj9": (38, [50, 57, 61, 64, 66]), "E/D": (38, [50, 56, 59, 64, 68]), "Bm9": (35, [47, 54, 57, 61, 62]),
         "Gmaj9": (43, [47, 54, 57, 59, 62]), "Asus4": (45, [50, 52, 57, 62, 64]), "A": (45, [49, 52, 57, 61, 64]),
@@ -278,12 +285,12 @@ def music_menu_loop():
 # --------------------------------------------------------------------------- 2. architect
 def music_architect_loop():
     tr = Track("music_architect_loop", 90, 24, loop=True, seed=202, rt60=2.0)
-    tr.bus("pad", -12, 0.35)
+    tr.bus("pad", -13, 0.35)
     tr.bus("mar", -9, 0.22, delay=(0.75 * tr.beat, 0.22, 3, 2800))
     tr.bus("kanun", -8, 0.3, delay=(0.5 * tr.beat, 0.25, 3, 3000))
-    tr.bus("bass", -10, 0.08)
+    tr.bus("bass", -12, 0.08)
     tr.bus("drums", -12, 0.12)
-    tr.bus("bell", -18, 0.5)
+    tr.bus("bell", -19, 0.5)
     C = {"Bm9": (35, [47, 54, 57, 61, 62]), "E/B": (35, [52, 56, 59, 64]), "Gmaj7": (43, [47, 50, 54, 57]),
          "A": (45, [49, 52, 57, 61]), "F#m7": (42, [45, 49, 52, 54]), "F#7sus4": (42, [47, 49, 52, 54]),
          "Bm/A": (45, [47, 50, 54, 59])}
@@ -338,11 +345,11 @@ def music_architect_loop():
 # --------------------------------------------------------------------------- 3. street
 def music_street_loop():
     tr = Track("music_street_loop", 100, 32, loop=True, seed=303, rt60=1.8)
-    tr.bus("pad", -12, 0.35)
-    tr.bus("oud", -6, 0.25, delay=(0.75 * tr.beat, 0.2, 3, 2600))
-    tr.bus("kanun", -11, 0.3, delay=(0.5 * tr.beat, 0.25, 3, 3200))
-    tr.bus("str", -13, 0.45)
-    tr.bus("bass", -9, 0.05)
+    tr.bus("pad", -13, 0.35)
+    tr.bus("oud", -7, 0.25, delay=(0.75 * tr.beat, 0.2, 3, 2600))
+    tr.bus("kanun", -13, 0.3, delay=(0.5 * tr.beat, 0.25, 3, 3200))
+    tr.bus("str", -14, 0.45)
+    tr.bus("bass", -11, 0.05)
     tr.bus("drums", -9, 0.12)
     C = {"G": (43, [50, 55, 57, 59, 62]), "D/F#": (42, [50, 54, 57, 62]), "Em7": (40, [50, 55, 59, 62]),
          "Cadd9": (36, [48, 52, 55, 62]), "D": (38, [50, 54, 57, 62]), "Dsus4": (38, [50, 55, 57, 62]),
@@ -406,12 +413,12 @@ def music_street_loop():
 # --------------------------------------------------------------------------- 4. drive
 def music_drive_loop():
     tr = Track("music_drive_loop", 112, 32, loop=True, seed=404, rt60=1.6)
-    tr.bus("pad", -13, 0.3)
-    tr.bus("lead", -7, 0.22, delay=(0.75 * tr.beat, 0.22, 3, 3000))
-    tr.bus("kanun", -14, 0.25, delay=(0.75 * tr.beat, 0.3, 4, 3200))
-    tr.bus("bass", -9, 0.03)
+    tr.bus("pad", -14, 0.3)
+    tr.bus("lead", -8, 0.22, delay=(0.75 * tr.beat, 0.22, 3, 3000))
+    tr.bus("kanun", -15, 0.25, delay=(0.75 * tr.beat, 0.3, 4, 3200))
+    tr.bus("bass", -10, 0.03)
     tr.bus("drums", -8, 0.1)
-    tr.bus("fx", -18, 0.4)
+    tr.bus("fx", -19, 0.4)
     C = {"A": (33, [52, 57, 61, 64]), "E/G#": (32, [52, 56, 59, 64]), "F#m7": (30, [54, 57, 61, 64]),
          "Dadd9": (38, [50, 54, 57, 64]), "E": (40, [52, 56, 59, 64]), "D": (38, [50, 54, 57, 62]),
          "Esus4": (40, [52, 57, 59, 64]), "F#m": (30, [54, 57, 61, 66]), "Bm7": (35, [50, 54, 57, 62]),
@@ -468,12 +475,12 @@ def music_drive_loop():
 # --------------------------------------------------------------------------- 5. storm (tension layer)
 def music_storm_loop():
     tr = Track("music_storm_loop", 90, 24, loop=True, seed=505, rt60=2.6)
-    tr.bus("drone", -11, 0.3)
-    tr.bus("ost", -7, 0.2)
+    tr.bus("drone", -10, 0.3)
+    tr.bus("ost", -8, 0.2)
     tr.bus("pad", -15, 0.4)
-    tr.bus("perc", -9, 0.18)
-    tr.bus("str", -19, 0.5)
-    tr.bus("wind", -19, 0.4)
+    tr.bus("perc", -10, 0.18)
+    tr.bus("str", -17, 0.5)
+    tr.bus("wind", -16, 0.4)
     loop_drone(tr, "drone", [26, 38, 45], bright=0.55)
     cyc = ["Dm", "Dm", "Bb", "A"]
     P = {"Dm": [50, 50, 53, 50, 52, 50, 45, 50], "Bb": [46, 46, 50, 46, 48, 46, 41, 46],
@@ -513,14 +520,14 @@ def music_storm_loop():
 def music_finale():
     tr = Track("music_finale", 96, 16, loop=False, tail=4.5, seed=606, rt60=2.8)
     tr.bus("pad", -10, 0.4)
-    tr.bus("kanun", -11, 0.3, delay=(0.75 * tr.beat, 0.25, 3, 3200))
+    tr.bus("kanun", -12, 0.3, delay=(0.75 * tr.beat, 0.25, 3, 3200))
     tr.bus("mar", -9, 0.3)
-    tr.bus("str", -10, 0.45)
-    tr.bus("brass", -12, 0.35)
-    tr.bus("lead", -6, 0.35)
-    tr.bus("bass", -10, 0.05)
-    tr.bus("perc", -10, 0.15)
-    tr.bus("bell", -15, 0.6)
+    tr.bus("str", -11, 0.45)
+    tr.bus("brass", -13, 0.35)
+    tr.bus("lead", -7, 0.35)
+    tr.bus("bass", -12, 0.05)
+    tr.bus("perc", -11, 0.15)
+    tr.bus("bell", -16, 0.6)
     C = {"Dmaj9": (38, [50, 57, 61, 64, 66]), "Bm9": (35, [47, 54, 57, 61, 62]), "Gmaj9": (43, [47, 54, 57, 59, 62]),
          "Asus4": (45, [50, 52, 57, 62]), "A": (45, [49, 52, 57, 61]), "G": (43, [50, 55, 59, 62]),
          "Bm": (35, [50, 54, 59, 62]), "A/C#": (37, [52, 57, 61, 64]), "Bsus4": (47, [52, 54, 59, 64]),
@@ -591,10 +598,10 @@ def music_finale():
 # --------------------------------------------------------------------------- 7-9. stingers
 def stinger_success():
     tr = Track("stinger_success", 120, 1, loop=False, tail=2.4, seed=707, rt60=2.0)
-    tr.bus("kanun", -6, 0.3)
-    tr.bus("pad", -10, 0.4)
+    tr.bus("kanun", -7, 0.3)
+    tr.bus("pad", -11, 0.4)
     tr.bus("bell", -9, 0.5)
-    tr.bus("perc", -12, 0.15)
+    tr.bus("perc", -14, 0.15)
     for i, m in enumerate([62, 66, 69, 74, 78, 81]):
         tr.notes("kanun", 0, [(i * 0.18, 0.5, m)], vel=0.55 + 0.05 * i, pan=-0.2 + 0.08 * i)
     tr.pad("pad", 1.1 / 4, 0.45, [50, 57, 62, 64, 66, 69], attack=0.15, release=1.8, bright=1.0)   # arrives on beat 1.1

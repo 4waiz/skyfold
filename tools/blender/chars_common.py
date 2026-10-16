@@ -464,6 +464,36 @@ class Part:
         return ob
 
 
+def superellipse_ring(cx, cy, ax, ay, n, nu, z, phase=0.0):
+    """Horizontal superellipse |x/ax|^n + |y/ay|^n = 1 at height z (nu points, CCW)."""
+    pts = []
+    e = 2.0 / n
+    for k in range(nu):
+        t = phase + 2 * pi * k / nu
+        c, s = cos(t), sin(t)
+        pts.append(Vector((cx + ax * math.copysign(abs(c) ** e, c),
+                           cy + ay * math.copysign(abs(s) ** e, s), z)))
+    return pts
+
+
+def loft_z(part, sections, nu, mat, n=3.2, cap0=True, cap1=True, band_mats=None):
+    """Loft horizontal superellipse slices. sections: [(z, y_front, y_back, half_width), ...]
+    bottom to top. band_mats {band_index: material} for the quads between slice i and i+1.
+    Caps fan to the slice centre. Returns faces."""
+    rings = []
+    for (z, y0, y1, a) in sections:
+        rings.append(superellipse_ring(0.0, (y0 + y1) / 2, a, (y1 - y0) / 2, n, nu, z))
+    c0 = sum(rings[0], Vector()) / nu if cap0 else None
+    c1 = sum(rings[-1], Vector()) / nu if cap1 else None
+    if c1 is not None:
+        c1 = c1 + Vector((0, 0, 0.0))
+    vr, faces = part.grid(rings, mat, True, c0, c1)
+    if band_mats:
+        for b, m in band_mats.items():
+            part.assign(faces[b * nu:(b + 1) * nu], m)
+    return faces
+
+
 def spline3(points, n_per=3, closed=False):
     """Catmull-Rom through 3D points (passes through every point)."""
     P = [Vector(p) for p in points]
