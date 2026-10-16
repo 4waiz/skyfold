@@ -55,6 +55,7 @@ namespace Skyfold
                 case "perf": body = Perf(); break;
                 case "fullcampaign": body = FullCampaign(); break;
                 case "lookdev": body = LookDev(); break;
+                case "menus": body = Menus(); break;
                 default: Check(false, "unknown scenario " + scenario); body = null; break;
             }
             if (body != null) yield return StartCoroutine(Guard(body));
@@ -371,6 +372,17 @@ namespace Skyfold
             car.RequestEnter();
             yield return WaitUntil(() => car.HasDriver && !car.Busy, 5f, "entered the car");
             yield return Shot("e1_05_car");
+            if (east)
+            {
+                // Stuck recovery: roll forward a little, stop, then hold R to put the car back on the road.
+                yield return HoldKeys(1.2f, Key.W);
+                yield return HoldKeys(1f, Key.Space);
+                yield return HoldKeys(1.4f, Key.R);
+                yield return new WaitForSecondsRealtime(1.2f);
+                var cc = CityLayout.CellCenter(car.Cell);
+                float off = new Vector2(car.Position.x - cc.x, car.Position.z - cc.z).magnitude;
+                Check(car.HasDriver && !car.Busy && off < 1.5f, $"hold R puts the car back on the road ({off:0.0} m from the lane centre point)");
+            }
             // Episode 1 ends as soon as the car is across the bridge the player built.
             yield return DriveTo("substation.park", 150f, () => MD.State != MissionState.Active, false);
             Check(car.CrossedBuiltBridge || MD.State != MissionState.Active, "drove across the built bridge to the island");
@@ -678,6 +690,38 @@ namespace Skyfold
             yield return new WaitForSecondsRealtime(0.3f);
             yield return Shot("look_d_no_highlight_colour");
             Check(true, "look-dev probe captured");
+        }
+
+        /// <summary>Every menu screen opens and Esc backs out; settings survive a save and reload.</summary>
+        IEnumerator Menus()
+        {
+            Root.ChooseDesktop();
+            yield return new WaitForSecondsRealtime(1f);
+            foreach (var screen in new[] { "episodes", "controls", "comfort", "audio", "display", "credits" })
+            {
+                MenuController.Instance.Show(screen);
+                yield return new WaitForSecondsRealtime(0.6f);
+                Check(MenuController.Instance.Screen == screen, $"menu screen '{screen}' opens");
+                yield return Shot("menu_" + screen);
+                yield return Press(Key.Escape);
+                yield return new WaitForSecondsRealtime(0.4f);
+                Check(MenuController.Instance.Screen == "title", $"Esc returns from '{screen}' to the title");
+            }
+            var s = SettingsStore.Current;
+            float music = s.music;
+            bool subs = s.subtitles;
+            s.music = 0.37f;
+            s.subtitles = !subs;
+            SettingsStore.Save();
+            SettingsStore.Load();
+            Check(Mathf.Abs(SettingsStore.Current.music - 0.37f) < 0.001f && SettingsStore.Current.subtitles == !subs, "settings survive a save and reload");
+            SettingsStore.Current.music = music;
+            SettingsStore.Current.subtitles = subs;
+            SettingsStore.Save();
+            MenuController.Instance.Show("launcher", false);
+            yield return new WaitForSecondsRealtime(0.6f);
+            yield return Shot("menu_launcher");
+            Check(MenuController.Instance.Screen == "launcher", "launcher (laptop or VR choice) shows");
         }
 
         IEnumerator Tour()
