@@ -215,11 +215,12 @@ namespace Skyfold.EditorTools
                 var cl = ModelLibrary.Spawn(i % 3 == 0 ? "cloud_puff_a" : i % 3 == 1 ? "cloud_puff_b" : "cloud_puff_c", clouds.transform, p, (float)c.Rng.NextDouble() * 360f, 2.6f + (float)c.Rng.NextDouble() * 2f);
                 foreach (var rr in cl.GetComponentsInChildren<Renderer>()) rr.shadowCastingMode = ShadowCastingMode.Off;
             }
-            c.StormFront = Child(c.Env, "Storm Front", new Vector3(520f, 0f, 300f)).transform;
+            c.StormFront = Child(c.Env, "Storm Front", new Vector3(980f, -70f, 760f)).transform;
             for (int i = 0; i < (ModelLibrary.Has("storm_cloud") ? 9 : 0); i++)
             {
-                var p = new Vector3(-180f + i * 45f, 90f + (i % 3) * 25f, (i % 2) * 60f);
-                var sc = ModelLibrary.Spawn("storm_cloud", c.StormFront, p, i * 37f, 4f + (i % 3));
+                // storm_cloud is about 55 m wide; x2.4-3.4 makes a 130-190 m bank piece.
+                var p = new Vector3(-200f + i * 50f, 80f + (i % 3) * 22f, (i % 2) * 70f);
+                var sc = ModelLibrary.Spawn("storm_cloud", c.StormFront, p, i * 37f, 2.4f + (i % 3) * 0.5f);
                 foreach (var rr in sc.GetComponentsInChildren<Renderer>()) rr.shadowCastingMode = ShadowCastingMode.Off;
             }
 

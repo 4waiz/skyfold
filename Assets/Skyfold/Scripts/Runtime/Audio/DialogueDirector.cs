@@ -24,6 +24,8 @@ namespace Skyfold
     /// <summary>
     /// Plays Noor's lines one at a time with captions. Lines never overlap; restarting a mission
     /// clears the queue. Missing audio falls back to a timed caption so nothing blocks.
+    /// Objective lines carry their objective as context: when the player finishes that objective
+    /// before Noor gets to them, they are dropped, so instructions never trail behind the player.
     /// </summary>
     public sealed class DialogueDirector : MonoBehaviour
     {
@@ -32,7 +34,14 @@ namespace Skyfold
         public float gapBetweenLines = 0.3f;
 
         readonly Dictionary<string, VoLine> m_Lines = new Dictionary<string, VoLine>();
-        readonly Queue<string> m_Queue = new Queue<string>();
+        struct Pending
+        {
+            public string id, context;
+            public float queuedAt, maxWait;
+        }
+
+        readonly List<Pending> m_Queue = new List<Pending>();
+        float m_Clock; // advances only while not paused, so pausing never makes lines stale
         VoLine m_Current;
         float m_Remaining;
         float m_Gap;
@@ -81,14 +90,25 @@ namespace Skyfold
             return id != null && m_Lines.TryGetValue(id, out var l) ? l : null;
         }
 
-        /// <summary>Queues a line (resolving desktop/VR variants). Duplicate queued lines are ignored.</summary>
-        public void Play(string baseId)
+        /// <summary>
+        /// Queues a line (resolving desktop/VR variants). Duplicate queued lines are ignored.
+        /// A context (objective id) lets <see cref="DropContext"/> discard it; maxWait &gt; 0 drops it
+        /// if it has waited that many seconds behind other lines.
+        /// </summary>
+        public void Play(string baseId, string context = null, float maxWait = 0f)
         {
             var id = Resolve(baseId);
             if (id == null) return;
             if (m_Current != null && m_Current.id == id) return;
-            foreach (var q in m_Queue) if (q == id) return;
-            m_Queue.Enqueue(id);
+            foreach (var q in m_Queue) if (q.id == id) return;
+            m_Queue.Add(new Pending { id = id, context = context, queuedAt = m_Clock, maxWait = maxWait });
+        }
+
+        /// <summary>Discards queued lines that belong to a finished objective.</summary>
+        public void DropContext(string context)
+        {
+            if (string.IsNullOrEmpty(context)) return;
+            m_Queue.RemoveAll(q => q.context == context);
         }
 
         /// <summary>Stops the current line and the queue, then plays this one now (used for warnings and failure).</summary>
@@ -118,6 +138,7 @@ namespace Skyfold
         {
             if (m_Paused) return;
             float dt = Time.unscaledDeltaTime;
+            m_Clock += dt;
             if (m_Current != null)
             {
                 m_Remaining -= dt;
@@ -135,7 +156,10 @@ namespace Skyfold
             if (m_Gap > 0f) { m_Gap -= dt; return; }
             if (m_Queue.Count == 0) return;
 
-            var id = m_Queue.Dequeue();
+            var next = m_Queue[0];
+            m_Queue.RemoveAt(0);
+            if (next.maxWait > 0f && m_Clock - next.queuedAt > next.maxWait) return; // stale: the moment has passed
+            var id = next.id;
             if (!m_Lines.TryGetValue(id, out var line)) return;
             m_Current = line;
             float duration = 0f;

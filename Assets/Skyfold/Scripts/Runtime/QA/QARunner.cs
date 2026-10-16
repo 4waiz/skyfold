@@ -365,7 +365,8 @@ namespace Skyfold
             yield return DriveTo("substation.park", 120f);
             yield return Shot("e1_06_island");
             yield return WaitUntil(() => MD.State == MissionState.Results || MD.State == MissionState.Success, 30f, "episode 1 success");
-            yield return new WaitForSecondsRealtime(4f);
+            yield return WaitUntil(() => MD.State == MissionState.Results && MenuController.Instance.Screen == "results", 20f, "results screen shown");
+            yield return new WaitForSecondsRealtime(1.5f);
             yield return Shot("e1_07_results");
             var r = MD.LastResult;
             Check(r != null && r.Success, "result recorded");

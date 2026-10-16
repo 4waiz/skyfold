@@ -25,6 +25,7 @@ namespace Skyfold
         CellSocket m_Socket;
         Transform m_DesktopHold;
         float m_LostTimer;
+        Rigidbody m_IgnoredHost; // vehicle whose colliders this cell currently ignores
         static readonly int EmissionId = Shader.PropertyToID("_EmissionColor");
         MaterialPropertyBlock m_Block;
 
@@ -130,6 +131,7 @@ namespace Skyfold
             transform.localRotation = Quaternion.identity;
             m_Socket = s;
             Location = s.location;
+            IgnoreHost(s);
             s.OnInserted(this);
             AudioDirector.Instance?.PlayAt("cell_insert", transform.position, 1f);
             PlayerRigs.Instance?.HapticBoth(0.5f, 0.1f);
@@ -175,7 +177,31 @@ namespace Skyfold
             transform.localRotation = Quaternion.identity;
             m_Socket = s;
             Location = s.location;
+            IgnoreHost(s);
             s.OnInserted(this, silent: true);
+        }
+
+        /// <summary>
+        /// A cell socketed in a moving body (the car's cradle) sits inside that body's collider. Without
+        /// this the physics engine keeps pushing the car out of its own cargo and the car cannot move.
+        /// </summary>
+        void IgnoreHost(CellSocket s)
+        {
+            var host = s != null ? s.GetComponentInParent<Rigidbody>() : null;
+            if (host == null || host == m_Rb) return;
+            if (m_IgnoredHost != null && m_IgnoredHost != host) SetHostCollisions(m_IgnoredHost, true);
+            SetHostCollisions(host, false);
+            m_IgnoredHost = host;
+        }
+
+        void SetHostCollisions(Rigidbody host, bool collide)
+        {
+            var mine = GetComponentsInChildren<Collider>(true);
+            foreach (var hc in host.GetComponentsInChildren<Collider>(true))
+            {
+                if (hc.transform.IsChildOf(transform)) continue;
+                foreach (var c in mine) Physics.IgnoreCollision(c, hc, !collide);
+            }
         }
 
         void SetPhysics(bool dynamic)
@@ -195,6 +221,17 @@ namespace Skyfold
                 float pulse = 1.6f + 0.8f * Mathf.Sin(Time.time * 3f);
                 m_Block.SetColor(EmissionId, new Color(0.21f, 0.88f, 0.82f) * pulse);
                 core.SetPropertyBlock(m_Block);
+            }
+
+            // Once out of the cradle and clear of the car, collide with it again.
+            if (m_IgnoredHost != null && m_Socket == null && Location != CellLocation.Held)
+            {
+                var hostCol = m_IgnoredHost.GetComponent<Collider>();
+                if (hostCol == null || (hostCol.ClosestPoint(transform.position) - transform.position).sqrMagnitude > 0.36f)
+                {
+                    SetHostCollisions(m_IgnoredHost, true);
+                    m_IgnoredHost = null;
+                }
             }
 
             if (Location == CellLocation.Loose)

@@ -233,8 +233,9 @@ namespace Skyfold
                 bool speak = !tutorialStep || g == Guidance.FullTutorial;
                 if (speak)
                 {
-                    if (o.VoiceBefore != null) foreach (var v in o.VoiceBefore) Ctx.Dialogue.Play(v);
-                    if (!string.IsNullOrEmpty(o.Voice)) Ctx.Dialogue.Play(o.Voice);
+                    // Tagged with the objective: dropped if the player finishes it before Noor gets there.
+                    if (o.VoiceBefore != null) foreach (var v in o.VoiceBefore) Ctx.Dialogue.Play(v, o.Id, 12f);
+                    if (!string.IsNullOrEmpty(o.Voice)) Ctx.Dialogue.Play(o.Voice, o.Id, 12f);
                 }
                 var target = Ctx.Target(o.GuideTarget);
                 if (target != null) Ctx.Nuri.PointAt(target, 5f);
@@ -252,6 +253,7 @@ namespace Skyfold
         {
             var o = CurrentObjective;
             if (o == null) return;
+            Ctx.Dialogue.DropContext(o.Id);
             try { o.OnComplete?.Invoke(Ctx); }
             catch (Exception e) { Debug.LogException(e); }
             AudioDirector.Instance?.PlayUI("objective_complete", 0.8f);
@@ -268,7 +270,8 @@ namespace Skyfold
             if (State == MissionState.Success)
             {
                 m_SuccessDelay -= Time.unscaledDeltaTime;
-                if (m_SuccessDelay <= 0f && !Ctx.Dialogue.IsSpeaking) SetState(MissionState.Results);
+                // Let Noor finish the closing line, but never hold the results back for long.
+                if (m_SuccessDelay <= 0f && (!Ctx.Dialogue.IsSpeaking || m_SuccessDelay < -8f)) SetState(MissionState.Results);
                 return;
             }
             if (State != MissionState.Active) return;
@@ -304,7 +307,7 @@ namespace Skyfold
             AudioDirector.Instance?.PlayUI("hint_ping", 0.7f);
             var target = Ctx.Target(o.GuideTarget);
             if (target != null) Ctx.Nuri.PointAt(target, 6f);
-            if (o.Id == "t.place" && m_HintLevel == 1 && SettingsStore.Current.guidance == Guidance.FullTutorial) Ctx.Dialogue.Play("g.hint_socket");
+            if (o.Id == "t.place" && m_HintLevel == 1 && SettingsStore.Current.guidance == Guidance.FullTutorial) Ctx.Dialogue.Play("g.hint_socket", o.Id, 8f);
             HintShown?.Invoke(CurrentHint);
         }
 

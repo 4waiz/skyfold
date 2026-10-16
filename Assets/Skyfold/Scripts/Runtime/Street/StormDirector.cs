@@ -14,7 +14,8 @@ namespace Skyfold
         public Light sun;
         public Material sky;
         public Transform stormFront;
-        public Vector3 frontStart = new Vector3(520f, 0f, 300f), frontEnd = new Vector3(230f, 0f, 160f);
+        // The bank starts low on the north-east horizon (mostly in the haze) and rolls in over the airfield.
+        public Vector3 frontStart = new Vector3(980f, -70f, 760f), frontEnd = new Vector3(330f, 0f, 250f);
         public ParticleSystem rain;
         public Light lightning;
 
