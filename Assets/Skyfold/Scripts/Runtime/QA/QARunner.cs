@@ -52,6 +52,7 @@ namespace Skyfold
                 case "soak": body = Soak(15f * 60f); break;
                 case "campaign": body = Campaign(); break;
                 case "tour": body = Tour(); break;
+                case "perf": body = Perf(); break;
                 default: Check(false, "unknown scenario " + scenario); body = null; break;
             }
             if (body != null) yield return StartCoroutine(Guard(body));
@@ -207,7 +208,7 @@ namespace Skyfold
         /// Drives the courier car with real W/A/S/D/Space keyboard events, like a careful player:
         /// follows the right-hand lane, slows for corners, backs up if stuck, stops at the target.
         /// </summary>
-        IEnumerator DriveTo(string target, float timeout)
+        IEnumerator DriveTo(string target, float timeout, Func<bool> done = null, bool requireTarget = true)
         {
             var car = CourierVehicle.Instance;
             var cells = Root.City.FindRoute("depot", "substation");
@@ -225,7 +226,9 @@ namespace Skyfold
             float t = 0f, nextLog = 0f, stuck = 0f, driven = 0f;
             int stuckEvents = 0;
             Vector3 last = car.Position;
-            while (t < timeout && car.DistanceTo(target) > 6.5f)
+            var carBody = car.GetComponent<Rigidbody>();
+            int vehicleMask = LayerMask.GetMask("Vehicle");
+            while (t < timeout && car.DistanceTo(target) > 6.5f && (done == null || !done()))
             {
                 if (!car.HasDriver) { Log("driver left the car unexpectedly"); break; }
                 float v = car.Speed;
@@ -236,6 +239,10 @@ namespace Skyfold
                 float targetV = Mathf.Lerp(11.5f, 4.5f, Mathf.InverseLerp(12f, 70f, turn));
                 float toGoal = car.DistanceTo(target);
                 if (toGoal < 16f) targetV = Mathf.Min(targetV, 1.8f + toGoal * 0.35f);
+                // Like a careful driver: slow for any vehicle in the lane ahead.
+                if (Physics.SphereCast(car.Position + Vector3.up * 0.9f + car.transform.forward * 2f, 0.55f, car.transform.forward, out var ahead,
+                        4f + Mathf.Abs(v) * 1.2f, vehicleMask, QueryTriggerInteraction.Ignore) && ahead.rigidbody != carBody)
+                    targetV = Mathf.Min(targetV, Mathf.Max(0f, ahead.distance - 2.5f) * 0.6f);
 
                 var keys = new List<Key>();
                 if (v < targetV - 0.3f) keys.Add(Key.W);
@@ -287,7 +294,7 @@ namespace Skyfold
             yield return null;
             CourierVehicle.DebugEvent = null;
             Log($"drive finished after {t:0.0}s, {driven:0} m driven, {stuckEvents} stuck events");
-            Check(car.DistanceTo(target) <= 9f, $"car reached {target} ({car.DistanceTo(target):0.0} m)");
+            if (requireTarget) Check(car.DistanceTo(target) <= 9f, $"car reached {target} ({car.DistanceTo(target):0.0} m)");
             Check(stuckEvents == 0, "drove the route without getting stuck");
         }
 
@@ -362,7 +369,9 @@ namespace Skyfold
             car.RequestEnter();
             yield return WaitUntil(() => car.HasDriver && !car.Busy, 5f, "entered the car");
             yield return Shot("e1_05_car");
-            yield return DriveTo("substation.park", 120f);
+            // Episode 1 ends as soon as the car is across the bridge the player built.
+            yield return DriveTo("substation.park", 150f, () => MD.State != MissionState.Active, false);
+            Check(car.CrossedBuiltBridge || MD.State != MissionState.Active, "drove across the built bridge to the island");
             yield return Shot("e1_06_island");
             yield return WaitUntil(() => MD.State == MissionState.Results || MD.State == MissionState.Success, 30f, "episode 1 success");
             yield return WaitUntil(() => MD.State == MissionState.Results && MenuController.Instance.Screen == "results", 20f, "results screen shown");
@@ -531,6 +540,83 @@ namespace Skyfold
             yield return Shot("tour_11_overlook");
             Check(true, "tour captured");
         }
+        // ------------------------------------------------------------------ performance
+        /// <summary>Frame-time statistics over a window (uncapped: vsync is turned off for perf runs).</summary>
+        IEnumerator Measure(string label, float seconds)
+        {
+            var frames = new List<float>();
+            float t = 0f;
+            long gc0 = GC.CollectionCount(0);
+            while (t < seconds)
+            {
+                yield return null;
+                float dt = Time.unscaledDeltaTime;
+                frames.Add(dt);
+                t += dt;
+            }
+            frames.Sort();
+            float sum = 0f;
+            foreach (var f in frames) sum += f;
+            float avg = sum / frames.Count;
+            float p99 = frames[Mathf.Min(frames.Count - 1, (int)(frames.Count * 0.99f))];
+            float max = frames[frames.Count - 1];
+            Log($"PERF {label}: {frames.Count} frames in {t:0.0}s, avg {1f / avg:0} fps ({avg * 1000f:0.00} ms), 1% low {1f / p99:0} fps ({p99 * 1000f:0.00} ms), worst {max * 1000f:0.0} ms, gen0 GCs {GC.CollectionCount(0) - gc0}");
+        }
+
+        IEnumerator Perf()
+        {
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = -1;
+            Log($"PERF setup: {Screen.width}x{Screen.height} {(Screen.fullScreen ? "fullscreen" : "windowed")}, quality '{QualitySettings.names[QualitySettings.GetQualityLevel()]}', MSAA {QualitySettings.antiAliasing}, vsync off, {SystemInfo.graphicsDeviceName} ({SystemInfo.graphicsDeviceType}), {SystemInfo.processorType}");
+            Root.ChooseDesktop();
+            yield return new WaitForSecondsRealtime(2f);
+            yield return Measure("title screen", 6f);
+            Root.StartMission(MissionCatalog.Demo);
+            yield return new WaitForSecondsRealtime(2f);
+            yield return Measure("Atelier with the miniature city", 6f);
+            yield return PlacePiece("piece.bridge", "bridge_east", 0);
+            yield return WaitUntil(() => MD.CurrentObjective != null && MD.CurrentObjective.Id == "t.fold", 20f, "fold objective");
+            yield return Press(Key.Q);
+            yield return WaitUntil(() => FoldController.Instance.InStreet && !FoldController.Instance.Busy, 5f, "folded");
+            var cell = PowerCell.Instance;
+            var car = CourierVehicle.Instance;
+            PlayerRigs.Instance.TeleportTo(new Vector3(52f, 0.15f, 30f), 70f);
+            yield return new WaitForSecondsRealtime(1f);
+            yield return Measure("street: avenue towards the depot", 6f);
+            PlayerRigs.Instance.TeleportTo(new Vector3(118f, 0.15f, 112f), 300f);
+            yield return new WaitForSecondsRealtime(1f);
+            yield return Measure("street: airfield and runway", 6f);
+            yield return WalkTo(cell.transform.position + Vector3.back * 1.2f, 0f);
+            cell.Interact(InteractorKind.Desktop);
+            yield return WalkTo(car.cradle.transform.position + car.transform.forward * -1.4f, car.transform.eulerAngles.y);
+            car.cradle.Interact(InteractorKind.Desktop);
+            yield return WalkTo(car.exitLeft.position, car.transform.eulerAngles.y + 90f);
+            car.RequestEnter();
+            yield return WaitUntil(() => car.HasDriver && !car.Busy, 5f, "entered car");
+            var drive = StartCoroutine(Measure("driving across the bridge (chase camera)", 11f));
+            yield return DriveTo("substation.park", 60f);
+            yield return drive;
+            yield return Press(Key.E);
+            yield return new WaitForSecondsRealtime(1f);
+            if (!car.HasDriver) car.cradle.Interact(InteractorKind.Desktop);
+            var socket = Substation.Instance.socket;
+            yield return WalkTo(socket.transform.position + Vector3.back * 1.5f, 0f);
+            socket.Interact(InteractorKind.Desktop);
+            yield return WaitUntil(() => MD.CurrentObjective != null && MD.CurrentObjective.Id == "d.beacons", 10f, "beacon objective");
+            BeaconSystem.Instance.masterSwitch.Interact(InteractorKind.Desktop);
+            yield return WaitUntil(() => AircraftSequence.Instance.ConditionsMet, 15f, "aircraft ready");
+            var tower = Root.Layout.GetAnchor("tower.lever");
+            PlayerRigs.Instance.TeleportTo(tower.Position + new Vector3(0f, 0f, -1.2f), 0f);
+            FindAnyObjectByType<DepartureLever>().Interact(InteractorKind.Desktop);
+            PlayerRigs.Instance.TeleportTo(new Vector3(100f, 0.15f, 120f), 250f);
+            yield return WaitUntil(() => AircraftSequence.Instance.State >= AircraftState.TakeoffRoll, 45f, "takeoff roll");
+            yield return Measure("takeoff roll and climb", 8f);
+            yield return WaitUntil(() => MD.State == MissionState.Results, 60f, "demo results");
+            yield return Measure("results screen", 4f);
+            Log($"PERF memory: managed heap {GC.GetTotalMemory(false) / (1024 * 1024)} MB, system RAM {SystemInfo.systemMemorySize} MB, VRAM {SystemInfo.graphicsMemorySize} MB");
+            QualitySettings.vSyncCount = 1;
+        }
+
         void Finish()
         {
             Log($"QA finished: {m_Checks - m_Failures}/{m_Checks} checks passed");

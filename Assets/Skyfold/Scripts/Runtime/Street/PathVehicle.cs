@@ -5,7 +5,8 @@ namespace Skyfold
 {
     /// <summary>
     /// A kinematic vehicle that follows a world-space polyline (convoy shuttles, city traffic).
-    /// It slows for anything ahead and never leaves the road graph.
+    /// It slows for anything ahead and never leaves the road graph. When the courier car comes up
+    /// behind, it pulls towards the kerb and waits so the player can pass.
     /// </summary>
     public sealed class PathVehicle : MonoBehaviour
     {
@@ -20,6 +21,7 @@ namespace Skyfold
         float m_Speed;
         float m_Spin;
         float m_StartDelay;
+        float m_Lateral, m_YieldTime;
         Rigidbody m_Rb;
 
         public bool Moving => m_Index < m_Path.Count;
@@ -75,9 +77,35 @@ namespace Skyfold
             if (m_Index < m_Path.Count)
             {
                 Vector3 p = m_Path[m_Index];
+                target = cruiseSpeed;
+
+                // Make way for the courier car: ease towards the kerb and wait while it passes
+                // (never for more than a few seconds, so a parked courier cannot block traffic forever).
+                float wantLateral = 0f;
+                var courier = CourierVehicle.Instance;
+                if (courier != null && courier.HasDriver && m_YieldTime < 6f)
+                {
+                    Vector3 rel = courier.Position - transform.position; rel.y = 0f;
+                    float behind = -Vector3.Dot(rel, transform.forward);
+                    bool sameWay = Vector3.Dot(courier.transform.forward, transform.forward) > 0.6f;
+                    if (sameWay && behind > -3f && behind < 16f && Mathf.Abs(Vector3.Dot(rel, transform.right)) < 4f && courier.Speed > 1.5f)
+                    {
+                        wantLateral = 2.4f;
+                        target = Mathf.Min(target, 1f);
+                        m_YieldTime += dt;
+                    }
+                }
+                if (wantLateral == 0f) m_YieldTime = Mathf.Max(0f, m_YieldTime - dt * 0.5f);
+                m_Lateral = Mathf.MoveTowards(m_Lateral, wantLateral, dt * 1.6f);
+                if (m_Lateral > 0.01f)
+                {
+                    // Aim at the same waypoint shifted sideways along the current segment.
+                    Vector3 seg = m_Index > 0 ? m_Path[m_Index] - m_Path[m_Index - 1] : p - transform.position;
+                    seg.y = 0f;
+                    if (seg.sqrMagnitude > 0.01f) p += Vector3.Cross(Vector3.up, seg.normalized) * m_Lateral;
+                }
                 Vector3 to = p - transform.position; to.y = 0f;
                 if (to.magnitude < 1.6f) { m_Index++; return; }
-                target = cruiseSpeed;
                 // Slow into corners.
                 if (m_Index + 1 < m_Path.Count)
                 {
