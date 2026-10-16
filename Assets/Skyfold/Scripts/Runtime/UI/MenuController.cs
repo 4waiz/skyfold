@@ -137,7 +137,7 @@ namespace Skyfold
                 panel.anchorMin = panel.anchorMax = new Vector2(0f, 1f);
                 panel.pivot = new Vector2(0f, 1f);
                 panel.anchoredPosition = new Vector2(110f, -262f);
-                panel.sizeDelta = new Vector2(m_Screen == "launcher" ? 700f : 600f, 0f);
+                panel.sizeDelta = new Vector2(700f, 0f); // wide enough for a label plus its detail on one line
                 var vlg = panel.GetComponent<VerticalLayoutGroup>();
                 vlg.spacing = 8f;
                 vlg.padding = new RectOffset(24, 24, 24, 24);

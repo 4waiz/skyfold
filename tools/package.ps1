@@ -63,7 +63,20 @@ if ($bad) { $bad | ForEach-Object { Write-Output ("BLOCKED: " + $_.FullName) }; 
 if (Test-Path $zip) { Remove-Item $zip -Force }
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
-[System.IO.Compression.ZipFile]::CreateFromDirectory($stage, $zip, [System.IO.Compression.CompressionLevel]::Optimal, $true)
+# Entries are added one by one so their paths use forward slashes (the ZIP standard); Windows
+# PowerShell's CreateFromDirectory writes backslashes, which other unzip tools mishandle.
+$zipStream = [System.IO.File]::Open($zip, [System.IO.FileMode]::CreateNew)
+$archive = New-Object System.IO.Compression.ZipArchive($zipStream, [System.IO.Compression.ZipArchiveMode]::Create)
+try {
+    Get-ChildItem $stage -Recurse -File | ForEach-Object {
+        $entry = "SKYFOLD/" + $_.FullName.Substring($stage.Length + 1).Replace('\', '/')
+        [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive, $_.FullName, $entry, [System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+    }
+}
+finally {
+    $archive.Dispose()
+    $zipStream.Dispose()
+}
 $zipMb = [math]::Round((Get-Item $zip).Length / 1MB, 1)
 $stageMb = [math]::Round(((Get-ChildItem $stage -Recurse -File | Measure-Object Length -Sum).Sum) / 1MB, 1)
 Write-Output "Staged: $stage ($stageMb MB)"

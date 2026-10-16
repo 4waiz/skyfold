@@ -17,9 +17,12 @@ public static class Win {
   [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr hWnd, out RECT rect);
   [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
   [DllImport("user32.dll")] public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+  [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();
 }
 "@
 
+# Physical pixels, so the capture matches the window on scaled (for example 150%) displays.
+[Win]::SetProcessDPIAware() | Out-Null
 Get-Process SKYFOLD -ErrorAction SilentlyContinue | Stop-Process -Force
 Start-Sleep -Milliseconds 500
 $t0 = Get-Date

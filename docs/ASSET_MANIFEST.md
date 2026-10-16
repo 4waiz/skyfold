@@ -21,6 +21,7 @@ Verification status wording: **Verified** means the licence text was read from t
 | Fallback font | LiberationSans SDF (TextMesh Pro Essential Resources) | Unity TextMesh Pro package | LiberationSans: SIL OFL 1.1 (licence file included); TMP resources: Unity Companion License | Verified | Not AI-generated |
 | App icons | SKYFOLD emblem plus laptop / VR headset / demo badges (`.png`, `.ico`) | Drawn procedurally with Pillow by `tools/icons/make_icons.py` | Original work | Verified | Not AI-generated |
 | UI sprites | Rounded panels, circles, check / cross, arrow, Noor's radio glyph | Generated at runtime in code (`UIKit.cs`) | Original work | Verified | Not AI-generated |
+| Screenshots (`docs\screenshots`) | Ten frames of the menus, Atelier, city, car, takeoff and results | Captured by the release build during automated QA, then resized and saved as JPG by `tools\qa\curate_screenshots.py`. No other editing. | Original work | Verified | Not AI-generated (real game frames) |
 | XR rig | XR Interaction Toolkit 3.6.0 *Starter Assets* sample (XR Origin, interactors, tunneling vignette, controller models hidden behind the courier gloves) | Unity Technologies | Unity Companion License | Verified (package licence) | Not AI-generated |
 | Engine and packages | Unity 6000.6.2f1 player, URP 17.6, Input System 1.20, XR Management 4.7, OpenXR 1.18, XRI 3.6, uGUI / TextMesh Pro 2.6 | Unity Technologies | Unity Terms of Service / Unity Companion License | Verified (Package Manager) | Not AI-generated |
 
