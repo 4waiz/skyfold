@@ -56,6 +56,7 @@ namespace Skyfold
                 case "fullcampaign": body = FullCampaign(); break;
                 case "lookdev": body = LookDev(); break;
                 case "menus": body = Menus(); break;
+                case "walk": body = Walk(); break;
                 default: Check(false, "unknown scenario " + scenario); body = null; break;
             }
             if (body != null) yield return StartCoroutine(Guard(body));
@@ -722,6 +723,67 @@ namespace Skyfold
             yield return new WaitForSecondsRealtime(0.6f);
             yield return Shot("menu_launcher");
             Check(MenuController.Instance.Screen == "launcher", "launcher (laptop or VR choice) shows");
+        }
+
+        /// <summary>Desktop on-foot controls with real input: W walks, Shift slows, the mouse turns, E picks up.</summary>
+        IEnumerator Walk()
+        {
+            Root.ChooseDesktop();
+            yield return new WaitForSecondsRealtime(0.5f);
+            Root.StartMission(MissionCatalog.Demo);
+            yield return new WaitForSecondsRealtime(1f);
+            yield return PlacePiece("piece.bridge", "bridge_east", 0);
+            yield return WaitUntil(() => MD.CurrentObjective != null && MD.CurrentObjective.Id == "t.fold", 20f, "fold objective");
+            yield return Press(Key.Q);
+            yield return WaitUntil(() => FoldController.Instance.InStreet && !FoldController.Instance.Busy, 5f, "Q folds down into the street");
+            yield return new WaitForSecondsRealtime(0.5f);
+            var body = PlayerRigs.Instance.desktop;
+
+            Vector3 p0 = body.FeetPosition;
+            Vector3 fwd = body.transform.forward;
+            yield return HoldKeys(1.5f, Key.W);
+            float walked = Vector3.Dot(body.FeetPosition - p0, fwd);
+            Check(walked > 3f, $"W walks forward ({walked:0.0} m in 1.5 s)");
+
+            p0 = body.FeetPosition;
+            fwd = body.transform.forward;
+            yield return HoldKeys(1.5f, Key.W, Key.LeftShift);
+            float slow = Vector3.Dot(body.FeetPosition - p0, fwd);
+            Check(slow > 1f && slow < walked * 0.75f, $"Shift walks slowly ({slow:0.0} m in 1.5 s)");
+
+            float yaw0 = body.transform.eulerAngles.y;
+            var mouse = Mouse.current;
+            if (mouse != null)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    InputSystem.QueueStateEvent(mouse, new MouseState { delta = new Vector2(15f, 0f) });
+                    yield return null;
+                }
+                InputSystem.QueueStateEvent(mouse, new MouseState());
+                yield return null;
+            }
+            float turned = Mathf.Abs(Mathf.DeltaAngle(yaw0, body.transform.eulerAngles.y));
+            Check(turned > 5f, $"mouse look turns the view ({turned:0} degrees, cursor {Cursor.lockState})");
+
+            var cell = PowerCell.Instance;
+            Vector3 stand = cell.transform.position + Vector3.back * 1.4f;
+            Vector3 to = cell.transform.position - stand;
+            yield return WalkTo(new Vector3(stand.x, body.FeetPosition.y, stand.z), Mathf.Atan2(to.x, to.z) * Mathf.Rad2Deg);
+            float eye = body.cam.transform.position.y;
+            body.SetPitch(Mathf.Atan2(eye - cell.transform.position.y, 1.4f) * Mathf.Rad2Deg);
+            yield return new WaitForSecondsRealtime(0.4f);
+            yield return Shot("walk_01_cell_prompt");
+            yield return Press(Key.E);
+            yield return new WaitForSecondsRealtime(0.4f);
+            Check(cell.Location == CellLocation.Held, "E picks up the power cell");
+            yield return Shot("walk_02_cell_held");
+
+            // Event operator key: F5 restarts the demo from the top (campaign untouched).
+            yield return Press(Key.F5);
+            yield return new WaitForSecondsRealtime(2f);
+            Check(MD.Current != null && MD.Current.IsDemo && MD.State == MissionState.Active && FoldController.Instance.InAtelier &&
+                  MD.CurrentObjective != null && MD.CurrentObjective.Id == "t.grab", "F5 operator reset restarts the demo in the Atelier");
         }
 
         IEnumerator Tour()

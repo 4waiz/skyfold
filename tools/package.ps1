@@ -10,7 +10,7 @@ $root = Split-Path -Parent $PSScriptRoot
 $build = Join-Path $root "Builds\Release\SKYFOLD"
 $releaseDir = Join-Path $root "Release"
 $stage = Join-Path $releaseDir "SKYFOLD"
-$version = ((Select-String -Path (Join-Path $root "ProjectSettings\ProjectSettings.asset") -Pattern "bundleVersion: (.+)").Matches[0].Groups[1].Value).Trim()
+$version = ((Select-String -Path (Join-Path $root "ProjectSettings\ProjectSettings.asset") -Pattern "^\s*bundleVersion: (.+)" -CaseSensitive).Matches[0].Groups[1].Value).Trim()
 $zip = Join-Path $releaseDir ("SKYFOLD_v{0}_win64.zip" -f $version)
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 
@@ -61,6 +61,7 @@ if ($bad) { $bad | ForEach-Object { Write-Output ("BLOCKED: " + $_.FullName) }; 
 
 # 6) ZIP (contains the SKYFOLD folder).
 if (Test-Path $zip) { Remove-Item $zip -Force }
+Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 [System.IO.Compression.ZipFile]::CreateFromDirectory($stage, $zip, [System.IO.Compression.CompressionLevel]::Optimal, $true)
 $zipMb = [math]::Round((Get-Item $zip).Length / 1MB, 1)
