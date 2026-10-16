@@ -22,7 +22,7 @@ namespace Skyfold
         CanvasGroup m_Group;
         RectTransform m_ObjectiveCard, m_TimerCard, m_PromptCard, m_HintCard, m_ToastCard, m_SubCard, m_Badge, m_Arrow, m_Speed, m_CursorHint;
         TextMeshProUGUI m_ObjEpisode, m_ObjText, m_ObjKeys, m_Timer, m_TimerLabel, m_Prompt, m_Hint, m_Toast, m_SubSpeaker, m_SubText, m_SpeedText, m_CursorText;
-        Image m_Crosshair, m_TimerBg, m_Portrait;
+        Image m_Crosshair, m_TimerBg, m_Portrait, m_RadioGlyph;
         float m_ToastTime, m_HintTime;
         bool m_ObjectivesCollapsed;
 
@@ -149,6 +149,11 @@ namespace Skyfold
             fit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             m_Portrait = UIKit.Image(m_SubCard, "Portrait", UIStyle.TealLight, UIKit.Circle, false);
             UIKit.Layout(m_Portrait, 96f, 96f, 0f, 96f);
+            // Until a portrait image exists, the badge shows an original broadcast glyph (no likeness).
+            m_RadioGlyph = UIKit.Image(m_Portrait.rectTransform, "Radio Glyph", new Color(0.06f, 0.27f, 0.3f), UIKit.Radio, false);
+            m_RadioGlyph.rectTransform.anchorMin = new Vector2(0.16f, 0.16f);
+            m_RadioGlyph.rectTransform.anchorMax = new Vector2(0.84f, 0.84f);
+            m_RadioGlyph.rectTransform.offsetMin = m_RadioGlyph.rectTransform.offsetMax = Vector2.zero;
             var col = UIKit.Rect(m_SubCard, "Text");
             var cv = col.gameObject.AddComponent<VerticalLayoutGroup>();
             cv.childControlHeight = cv.childControlWidth = true;
@@ -289,7 +294,10 @@ namespace Skyfold
             m_VRSpeaker.text = speaker;
             m_VRSub.text = line.text;
             m_VRSub.fontSize = 34f * SettingsStore.Current.subtitleScale;
-            if (noorPortrait != null) { m_Portrait.sprite = noorPortrait; m_Portrait.color = Color.white; }
+            bool nuri = line.speaker == "nuri";
+            if (noorPortrait != null && !nuri) { m_Portrait.sprite = noorPortrait; m_Portrait.color = Color.white; }
+            else { m_Portrait.sprite = UIKit.Circle; m_Portrait.color = nuri ? UIStyle.Gold : UIStyle.TealLight; }
+            if (m_RadioGlyph != null) m_RadioGlyph.gameObject.SetActive(noorPortrait == null && !nuri);
         }
 
         void OnLineEnded(VoLine line)

@@ -9,7 +9,7 @@ namespace Skyfold
     /// <summary>Builds the game's uGUI/TextMeshPro widgets in code with one consistent style.</summary>
     public static class UIKit
     {
-        static Sprite s_Rounded, s_Circle, s_Check, s_Cross, s_Arrow, s_Ring;
+        static Sprite s_Rounded, s_Circle, s_Check, s_Cross, s_Arrow, s_Ring, s_Radio;
 
         public static Sprite Rounded => s_Rounded != null ? s_Rounded : (s_Rounded = MakeRounded(96, 30));
         public static Sprite Circle => s_Circle != null ? s_Circle : (s_Circle = MakeCircle(128, false));
@@ -17,6 +17,8 @@ namespace Skyfold
         public static Sprite Check => s_Check != null ? s_Check : (s_Check = MakeIcon(128, true));
         public static Sprite Cross => s_Cross != null ? s_Cross : (s_Cross = MakeIcon(128, false));
         public static Sprite Arrow => s_Arrow != null ? s_Arrow : (s_Arrow = MakeArrow(128));
+        /// <summary>Broadcast glyph (mast, dot, two pairs of arcs) for Noor's radio badge.</summary>
+        public static Sprite Radio => s_Radio != null ? s_Radio : (s_Radio = MakeRadio(128));
 
         // ------------------------------------------------------------------ procedural sprites
         static Sprite MakeRounded(int size, int radius)
@@ -92,6 +94,35 @@ namespace Skyfold
                     var p = new Vector2(x + 0.5f, y + 0.5f) / size;
                     float d = Mathf.Min(SegmentDistance(p, new Vector2(0.25f, 0.2f), new Vector2(0.75f, 0.5f)), SegmentDistance(p, new Vector2(0.75f, 0.5f), new Vector2(0.25f, 0.8f)));
                     float a = Mathf.Clamp01((0.09f - d) * size + 0.5f);
+                    px[y * size + x] = new Color32(255, 255, 255, (byte)(a * 255));
+                }
+            tex.SetPixels32(px);
+            tex.Apply(false, true);
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+        }
+
+        static Sprite MakeRadio(int size)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp, name = "UI Radio" };
+            var px = new Color32[size * size];
+            var c = new Vector2(0.5f, 0.56f);
+            const float w = 0.034f;
+            for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    var p = new Vector2(x + 0.5f, y + 0.5f) / size;
+                    Vector2 v = p - c;
+                    float d = Mathf.Abs(v.magnitude - 0.075f) - 0.04f;                                // dot
+                    d = Mathf.Min(d, SegmentDistance(p, new Vector2(0.5f, 0.2f), new Vector2(0.5f, 0.48f)) - w); // mast
+                    d = Mathf.Min(d, SegmentDistance(p, new Vector2(0.38f, 0.2f), new Vector2(0.62f, 0.2f)) - w); // foot
+                    // Arcs only within 50 degrees of horizontal, on both sides.
+                    float ang = Mathf.Abs(Mathf.Atan2(v.y, Mathf.Abs(v.x))) * Mathf.Rad2Deg;
+                    if (ang < 50f)
+                    {
+                        d = Mathf.Min(d, Mathf.Abs(v.magnitude - 0.2f) - w);
+                        d = Mathf.Min(d, Mathf.Abs(v.magnitude - 0.32f) - w);
+                    }
+                    float a = Mathf.Clamp01(-d * size + 0.5f);
                     px[y * size + x] = new Color32(255, 255, 255, (byte)(a * 255));
                 }
             tex.SetPixels32(px);
