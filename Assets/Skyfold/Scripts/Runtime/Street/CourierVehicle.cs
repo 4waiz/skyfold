@@ -443,14 +443,17 @@ namespace Skyfold
         void UpdateVisuals()
         {
             float vf = Speed;
-            m_WheelSpin += vf / wheelRadius * Mathf.Rad2Deg * Time.deltaTime;
+            m_WheelSpin = Mathf.Repeat(m_WheelSpin + vf / wheelRadius * Mathf.Rad2Deg * Time.deltaTime, 360f);
+            if (m_WheelBase == null) CaptureRestPose();
             for (int i = 0; i < wheels.Length; i++)
             {
                 if (wheels[i] == null) continue;
                 float steer = i < 2 ? m_SteerSmoothed * 26f : 0f;
-                wheels[i].localRotation = Quaternion.Euler(m_WheelSpin, steer, 0f);
+                // Spin about the axle (parent X), steer about the parent's up, keep the modelled rest pose.
+                wheels[i].localRotation = Quaternion.Euler(0f, steer, 0f) * Quaternion.Euler(m_WheelSpin, 0f, 0f) * m_WheelBase[i];
             }
-            if (steeringWheel != null) steeringWheel.localRotation = Quaternion.Euler(0f, 0f, -m_SteerSmoothed * 90f);
+            // The column is tilted (rest rotation 35, 0, 0); the wheel turns about its own local Z.
+            if (steeringWheel != null) steeringWheel.localRotation = m_SteeringBase * Quaternion.Euler(0f, 0f, -m_SteerSmoothed * 90f);
             if (body != null)
             {
                 bool vr = PlayerRigs.Instance != null && PlayerRigs.Instance.Mode == PlayMode.VR && HasDriver && !Remote;
@@ -458,6 +461,16 @@ namespace Skyfold
                 float pitch = vr ? 0f : (m_Brake - m_Throttle) * 1.2f * Mathf.Clamp01(Mathf.Abs(vf) / 4f);
                 body.localRotation = Quaternion.Slerp(body.localRotation, Quaternion.Euler(pitch, 0f, roll), 1f - Mathf.Exp(-6f * Time.deltaTime));
             }
+        }
+
+        Quaternion[] m_WheelBase;
+        Quaternion m_SteeringBase = Quaternion.identity;
+
+        void CaptureRestPose()
+        {
+            m_WheelBase = new Quaternion[wheels.Length];
+            for (int i = 0; i < wheels.Length; i++) m_WheelBase[i] = wheels[i] != null ? wheels[i].localRotation : Quaternion.identity;
+            if (steeringWheel != null) m_SteeringBase = steeringWheel.localRotation;
         }
 
         void UpdateAudio()

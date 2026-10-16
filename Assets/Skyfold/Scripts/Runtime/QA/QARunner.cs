@@ -144,39 +144,151 @@ namespace Skyfold
             yield return new WaitForSecondsRealtime(0.5f);
         }
 
+        // ------------------------------------------------------------------ driving bot
+        static Vector3 Flat(Vector3 v) => new Vector3(v.x, 0f, v.z);
+
+        /// <summary>The route's lane line with arc-length lookup, for a pure-pursuit driver.</summary>
+        sealed class DriveLine
+        {
+            readonly List<Vector3> m_P = new List<Vector3>();
+            readonly float[] m_S;
+            public float Length => m_S[m_S.Length - 1];
+
+            public DriveLine(List<Vector3> pts)
+            {
+                foreach (var p in pts)
+                    if (m_P.Count == 0 || (Flat(p) - m_P[m_P.Count - 1]).sqrMagnitude > 0.01f) m_P.Add(Flat(p));
+                m_S = new float[m_P.Count];
+                for (int i = 1; i < m_P.Count; i++) m_S[i] = m_S[i - 1] + Vector3.Distance(m_P[i - 1], m_P[i]);
+            }
+
+            public Vector3 At(float s)
+            {
+                if (s <= 0f) return m_P[0];
+                for (int i = 0; i < m_P.Count - 1; i++)
+                    if (s <= m_S[i + 1]) return Vector3.Lerp(m_P[i], m_P[i + 1], (s - m_S[i]) / Mathf.Max(0.001f, m_S[i + 1] - m_S[i]));
+                return m_P[m_P.Count - 1];
+            }
+
+            /// <summary>Closest arc length to a position, searched in [from, to] so progress never jumps back.</summary>
+            public float Project(Vector3 pos, float from, float to)
+            {
+                pos = Flat(pos);
+                float best = float.MaxValue, bestS = from;
+                for (int i = 0; i < m_P.Count - 1; i++)
+                {
+                    if (m_S[i + 1] < from || m_S[i] > to) continue;
+                    Vector3 ab = m_P[i + 1] - m_P[i];
+                    float k = Mathf.Clamp01(Vector3.Dot(pos - m_P[i], ab) / Mathf.Max(0.0001f, ab.sqrMagnitude));
+                    float s = Mathf.Clamp(m_S[i] + k * ab.magnitude, from, to);
+                    float d = (At(s) - pos).sqrMagnitude;
+                    if (d < best) { best = d; bestS = s; }
+                }
+                return bestS;
+            }
+
+            /// <summary>Total heading change in degrees between two arc lengths.</summary>
+            public float TurnBetween(float s0, float s1)
+            {
+                float total = 0f;
+                Vector3 prev = Vector3.zero;
+                for (float s = s0; s < s1; s += 1.5f)
+                {
+                    Vector3 d = At(s + 1.5f) - At(s);
+                    if (d.sqrMagnitude < 0.0001f) continue;
+                    if (prev != Vector3.zero) total += Vector3.Angle(prev, d);
+                    prev = d;
+                }
+                return total;
+            }
+        }
+
+        /// <summary>
+        /// Drives the courier car with real W/A/S/D/Space keyboard events, like a careful player:
+        /// follows the right-hand lane, slows for corners, backs up if stuck, stops at the target.
+        /// </summary>
         IEnumerator DriveTo(string target, float timeout)
         {
             var car = CourierVehicle.Instance;
             var cells = Root.City.FindRoute("depot", "substation");
-            var path = RouteValidator.PathToWorld(cells, 2f, 0f);
-            int idx = 0;
-            float t = 0f;
+            Check(cells != null && cells.Count > 1, "a drivable route exists");
+            if (cells == null || cells.Count < 2) yield break;
+            var pts = RouteValidator.PathToWorld(cells, 2f, 0f);
+            var goal = SceneRegistry.Get(target);
+            if (goal != null) pts.Add(goal.position);
+            var line = new DriveLine(pts);
+            Log("route " + string.Join(" ", cells.ConvertAll(c => $"({c.x},{c.y})")) + $", lane line {line.Length:0} m");
+
             var kb = Keyboard.current;
-            while (t < timeout && car.DistanceTo(target) > 8f)
+            CourierVehicle.DebugEvent = msg => Log("car " + msg);
+            float s = line.Project(car.Position, 0f, 14f);
+            float t = 0f, nextLog = 0f, stuck = 0f, driven = 0f;
+            int stuckEvents = 0;
+            Vector3 last = car.Position;
+            while (t < timeout && car.DistanceTo(target) > 6.5f)
             {
-                // Steer toward the next route point using the real W/A/D bindings.
-                while (idx < path.Count - 1 && Vector3.Distance(new Vector3(path[idx].x, 0f, path[idx].z), new Vector3(car.Position.x, 0f, car.Position.z)) < 5f) idx++;
-                Vector3 to = path[Mathf.Min(idx, path.Count - 1)] - car.Position;
-                to.y = 0f;
-                float angle = Vector3.SignedAngle(car.transform.forward, to, Vector3.up);
-                var keys = new List<Key> { Key.W };
-                if (angle > 6f) keys.Add(Key.D);
-                else if (angle < -6f) keys.Add(Key.A);
-                if (Mathf.Abs(angle) > 50f && car.Speed > 5f) keys.Remove(Key.W);
+                if (!car.HasDriver) { Log("driver left the car unexpectedly"); break; }
+                float v = car.Speed;
+                s = line.Project(car.Position, Mathf.Max(0f, s - 1f), s + 10f);
+                Vector3 aim = line.At(s + 3.5f + Mathf.Abs(v) * 0.45f);
+                float angle = Vector3.SignedAngle(Flat(car.transform.forward), aim - Flat(car.Position), Vector3.up);
+                float turn = line.TurnBetween(s, s + 6f + Mathf.Abs(v) * 1.3f);
+                float targetV = Mathf.Lerp(11.5f, 4.5f, Mathf.InverseLerp(12f, 70f, turn));
+                float toGoal = car.DistanceTo(target);
+                if (toGoal < 16f) targetV = Mathf.Min(targetV, 1.8f + toGoal * 0.35f);
+
+                var keys = new List<Key>();
+                if (v < targetV - 0.3f) keys.Add(Key.W);
+                else if (v > targetV + 1.2f) keys.Add(Key.S);
+                if (angle > 3f) keys.Add(Key.D);
+                else if (angle < -3f) keys.Add(Key.A);
+
+                // A player who is stuck backs up and tries again; do the same and record it.
+                stuck = keys.Contains(Key.W) && Mathf.Abs(v) < 0.4f ? stuck + Time.deltaTime : 0f;
+                if (stuck > 2.5f)
+                {
+                    stuckEvents++;
+                    Log($"STUCK #{stuckEvents} at ({car.Position.x:0.0},{car.Position.z:0.0}) cell {car.Cell}, line {s:0}/{line.Length:0} m, aim angle {angle:0}");
+                    if (stuckEvents <= 3) yield return Shot($"drive_stuck_{stuckEvents}");
+                    if (stuckEvents > 4) break;
+                    float r = 0f;
+                    var back = new[] { Key.S, angle > 0f ? Key.A : Key.D };
+                    while (r < 1.8f)
+                    {
+                        if (kb != null) InputSystem.QueueStateEvent(kb, new KeyboardState(back));
+                        r += Time.deltaTime;
+                        t += Time.deltaTime;
+                        yield return null;
+                    }
+                    stuck = 0f;
+                    continue;
+                }
+
                 if (kb != null) InputSystem.QueueStateEvent(kb, new KeyboardState(keys.ToArray()));
+                driven += Vector3.Distance(Flat(last), Flat(car.Position));
+                last = car.Position;
+                if (t >= nextLog)
+                {
+                    nextLog += 1f;
+                    Log($"drive t={t:0.0} pos=({car.Position.x:0.0},{car.Position.y:0.00},{car.Position.z:0.0}) cell={car.Cell} v={v:0.0}/{targetV:0.0} line={s:0}/{line.Length:0} angle={angle:0} turn={turn:0} keys={string.Join("+", keys)} in(th={car.ThrottleInput:0.0} br={car.BrakeInput:0.0} st={car.SteerInput:0.00}) wheels={car.GroundedWheels}");
+                }
                 t += Time.deltaTime;
                 yield return null;
             }
-            // Brake to a stop with S.
+            // Parking brake (Space) to a full stop.
             float b = 0f;
-            while (Mathf.Abs(car.Speed) > 0.3f && b < 6f)
+            while (Mathf.Abs(car.Speed) > 0.2f && b < 6f)
             {
                 if (kb != null) InputSystem.QueueStateEvent(kb, new KeyboardState(Key.Space));
                 b += Time.deltaTime;
                 yield return null;
             }
             if (kb != null) InputSystem.QueueStateEvent(kb, new KeyboardState());
+            yield return null;
+            CourierVehicle.DebugEvent = null;
+            Log($"drive finished after {t:0.0}s, {driven:0} m driven, {stuckEvents} stuck events");
             Check(car.DistanceTo(target) <= 9f, $"car reached {target} ({car.DistanceTo(target):0.0} m)");
+            Check(stuckEvents == 0, "drove the route without getting stuck");
         }
 
         IEnumerator WalkTo(Vector3 feet, float yaw)

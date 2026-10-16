@@ -30,6 +30,8 @@ namespace Skyfold
         float m_Speed;
         float m_PropSpeed;
         float m_DoorAngle;
+        Quaternion m_DoorBase;
+        bool m_HasDoorBase;
         float m_BoardTimer;
         float m_StateTime;
         float m_Pitch, m_Bank;
@@ -148,7 +150,11 @@ namespace Skyfold
 
             float doorTarget = State == AircraftState.Boarding ? 1f : 0f;
             m_DoorAngle = Mathf.MoveTowards(m_DoorAngle, doorTarget, dt * 0.8f);
-            if (door != null) door.localRotation = Quaternion.Euler(-m_DoorAngle * 100f, 0f, 0f);
+            if (door != null)
+            {
+                if (!m_HasDoorBase) { m_DoorBase = door.localRotation; m_HasDoorBase = true; }
+                door.localRotation = m_DoorBase * Quaternion.Euler(0f, 0f, Mathf.SmoothStep(0f, 1f, m_DoorAngle) * 125f);
+            }
 
             float propTarget = State switch
             {

@@ -30,10 +30,20 @@ namespace Skyfold
 
         public NuriMood Mood => m_Mood;
 
+        Quaternion m_BodyRest = Quaternion.identity, m_HeadRest = Quaternion.identity, m_WingLRest = Quaternion.identity,
+                   m_WingRRest = Quaternion.identity, m_TailRest = Quaternion.identity;
+        Vector3 m_LensScale = Vector3.one;
+
         void Awake()
         {
             Instance = this;
             m_Block = new MaterialPropertyBlock();
+            if (body != null) m_BodyRest = body.localRotation;
+            if (head != null) m_HeadRest = head.localRotation;
+            if (wingL != null) m_WingLRest = wingL.localRotation;
+            if (wingR != null) m_WingRRest = wingR.localRotation;
+            if (tail != null) m_TailRest = tail.localRotation;
+            if (lens != null) m_LensScale = lens.localScale;
         }
 
         void OnDestroy() { if (Instance == this) Instance = null; }
@@ -129,16 +139,16 @@ namespace Skyfold
             m_Flap += dt * flapRate;
             float amp = m_Mood == NuriMood.Concern ? 8f : (m_Mood == NuriMood.Celebrate ? 38f : 18f + speed * 10f);
             float baseAngle = m_Mood == NuriMood.Concern ? -20f : 0f;
-            if (wingL != null) wingL.localRotation = Quaternion.Euler(0f, 0f, baseAngle + Mathf.Sin(m_Flap) * amp);
-            if (wingR != null) wingR.localRotation = Quaternion.Euler(0f, 0f, -(baseAngle + Mathf.Sin(m_Flap) * amp));
-            if (tail != null) tail.localRotation = Quaternion.Euler(Mathf.Sin(t * 1.3f) * 6f + speed * 8f, 0f, 0f);
+            if (wingL != null) wingL.localRotation = m_WingLRest * Quaternion.Euler(0f, 0f, baseAngle + Mathf.Sin(m_Flap) * amp);
+            if (wingR != null) wingR.localRotation = m_WingRRest * Quaternion.Euler(0f, 0f, -(baseAngle + Mathf.Sin(m_Flap) * amp));
+            if (tail != null) tail.localRotation = m_TailRest * Quaternion.Euler(Mathf.Sin(t * 1.3f) * 6f + speed * 8f, 0f, 0f);
             if (head != null)
             {
                 float tilt = m_Mood == NuriMood.Concern ? 18f : (m_Mood == NuriMood.Happy ? Mathf.Sin(t * 10f) * 10f : Mathf.Sin(t * 0.7f) * 6f);
-                head.localRotation = Quaternion.Euler(m_Mood == NuriMood.Concern ? 14f : 0f, 0f, tilt);
+                head.localRotation = m_HeadRest * Quaternion.Euler(m_Mood == NuriMood.Concern ? 14f : 0f, 0f, tilt);
             }
-            if (body != null && m_Mood == NuriMood.Celebrate) body.localRotation = Quaternion.Euler(0f, Mathf.Repeat(t * 540f, 360f), 0f);
-            else if (body != null) body.localRotation = Quaternion.Slerp(body.localRotation, Quaternion.identity, 1f - Mathf.Exp(-8f * dt));
+            if (body != null && m_Mood == NuriMood.Celebrate) body.localRotation = Quaternion.Euler(0f, Mathf.Repeat(t * 540f, 360f), 0f) * m_BodyRest;
+            else if (body != null) body.localRotation = Quaternion.Slerp(body.localRotation, m_BodyRest, 1f - Mathf.Exp(-8f * dt));
 
             if (lensRenderer != null)
             {
@@ -148,7 +158,7 @@ namespace Skyfold
                 m_Block.SetColor(EmissionId, c * k);
                 lensRenderer.SetPropertyBlock(m_Block);
             }
-            if (lens != null) lens.localScale = Vector3.one * (m_Mood == NuriMood.Happy || m_Mood == NuriMood.Celebrate ? 1.12f : (m_Mood == NuriMood.Concern ? 0.85f : 1f));
+            if (lens != null) lens.localScale = m_LensScale * (m_Mood == NuriMood.Happy || m_Mood == NuriMood.Celebrate ? 1.12f : (m_Mood == NuriMood.Concern ? 0.85f : 1f));
         }
     }
 }

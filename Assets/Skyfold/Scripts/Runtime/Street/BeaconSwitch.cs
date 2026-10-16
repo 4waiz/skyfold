@@ -7,7 +7,7 @@ namespace Skyfold
     {
         public string flagKey = "beacon.1";
         public Transform lever;
-        public float offAngle = -35f, onAngle = 35f;
+        public float offAngle = 0f, onAngle = 160f; // modelled up = off; thrown out and down = on
 
         Quaternion m_Base;
         bool m_HasBase;
@@ -32,7 +32,7 @@ namespace Skyfold
         void Update()
         {
             float target = IsOn ? onAngle : offAngle;
-            m_Angle = Mathf.MoveTowards(m_Angle, target, Time.deltaTime * 260f);
+            m_Angle = Mathf.MoveTowards(m_Angle, target, Time.deltaTime * 420f);
             if (lever != null) { if (!m_HasBase) { m_Base = lever.localRotation; m_HasBase = true; } lever.localRotation = m_Base * Quaternion.Euler(m_Angle, 0f, 0f); }
         }
     }
