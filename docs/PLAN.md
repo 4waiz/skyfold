@@ -63,7 +63,7 @@ Scenes, prefabs, materials, input assets, XR settings and build settings are gen
 ## 9. Launch and XR
 
 - One `SKYFOLD.exe`. XR is **not** initialised at startup (`InitManagerOnStart = false`). **Enter VR** calls `InitializeLoader → check activeLoader and XRDisplaySubsystem running → StartSubsystems`, then activates the XR rig and disables the desktop rig. If it fails, it shows Retry / Desktop plus the log path, never a black screen.
-- Shortcuts: **SKYFOLD** (laptop badge, `--mode=desktop`) and **SKYFOLD - Quest 3** (headset badge, `--mode=vr`). A demo shortcut (`--demo`) goes in the release folder.
+- Shortcuts: **SKYFOLD** (laptop badge, `--mode=desktop`) and **SKYFOLD - Quest 3** (headset badge, `--mode=vr`) on the Desktop, created by `tools\package.ps1`. The release folder also has portable launchers that keep working wherever the ZIP is extracted: `Play on this laptop.cmd`, `Play in VR (Quest 3 Link).cmd` and `Play Demo (3 min).cmd` (`--demo`).
 - The spectator gets a mirrored eye view on the laptop, plus a screen-space overlay (objectives, subtitles, timer) that renders only to the laptop window.
 
 ## 10. Art and audio
