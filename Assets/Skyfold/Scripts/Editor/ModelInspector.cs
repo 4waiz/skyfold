@@ -24,6 +24,35 @@ namespace Skyfold.EditorTools
             EditorApplication.Exit(0);
         }
 
+        /// <summary>Per-mesh detail for a few models: vertex colours and the normals of the lowest vertices.</summary>
+        public static void BatchMeshDetail()
+        {
+            var sb = new StringBuilder();
+            foreach (var name in new[] { "Sky/cloud_puff_a", "Sky/storm_cloud", "Buildings/bldg_substation" })
+            {
+                var go = AssetDatabase.LoadAssetAtPath<GameObject>($"{ModelsRoot}/{name}.fbx");
+                if (go == null) { sb.AppendLine("missing " + name); continue; }
+                foreach (var mf in go.GetComponentsInChildren<MeshFilter>(true))
+                {
+                    var m = mf.sharedMesh;
+                    if (m == null) continue;
+                    var v = m.vertices; var n = m.normals; var c = m.colors;
+                    sb.AppendLine($"== {name}/{mf.name} verts={v.Length} subMeshes={m.subMeshCount} colours={c.Length} mats={string.Join(",", mf.GetComponent<Renderer>().sharedMaterials.Select(x => x != null ? x.name : "null"))}");
+                    if (c.Length > 0)
+                    {
+                        sb.AppendLine($"   colour r {c.Min(x => x.r):0.00}..{c.Max(x => x.r):0.00} g {c.Min(x => x.g):0.00}..{c.Max(x => x.g):0.00} b {c.Min(x => x.b):0.00}..{c.Max(x => x.b):0.00} a {c.Min(x => x.a):0.00}..{c.Max(x => x.a):0.00}");
+                    }
+                    float minY = v.Min(p => p.y);
+                    var low = Enumerable.Range(0, v.Length).Where(i => v[i].y < minY + 0.05f * (v.Max(p => p.y) - minY)).ToList();
+                    Vector3 avgN = Vector3.zero; foreach (var i in low) avgN += n[i];
+                    sb.AppendLine($"   lowest {low.Count} verts: avg normal {F(avgN.normalized)}; sample normals {string.Join(" ", low.Take(6).Select(i => F(n[i])))}");
+                    if (c.Length > 0) sb.AppendLine($"   lowest colours {string.Join(" ", low.Take(6).Select(i => $"({c[i].r:0.00},{c[i].g:0.00},{c[i].b:0.00})"))}");
+                }
+            }
+            File.WriteAllText("Logs/mesh_detail.txt", sb.ToString());
+            EditorApplication.Exit(0);
+        }
+
         public static void Inspect(string outPath)
         {
             var sb = new StringBuilder();
