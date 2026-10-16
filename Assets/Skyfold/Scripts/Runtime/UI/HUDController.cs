@@ -382,10 +382,17 @@ namespace Skyfold
         {
             switch (input.Context)
             {
-                case InputContext.Architect: return "Hold left mouse: move a piece   ·   R: turn   ·   Q: fold down   ·   Tab: hide";
-                case InputContext.Driving: return "W/S: drive & brake   ·   A/D: steer   ·   E: climb out   ·   Tab: hide";
-                default: return "WASD: walk   ·   E: use   ·   Q: fold at a station   ·   Tab: hide";
+                case InputContext.Architect: return Keys("Hold left mouse: move a piece", "R: turn", "Q: fold down", "Tab: hide");
+                case InputContext.Driving: return Keys("W/S: drive & brake", "A/D: steer", "E: climb out", "Hold R: back on the road", "Tab: hide");
+                default: return Keys("WASD: walk", "E: use", "Q: fold at a station", "Tab: hide");
             }
+        }
+
+        /// <summary>Joins key hints so a line only ever wraps between hints, never inside one.</summary>
+        static string Keys(params string[] parts)
+        {
+            for (int i = 0; i < parts.Length; i++) parts[i] = "<nobr>" + parts[i] + "</nobr>";
+            return string.Join("   ·   ", parts);
         }
 
         string PromptText(InputRouter input, PlayerRigs rigs)

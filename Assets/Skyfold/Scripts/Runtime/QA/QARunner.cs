@@ -53,6 +53,7 @@ namespace Skyfold
                 case "campaign": body = Campaign(); break;
                 case "tour": body = Tour(); break;
                 case "perf": body = Perf(); break;
+                case "fullcampaign": body = FullCampaign(); break;
                 default: Check(false, "unknown scenario " + scenario); body = null; break;
             }
             if (body != null) yield return StartCoroutine(Guard(body));
@@ -500,6 +501,117 @@ namespace Skyfold
             yield return new WaitForSecondsRealtime(1f);
             Check(ProgressStore.Campaign.unlockedEpisode >= 2, "episode 2 unlocked");
             Check(ProgressStore.Campaign.placements.Count > 0, "route saved for later episodes");
+        }
+
+        /// <summary>Episodes 1 (east), 2 and 3 back to back, with real saved progress in between.</summary>
+        IEnumerator FullCampaign()
+        {
+            yield return Episode1(true);
+            Root.QuitToMenu();
+            yield return new WaitForSecondsRealtime(1f);
+            Check(ProgressStore.Campaign.unlockedEpisode >= 2, "episode 2 unlocked");
+            yield return Episode2();
+            Root.QuitToMenu();
+            yield return new WaitForSecondsRealtime(1f);
+            Check(ProgressStore.Campaign.unlockedEpisode >= 3, "episode 3 unlocked");
+            yield return Episode3();
+            Root.QuitToMenu();
+            yield return new WaitForSecondsRealtime(1f);
+            int done = 0;
+            foreach (var e in ProgressStore.Campaign.episodes) if (e.completed) done++;
+            Check(done >= 3, $"all three episodes recorded as complete ({done})");
+        }
+
+        IEnumerator Episode2()
+        {
+            Root.StartMission(MissionCatalog.Episode2);
+            yield return new WaitForSecondsRealtime(1.5f);
+            Check(MD.State == MissionState.Active, "episode 2 active");
+            Check(FoldController.Instance.InStreet, "episode 2 starts in the street at the depot");
+            Check(Root.City.HasRoute("depot", "substation"), "episode 2 keeps the route built in episode 1");
+            yield return Shot("e2_01_start");
+            var cell = PowerCell.Instance;
+            var car = CourierVehicle.Instance;
+            yield return WalkTo(cell.transform.position + Vector3.back * 1.2f, 0f);
+            cell.Interact(InteractorKind.Desktop);
+            Check(cell.Location == CellLocation.Held, "picked up the cell");
+            yield return WalkTo(car.cradle.transform.position + car.transform.forward * -1.4f, car.transform.eulerAngles.y);
+            car.cradle.Interact(InteractorKind.Desktop);
+            Check(cell.Location == CellLocation.CarCradle, "cell loaded into the cradle");
+            yield return WalkTo(car.exitLeft.position, car.transform.eulerAngles.y + 90f);
+            car.RequestEnter();
+            yield return WaitUntil(() => car.HasDriver && !car.Busy, 5f, "entered the car");
+            yield return DriveTo("substation.park", 120f);
+            yield return Shot("e2_02_substation");
+            yield return Press(Key.E);
+            yield return WaitUntil(() => !car.HasDriver && !car.Busy, 5f, "E exits the stopped car");
+            car.cradle.Interact(InteractorKind.Desktop);
+            Check(cell.HeldOnDesktop, "took the cell from the cradle");
+            var socket = Substation.Instance.socket;
+            yield return WalkTo(socket.transform.position + Vector3.back * 1.5f, 0f);
+            socket.Interact(InteractorKind.Desktop);
+            yield return WaitUntil(() => Root.City.GetFlag(Flags.SubstationPowered), 3f, "substation powered");
+            yield return WaitUntil(() => MD.CurrentObjective != null && MD.CurrentObjective.Id == "e2.convoy", 10f, "convoy objective");
+            yield return new WaitForSecondsRealtime(3f);
+            yield return Shot("e2_03_convoy");
+            yield return WaitUntil(() => MD.State == MissionState.Results, 40f, "episode 2 results");
+            yield return new WaitForSecondsRealtime(1.5f);
+            yield return Shot("e2_04_results");
+            var r = MD.LastResult;
+            Check(r != null && r.Success, "episode 2 result recorded");
+            if (r != null) Log($"episode 2 result medal={r.Medal} timeLeft={r.TimeLeft:0} hints={r.HintsShown}");
+        }
+
+        IEnumerator Episode3()
+        {
+            Root.StartMission(MissionCatalog.Episode3);
+            yield return new WaitForSecondsRealtime(1.5f);
+            Check(MD.State == MissionState.Active, "episode 3 active");
+            Check(Root.City.GetFlag(Flags.SubstationPowered), "airfield already powered from episode 2");
+            yield return Shot("e3_01_start");
+            var fold = FoldController.Instance;
+            var kiosk = fold.Station("kiosk.B");
+            var stand = kiosk.arriveAnchor != null ? kiosk.arriveAnchor : kiosk.transform;
+            yield return WalkTo(stand.position + Vector3.up * 0.05f, stand.eulerAngles.y);
+            yield return WaitUntil(() => fold.StationInRange == kiosk, 3f, "standing at the airfield Fold Station");
+            yield return Press(Key.Q);
+            yield return WaitUntil(() => fold.InAtelier && !fold.Busy, 6f, "Q folds up to the Atelier from the airfield");
+            int rejected = Root.City.RejectedAttempts;
+            yield return PlacePiece("piece.link.tee", "terminal_link", 0);
+            Check(Root.City.RejectedAttempts == rejected + 1, "tee into the terminal buildings rejected");
+            yield return PlacePiece("piece.link.straight", "terminal_link", 0);
+            yield return WaitUntil(() => MD.CurrentObjective != null && MD.CurrentObjective.Id == "e3.unfold", 10f, "terminal link repaired");
+            yield return Shot("e3_02_link");
+            yield return Press(Key.Q);
+            yield return WaitUntil(() => fold.InStreet && !fold.Busy, 6f, "Q folds back down to the airfield");
+            yield return WaitUntil(() => MD.CurrentObjective != null && MD.CurrentObjective.Id == "e3.beacons", 10f, "beacon objective");
+            var beacons = BeaconSystem.Instance;
+            for (int i = 0; i < beacons.switches.Count; i++)
+            {
+                var sw = beacons.switches[i];
+                yield return WalkTo(sw.transform.position + sw.transform.forward * 1.3f, sw.transform.eulerAngles.y + 180f);
+                sw.Interact(InteractorKind.Desktop);
+                yield return new WaitForSecondsRealtime(0.6f);
+                Check(beacons.LitCount == i + 1, $"beacon switch {i + 1} lights its group ({beacons.LitCount}/{beacons.Total})");
+            }
+            yield return Shot("e3_03_beacons");
+            yield return WaitUntil(() => ConvoyDirector.Instance.Arrived, 120f, "convoy reached the terminal over the repaired roads");
+            yield return Shot("e3_04_convoy");
+            yield return WaitUntil(() => AircraftSequence.Instance.ConditionsMet, 20f, "passengers boarded, aircraft ready");
+            var tower = Root.Layout.GetAnchor("tower.lever");
+            yield return WalkTo(tower.Position + new Vector3(0f, 0f, -1.2f), 0f);
+            FindAnyObjectByType<DepartureLever>().Interact(InteractorKind.Desktop);
+            Check(Root.City.GetFlag(Flags.DepartureCleared), "departure cleared at the tower");
+            PlayerRigs.Instance.TeleportTo(new Vector3(100f, 0.15f, 120f), 250f);
+            yield return WaitUntil(() => AircraftSequence.Instance.State >= AircraftState.TakeoffRoll, 45f, "taxi to the runway");
+            yield return new WaitForSecondsRealtime(2.5f);
+            yield return Shot("e3_05_takeoff");
+            yield return WaitUntil(() => MD.State == MissionState.Results, 60f, "episode 3 results");
+            yield return new WaitForSecondsRealtime(1.5f);
+            yield return Shot("e3_06_results");
+            var r = MD.LastResult;
+            Check(r != null && r.Success, "episode 3 result recorded");
+            if (r != null) Log($"episode 3 result medal={r.Medal} timeLeft={r.TimeLeft:0} rejected={r.Rejected} hints={r.HintsShown}");
         }
 
         IEnumerator Tour()
