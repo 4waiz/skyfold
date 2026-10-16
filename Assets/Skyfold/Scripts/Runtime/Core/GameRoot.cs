@@ -51,6 +51,7 @@ namespace Skyfold
         InputContext m_ContextBeforePause;
         bool m_VRStarting;
         bool m_PendingDemo;
+        int m_PendingEpisode;
         Coroutine m_VRRoutine;
         Transform m_DynamicProxy;
 
@@ -58,6 +59,14 @@ namespace Skyfold
         {
             Instance = this;
             var opts = LaunchOptions.Init();
+            if (!string.IsNullOrEmpty(opts.QaScenario))
+            {
+                // QA runs start from a clean, separate save folder every time.
+                string qaSaves = System.IO.Path.Combine(Application.persistentDataPath, "QA_saves");
+                if (System.IO.Directory.Exists(qaSaves)) System.IO.Directory.Delete(qaSaves, true);
+                System.IO.Directory.CreateDirectory(qaSaves);
+                JsonFile.Override = qaSaves;
+            }
             SettingsStore.Load();
             ProgressStore.Load();
             if (opts.Windowed) SettingsStore.Current.fullscreen = false;
@@ -68,6 +77,7 @@ namespace Skyfold
             City = new CityState(Layout);
             City.OccupancyCheck = Occupancy;
             m_PendingDemo = opts.Demo;
+            m_PendingEpisode = opts.Episode;
             LogSystem(opts);
             // QA runs keep Unity's own -screen-width/-screen-height/-screen-fullscreen values.
             if (string.IsNullOrEmpty(opts.QaScenario)) ApplyDisplay();
@@ -129,6 +139,7 @@ namespace Skyfold
             SwitchRig(PlayMode.Desktop);
             EnterTitleState();
             if (m_PendingDemo) { m_PendingDemo = false; StartMission(MissionCatalog.Demo); return; }
+            if (TryStartPendingEpisode()) return;
             menu.Show("title", false);
         }
 
@@ -251,7 +262,23 @@ namespace Skyfold
             EnterTitleState();
             yield return null;
             if (m_PendingDemo) { m_PendingDemo = false; StartMission(MissionCatalog.Demo); yield break; }
+            if (SettingsStore.Current.comfortChosen && TryStartPendingEpisode()) yield break;
             menu.Show(SettingsStore.Current.comfortChosen ? "title" : "firstcomfort", false);
+        }
+
+        /// <summary>--episode=N from the command line: start it if the campaign has unlocked it.</summary>
+        bool TryStartPendingEpisode()
+        {
+            int e = m_PendingEpisode;
+            m_PendingEpisode = 0;
+            if (e <= 0) return false;
+            if (e > ProgressStore.Campaign.unlockedEpisode)
+            {
+                Debug.Log($"[SKYFOLD] --episode={e} ignored: the campaign has unlocked up to episode {ProgressStore.Campaign.unlockedEpisode}.");
+                return false;
+            }
+            StartMission(MissionCatalog.ForEpisode(e));
+            return true;
         }
 
         public void CancelVR() => ChooseDesktop();

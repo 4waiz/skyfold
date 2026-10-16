@@ -1,0 +1,27 @@
+SKYFOLD: The Last Flight - third-party notices
+=============================================
+
+Fonts (SIL Open Font License 1.1; full licence texts in this folder)
+- Unbounded - Copyright 2022 The Unbounded Project Authors (https://github.com/googlefonts/unbounded).
+  The SemiBold static instance was generated from the variable font with fontTools.
+- Atkinson Hyperlegible - Copyright 2020 Braille Institute of America, Inc.
+- Liberation Sans (TextMesh Pro fallback font) - see LiberationSans-OFL.txt.
+
+Voice
+- Noor's lines were synthesised offline with Kokoro-82M by hexgrad (Apache License 2.0),
+  run through kokoro-onnx (MIT), using the stock voice af_heart. No voice cloning.
+  The generated audio files belong to the project.
+
+Sound effects
+- Some effects layer processed recordings from Kenney.nl sound packs (Impact Sounds,
+  Interface Sounds, Casino Audio). The source documents these as public-domain sounds from
+  Kenney.nl, and Kenney publishes its packs under Creative Commons CC0 1.0. No licence file came
+  with the local copy used. Credit is given here anyway: thank you, Kenney (www.kenney.nl).
+
+Engine and packages
+- Made with Unity 6 (Unity Technologies). Unity runtime, Universal Render Pipeline, Input
+  System, XR Management, OpenXR Plugin, XR Interaction Toolkit (including its Starter Assets
+  sample) and TextMesh Pro are used under the Unity Terms of Service / Unity Companion License.
+
+Everything else (3D models, materials, shaders, music, ambience, synthesised effects, icons and
+UI art) is original work made for SKYFOLD by Awaiz Ahmed / Team Kanban.

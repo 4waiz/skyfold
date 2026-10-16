@@ -54,7 +54,9 @@ namespace Skyfold
     /// <summary>Loads and saves JSON files in the player's persistent data folder with safe defaults.</summary>
     public static class JsonFile
     {
-        public static string Dir => Application.persistentDataPath;
+        /// <summary>Set for automated QA so test runs never touch the player's real saves.</summary>
+        public static string Override;
+        public static string Dir => string.IsNullOrEmpty(Override) ? Application.persistentDataPath : Override;
 
         public static T Load<T>(string fileName, Func<T> defaults, Func<T, bool> validate, out string note) where T : class
         {
