@@ -7,7 +7,7 @@
   "duration_s": 80.0,
   "lufs": -20.0,
   "tp_dbtp": -5.9,
-  "bus_rms_db": {
+  "buses": {
    "pad": {
     "target_lu": -10,
     "measured_lufs": -2.1,
@@ -46,10 +46,396 @@
    "seam_curv": 0.014984130859375,
    "p999_curv": 0.036041259765625,
    "rms_jump_50ms_db": 3.1871610812422704,
-   "rms_jump_50ms_limit": 4.402311364295403,
+   "rms_jump_50ms_limit": 10.36692757316141,
    "rms_jump_10ms_db": 5.463045643809804,
-   "rms_jump_10ms_limit": 4.100127904083909,
+   "rms_jump_10ms_limit": 9.609435400399175,
+   "bar_line_jumps": {
+    "p90_50ms_db": 9.36692757316141,
+    "p90_10ms_db": 8.609435400399175
+   },
+   "ok": true
+  }
+ },
+ "music_architect_loop": {
+  "desc": "curious puzzle, B dorian, 90 BPM",
+  "bpm": 90,
+  "bars": 24,
+  "loop": true,
+  "duration_s": 64.0,
+  "lufs": -20.0,
+  "tp_dbtp": -5.77,
+  "buses": {
+   "pad": {
+    "target_lu": -13,
+    "measured_lufs": -2.7,
+    "gain_db": -30.3
+   },
+   "mar": {
+    "target_lu": -9,
+    "measured_lufs": -13.4,
+    "gain_db": -15.6
+   },
+   "kanun": {
+    "target_lu": -8,
+    "measured_lufs": -19.1,
+    "gain_db": -8.9
+   },
+   "bass": {
+    "target_lu": -12,
+    "measured_lufs": -17.1,
+    "gain_db": -14.9
+   },
+   "drums": {
+    "target_lu": -12,
+    "measured_lufs": -22.6,
+    "gain_db": -9.4
+   },
+   "bell": {
+    "target_lu": -19,
+    "measured_lufs": -17.7,
+    "gain_db": -21.3
+   }
+  },
+  "bar_s": 2.666667,
+  "seam": {
+   "seam_step": 0.001007080078125,
+   "p999_step": 0.060546875,
+   "seam_curv": 0.0003662109375,
+   "p999_curv": 0.046112060546875,
+   "rms_jump_50ms_db": 10.380621106539657,
+   "rms_jump_50ms_limit": 12.032882784163395,
+   "rms_jump_10ms_db": 6.199843383113793,
+   "rms_jump_10ms_limit": 12.404841817473454,
+   "bar_line_jumps": {
+    "p90_50ms_db": 11.032882784163395,
+    "p90_10ms_db": 11.404841817473454
+   },
+   "ok": true
+  }
+ },
+ "music_street_loop": {
+  "desc": "warm adventure, G major, 100 BPM",
+  "bpm": 100,
+  "bars": 32,
+  "loop": true,
+  "duration_s": 76.8,
+  "lufs": -20.0,
+  "tp_dbtp": -4.05,
+  "buses": {
+   "pad": {
+    "target_lu": -13,
+    "measured_lufs": -2.5,
+    "gain_db": -30.5
+   },
+   "oud": {
+    "target_lu": -7,
+    "measured_lufs": -17.7,
+    "gain_db": -9.3
+   },
+   "kanun": {
+    "target_lu": -13,
+    "measured_lufs": -18.6,
+    "gain_db": -14.4
+   },
+   "str": {
+    "target_lu": -14,
+    "measured_lufs": -7.3,
+    "gain_db": -26.7
+   },
+   "bass": {
+    "target_lu": -11,
+    "measured_lufs": -7.0,
+    "gain_db": -24.0
+   },
+   "drums": {
+    "target_lu": -9,
+    "measured_lufs": -19.8,
+    "gain_db": -9.2
+   }
+  },
+  "bar_s": 2.4,
+  "seam": {
+   "seam_step": 0.006439208984375,
+   "p999_step": 0.045074462890625,
+   "seam_curv": 0.00286865234375,
+   "p999_curv": 0.0302734375,
+   "rms_jump_50ms_db": 9.44082794251994,
+   "rms_jump_50ms_limit": 9.878951667205076,
+   "rms_jump_10ms_db": 9.372034609313072,
+   "rms_jump_10ms_limit": 9.21793937352342,
+   "bar_line_jumps": {
+    "p90_50ms_db": 8.878951667205076,
+    "p90_10ms_db": 8.21793937352342
+   },
    "ok": false
+  }
+ },
+ "music_drive_loop": {
+  "desc": "upbeat drive, A major, 112 BPM",
+  "bpm": 112,
+  "bars": 32,
+  "loop": true,
+  "duration_s": 68.571,
+  "lufs": -20.0,
+  "tp_dbtp": -3.67,
+  "buses": {
+   "pad": {
+    "target_lu": -14,
+    "measured_lufs": -2.4,
+    "gain_db": -31.6
+   },
+   "lead": {
+    "target_lu": -8,
+    "measured_lufs": -14.7,
+    "gain_db": -13.3
+   },
+   "kanun": {
+    "target_lu": -15,
+    "measured_lufs": -15.9,
+    "gain_db": -19.1
+   },
+   "bass": {
+    "target_lu": -10,
+    "measured_lufs": -6.3,
+    "gain_db": -23.7
+   },
+   "drums": {
+    "target_lu": -8,
+    "measured_lufs": -17.8,
+    "gain_db": -10.2
+   },
+   "fx": {
+    "target_lu": -19,
+    "measured_lufs": -16.0,
+    "gain_db": -23.0
+   }
+  },
+  "bar_s": 2.142857,
+  "seam": {
+   "seam_step": 0.001739501953125,
+   "p999_step": 0.034820556640625,
+   "seam_curv": 0.0078125,
+   "p999_curv": 0.0191650390625,
+   "rms_jump_50ms_db": 1.132028529573997,
+   "rms_jump_50ms_limit": 10.94717290065397,
+   "rms_jump_10ms_db": 3.819925293721669,
+   "rms_jump_10ms_limit": 11.089622372989734,
+   "bar_line_jumps": {
+    "p90_50ms_db": 9.94717290065397,
+    "p90_10ms_db": 10.089622372989734
+   },
+   "ok": true
+  }
+ },
+ "music_storm_loop": {
+  "desc": "tension layer, D minor, 90 BPM",
+  "bpm": 90,
+  "bars": 24,
+  "loop": true,
+  "duration_s": 64.0,
+  "lufs": -20.0,
+  "tp_dbtp": -2.95,
+  "buses": {
+   "drone": {
+    "target_lu": -10,
+    "measured_lufs": -13.4,
+    "gain_db": -16.6
+   },
+   "ost": {
+    "target_lu": -8,
+    "measured_lufs": -21.9,
+    "gain_db": -6.1
+   },
+   "pad": {
+    "target_lu": -15,
+    "measured_lufs": -4.7,
+    "gain_db": -30.3
+   },
+   "perc": {
+    "target_lu": -10,
+    "measured_lufs": -21.9,
+    "gain_db": -8.1
+   },
+   "str": {
+    "target_lu": -17,
+    "measured_lufs": -11.4,
+    "gain_db": -25.6
+   },
+   "wind": {
+    "target_lu": -16,
+    "measured_lufs": -15.4,
+    "gain_db": -20.6
+   }
+  },
+  "bar_s": 2.666667,
+  "seam": {
+   "seam_step": 0.0015869140625,
+   "p999_step": 0.01129150390625,
+   "seam_curv": 0.0001220703125,
+   "p999_curv": 0.00457763671875,
+   "rms_jump_50ms_db": 3.6770761326298063,
+   "rms_jump_50ms_limit": 10.075568328348778,
+   "rms_jump_10ms_db": 4.698668365631286,
+   "rms_jump_10ms_limit": 10.343474966567767,
+   "bar_line_jumps": {
+    "p90_50ms_db": 9.075568328348778,
+    "p90_10ms_db": 9.343474966567767
+   },
+   "ok": true
+  }
+ },
+ "music_finale": {
+  "desc": "takeoff finale, D major -> E major, 96 BPM",
+  "bpm": 96,
+  "bars": 16,
+  "loop": false,
+  "duration_s": 44.5,
+  "lufs": -20.0,
+  "tp_dbtp": -5.62,
+  "buses": {
+   "pad": {
+    "target_lu": -10,
+    "measured_lufs": -3.3,
+    "gain_db": -26.7
+   },
+   "kanun": {
+    "target_lu": -12,
+    "measured_lufs": -18.2,
+    "gain_db": -13.8
+   },
+   "mar": {
+    "target_lu": -9,
+    "measured_lufs": -17.0,
+    "gain_db": -12.0
+   },
+   "str": {
+    "target_lu": -11,
+    "measured_lufs": -5.1,
+    "gain_db": -25.9
+   },
+   "brass": {
+    "target_lu": -13,
+    "measured_lufs": -10.6,
+    "gain_db": -22.4
+   },
+   "lead": {
+    "target_lu": -7,
+    "measured_lufs": -9.8,
+    "gain_db": -17.2
+   },
+   "bass": {
+    "target_lu": -12,
+    "measured_lufs": -8.2,
+    "gain_db": -23.8
+   },
+   "perc": {
+    "target_lu": -11,
+    "measured_lufs": -17.7,
+    "gain_db": -13.3
+   },
+   "bell": {
+    "target_lu": -16,
+    "measured_lufs": -16.1,
+    "gain_db": -19.9
+   }
+  }
+ },
+ "stinger_success": {
+  "desc": "success stinger, D major",
+  "bpm": 120,
+  "bars": 1,
+  "loop": false,
+  "duration_s": 4.4,
+  "lufs": -20.0,
+  "tp_dbtp": -8.13,
+  "buses": {
+   "kanun": {
+    "target_lu": -7,
+    "measured_lufs": -16.6,
+    "gain_db": -10.4
+   },
+   "pad": {
+    "target_lu": -11,
+    "measured_lufs": -2.8,
+    "gain_db": -28.2
+   },
+   "bell": {
+    "target_lu": -9,
+    "measured_lufs": -14.3,
+    "gain_db": -14.7
+   },
+   "perc": {
+    "target_lu": -14,
+    "measured_lufs": -19.4,
+    "gain_db": -14.6
+   }
+  }
+ },
+ "stinger_fail": {
+  "desc": "gentle retry stinger, IV-I in D",
+  "bpm": 90,
+  "bars": 1,
+  "loop": false,
+  "duration_s": 3.567,
+  "lufs": -19.87,
+  "tp_dbtp": -8.21,
+  "buses": {
+   "mar": {
+    "target_lu": -6,
+    "measured_lufs": -17.1,
+    "gain_db": -8.9
+   },
+   "pad": {
+    "target_lu": -11,
+    "measured_lufs": -3.3,
+    "gain_db": -27.7
+   },
+   "kanun": {
+    "target_lu": -9,
+    "measured_lufs": -21.9,
+    "gain_db": -7.1
+   }
+  }
+ },
+ "stinger_episode": {
+  "desc": "episode complete, IV-V-I in D",
+  "bpm": 96,
+  "bars": 2,
+  "loop": false,
+  "duration_s": 6.4,
+  "lufs": -19.97,
+  "tp_dbtp": -8.21,
+  "buses": {
+   "pad": {
+    "target_lu": -9,
+    "measured_lufs": -2.7,
+    "gain_db": -26.3
+   },
+   "str": {
+    "target_lu": -10,
+    "measured_lufs": -4.3,
+    "gain_db": -25.7
+   },
+   "lead": {
+    "target_lu": -6,
+    "measured_lufs": -11.0,
+    "gain_db": -15.0
+   },
+   "kanun": {
+    "target_lu": -10,
+    "measured_lufs": -19.8,
+    "gain_db": -10.2
+   },
+   "perc": {
+    "target_lu": -9,
+    "measured_lufs": -14.8,
+    "gain_db": -14.2
+   },
+   "bell": {
+    "target_lu": -12,
+    "measured_lufs": -14.6,
+    "gain_db": -17.4
+   }
   }
  }
 }

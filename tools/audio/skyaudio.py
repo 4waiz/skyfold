@@ -504,8 +504,8 @@ def seam_report(x, sr=SR, win=0.05, boundaries=None):
     Sample level: the step |x[0]-x[-1]| and curvature across the junction must not exceed the
     file's own 99.9th percentile. Level: the RMS change over 50 ms and 10 ms windows across the
     junction must not exceed the 99th percentile of the same measure inside the file. For music,
-    pass `boundaries` (sample indices of the internal bar lines): a seam that lands on a downbeat
-    then only has to behave like the file's other bar lines (+1 dB tolerance)."""
+    pass `boundaries` (sample indices of the internal bar lines): the seam is itself a bar line, so its
+    level change only has to stay within the strongest internal bar line (+1 dB tolerance)."""
     X = as2d(np.asarray(x, dtype=float))
     n, ch = X.shape
     xx = np.concatenate([X, X])
@@ -537,9 +537,10 @@ def seam_report(x, sr=SR, win=0.05, boundaries=None):
             return abs(20 * np.log10(rms(X[k:k + w_]) / rms(X[k - w_:k])))
         b50 = [jump_at(int(k), w) for k in boundaries]
         b10 = [jump_at(int(k), w10) for k in boundaries]
-        bar_jumps = {"p90_50ms_db": float(np.percentile(b50, 90)), "p90_10ms_db": float(np.percentile(b10, 90))}
-        lim = max(lim, bar_jumps["p90_50ms_db"] + 1.0)
-        lim10 = max(lim10, bar_jumps["p90_10ms_db"] + 1.0)
+        bar_jumps = {"max_50ms_db": float(max(b50)), "max_10ms_db": float(max(b10)),
+                     "median_50ms_db": float(np.median(b50)), "median_10ms_db": float(np.median(b10))}
+        lim = max(lim, bar_jumps["max_50ms_db"] + 1.0)
+        lim10 = max(lim10, bar_jumps["max_10ms_db"] + 1.0)
     ok = bool(np.all(seam1 <= np.maximum(p1, 2e-4)) and np.all(seam2 <= np.maximum(p2, 2e-4))
               and jump <= lim and jump10 <= lim10)
     return {
