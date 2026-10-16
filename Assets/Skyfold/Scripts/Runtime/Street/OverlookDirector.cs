@@ -6,6 +6,7 @@ namespace Skyfold
     /// <summary>
     /// VR comfort "Remote Drive": the player stands on a fixed elevated overlook and drives the
     /// same car remotely, so there is no artificial vehicle motion. Overlooks change only with a fade.
+    /// The platforms are only shown while in use, so they never float over the city as stray discs.
     /// </summary>
     public sealed class OverlookDirector : MonoBehaviour
     {
@@ -17,7 +18,25 @@ namespace Skyfold
         Transform m_Current;
         bool m_Switching;
 
-        void Awake() => Instance = this;
+        void Awake()
+        {
+            Instance = this;
+            ShowOnly(null);
+        }
+
+        void ShowOnly(Transform shown)
+        {
+            if (overlooks == null) return;
+            foreach (var o in overlooks) if (o != null) o.gameObject.SetActive(o == shown);
+        }
+
+        /// <summary>Shows one platform without starting Remote Drive (screenshots and the tour).</summary>
+        public void Preview(string id)
+        {
+            Transform found = null;
+            if (overlooks != null) foreach (var o in overlooks) if (o != null && o.name.EndsWith(id)) found = o;
+            ShowOnly(found);
+        }
         void OnDestroy() { if (Instance == this) Instance = null; }
 
         public bool Active => m_Car != null;
@@ -26,6 +45,7 @@ namespace Skyfold
         {
             m_Car = car;
             m_Current = Nearest(car.Position);
+            ShowOnly(m_Current);
             if (m_Current != null) PlayerRigs.Instance.TeleportTo(m_Current.position, YawTowards(m_Current.position, car.Position));
             DialogueDirector.Instance?.Play("g.remote_drive");
         }
@@ -34,6 +54,7 @@ namespace Skyfold
         {
             m_Car = null;
             m_Current = null;
+            ShowOnly(null);
         }
 
         Transform Nearest(Vector3 p)
@@ -69,6 +90,7 @@ namespace Skyfold
             m_Switching = true;
             yield return ScreenFader.Instance.FadeOut(0.2f);
             m_Current = next;
+            ShowOnly(next);
             PlayerRigs.Instance.TeleportTo(next.position, YawTowards(next.position, m_Car.Position));
             yield return ScreenFader.Instance.FadeIn(0.3f);
             m_Switching = false;

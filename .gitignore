@@ -52,3 +52,7 @@ desktop.ini
 /qa/_captures/
 *.blend1
 *.blend2
+
+# Transient files the Performance Testing package writes during a player build
+/Assets/Resources/
+/Assets/Resources.meta

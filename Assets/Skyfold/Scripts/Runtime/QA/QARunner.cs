@@ -818,6 +818,7 @@ namespace Skyfold
             // Overlook (VR comfort remote-drive viewpoint) seen from the desktop camera.
             var cam = PlayerRigs.Instance.desktop;
             var ov = Root.Layout.GetAnchor("overlook.mainland");
+            OverlookDirector.Instance?.Preview("overlook.mainland");
             PlayerRigs.Instance.TeleportTo(ov.Position + Vector3.up * 0.1f, ov.Yaw);
             cam.SetPitch(14f);
             yield return new WaitForSecondsRealtime(1.2f);
