@@ -198,14 +198,17 @@ namespace Skyfold
 
         void Taxi(float dt)
         {
-            m_Speed = Mathf.MoveTowards(m_Speed, 6.5f, dt * 1.5f);
             if (m_PathIndex >= m_Path.Count) { SetState(AircraftState.TakeoffRoll); return; }
             Vector3 target = m_Path[m_PathIndex];
             Vector3 pos = transform.position;
             Vector3 to = target - pos; to.y = 0f;
-            if (to.magnitude < 2.5f) { m_PathIndex++; return; }
-            Quaternion want = Quaternion.LookRotation(to.normalized);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, want, 55f * dt);
+            if (to.magnitude < 3.5f) { m_PathIndex++; return; }
+            // Slow right down for sharp turns so the turn circle is always tighter than the waypoint
+            // radius (otherwise it can orbit a waypoint forever), then roll on at taxi speed.
+            float error = Vector3.Angle(transform.forward, to);
+            float want = error > 25f ? 2f : Mathf.Lerp(6.5f, 3f, error / 25f);
+            m_Speed = Mathf.MoveTowards(m_Speed, want, dt * 3f);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(to.normalized), 60f * dt);
             transform.position += transform.forward * m_Speed * dt;
         }
 

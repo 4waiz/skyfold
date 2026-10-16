@@ -189,22 +189,37 @@ namespace Skyfold
             return true;
         }
 
+        Transform m_ExitPoint;
+
+        /// <summary>
+        /// Finds a safe place to stand beside the car: the driver's door first, then the other side,
+        /// then a little further out, behind and in front. Each spot needs solid ground (a raised kerb
+        /// is fine) and a clear standing space above that ground.
+        /// </summary>
         bool FindExit(out Transform exit)
         {
             exit = null;
-            int mask = ~LayerMask.GetMask("Vehicle", "Trigger", "MiniCity", "PlayerBody", "WorldUI", "Water");
-            foreach (var e in new[] { exitLeft, exitRight })
+            int mask = ~LayerMask.GetMask("Vehicle", "Trigger", "MiniCity", "PlayerBody", "WorldUI", "Water", "Interactable");
+            Vector3 r = transform.right, f = transform.forward;
+            var candidates = new List<Vector3>();
+            if (exitLeft != null) candidates.Add(exitLeft.position);
+            if (exitRight != null) candidates.Add(exitRight.position);
+            candidates.Add(transform.position - r * 2.3f);
+            candidates.Add(transform.position + r * 2.3f);
+            candidates.Add(transform.position - f * 3.1f);
+            candidates.Add(transform.position + f * 3.3f);
+            foreach (var c in candidates)
             {
-                if (e == null) continue;
-                Vector3 p = e.position;
-                if (!Physics.CheckCapsule(p + Vector3.up * 0.4f, p + Vector3.up * 1.6f, 0.3f, mask, QueryTriggerInteraction.Ignore) &&
-                    Physics.Raycast(p + Vector3.up * 1f, Vector3.down, out var hit, 2.5f, mask, QueryTriggerInteraction.Ignore) &&
-                    hit.point.y > CityLayout.WaterLevel + 0.4f)
-                {
-                    exit = e;
-                    return true;
-                }
+                if (!Physics.Raycast(c + Vector3.up * 1.8f, Vector3.down, out var ground, 3.5f, mask, QueryTriggerInteraction.Ignore)) continue;
+                if (ground.point.y < CityLayout.WaterLevel + 0.4f || ground.normal.y < 0.7f) continue;
+                Vector3 g = ground.point;
+                if (Physics.CheckCapsule(g + Vector3.up * 0.32f, g + Vector3.up * 1.6f, 0.26f, mask, QueryTriggerInteraction.Ignore)) continue;
+                if (m_ExitPoint == null) { m_ExitPoint = new GameObject("Exit Point").transform; m_ExitPoint.SetParent(transform, false); }
+                m_ExitPoint.position = g + Vector3.up * 0.02f;
+                exit = m_ExitPoint;
+                return true;
             }
+            Debug.Log($"[SKYFOLD] No room to climb out of the car at {transform.position}");
             return false;
         }
 
