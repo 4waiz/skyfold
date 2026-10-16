@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.XR.Interaction.Toolkit.UI;
 
 namespace Skyfold
 {
@@ -9,6 +12,7 @@ namespace Skyfold
     /// Bootstrap and top-level flow: launch arguments, settings, the single CityState shared by every
     /// system, launcher/title/play/pause/results, and the desktop-first Enter VR / Exit VR lifecycle.
     /// </summary>
+    [DefaultExecutionOrder(-100)]
     public sealed class GameRoot : MonoBehaviour
     {
         public static GameRoot Instance { get; private set; }
@@ -63,6 +67,14 @@ namespace Skyfold
             Layout = CityLayout.NacreBay;
             City = new CityState(Layout);
             City.OccupancyCheck = Occupancy;
+            m_PendingDemo = opts.Demo;
+            LogSystem(opts);
+            ApplyDisplay();
+        }
+
+        /// <summary>Connects every system to the one CityState. Runs after all Awake calls.</summary>
+        void BindSystems()
+        {
             foreach (var s in slots) if (s != null) s.Bind(City);
             tabletop.Bind(City);
             beacons.Bind(City);
@@ -81,13 +93,11 @@ namespace Skyfold
             m_DynamicProxy = new GameObject("Dynamic Target Proxy").transform;
             m_DynamicProxy.SetParent(transform, false);
             RegisterDynamicTargets();
-            m_PendingDemo = opts.Demo;
-            LogSystem(opts);
-            ApplyDisplay();
         }
 
         void Start()
         {
+            BindSystems();
             rigs.SetMode(PlayMode.Desktop);
             input.SetMode(PlayMode.Desktop);
             dialogue.Mode = PlayMode.Desktop;
@@ -260,6 +270,15 @@ namespace Skyfold
             rigs.SetMode(mode);
             input.SetMode(mode);
             dialogue.Mode = mode;
+            // Mouse/keyboard UI on the laptop; tracked-controller rays in VR.
+            var es = EventSystem.current;
+            if (es != null)
+            {
+                var desktopUI = es.GetComponent<InputSystemUIInputModule>();
+                var xrUI = es.GetComponent<XRUIInputModule>();
+                if (desktopUI != null) desktopUI.enabled = mode == PlayMode.Desktop;
+                if (xrUI != null) xrUI.enabled = mode == PlayMode.VR;
+            }
             if (mode == PlayMode.VR)
             {
                 fader.AttachTo(rigs.vr.Camera);

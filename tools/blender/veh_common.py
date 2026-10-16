@@ -153,21 +153,50 @@ class LoftBody:
         t = math.acos(max(-1.0, min(1.0, c)))
         return -t if face < 0 else t
 
-    def panel_side(self, part, side, ya, yb, za, zb, mat, off=0.008, nt=6, nz=3):
-        """Conformal single-sided panel (outward normals) on a flank, y = ya..yb, z = za..zb."""
+    def corner45(self, z):
+        """(x, dy) of the 45-degree point of the rounded corner at height z: flanks own the
+        surface where the normal is closer to +-X, ends where it is closer to +-Y."""
+        y0, y1, a = self.section(z)
+        b = (y1 - y0) / 2
+        e = 2.0 / self.n
+        lo, hi = 1e-5, pi / 2 - 1e-5
+        for _ in range(40):
+            t = (lo + hi) / 2
+            x = a * cos(t) ** e
+            y = b * sin(t) ** e
+            nx = (x / a) ** (self.n - 1) / a
+            ny = (y / b) ** (self.n - 1) / b
+            if nx > ny:
+                lo = t
+            else:
+                hi = t
+        t = (lo + hi) / 2
+        return a * cos(t) ** e, b * sin(t) ** e
+
+    def panel_side(self, part, side, ya, yb, za, zb, mat, off=0.008, nt=6, nz=3, margin=0.03):
+        """Conformal single-sided panel (outward normals) on a flank, y = ya..yb, z = za..zb.
+        Each row is clamped to the flank (behind the 45-degree corner line) so it never folds
+        round the corner into an end panel."""
         rows = []
         for j in range(nz + 1):
             z = za + (zb - za) * j / nz
-            row = [self.point(self.t_of_y(ya + (yb - ya) * i / nt, z, side), z, off)
+            y0, y1, a = self.section(z)
+            cy = (y0 + y1) / 2
+            x45, dy = self.corner45(z)
+            ra, rb = max(ya, cy - dy + margin), min(yb, cy + dy - margin)
+            row = [self.point(self.t_of_y(ra + (rb - ra) * i / nt, z, side), z, off)
                    for i in range(nt + 1)]
             rows.append(row if side > 0 else row[::-1])
         return self._sheet(part, rows, mat)
 
-    def panel_end(self, part, face, xa, xb, za, zb, mat, off=0.008, nt=6, nz=3):
+    def panel_end(self, part, face, xa, xb, za, zb, mat, off=0.008, nt=6, nz=3, margin=0.03):
         rows = []
         for j in range(nz + 1):
             z = za + (zb - za) * j / nz
-            row = [self.point(self.t_of_x(xa + (xb - xa) * i / nt, z, face), z, off)
+            x45, dy = self.corner45(z)
+            ra = max(xa, self.x0 - x45 + margin)
+            rb = min(xb, self.x0 + x45 - margin)
+            row = [self.point(self.t_of_x(ra + (rb - ra) * i / nt, z, face), z, off)
                    for i in range(nt + 1)]
             rows.append(row if face < 0 else row[::-1])
         return self._sheet(part, rows, mat)

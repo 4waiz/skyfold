@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -91,7 +91,8 @@ namespace Skyfold
         {
             if (m_Screen == null) return;
             var input = InputRouter.Instance;
-            if (input != null && input.Back.WasPressedThisFrame() && Time.unscaledTime - m_OpenedAt > 0.2f) Back();
+            bool escBack = input != null && input.Pause.WasPressedThisFrame() && m_Screen != "pause";
+            if (input != null && (input.Back.WasPressedThisFrame() || escBack) && Time.unscaledTime - m_OpenedAt > 0.2f) Back();
             // Keep a focused control for keyboard users.
             var es = EventSystem.current;
             if (!VRMode && es != null && (es.currentSelectedGameObject == null || !es.currentSelectedGameObject.activeInHierarchy) && m_First != null &&

@@ -110,7 +110,7 @@ def deco(a, ops, planes, target=None):
     if any_s:
         a.part(mbs, name="sills", target=target)
     if any_f:
-        a.part(mbf, bevel=0.02, seg=1, name="frames", target=target)
+        a.part(mbf, name="frames", target=target)
     if any_m:
         a.part(mbm, name="mullions", target=target)
 
@@ -784,7 +784,7 @@ def bldg_dome(a):
     a.part(mb, name="pinnacles")
 
 
-@asset("bldg_courtyard", "Buildings", "buildings", ao=BLD_AO, render=dict(BLD_RENDER, az=-35.0))
+@asset("bldg_courtyard", "Buildings", "buildings", ao=BLD_AO, render=dict(BLD_RENDER, az=42.0, el=30.0))
 def bldg_courtyard(a):
     """L-shaped 2-storey house around a shaded courtyard (palm, fountain, sail) open to Unity N/W."""
     from env_nature import palm
@@ -798,9 +798,9 @@ def bldg_courtyard(a):
     opsA = [Op('N', x, 0.35, 1.7, 2.9, 'round', depth=1.4, back=wall, sill=False, frame='SKY_Pearl', frame_t=0.12)
             for x in (0.5, 2.6, 4.7)]
     opsA += [Op('N', x, 4.0, 1.0, 1.75, 'pointed', seg=4) for x in (0.5, 2.6, 4.7)]
-    opsA += [Op('S', x, z, 1.0, 1.75, 'round') for x in (-4.0, 0.0, 4.0) for z in (1.0, 4.0)]
+    opsA += [Op('S', x, z, 1.0, 1.75, 'round') for x in (-3.0, 3.0) for z in (1.0, 4.0)]
     opsA += [Op('W', 3.75, 1.0, 1.0, 1.75, 'round'), Op('W', 3.75, 4.0, 1.0, 1.75, 'pointed', seg=4)]
-    opsA += [Op('E', 3.75, 1.0, 1.0, 1.75, 'round'), Op('E', 3.75, 4.0, 1.0, 1.75, 'round')]
+    opsA += [Op('E', 3.75, 4.0, 1.0, 1.75, 'round')]
     block(a, A[0], A[1], A[2], A[3], 0.0, zr, wall, opsA, name="wingA", fm={'top': 'SKY_Kerb'})
     opsB = [Op('W', y, 0.35, 1.7, 2.9, 'round', depth=1.4, back=wall, sill=False, frame='SKY_Pearl', frame_t=0.12)
             for y in (-4.3, -2.2)]
@@ -837,7 +837,7 @@ def bldg_courtyard(a):
     fx, fy = 2.6, -2.4
     mb = MB()
     mb.lathe([(0, 0.12), (1.25, 0.12), (1.25, 0.55), (1.08, 0.55), (1.08, 0.4), (0, 0.4)], 16, 'SKY_Pearl', cx=fx, cy=fy)
-    a.part(mb, bevel=0.02, seg=1, name="fountain_basin")
+    a.part(mb, name="fountain_basin")
     mb = MB()
     mb.lathe([(0, 0.4), (1.09, 0.4), (1.09, 0.47), (0, 0.47)], 16, 'SKY_TealLight', cx=fx, cy=fy)
     a.part(mb, name="fountain_water")
@@ -849,8 +849,8 @@ def bldg_courtyard(a):
     mb.lathe([(0, 1.05), (0.4, 1.05), (0, 1.1)], 10, 'SKY_TealLight', cx=fx, cy=fy)
     a.part(mb, name="fountain_bowl_water")
     # palm (separate shell parts merged into the building mesh)
-    palm(a, x=4.6, y=0.0, z=0.12, height=4.4, lean=(0.5, -0.4), fronds=10, frond_len=2.6, r0=0.26, r1=0.18,
-         seed=21, dates=False, frond_seg=7, trunk_seg=8, sides=7)
+    palm(a, x=4.6, y=0.0, z=0.12, height=4.4, lean=(0.5, -0.4), fronds=9, frond_len=2.6, r0=0.26, r1=0.18,
+         seed=21, dates=False, frond_seg=6, trunk_seg=8, sides=7)
     a.set_target(a.name, weighted=True, smooth=48.0)
     mb = MB()
     mb.lathe([(0, 0.12), (0.55, 0.12), (0.55, 0.45), (0, 0.45)], 10, 'SKY_SandstoneDeep', cx=4.6, cy=0.0)
@@ -1071,7 +1071,7 @@ def bldg_terminal(a):
     mb.box(-6.9, 6.9, -5.02, -4.96, 5.5, 5.58, 'SKY_TealGlow')
     a.part(mb, name="glow")
     mb = MB()
-    mb.box(-7.05, 7.05, -5.05, Y0 + 0.2, 5.95, 6.05, 'SKY_Brass')
+    mb.box(-7.05, 7.05, -5.05, -4.85, 5.95, 6.05, 'SKY_Brass')
     a.part(mb, name="canopy_trim")
     # forecourt and drop-off kerb
     mb = MB()
@@ -1099,6 +1099,20 @@ def bldg_terminal(a):
     mb = MB()
     mb.box(X0 + 0.25, X1 - 0.25, Y0 + 0.35, Y1 - 0.35, zw, zw + 0.25, 'SKY_TealLight')
     a.part(mb, name="clerestory")
+    # glazed lunettes closing both vault ends + radial brass mullions
+    lun = [(x * 0.965, z - 0.2) for (x, z) in crv]
+    mb = MB()
+    for y in (Y0 + 0.32, Y1 - 0.32):
+        mb.prism_frame(lun, (0, 0, 0), (1, 0, 0), (0, 0, 1), (0, 1, 0), y - 0.05, y + 0.05, 'SKY_Glass')
+    a.part(mb, name="lunettes")
+    mb = MB()
+    for y in (Y0 + 0.25,):
+        for t in (30, 60, 90, 120, 150):
+            ex = math.cos(math.radians(t)) * 6.4
+            ez = zw + 0.05 + 1.33 * math.sin(math.radians(t))
+            mb.sweep([(0, y, zw + 0.25), (ex, y, ez)], circle(0.05, 4), 'SKY_Brass')
+    a.part(mb, name="lunette_mullions")
+
     mb = MB()
     for y in (Y0 + 0.2, Y1 - 0.2):
         mb.box(X0, X1, y - 0.12, y + 0.12, zw, zw + 0.25, 'SKY_Sandstone')

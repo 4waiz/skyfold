@@ -222,7 +222,7 @@ def amb_atelier_loop():
                         attack=0.004)
             sa.place(chimes, sa.pan(x, rng.uniform(-0.5, 0.5)), int((p + j * rng.uniform(0.15, 0.5)) * SR), wrap=True)
     chimes = chimes + 0.7 * sa.convolve(chimes, sa.reverb_ir(2.2, seed=51), circular=True)
-    out += chimes * 0.05
+    out += chimes * 0.16
     out = out + 0.1 * sa.convolve(out, sa.reverb_ir(1.6, seed=52), circular=True)
     return out
 
@@ -242,7 +242,7 @@ def amb_storm_loop():
     gust_frames = lambda tt: np.interp(np.mod(tt, T), np.arange(0, T, 0.05), gust[:: int(0.05 * SR)][: len(np.arange(0, T, 0.05))])
     howl = tv_filter(howl_src, lambda tt, f: np.exp(-0.5 * (np.log2(np.maximum(f, 1) / (380 + 520 * gust_frames(tt))) / 0.18) ** 2),
                      nper=4096, hop=512, period=T)
-    out += howl / np.std(howl) * 0.09 * (0.2 + 0.8 * gust)[:, None]
+    out += howl / np.std(howl) * 0.12 * (0.2 + 0.8 * gust)[:, None]
     rum = np.zeros((n, 2))
     for t0 in event_times(rng, T, 4, 0.3):
         d = rng.uniform(6.0, 9.0)

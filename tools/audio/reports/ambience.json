@@ -1,0 +1,74 @@
+{
+ "amb_coast_loop": {
+  "desc": "gentle waves + soft wind",
+  "duration_s": 48.0,
+  "lufs": -24.0,
+  "tp_dbtp": -9.53,
+  "seam": {
+   "seam_step": 0.012542724609375,
+   "p999_step": 0.067413330078125,
+   "seam_curv": 0.005584716796875,
+   "p999_curv": 0.05447396850586017,
+   "rms_jump_50ms_db": 0.3421949349047059,
+   "rms_jump_50ms_limit": 2.0685398603813865,
+   "rms_jump_10ms_db": 0.458496067386686,
+   "rms_jump_10ms_limit": 3.0256473538178126,
+   "bar_line_jumps": null,
+   "ok": true
+  }
+ },
+ "amb_city_loop": {
+  "desc": "distant city murmur/hum + far birds",
+  "duration_s": 48.0,
+  "lufs": -24.0,
+  "tp_dbtp": -11.06,
+  "seam": {
+   "seam_step": 0.004119873046875,
+   "p999_step": 0.018402099609375,
+   "seam_curv": 0.000396728515625,
+   "p999_curv": 0.007293701171875,
+   "rms_jump_50ms_db": 0.18433268688344828,
+   "rms_jump_50ms_limit": 1.781872508072904,
+   "rms_jump_10ms_db": 1.6423345175958581,
+   "rms_jump_10ms_limit": 4.0239687152091905,
+   "bar_line_jumps": null,
+   "ok": true
+  }
+ },
+ "amb_atelier_loop": {
+  "desc": "terrace breeze + faint chimes",
+  "duration_s": 60.0,
+  "lufs": -24.0,
+  "tp_dbtp": -10.72,
+  "seam": {
+   "seam_step": 0.003814697265625,
+   "p999_step": 0.02398681640625,
+   "seam_curv": 0.00341796875,
+   "p999_curv": 0.0086669921875,
+   "rms_jump_50ms_db": 0.10575191021673552,
+   "rms_jump_50ms_limit": 1.5,
+   "rms_jump_10ms_db": 0.24821532637935412,
+   "rms_jump_10ms_limit": 2.976430343241963,
+   "bar_line_jumps": null,
+   "ok": true
+  }
+ },
+ "amb_storm_loop": {
+  "desc": "gusty wind + distant rumble",
+  "duration_s": 60.0,
+  "lufs": -24.0,
+  "tp_dbtp": -9.2,
+  "seam": {
+   "seam_step": 0.001495361328125,
+   "p999_step": 0.010223388671875,
+   "seam_curv": 0.00018310546875,
+   "p999_curv": 0.001617431640625,
+   "rms_jump_50ms_db": 1.980447509427209,
+   "rms_jump_50ms_limit": 3.8834759019320715,
+   "rms_jump_10ms_db": 3.34615121578993,
+   "rms_jump_10ms_limit": 6.510864171668654,
+   "bar_line_jumps": null,
+   "ok": true
+  }
+ }
+}

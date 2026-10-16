@@ -7,6 +7,8 @@ namespace Skyfold
     {
         public Transform lever;
         public AircraftSequence aircraft;
+        Quaternion m_Base;
+        bool m_HasBase;
         float m_Angle = -35f;
 
         CityState City => GameRoot.Instance != null ? GameRoot.Instance.City : null;
@@ -37,7 +39,7 @@ namespace Skyfold
         {
             float target = Cleared ? 35f : -35f;
             m_Angle = Mathf.MoveTowards(m_Angle, target, Time.deltaTime * 200f);
-            if (lever != null) lever.localRotation = Quaternion.Euler(m_Angle, 0f, 0f);
+            if (lever != null) { if (!m_HasBase) { m_Base = lever.localRotation; m_HasBase = true; } lever.localRotation = m_Base * Quaternion.Euler(m_Angle, 0f, 0f); }
         }
     }
 }
