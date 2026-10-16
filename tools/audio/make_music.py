@@ -77,6 +77,7 @@ class Track:
         self.rng = np.random.default_rng(seed)
         self.buses = {}
         self.rt60, self.verb_gain = rt60, verb_gain
+        self.auto = None          # optional master automation [(bar, dB), ...] for one-shots
 
     def bus(self, name, level=-10.0, verb=0.2, delay=None):
         """level: target loudness of this bus in LU relative to the mix reference (gated BS.1770, so a
@@ -181,6 +182,9 @@ class Track:
         ir = sa.reverb_ir(self.rt60, seed=ir_seed)
         wet = sa.convolve(send, ir, circular=self.loop)[:n] * self.verb_gain
         mix = dry + wet
+        if self.auto:
+            pts = [(b * self.bar, d) for b, d in self.auto]
+            mix = mix * sa.db2a(sa.env_points(n, pts))[:, None]
         if self.loop:
             mix = sa.filt_circ(mix - mix.mean(axis=0), sa.sos("highpass", 28, 2))
         else:
@@ -528,6 +532,8 @@ def music_finale():
     tr.bus("bass", -12, 0.05)
     tr.bus("perc", -11, 0.15)
     tr.bus("bell", -16, 0.6)
+    # dynamic arc: soft wonder -> build -> takeoff uplift -> gentle resolve
+    tr.auto = [(0, -8), (4, -7), (7.6, -2.5), (8, 0), (13.5, 0), (14, -2.5), (15, -5), (18, -6)]
     C = {"Dmaj9": (38, [50, 57, 61, 64, 66]), "Bm9": (35, [47, 54, 57, 61, 62]), "Gmaj9": (43, [47, 54, 57, 59, 62]),
          "Asus4": (45, [50, 52, 57, 62]), "A": (45, [49, 52, 57, 61]), "G": (43, [50, 55, 59, 62]),
          "Bm": (35, [50, 54, 59, 62]), "A/C#": (37, [52, 57, 61, 64]), "Bsus4": (47, [52, 54, 59, 64]),

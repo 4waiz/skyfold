@@ -34,7 +34,7 @@ namespace Skyfold
         float m_StateTime;
         float m_Pitch, m_Bank;
         AudioSource m_Engine;
-        bool m_EngineLoud;
+        bool? m_LightsPowered;
         static readonly int EmissionId = Shader.PropertyToID("_EmissionColor");
         MaterialPropertyBlock m_Block;
 
@@ -245,14 +245,9 @@ namespace Skyfold
             if (navRight != null) navRight.enabled = powered;
             if (beacon != null) beacon.enabled = powered && Mathf.Repeat(Time.time, 1.2f) < 0.15f;
             if (landing != null) landing.enabled = State >= AircraftState.Taxi && State != AircraftState.Departed;
-            if (cabinWindows == null) return;
-            foreach (var r in cabinWindows)
-            {
-                if (r == null) continue;
-                r.GetPropertyBlock(m_Block);
-                m_Block.SetColor(EmissionId, powered ? new Color(1f, 0.85f, 0.6f) * 2f : Color.black);
-                r.SetPropertyBlock(m_Block);
-            }
+            if (cabinWindows == null || m_LightsPowered == powered) return;
+            m_LightsPowered = powered;
+            foreach (var r in cabinWindows) Substation.SetEmissiveSlots(r, powered ? new Color(1f, 0.85f, 0.6f) * 2f : Color.black, m_Block);
         }
     }
 }

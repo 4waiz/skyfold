@@ -63,12 +63,22 @@ namespace Skyfold
                 r.SetPropertyBlock(m_Block);
             }
             foreach (var l in islandLights) if (l != null) l.enabled = on;
-            foreach (var r in islandWindows)
+            foreach (var r in islandWindows) SetEmissiveSlots(r, on ? new Color(1f, 0.85f, 0.6f) * 2.2f : Color.black, m_Block);
+        }
+
+        /// <summary>Applies emission only to the window/lamp material slots of a multi-material renderer.</summary>
+        public static void SetEmissiveSlots(Renderer r, Color emission, MaterialPropertyBlock block)
+        {
+            if (r == null) return;
+            var mats = r.sharedMaterials;
+            for (int i = 0; i < mats.Length; i++)
             {
-                if (r == null) continue;
-                r.GetPropertyBlock(m_Block);
-                m_Block.SetColor(EmissionId, on ? new Color(1f, 0.85f, 0.6f) * 2.5f : Color.black);
-                r.SetPropertyBlock(m_Block);
+                if (mats[i] == null) continue;
+                string n = mats[i].name;
+                if (n != "SKY_Light" && n != "SKY_Glass") continue;
+                r.GetPropertyBlock(block, i);
+                block.SetColor(EmissionId, n == "SKY_Glass" ? emission * 0.35f : emission);
+                r.SetPropertyBlock(block, i);
             }
         }
     }

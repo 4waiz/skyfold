@@ -291,7 +291,7 @@
   "loop": false,
   "duration_s": 44.5,
   "lufs": -20.0,
-  "tp_dbtp": -5.62,
+  "tp_dbtp": -4.47,
   "buses": {
    "pad": {
     "target_lu": -10,

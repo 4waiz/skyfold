@@ -29,11 +29,12 @@ namespace Skyfold.EditorTools
         {
             EnsureEssentials();
             Directory.CreateDirectory(Folder);
-            foreach (var f in Directory.GetFiles(SourceDir))
+            // Ship only the faces in use (the variable source font stays in source-art).
+            foreach (var name in new[] { "Unbounded-SemiBold.ttf", "Unbounded-OFL.txt", "AtkinsonHyperlegible-Regular.ttf", "AtkinsonHyperlegible-Bold.ttf", "AtkinsonHyperlegible-OFL.txt" })
             {
-                string name = Path.GetFileName(f);
-                if (name.EndsWith(".ttf") || name.EndsWith(".otf") || name.EndsWith(".txt"))
-                    File.Copy(f, Path.Combine(Folder, name), true);
+                string f = Path.Combine(SourceDir, name);
+                if (File.Exists(f)) File.Copy(f, Path.Combine(Folder, name), true);
+                else Debug.LogWarning("[SKYFOLD] Font source missing: " + f);
             }
             AssetDatabase.Refresh();
 
