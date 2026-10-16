@@ -154,7 +154,7 @@ namespace Skyfold.EditorTools
 
         static void ConfigureXR()
         {
-            if (!EditorBuildSettings.TryGetConfigObject(XRGeneralSettings.k_SettingsKey, out XRGeneralSettingsPerBuildTarget perTarget) || perTarget == null)
+            if (!EditorBuildSettings.TryGetConfigObject(XRGeneralSettings.settingsKey, out XRGeneralSettingsPerBuildTarget perTarget) || perTarget == null)
             {
                 var guids = AssetDatabase.FindAssets("t:XRGeneralSettingsPerBuildTarget");
                 if (guids.Length > 0)
@@ -166,7 +166,7 @@ namespace Skyfold.EditorTools
                     perTarget = ScriptableObject.CreateInstance<XRGeneralSettingsPerBuildTarget>();
                     AssetDatabase.CreateAsset(perTarget, XRSettingsFolder + "/XRGeneralSettingsPerBuildTarget.asset");
                 }
-                EditorBuildSettings.AddConfigObject(XRGeneralSettings.k_SettingsKey, perTarget, true);
+                EditorBuildSettings.AddConfigObject(XRGeneralSettings.settingsKey, perTarget, true);
             }
 
             if (!perTarget.HasManagerSettingsForBuildTarget(BuildTargetGroup.Standalone))

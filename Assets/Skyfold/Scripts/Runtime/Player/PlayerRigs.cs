@@ -18,7 +18,14 @@ namespace Skyfold
 
         public Camera ActiveCamera => Mode == PlayMode.VR && vr != null ? vr.Camera : desktop != null ? desktop.cam : Camera.main;
         public Transform Head => Mode == PlayMode.VR && vr != null ? vr.Head : desktop.Head;
-        public Vector3 FeetPosition => Mode == PlayMode.VR && vr != null ? vr.FeetPosition : desktop.FeetPosition;
+        public Vector3 FeetPosition
+        {
+            get
+            {
+                if (IsDriving && CourierVehicle.Instance != null) return CourierVehicle.Instance.Position;
+                return Mode == PlayMode.VR && vr != null ? vr.FeetPosition : desktop.FeetPosition;
+            }
+        }
 
         public Vector3 Forward
         {

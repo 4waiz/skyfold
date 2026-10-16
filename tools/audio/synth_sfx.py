@@ -73,6 +73,7 @@ def layer(parts, extra=0.0):
     end = max(int(round(t0 * SR)) + len(x) for x, t0, _ in parts) + int(extra * SR)
     buf = np.zeros(end)
     for x, t0, g in parts:
+        x = sa.fade(x, 0.0005, 0.004) if len(x) > int(0.01 * SR) else x   # no truncation clicks
         sa.place(buf, x * sa.db2a(g), int(round(t0 * SR)))
     return buf
 
@@ -307,7 +308,7 @@ def piece_drop(r):
 def piece_rotate(r):
     parts = []
     for i, (t0, f) in enumerate([(0.0, 1650), (0.048, 1800), (0.096, 1950)]):
-        parts.append((tick(r, f, 0.005), t0, -8 + 2 * i))
+        parts.append((sa.lp(tick(r, f, 0.005, noise_amt=0.25), 6000, 2), t0, -8 + 2 * i))
         parts.append((K(["interface/click_002.ogg", "interface/click_003.ogg", "interface/click_005.ogg"][i],
                         lp=6000), t0 + 0.001, -16))
     sw = whoosh(0.22, lambda tt: 1200 + 900 * np.clip(tt / 0.22, 0, 1), r, bw=0.6,
@@ -323,7 +324,7 @@ def socket_snap(r):
     chime = (ss.bell(81, r, tau=0.55, vel=1.0, partials=ss.BELL_GLASS, attack=0.006, dur=1.0)
              + 0.6 * ss.bell(88, r, tau=0.45, vel=1.0, partials=ss.BELL_GLASS, attack=0.006, dur=1.0))
     chime = verb(chime, wet=0.3, rt60=0.9)
-    return layer([(K("impact/impactMetal_medium_002.ogg", lp=7000), 0, -2),
+    return layer([(K("impact/impactMetal_medium_002.ogg", lp=6000), 0, -2),
                   (tick(r, 2300, 0.008), 0.022, -6),
                   (body, 0.0, -8),
                   (chime, 0.035, -7)])
@@ -356,7 +357,7 @@ def bridge_assemble(r):
     clicks = ["interface/click_002.ogg", "interface/click_003.ogg", "interface/click_005.ogg"]
     for k in range(N):
         tk = 0.08 + 1.3 * (k / N) ** 0.7
-        parts.append((tick(r, 1600 + 40 * k, 0.005), tk, -15))
+        parts.append((sa.lp(tick(r, 1600 + 40 * k, 0.005, noise_amt=0.25), 6000, 2), tk, -15))
         parts.append((K(clicks[k % 3], lp=6000), tk, -19))
     for rel, tk in [("impact/impactPlank_medium_001.ogg", 0.32), ("impact/impactPlank_medium_002.ogg", 0.78),
                     ("impact/impactPlank_medium_003.ogg", 1.12)]:
@@ -372,10 +373,10 @@ def bridge_assemble(r):
 
 
 def route_complete(r):
-    buf = np.zeros(int(1.0 * SR))
+    buf = np.zeros(int(2.0 * SR))
     for i, m in enumerate([74, 78, 81, 86, 90]):
-        x = ss.fm_bell(m, r, tau=0.9, ratio=1.0, index=1.6, itau=0.15, dur=1.0) \
-            + 0.5 * ss.pluck(m, r, "harp", vel=0.8, dur=1.0)
+        x = ss.fm_bell(m, r, tau=0.9, ratio=1.0, index=1.6, itau=0.15, dur=1.5) \
+            + 0.4 * sa.lp(ss.pluck(m, r, "harp", vel=0.6, dur=1.5), 6000, 2)
         sa.place(buf, x * (0.75 + 0.06 * i), int(i * 0.09 * SR))
     padn = int(1.3 * SR)
     pad = sum(mono(ss.pad_note(m, 0.6, r, attack=0.2, release=0.7, bright=0.7)) for m in (62, 66, 69))[:padn]
@@ -391,15 +392,15 @@ def fold_out(r):
     n, t = T(0.3)
     settle = np.sin(2 * np.pi * 90 * t) * np.exp(-t / 0.1)
     settle[:96] *= np.linspace(0, 1, 96)
-    return layer([(w, 0, 0), (K("casino/card-slide-1.ogg", lp=7000), 0.12, -10),
-                  (K("casino/card-fan-1.ogg", rate=0.9, lp=6500), 0.35, -14),
+    return layer([(w, 0, 0), (K("casino/card-slide-1.ogg", lp=5500), 0.12, -11),
+                  (K("casino/card-fan-1.ogg", rate=0.9, lp=5000), 0.35, -15),
                   (settle, 0.8, -14), (K("impact/impactSoft_medium_000.ogg"), 0.8, -14)])
 
 
 def fold_in(r):
     w = whoosh(0.95, lambda tt: 450 + 2750 * (np.clip(tt / 0.9, 0, 1) ** 2), r, bw=0.9,
                amp_pts=[(0, 0), (0.55, 0.6), (0.85, 1), (0.95, 0)])
-    paper = K("casino/card-slide-1.ogg", lp=7000, rev=True)
+    paper = K("casino/card-slide-1.ogg", lp=5500, rev=True)
     sparkle = verb(ss.glass(93, r, 0.7, tau=0.5), 0.4, 1.0)
     return layer([(w, 0, 0), (paper, max(0.0, 0.88 - len(paper) / SR), -11), (sparkle, 0.88, -20)])
 
@@ -425,7 +426,7 @@ def cell_insert(r):
         hum += a * np.sin(k * ph + r.random() * 6.28)
     hum *= sa.env_points(n, [(0.05, 0), (0.25, 0.5), (0.9, 1), (1.15, 0)])
     return layer([(K("impact/impactMetal_medium_000.ogg", lp=6500), 0, -2),
-                  (K("interface/switch_007.ogg", lp=6000), 0.015, -8),
+                  (K("interface/switch_007.ogg", lp=5000), 0.015, -8),
                   (hum, 0.0, -6), (ss.bell(81, r, tau=0.4, dur=0.8), 0.95, -16)])
 
 
@@ -461,7 +462,7 @@ def substation_on(r):
     parts = [(thunk, 0, -2), (K("impact/impactSoft_heavy_002.ogg"), 0, -3),
              (K("impact/impactMetal_heavy_000.ogg", lp=5000), 0.002, -10), (sa.lp(hum, 2500, 2), 0, -10)]
     for tk, g in [(0.35, -12), (0.47, -14), (0.6, -13), (0.9, -16)]:
-        parts.append((tick(r, 2000, 0.006), tk, g))
+        parts.append((sa.lp(tick(r, 2000, 0.006, noise_amt=0.3), 6000, 2), tk, g))
         parts.append((K("interface/click_001.ogg", lp=6000), tk, g - 4))
     return layer(parts)
 
@@ -523,7 +524,7 @@ def thunder_far_03(r):
 
 def checkpoint(r):
     def n_(m):
-        return ss.bell(m, r, tau=0.7, dur=1.2) + 0.35 * ss.pluck(m, r, "harp", vel=0.7, dur=1.2)
+        return ss.bell(m, r, tau=0.7, dur=1.2) + 0.25 * sa.lp(ss.pluck(m, r, "harp", vel=0.6, dur=1.2), 5000, 2)
     return verb(layer([(n_(81), 0, -1), (n_(86), 0.11, 0)]), 0.2, 1.2, tail=0.3)
 
 
@@ -616,7 +617,7 @@ def car_motor_loop(r):
     y *= 1 + 0.04 * np.sin(2 * np.pi * 1.0 * t)
     nz = sa.fft_shape(r.standard_normal(n), sa.band_curve(200, 3000))
     y += 0.05 * nz / np.std(nz) * (1 + 0.3 * np.sin(2 * np.pi * 240.0 * t))
-    return finish_loop(y, lp=6000)
+    return finish_loop(y, lp=4500)
 
 
 def car_roll_loop(r):
@@ -627,7 +628,7 @@ def car_roll_loop(r):
     hiss = sa.fft_shape(r.standard_normal(n), sa.band_curve(1500, 5000))
     y = y / np.std(y) + 0.08 * hiss / np.std(hiss)
     mod = 1 + 0.08 * np.sin(2 * np.pi * 5 * t / 3.0) + 0.06 * (sa.smooth_random(n, 12, r) - 0.5)
-    return finish_loop(y * mod, lp=7000)
+    return finish_loop(y * mod, lp=4500)
 
 
 def car_bump(r):
@@ -705,7 +706,7 @@ def _turboprop(n, f1, f2, whine1, whine2, noise_gain, r, circular=False, chop=0.
 def plane_idle_loop(r):
     n = 4 * SR                                     # 4 s: all rates are multiples of 0.25 Hz
     y = _turboprop(n, 62.0, 62.75, 2250.0, 2262.5, 1.0, r, circular=True)
-    return finish_loop(y, lp=8000)
+    return finish_loop(y, lp=6000)
 
 
 def plane_spoolup(r):
@@ -797,25 +798,25 @@ def _footstep(src, rate):
 #  id: (function, loop, lp_hz)
 SFX = {
     "piece_pickup": (piece_pickup, False, 10000), "piece_drop": (piece_drop, False, 9000),
-    "piece_rotate": (piece_rotate, False, 9000), "socket_snap": (socket_snap, False, 10000),
-    "socket_reject": (socket_reject, False, 8000), "bridge_assemble": (bridge_assemble, False, 10000),
-    "route_complete": (route_complete, False, 11000), "fold_out": (fold_out, False, 10000),
-    "fold_in": (fold_in, False, 10000), "cell_pickup": (cell_pickup, False, 9000),
-    "cell_insert": (cell_insert, False, 9000), "power_transfer": (power_transfer, False, 10000),
-    "substation_on": (substation_on, False, 9000), "switch_lever": (switch_lever, False, 8000),
+    "piece_rotate": (piece_rotate, False, 7000), "socket_snap": (socket_snap, False, 9000),
+    "socket_reject": (socket_reject, False, 8000), "bridge_assemble": (bridge_assemble, False, 8000),
+    "route_complete": (route_complete, False, 9000), "fold_out": (fold_out, False, 8500),
+    "fold_in": (fold_in, False, 8500), "cell_pickup": (cell_pickup, False, 9000),
+    "cell_insert": (cell_insert, False, 9000), "power_transfer": (power_transfer, False, 8000),
+    "substation_on": (substation_on, False, 7000), "switch_lever": (switch_lever, False, 8000),
     "beacon_on": (beacon_on, False, 10000), "warning_chime": (warning_chime, False, 10000),
     "thunder_far_01": (thunder_far_01, False, 3000), "thunder_far_02": (thunder_far_02, False, 3000),
-    "thunder_far_03": (thunder_far_03, False, 3000), "checkpoint": (checkpoint, False, 11000),
-    "objective_complete": (objective_complete, False, 11000), "hint_ping": (hint_ping, False, 10000),
+    "thunder_far_03": (thunder_far_03, False, 3000), "checkpoint": (checkpoint, False, 8000),
+    "objective_complete": (objective_complete, False, 9000), "hint_ping": (hint_ping, False, 10000),
     "ui_hover": (ui_hover, False, 8000), "ui_click": (ui_click, False, 8000), "ui_back": (ui_back, False, 8000),
-    "ui_toggle": (ui_toggle, False, 8000), "ui_slider_tick": (ui_slider_tick, False, 7000),
+    "ui_toggle": (ui_toggle, False, 6500), "ui_slider_tick": (ui_slider_tick, False, 7000),
     "car_enter": (car_enter, False, 8000), "car_start": (car_start, False, 8000),
     "car_motor_loop": (car_motor_loop, True, None), "car_roll_loop": (car_roll_loop, True, None),
     "car_bump": (car_bump, False, 8000), "car_horn": (car_horn, False, 6000),
     "plane_idle_loop": (plane_idle_loop, True, None), "plane_spoolup": (plane_spoolup, False, 9000),
     "plane_takeoff": (plane_takeoff, False, 9000), "plane_flyby": (plane_flyby, False, 9000),
     "convoy_beep": (convoy_beep, False, 6000), "splash": (splash, False, 9000),
-    "respawn": (respawn, False, 11000), "teleport": (teleport, False, 10000),
+    "respawn": (respawn, False, 9000), "teleport": (teleport, False, 10000),
     "door_chime": (door_chime, False, 10000),
 }
 for i, (src, rate) in enumerate([("impact/footstep_concrete_000.ogg", 1.0), ("impact/footstep_concrete_001.ogg", 0.96),
@@ -846,7 +847,7 @@ def main():
         CUR[0] = sid
         USED[sid] = []
         y = fn(R(sid))
-        y = finish_loop(y, lp=lp_hz or 9000) if loop else finish(y, lp=lp_hz, max_dur=MAX_DUR.get(sid))
+        y = finish_loop(y, lp=None) if loop else finish(y, lp=lp_hz, max_dur=MAX_DUR.get(sid))
         sa.write_wav(OUT / f"{sid}.wav", y, seed=zlib.crc32(sid.encode()))
         info = {"kenney": USED.get(sid, []), "loop": loop, "duration_s": round(len(y) / SR, 3)}
         if sid.startswith("nuri_"):

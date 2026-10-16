@@ -1,4 +1,4 @@
-﻿{
+{
     "name": "Skyfold.Runtime",
     "rootNamespace": "Skyfold",
     "references": [
@@ -10,7 +10,8 @@
         "Unity.RenderPipelines.Universal.Runtime",
         "Unity.RenderPipelines.Core.Runtime",
         "Unity.TextMeshPro",
-        "UnityEngine.UI"
+        "UnityEngine.UI",
+        "Unity.XR.Interaction.Toolkit.Samples.StarterAssets"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit.UI;
@@ -410,8 +410,8 @@ namespace Skyfold
 
         DesktopInteractionScanner m_Scanner;
         VRUseHandler m_VRUse;
-        DesktopInteractionScanner FindScanner() => m_Scanner != null ? m_Scanner : (m_Scanner = FindFirstObjectByType<DesktopInteractionScanner>());
-        VRUseHandler FindVRUse() => m_VRUse != null ? m_VRUse : (m_VRUse = FindFirstObjectByType<VRUseHandler>());
+        DesktopInteractionScanner FindScanner() => m_Scanner != null ? m_Scanner : (m_Scanner = FindAnyObjectByType<DesktopInteractionScanner>());
+        VRUseHandler FindVRUse() => m_VRUse != null ? m_VRUse : (m_VRUse = FindAnyObjectByType<VRUseHandler>());
 
         void UpdateArrow(bool show, ObjectiveDef o, PlayerRigs rigs)
         {

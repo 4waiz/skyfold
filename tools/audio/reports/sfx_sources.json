@@ -224,7 +224,7 @@
   "loop": false
  },
  "piece_drop": {
-  "duration_s": 0.175,
+  "duration_s": 0.289,
   "kenney": [
    "impact/impactSoft_medium_002.ogg",
    "impact/impactWood_light_001.ogg",
@@ -233,7 +233,7 @@
   "loop": false
  },
  "piece_pickup": {
-  "duration_s": 0.174,
+  "duration_s": 0.195,
   "kenney": [
    "impact/impactWood_light_002.ogg"
   ],
@@ -312,7 +312,7 @@
   "loop": false
  },
  "switch_lever": {
-  "duration_s": 0.31,
+  "duration_s": 0.309,
   "kenney": [
    "interface/switch_007.ogg",
    "impact/impactMetal_heavy_004.ogg"

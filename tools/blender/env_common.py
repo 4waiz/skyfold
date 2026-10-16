@@ -521,6 +521,12 @@ def assemble(asset, ao=True, ao_kw=None):
     for target, parts in asset.targets.items():
         dg = bpy.context.evaluated_depsgraph_get()
         meshes = [_bake_object(p) for p in parts]
+        if os.environ.get("SKY_PART_STATS"):
+            stats = {}
+            for p, m in zip(parts, meshes):
+                key = p.name.split("__")[-1]
+                stats[key] = stats.get(key, 0) + sum(len(pg.vertices) - 2 for pg in m.polygons)
+            print("  parts:", ", ".join(f"{k}={v}" for k, v in sorted(stats.items(), key=lambda kv: -kv[1])))
         me = _merge_meshes(target, meshes)
         for p in parts:
             bpy.data.objects.remove(p, do_unlink=True)

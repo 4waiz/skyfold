@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -180,7 +180,7 @@ namespace Skyfold
             if (def.ConvoyAtTerminal) Ctx.Convoy.PlaceAtTerminal();
             else Ctx.Convoy.ResetAtDepot();
             Ctx.Aircraft.ResetToPark();
-            FindFirstObjectByType<TrafficDirector>()?.ResetCars();
+            FindAnyObjectByType<TrafficDirector>()?.ResetCars();
             StormDirector.Instance?.SetProgress(0f);
             Ctx.Guide.Hide();
             Ctx.Tabletop.SyncFromState();
@@ -454,6 +454,19 @@ namespace Skyfold
             if (Ctx.Car.HasDriver) Ctx.Car.EndDriving(Ctx.Car.Position, 0f);
             Begin(MissionCatalog.Get(Current.Id));
             yield return ScreenFader.Instance.FadeIn(0.35f);
+        }
+
+        /// <summary>The living title-screen city: broken causeway, traffic, no objectives or timer.</summary>
+        public void PrepareShowcase()
+        {
+            var def = MissionCatalog.Get(MissionCatalog.Episode1);
+            Current = null;
+            m_Checkpoint = null;
+            FullScaleSlot.SuppressAnimation = true;
+            Ctx.City.Configure(def.ActiveSockets, def.Presets, def.Inventory);
+            FullScaleSlot.SuppressAnimation = false;
+            ResetWorld(def);
+            SetState(MissionState.Idle);
         }
 
         public void Abort()
