@@ -127,6 +127,15 @@ def mesh_into(mb, me, mat, flat_z=None, squash=0.1, mat_fn=None):
         for v in bm.verts:
             if v.co.z < flat_z:
                 v.co.z = flat_z + (v.co.z - flat_z) * squash
+    # weld slivers left by decimation / the squashed base (no zero-area faces)
+    for _ in range(3):
+        bmesh.ops.dissolve_degenerate(bm, dist=0.01, edges=bm.edges[:])
+        bad = [f for f in bm.faces if f.calc_area() < 1e-5]
+        if not bad:
+            break
+        bmesh.ops.collapse(bm, edges=list({e for f in bad for e in f.edges if e.calc_length() < 0.05}) or
+                           [min(bad[0].edges, key=lambda e: e.calc_length())])
+    bmesh.ops.remove_doubles(bm, verts=bm.verts[:], dist=0.002)
     vm = {v: mb.v(v.co.copy()) for v in bm.verts}
     fs = []
     for f in bm.faces:

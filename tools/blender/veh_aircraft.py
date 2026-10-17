@@ -148,11 +148,13 @@ def ring_angles(y):
     a2 = phi_at_z(y, hi, 1)
     a3 = phi_at_z(y, hi + 0.035, 1)
     a4 = phi_at_z(y, hi + 0.075, 1)
-    lim0, lim1 = radians(-62), radians(70)
-    a1 = min(max(a1, lim0), lim1 - 0.20)
-    a2 = min(max(a2, a1 + 0.05), lim1 - 0.10)
-    a3 = max(a3, a2 + 0.02)
-    a4 = max(a4, a3 + 0.02)
+    # monotone with minimum spacing (near the nose / tail tips the livery heights leave the
+    # shrinking section; without this, columns collapse into zero-area or folded faces)
+    lim0, lim1 = radians(-62), radians(58)
+    a1 = min(max(a1, lim0), lim1 - 0.30)
+    a2 = min(max(a2, a1 + 0.05), lim1 - 0.12)
+    a3 = min(max(a3, a2 + 0.02), lim1 - 0.06)
+    a4 = min(max(a4, a3 + 0.02), lim1)
 
     def arc(a, b, n):
         return [a + (b - a) * k / n for k in range(n)]
@@ -229,10 +231,10 @@ def glazing(cut, glass, frames):
         P = [fus_pt(u, v) for (u, v) in fr]
         N = [fus_n(u, v) for (u, v) in fr]
         V.ribbon(frames, P, N, 0.030, 0.004, 0.012, INK, closed=True)
-    # anti-glare panel ahead of the windscreen
-    ag = [(-5.20, 0.92), (-5.20, 2.22), (-5.36, 2.02), (-5.47, 1.571), (-5.36, 1.12)]
-    surface_skin(glass, ccw(densify2(ag, 0.08, closed=True)), polar_map(), 0.0025, INK,
-                 scales=(1.0, 0.5))
+    # anti-glare panel ahead of the windscreen: a shallow ink recess
+    ag = [(-5.205, 0.92), (-5.205, 2.22), (-5.36, 2.02), (-5.47, 1.571), (-5.36, 1.12)]
+    surface_patch(cut, ccw(densify2(ag, 0.06, closed=True)), polar_map(), 0.003, 0.10, INK,
+                  scales=(1.0, 0.7, 0.4))
     # cabin windows
     for side, ys in ((1, CABIN_L), (-1, CABIN_R)):
         m = side_map(side)
@@ -475,6 +477,32 @@ def wing(part):
             part.tube([a, a + Vector((0, 0.11, 0.01))], 0.0055, 5, INK, caps='flat')
 
 
+def wing_lines(lines):
+    up, lo = foil(40, WTC, WCAM)
+
+    def upper(u):
+        for (a, b) in zip(up, up[1:]):
+            if a[0] <= u <= b[0]:
+                t = (u - a[0]) / max(b[0] - a[0], 1e-9)
+                return a[1] + (b[1] - a[1]) * t
+        return up[-1][1]
+    for sx in (1, -1):
+        for (x0, x1, u) in ((1.05, 7.45, 0.17), (1.05, 7.45, 0.70)):
+            P, N = [], []
+            for k in range(16):
+                x = sx * (x0 + (x1 - x0) * k / 15)
+                P.append(wing_pt(x, u, upper(u)))
+                N.append(Vector((0, 0, 1)))
+            V.surface_strip(lines, P, N, 0.010, 0.0025, INK)
+        for x in (3.62, 5.62):
+            P, N = [], []
+            for k in range(8):
+                uu = 0.17 + (0.70 - 0.17) * k / 7
+                P.append(wing_pt(sx * x, uu, upper(uu)))
+                N.append(Vector((0, 0, 1)))
+            V.surface_strip(lines, P, N, 0.010, 0.0025, INK)
+
+
 def root_fairing(part):
     """Pearl saddle blending the high wing into the fuselage top."""
     pod = V.Pod([(2.42, -0.95, 0.95, 0.62), (2.60, -1.30, 1.15, 0.86), (2.72, -1.40, 1.28, 0.95),
@@ -574,16 +602,17 @@ def nacelle(part, sx):
     lathe_m(part, prof, 28, mats, M=M, axis='Y')
     # chin intake scoop with a dark mouth
     Mi = T(x, -2.70, NAC_Z - 0.375)
-    slab(part, 0.26, 0.42, 0.13, 0.08, 0.05, PEARL, M=Mi @ rot_x(90) @ rot_x(-90), nc=2, ne=2)
+    slab(part, 0.26, 0.42, 0.13, 0.08, 0.05, PEARL, M=Mi, nc=2, ne=2)
     Mm = frame(Vector((x, -2.915, NAC_Z - 0.372)), (0, -1, 0), (0, 0, 1))
     slab(part, 0.19, 0.075, 0.03, 0.03, 0.008, INK, M=Mm, nc=2, ne=1)
     # exhaust stacks either side, pointing aft and down
     for side in (1, -1):
-        base = Vector((x + side * 0.37, -2.05, NAC_Z - 0.06))
-        d = Vector((side * 0.35, 1.0, -0.25)).normalized()
+        base = Vector((x + side * 0.34, -2.12, NAC_Z - 0.10))
+        d = Vector((side * 0.55, 1.0, -0.30)).normalized()
         Me = frame(base, d, (0, 0, 1))
-        lathe_m(part, [(0.060, -0.10), (0.060, 0.10), (0.052, 0.115), (0.043, 0.112),
-                       (0.043, 0.0), (0.0, 0.0)], 12, [METAL, METAL, METAL, INK, INK], M=Me)
+        lathe_m(part, [(0.078, -0.14), (0.078, 0.17), (0.068, 0.188), (0.056, 0.184),
+                       (0.056, 0.02), (0.0, 0.02)], 14, [METAL, METAL, METAL, INK, INK], M=Me)
+        part.torus(0.080, 0.010, 14, 4, BRASS, matrix=Me @ T(0, 0, 0.05))
         # cooling louvres behind the teal cowl band
         for k in range(3):
             y = -2.45 + k * 0.11
@@ -732,6 +761,7 @@ def build():
     glazing(cut, glass, frames)
     V.boolean(fob, [cut.to_temp(name="cut")])
     outlines(lines)
+    wing_lines(lines)
     shell = C.Part()
     wing(shell)
     root_fairing(shell)

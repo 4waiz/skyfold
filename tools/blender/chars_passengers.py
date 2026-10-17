@@ -606,9 +606,9 @@ def shirt_details(f, tsurf):
         F = conform(tsurf, lambda x, y: Vector((x, -0.085, 1.448 + y)), 0.001, (0, 1, 0.55))
         plate(p, out, F, 0.006, v['trim'], bevel=0.0022)
     # band collar round the neck
-    p.torus(0.0565, 0.0085, 18, 4, v['trim'], matrix=Matrix.Translation((0.0, 0.010, 1.452)),
+    p.torus(0.0580, 0.0090, 18, 4, v['trim'], matrix=Matrix.Translation((0.0, 0.010, 1.452)),
             scale_minor=(0.55, 1.5))
-    pl = densify(rounded_rect(0.028, 0.30, 0.006, 1), 0.06)
+    pl = densify(rounded_rect(0.028, 0.30, 0.006, 1), 0.03)
     plate(p, pl, conform(tsurf, lambda x, y: Vector((x, -0.5, 1.250 + y)), -0.001, (0, 1, 0)),
           0.004, v['top'], bevel=0.0018, fill=1, fill_to=0.008)
     for z in (1.360, 1.270, 1.180, 1.090):
@@ -743,7 +743,7 @@ def scarf(f):
     p.torus(0.070, 0.026, 16, 6, m, matrix=Mt, scale_minor=(1.0, 1.15))
     p.torus(0.060, 0.020, 14, 4, m, matrix=Matrix.Translation((0.0, -0.002, 1.478)) @
             Matrix.Rotation(radians(-14), 4, 'X'))
-    for (x0, L, dy) in ((0.030, 0.230, -0.008), (0.060, 0.180, 0.0)):
+    for (x0, L, dy) in ((0.030, 0.230, -0.011), (0.060, 0.180, -0.003)):
         pts = [Vector((x0, -0.070, 1.430)), Vector((x0 + 0.006, -0.116 + dy, 1.350)),
                Vector((x0 + 0.010, -0.128 + dy, 1.430 - L * 0.75)),
                Vector((x0 + 0.012, -0.124 + dy, 1.430 - L))]
