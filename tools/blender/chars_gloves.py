@@ -148,19 +148,25 @@ def inset2d(pts, d, maxm=2.4):
     return out
 
 
-def plate(part, outline, F, thick, mat, bevel=0.0005, rim=None, rim_w=0.0, rim_wall=True):
-    """Beveled plate from a CCW 2D outline; F(x, y, h) -> world point (h = 0 bottom .. thick)."""
+def plate(part, outline, F, thick, mat, bevel=0.0005, rim=None, rim_w=0.0, rim_wall=True,
+          fill=0, fill_to=0.0):
+    """Beveled plate from a CCW 2D outline; F(x, y, h) -> world point (h = 0 bottom .. thick).
+    fill adds concentric top rings (inset up to fill_to) so a plate wrapped on a curved surface
+    keeps its top on the curve instead of a flat cap cutting under it."""
     O = list(outline)
     n = len(O)
     rings = [(O, 0.0), (O, thick - bevel), (inset2d(O, bevel), thick)]
     if rim and rim_w > 0:
         rings.append((inset2d(O, bevel + rim_w), thick))
+    nrim = len(rings) - 1
+    d0 = bevel + (rim_w if rim else 0.0)
+    for k in range(1, fill + 1):
+        rings.append((inset2d(O, d0 + (fill_to - d0) * k / fill), thick))
     pts = [[F(x, y, h) for (x, y) in r] for (r, h) in rings]
     vr, faces = part.grid(pts, mat, True, 'ngon', 'ngon')
     if rim:
-        nb = len(rings) - 1
-        b0 = nb - (2 if rim_w > 0 else 1) - (1 if rim_wall else 0)
-        part.assign(faces[b0 * n: nb * n], rim)
+        b0 = nrim - (2 if rim_w > 0 else 1) - (1 if rim_wall else 0)
+        part.assign(faces[b0 * n: nrim * n], rim)
     return faces
 
 
@@ -263,7 +269,7 @@ def dome(part, p, n, r, h, segs, mat, cap_mat=None, sink=0.0008):
     return fs
 
 
-def stitches(part, F, outline, h, mat, dash=0.0021, gap=0.0014, w=0.0008, t=0.0005):
+def stitches(part, F, outline, h, mat, dash=0.0027, gap=0.0019, w=0.0010, t=0.0006):
     """Raised stitch dashes along a closed CCW layout outline mapped by F at height h."""
     pts = [F(x, y, h) for (x, y) in outline]
     nrm = [(F(x, y, h + 0.001) - F(x, y, h)).normalized() for (x, y) in outline]
@@ -287,9 +293,17 @@ def stitches(part, F, outline, h, mat, dash=0.0021, gap=0.0014, w=0.0008, t=0.00
                 d = (b - a).normalized()
                 side = nn.cross(d).normalized()
                 d = side.cross(nn).normalized()
-                M = Matrix((d, side, nn)).transposed().to_4x4()
-                M.translation = p + nn * (t * 0.35)
-                part.box(Vector((0, 0, 0)), (dash, w, t), mat, matrix=M)
+                q0, q1 = p - d * dash * 0.5, p + d * dash * 0.5
+                base = -nn * t * 0.4
+                tri = [side * (w * 0.5) + base, -side * (w * 0.5) + base, nn * t]
+                bm = part.bm
+                va = [bm.verts.new(q0 + o) for o in tri]
+                vb = [bm.verts.new(q1 + o) for o in tri]
+                fs = [bm.faces.new((va[0], va[1], va[2])), bm.faces.new((vb[2], vb[1], vb[0]))]
+                for i in range(3):
+                    j = (i + 1) % 3
+                    fs.append(bm.faces.new((va[i], vb[i], vb[j], va[j])))
+                part.assign(fs, mat)
                 break
 
 
@@ -361,25 +375,24 @@ class TubeLine:
 
 def finger(soft, pads, joints, d0, r, curl_axis):
     root_in = joints[0] - d0 * 0.016
-    pts = C.spline3([root_in] + joints, 4)        # samples: 4 MCP, 8 PIP, 12 DIP, 16 tip
-    prof = keyed([(0, 1.0), (4, 1.05), (6, 0.95), (7.4, 0.97), (8, 0.915), (8.6, 0.96),
-                  (10, 0.905), (11.4, 0.91), (12, 0.855), (12.6, 0.90), (13, 0.93), (14, 0.91),
-                  (16, 0.80)], len(pts))
+    pts = C.spline3([root_in] + joints, 3)        # samples: 3 MCP, 6 PIP, 9 DIP, 12 tip
+    prof = keyed([(0, 1.0), (3, 1.05), (4.5, 0.95), (5.4, 0.97), (6, 0.915), (6.6, 0.96),
+                  (7.5, 0.905), (8.4, 0.91), (9, 0.855), (9.6, 0.90), (10, 0.93), (10.5, 0.92),
+                  (12, 0.80)], len(pts))
     rad = [r * k for k in prof]
     segs = 10
     vr, fs = soft.tube(pts, rad, segs, IVORY, caps='round', cap_segs=2, scale_xy=FINGER_SXY,
                        up=(1, 0, 0))
     nb = len(pts) + 2 * 2 - 1                      # bands incl. the two cap rings each end
-    soft.assign(fs[(2 + 13) * segs:nb * segs], SAND)          # grip tip
+    soft.assign(fs[(2 + 10) * segs:nb * segs], SAND)          # grip tip
     soft.assign(fs[(nb + 1) * segs:(nb + 2) * segs], SAND)    # tip fan
     line = TubeLine(pts, rad, (1, 0, 0))
-    # teal knuckle pads on the backs of the proximal and middle phalanges
-    for (i0, i1, wk, lk) in ((4, 8, 0.0122, 0.72), (8, 12, 0.0108, 0.62)):
-        x0, x1 = line.cum[i0], line.cum[i1]
-        L = (x1 - x0) * lk
-        out = rounded_rect(L, wk, min(L, wk) * 0.42, 2)
-        F0 = line.pad_F(x0 + (x1 - x0) * 0.5, -0.0002)
-        plate(pads, out, F0, 0.0016, TEAL, bevel=0.0005)
+    # teal knuckle pad on the back of the proximal phalanx
+    x0, x1 = line.cum[3], line.cum[6]
+    L, wk = (x1 - x0) * 0.74, 0.0128
+    out = rounded_rect(L, wk, min(L, wk) * 0.40, 2)
+    plate(pads, out, line.pad_F((x0 + x1) * 0.5, -0.0002), 0.0017, TEAL, bevel=0.0005, fill=2,
+          fill_to=min(L, wk) * 0.36)
 
 
 def thumb(soft, pads, grip):
@@ -389,22 +402,23 @@ def thumb(soft, pads, grip):
     else:
         ctrl = [(0.029, 0.030, 0.024), (0.018, 0.010, 0.035), (0.007, -0.006, 0.041),
                 (0.001, -0.019, 0.042)]
-    pts = C.spline3(ctrl, 4)                       # samples: 4 MCP, 8 IP, 12 tip
-    prof = keyed([(0, 1.0), (4, 0.97), (7.4, 0.93), (8, 0.88), (8.6, 0.92), (9, 0.94),
-                  (10, 0.92), (12, 0.78)], len(pts))
+    pts = C.spline3(ctrl, 3)                       # samples: 3 MCP, 6 IP, 9 tip
+    prof = keyed([(0, 1.0), (3, 0.97), (5.4, 0.93), (6, 0.88), (6.6, 0.92), (7, 0.94),
+                  (7.6, 0.92), (9, 0.78)], len(pts))
     rad = [0.0106 * k for k in prof]
     segs = 10
     up = (1, 0, 0.4)
     vr, fs = soft.tube(pts, rad, segs, IVORY, caps='round', cap_segs=2, scale_xy=(1.06, 0.94),
                        up=up)
     nb = len(pts) + 2 * 2 - 1
-    soft.assign(fs[(2 + 9) * segs:nb * segs], SAND)
+    soft.assign(fs[(2 + 7) * segs:nb * segs], SAND)
     soft.assign(fs[(nb + 1) * segs:(nb + 2) * segs], SAND)
     line = TubeLine(pts, rad, up, (1.06, 0.94))
-    x0, x1 = line.cum[4], line.cum[8]
+    x0, x1 = line.cum[3], line.cum[6]
     L = (x1 - x0) * 0.66
-    out = rounded_rect(L, 0.0128, min(L, 0.0128) * 0.42, 2)
-    plate(pads, out, line.pad_F((x0 + x1) * 0.5, -0.0002), 0.0016, TEAL, bevel=0.0005)
+    out = rounded_rect(L, 0.0132, min(L, 0.0132) * 0.40, 2)
+    plate(pads, out, line.pad_F((x0 + x1) * 0.5, -0.0002), 0.0017, TEAL, bevel=0.0005, fill=2,
+          fill_to=min(L, 0.0132) * 0.36)
 
 
 # ---------------------------------------------------------------------------- hand
@@ -414,7 +428,7 @@ def build_hand(name, grip, device, parent, mirror=False):
     pads = C.Part()      # plates, pads, fittings
 
     # palm block: rounded, tapering toward the wrist (cupped when gripping)
-    vs, fs = palm.superellipsoid(PALM_C, PALM_R, 0.62, 0.62, 24, 14, IVORY, pole_axis='Y')
+    vs, fs = palm.superellipsoid(PALM_C, PALM_R, 0.62, 0.62, 22, 12, IVORY, pole_axis='Y')
     vs = list({v for f in fs for v in f.verts})
 
     def taper(v):
@@ -443,7 +457,8 @@ def build_hand(name, grip, device, parent, mirror=False):
         return Vector((0.10, 0.025 + x, y))
     out = rounded_rect(0.046, 0.050, 0.0125, 3)
     Fb = conform(surf, back3d, -0.0002, axis=(-1, 0, 0))
-    plate(pads, out, Fb, 0.0017, PEARL, bevel=0.0006, rim=BRASS, rim_w=0.0012)
+    plate(pads, out, Fb, 0.0017, PEARL, bevel=0.0006, rim=BRASS, rim_w=0.0012, fill=1,
+          fill_to=0.010)
     stitches(pads, conform(surf, back3d, 0.0, axis=(-1, 0, 0)),
              [(x * 1.16, y * 1.12) for (x, y) in rounded_rect(0.046, 0.050, 0.0125, 3)], 0.0, PEARL)
     for zz in (0.012, -0.012):
@@ -454,7 +469,7 @@ def build_hand(name, grip, device, parent, mirror=False):
         return Vector((0.10, -0.0045 + x, y - 0.0005))
     out = rounded_rect(0.0125, 0.060, 0.0055, 3)
     plate(pads, out, conform(surf, kn3d, -0.0003, axis=(-1, 0, 0)), 0.0026, TEAL, bevel=0.0007,
-          rim=BRASS, rim_w=0.0008)
+          rim=BRASS, rim_w=0.0008, fill=1, fill_to=0.0036)
     for (nm, root, lens, r, curls, spread) in FINGERS:
         loc, n = surf.ray(Vector((0.10, -0.0045, root[2] - 0.0005)), Vector((-1, 0, 0)))
         dome(pads, loc + n * 0.0022, n, 0.0020, 0.0012, 8, BRASS)
@@ -463,8 +478,8 @@ def build_hand(name, grip, device, parent, mirror=False):
         return Vector((-0.05, 0.023 + x, y - 0.001))
     out = rounded_rect(0.048, 0.054, 0.014, 3)
     Fp = conform(surf, palm3d, -0.0002, axis=(1, 0, 0))
-    plate(pads, out, Fp, 0.0020, SAND, bevel=0.0006)
-    stitches(pads, Fp, inset2d(out, 0.0024), 0.0020, PEARL)
+    plate(pads, out, Fp, 0.0020, SAND, bevel=0.0006, fill=1, fill_to=0.0045)
+    stitches(pads, Fp, inset2d(out, 0.0026), 0.0020, PEARL)
 
     # cuff (deep teal), elliptical, rolled lip, recessed dark wrist opening
     cuff = C.Part()
@@ -482,7 +497,7 @@ def build_hand(name, grip, device, parent, mirror=False):
     # brass trim ring where the cuff meets the hand
     Mr = Matrix.Translation(CUFF_C + Vector((0, 0.0575, 0))) @ S @ \
         Matrix.Rotation(radians(90), 4, 'X')
-    soft.torus(0.0310, 0.0023, seg, 6, BRASS, matrix=Mr)
+    soft.torus(0.0310, 0.0023, seg, 5, BRASS, matrix=Mr)
     if device:
         bracer(pads, soft, csurf, S)
     else:
@@ -519,7 +534,7 @@ def bracer(pads, soft, csurf, S):
     # two brass straps round the cuff, under the housing ends
     for y in (DEVICE_Y - 0.0205, DEVICE_Y + 0.0205):
         Mb = Matrix.Translation(CUFF_C + Vector((0, y, 0))) @ S @ Matrix.Rotation(radians(90), 4, 'X')
-        soft.torus(0.0336, 0.0021, 24, 5, BRASS, matrix=Mb, scale_minor=(0.7, 1.7))
+        soft.torus(0.0336, 0.0021, 22, 4, BRASS, matrix=Mb, scale_minor=(0.7, 1.7))
     # housing (teal, rounded)
     pads.rbox(Vector(((hx0 + top) / 2, DEVICE_Y, 0.0)), (top - hx0, 0.050, 0.0380), 0.0036, 2, TEAL)
     # raised brass bezel round the screen opening
@@ -534,7 +549,7 @@ def bracer(pads, soft, csurf, S):
     plate(pads, glass, lambda x, y, h: Vector((top - 0.0006 + h, DEVICE_Y + x, y)), 0.0024, INK,
           bevel=0.0004)
     planar_ring(pads, rounded_rect(sw - 0.0036, sh - 0.0036, sr - 0.0018, 4),
-                [(0.0, 0.0), (0.0006, 0.0), (0.0006, 0.0002), (0.0, 0.0002)],
+                [(0.0, 0.0), (0.0007, 0.0), (0.00035, 0.0003)],
                 Vector((top + 0.0018, DEVICE_Y, 0.0)), Vector((0, 1, 0)), Vector((0, 0, 1)),
                 Vector((1, 0, 0)), GLOW)
     # status lights on the elbow end of the housing top, glow strip on the fingertip end face
@@ -554,9 +569,9 @@ def bracer(pads, soft, csurf, S):
         for k, (yy, wd) in enumerate(((DEVICE_Y - 0.0105, 0.020), (DEVICE_Y + 0.0105, 0.020))):
             a0 = sgn * radians(36.0)
             F = cuff_F(csurf, S, yy, a0, -0.0003 + 0.0006 * k)
-            out = rounded_rect(wd, 0.0105, 0.0030, 2)
-            plate(pads, [(x, y) for (x, y) in out], F, 0.0016, PEARL, bevel=0.0005, rim=BRASS,
-                  rim_w=0.0007)
+            out = rounded_rect(wd, 0.0105, 0.0030, 1)
+            plate(pads, out, F, 0.0016, PEARL, bevel=0.0005, rim=BRASS, rim_w=0.0007, fill=1,
+                  fill_to=0.0035)
         hy = Vector((top - 0.0030, DEVICE_Y, sgn * 0.0192))
         M = Matrix.Translation(hy) @ Matrix.Rotation(radians(90), 4, 'X')
         pads.cylinder(0.0014, 0.040, 8, BRASS,
@@ -569,8 +584,8 @@ def strap(pads, csurf, S, side=1):
     F = cuff_F(csurf, S, DEVICE_Y - 0.0075, -0.95, -0.0003)
     out = rounded_rect(0.015, 0.060, 0.0035, 2)
     out = [(x + 0.0075, y + 0.030) for (x, y) in out]
-    plate(pads, out, F, 0.0018, SAND, bevel=0.0005)
-    stitches(pads, F, inset2d(out, 0.0018), 0.0018, PEARL, dash=0.0019, gap=0.0014)
+    plate(pads, out, F, 0.0018, SAND, bevel=0.0005, fill=1, fill_to=0.0050)
+    stitches(pads, F, inset2d(out, 0.0019), 0.0018, PEARL, dash=0.0022, gap=0.0016)
     # buckle: brass frame + tongue bar on the back of the wrist
     Fb = cuff_F(csurf, S, DEVICE_Y, 0.0, 0.0012)
     o = Fb(0.0, 0.0, 0.0)

@@ -359,12 +359,12 @@ namespace Skyfold
         MaterialPropertyBlock m_Block;
 
         /// <summary>Same look as BeaconSystem.SetLens, so a scripted sweep matches the game's lit beacons.</summary>
-        void SetBeaconLens(Renderer r, bool on)
+        void SetBeaconLens(Renderer r, bool on, float boost = 1f)
         {
             if (r == null) return;
             if (m_Block == null) m_Block = new MaterialPropertyBlock();
             r.GetPropertyBlock(m_Block);
-            m_Block.SetColor(EmissionId, on ? new Color(1f, 0.82f, 0.42f) * 6f : new Color(0.05f, 0.05f, 0.05f));
+            m_Block.SetColor(EmissionId, on ? new Color(1f, 0.82f, 0.42f) * (6f * boost) : new Color(0.05f, 0.05f, 0.05f));
             r.SetPropertyBlock(m_Block);
         }
 
@@ -530,7 +530,7 @@ namespace Skyfold
             m_Shots["B4"] = () => ShotDrive("B4");
             m_Shots["B5"] = () => ShotDrive("B5");
             m_Shots["B6"] = ShotSubstation;
-            m_Shots["B7"] = ShotIslandWakes;
+            m_Shots["B7"] = ShotAirfieldWakes;
             m_Shots["C1"] = ShotStorm;
             m_Shots["C2"] = ShotBeacons;
             m_Shots["C3"] = ShotBoarding;
@@ -594,7 +594,7 @@ namespace Skyfold
             piece.transform.SetPositionAndRotation(start, QuarterRotation(piece.CurrentQuarter));
             Vector3 hover = s + Vector3.up * 0.036f;
             bool turned = false, released = false;
-            Vector3 c0 = Mini(F(133.5f, 138f), F(10.5f, 11.5f), F(66.5f, 88f)), c1 = Mini(F(136.5f, 140f), F(9f, 10f), F(70.5f, 86.5f));
+            Vector3 c0 = Mini(F(129f, 138f), F(12.5f, 11.5f), F(66f, 88f)), c1 = Mini(F(132f, 140f), F(11f, 10f), F(70f, 86.5f));
             Vector3 look = Mini(152f, 3f, 72.3f);
             yield return Record("A3", 7f, 6f, t =>
             {
@@ -614,7 +614,7 @@ namespace Skyfold
                     }
                 }
                 Vector3 pos = Lerp3(c0, c1, Smooth(t));
-                Pose(pos, look, F(36f, 54f), 0.003f);
+                Pose(pos, look, F(34f, 54f), 0.003f);
                 Dof(Vector3.Distance(pos, s + Vector3.up * 0.012f), 2.4f, 50f);
             });
         }
@@ -649,8 +649,8 @@ namespace Skyfold
             yield return Record("B1", 5f, 4.5f, t =>
             {
                 float e = InOutCubic(t);
-                Vector3 pos = Vector3.Lerp(p0, eye, e);
-                pos.y = Mathf.Lerp(p0.y, eye.y, Mathf.Pow(e, 0.8f));
+                Vector3 pos = Vector3.Lerp(p0, eye, Smooth(Range01(t, 0f, 0.72f)));
+                pos.y = Mathf.Lerp(p0.y, eye.y, e);
                 m_Cam.transform.position = pos;
                 m_Cam.transform.rotation = Quaternion.Slerp(r0, r1, InOutCubic(Range01(t, 0.25f, 1f)));
                 m_Cam.fieldOfView = Mathf.Lerp(F(58f, 80f), F(68f, 84f), e);
@@ -719,7 +719,7 @@ namespace Skyfold
                 yield return Record("B4", 5f, 4f, t =>
                 {
                     z = Mathf.Lerp(z, car.Position.z + 2.5f, 1f - Mathf.Exp(-6f / Fps));
-                    Vector3 pos = new Vector3(F(140f, 142.5f), F(1.4f, 1.8f), z);
+                    Vector3 pos = new Vector3(F(140f, 142.5f), F(2.5f, 2.9f), z);
                     Pose(pos, car.Position + Vector3.up * 0.7f, F(34f, 56f));
                 });
             }
@@ -766,28 +766,20 @@ namespace Skyfold
             NoDof();
         }
 
-        // B7: the island wakes up. Street lamps come on in a wave spreading from the substation.
-        IEnumerator ShotIslandWakes()
+        // B7: power reaches the airfield. The parked aircraft wakes: cabin windows, nav lights, beacon, props.
+        IEnumerator ShotAirfieldWakes()
         {
-            yield return Fresh(true, 0.62f);
+            yield return Fresh(true, 0.7f);
             yield return PlaceBridgeNow();
-            var sub = Substation.Instance;
-            Vector3 origin = sub.transform.position;
+            yield return Wait(2f); // let the bridge finish rising (it is in view from the apron)
             bool powered = false;
-            const float powerAt = 0.22f;
             yield return Record("B7", 4f, 3.5f, t =>
             {
-                if (!powered && t >= powerAt) { powered = true; PowerUp(); }
-                float since = (t - powerAt) * m_RecDur;
-                foreach (var l in sub.islandLights)
-                {
-                    if (l == null) continue;
-                    Vector3 d = l.transform.position - origin; d.y = 0f;
-                    l.enabled = since >= d.magnitude / 70f;
-                }
-                Vector3 pos = Lerp3(new Vector3(F(183f, 181f), F(8.5f, 10f), F(73.5f, 72f)), new Vector3(F(181f, 179.5f), F(7.8f, 9.2f), F(75f, 73.5f)), Smooth(t));
-                Pose(pos, new Vector3(F(128f, 140f), 1.5f, F(97f, 99f)), F(44f, 64f));
+                if (!powered && t >= 0.25f) { powered = true; PowerUp(); }
+                Vector3 pos = Lerp3(new Vector3(F(108f, 112f), F(1.4f, 1.6f), F(131f, 133f)), new Vector3(F(106.5f, 110.5f), F(1.55f, 1.75f), F(130.6f, 132.5f)), Smooth(t));
+                Pose(pos, new Vector3(88f, 2f, 121.5f), F(42f, 62f));
             });
+            Log("B7 aircraft state: " + AircraftSequence.Instance.State);
         }
 
         // C1: the storm rolls in over the airfield (time-lapse).
@@ -819,11 +811,16 @@ namespace Skyfold
                 float since = (t - sweepAt) * m_RecDur;
                 foreach (var g in beacons.groups)
                 {
-                    foreach (var r in g.lenses) if (r != null) SetBeaconLens(r, since >= (r.transform.position.x - 22f) / 95f);
+                    foreach (var r in g.lenses)
+                    {
+                        if (r == null) continue;
+                        float age = since - (r.transform.position.x - 22f) / 95f;
+                        SetBeaconLens(r, age >= 0f, age >= 0f ? 1f + 1.6f * Mathf.Exp(-age * 7f) : 1f);
+                    }
                     foreach (var l in g.lights) if (l != null) l.enabled = since >= (l.transform.position.x - 22f) / 95f;
                 }
-                Vector3 pos = Lerp3(new Vector3(17.8f, F(1.25f, 1.4f), 136f), new Vector3(21.5f, F(1.35f, 1.5f), 136f), Smooth(t));
-                Pose(pos, new Vector3(160f, F(0.2f, -0.6f), 136f), F(26f, 44f));
+                Vector3 pos = Lerp3(new Vector3(19.5f, 0.32f, F(128.3f, 128.6f)), new Vector3(21f, 0.36f, F(128.4f, 128.7f)), Smooth(t));
+                Pose(pos, new Vector3(170f, 0.35f, F(129.9f, 129.7f)), F(18f, 30f));
             });
         }
 

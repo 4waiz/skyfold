@@ -75,7 +75,7 @@ def pods(shell):
     rear = V.Pod(REAR, n=3.6, step=REAR_STEPS)
     rear.build(shell, 32, PEARL, ribs=[(STRIPE[0], STRIPE[1], 0.004)],
                bands=[(STRIPE[0], STRIPE[1], TEAL)], grooves=[(0.775, 0.0045, 0.003)],
-               crown=0.006, fill=2, cap_bottom=False)
+               crown=0.006, fill=1, cap_bottom=False)
     return nose, rear
 
 
@@ -103,7 +103,7 @@ def fenders(sym):
     R0 = 0.405
     for sy in (-1, 1):
         c = Vector((TRACK_X, sy * AXLE_Y, WHEEL_R))
-        n = 12
+        n = 10
         angs = [radians(-6 + 192 * k / n) for k in range(n + 1)]
         path = [c + Vector((0, cos(a) * R0, sin(a) * R0)) for a in angs]
         up = (path[0] - c).normalized()
@@ -146,7 +146,7 @@ def front_face(shell, nose):
         t = nose.t_of_x(sx * 0.31, z, -1)
         p = nose.point(t, z)
         n = (nose.normal(t, z) + Vector((0, -0.7, 0.0))).normalized()
-        V.lamp_round(shell, p, n, 0.098, segs=20, depth=0.04)
+        V.lamp_round(shell, p, n, 0.098, segs=24, depth=0.04)
         # indicators on the front corners
         z2 = 0.585
         t2 = nose.t_of_x(sx * 0.505, z2, -1)
@@ -237,6 +237,10 @@ def seat(shell):
         shell.rbox(Vector((0, -0.058, -0.18 + k * 0.115)), (0.32, 0.03, 0.105), 0.013, 1, TEAL,
                    matrix=Mb)
     shell.rbox(Vector((0, -0.02, 0.272)), (0.40, 0.10, 0.07), 0.032, 2, TEAL, matrix=Mb)
+    slab(shell, 0.40, 0.36, 0.014, 0.05, 0.005, TEAL, M=Mb @ T(0, 0.064, -0.075) @ rot_x(-90),
+         nc=2, ne=1, cap_bottom=False)
+    shell.tube([Mb @ Vector((-0.17, 0.073, 0.098)), Mb @ Vector((0.17, 0.073, 0.098))], 0.0065, 6,
+               BRASS, caps='round', cap_segs=1)
     # headrest on brass posts
     Mh = T(0, 0.505, 1.178) @ rot_x(-12)
     shell.rbox(Vector((0, 0, 0)), (0.26, 0.085, 0.13), 0.038, 2, TEAL, matrix=Mh)
@@ -249,7 +253,7 @@ def seat(shell):
 def gauge(part, M, R, needle_deg):
     """Round gauge in local frame M (face toward local +Z): brass bezel, dark face, segmented
     glowing arc (no text), coral needle, brass centre cap."""
-    segs = 16
+    segs = 20
     prof = [(1.26 * R, -0.006), (1.18 * R, 0.009), (1.07 * R, 0.010), (0.99 * R, 0.003),
             (0.92 * R, -0.004), (0.74 * R, -0.004), (0.0, -0.004)]
     vr, fs = lathe_m(part, prof, segs, [BRASS, BRASS, BRASS, INK, INK, INK], M=M,
@@ -274,10 +278,11 @@ def gauge(part, M, R, needle_deg):
 def dashboard(shell, sym):
     # main dash: swept section along X with rounded ends (teal top pad, pearl fascia)
     sec = [(-0.585, 0.765), (-0.380, 0.745), (-0.345, 0.760), (-0.333, 0.785), (-0.342, 0.860),
-           (-0.350, 0.900), (-0.336, 0.915), (-0.322, 0.932), (-0.330, 0.950), (-0.380, 0.960),
+           (-0.350, 0.900), (-0.336, 0.915), (-0.322, 0.932), (-0.330, 0.950), (-0.347, 0.9555),
+           (-0.351, 0.9515), (-0.355, 0.9565), (-0.380, 0.960),
            (-0.480, 0.960), (-0.560, 0.952), (-0.592, 0.925), (-0.600, 0.850)]
-    sec = [(y, z) for (y, z) in sec]
-    smats = [INK, INK, PEARL, PEARL, PEARL, TEAL, TEAL, TEAL, TEAL, TEAL, TEAL, TEAL, PEARL, PEARL]
+    smats = [INK, INK, PEARL, PEARL, PEARL, TEAL, TEAL, TEAL, TEAL, INK, INK, TEAL, TEAL, TEAL,
+             TEAL, PEARL, PEARL]
     xs = [-0.50, -0.490, -0.465, 0.0, 0.465, 0.490, 0.50]
     scl = [(0.80, 0.86), (0.94, 0.96), (1.0, 1.0), (1.0, 1.0), (1.0, 1.0), (0.94, 0.96),
            (0.80, 0.86)]
@@ -292,9 +297,9 @@ def dashboard(shell, sym):
     bn.z *= 0.6
     bn.normalize()
     Mb = frame(bc, bn, (0, 0, 1))
-    slab(shell, 0.255, 0.090, 0.070, 0.035, 0.022, TEAL, M=Mb, nc=3, ne=2)
+    slab(shell, 0.250, 0.104, 0.070, 0.040, 0.014, TEAL, M=Mb, nc=3, ne=2)
     for sx, nd in ((1, -55), (-1, 35)):
-        gauge(shell, Mb @ T(sx * 0.058, -0.006, 0.036), 0.035, nd)
+        gauge(shell, Mb @ T(sx * 0.058, -0.004, 0.0405), 0.033, nd)
     # fascia frame helper: fascia face ~ (y -0.342, z 0.84), normal toward the driver
     fn = Vector((0, 0.989, 0.146))
 
@@ -442,8 +447,9 @@ def canopy(shell, sym):
     hc = Vector((0.660, -0.585, 1.045))
     sweep(sym, spline([st0, Vector((0.585, -0.56, 1.02)), hc + Vector((-0.04, 0.005, -0.006))],
                       2), V.circle2(0.011, 6), INK, up=(0, 0, 1))
-    Mm = frame(hc, (0.12, 1, 0), (0, 0, 1))
+    Mm = frame(hc, (-0.30, 1, 0.05), (0, 0, 1))
     g = slab(sym, 0.135, 0.090, 0.050, 0.038, 0.020, PEARL, M=Mm, nc=2, ne=2, bottom=TEAL)
+    sym.assign(g['top'][:-12], INK)
     sym.assign(g['top'][-12:], METAL)
     # padded roll bar behind the headrest
     rb_l = Vector((0.483, 0.622, 1.25))
@@ -485,7 +491,7 @@ def cargo_deck(shell, sym):
     # cradle for the power cell (SOCKET_cargo = bottom centre of the cell)
     c = CARGO
     lathe_m(shell, [(0.138, -0.024), (0.138, -0.010), (0.131, -0.002), (0.118, 0.0),
-                    (0.036, 0.0), (0.0, 0.0)], 16, [INK, INK, INK, INK, BRASS],
+                    (0.036, 0.0), (0.0, 0.0)], 20, [INK, INK, INK, INK, BRASS],
             M=T(c.x, c.y, c.z))
     shell.torus(0.098, 0.0055, 24, 4, GLOW, matrix=T(c.x, c.y, c.z + 0.002))
     for k in range(4):
@@ -530,7 +536,7 @@ def build_steering(body):
     W = T(HUB) @ rot_x(COLUMN_TILT)
     bm = p.bm
     Rm, r0 = 0.165, 0.0195
-    nu, nv = 32, 8
+    nu, nv = 40, 8
     rings = []
     for i in range(nu):
         ph = 2 * pi * i / nu                       # 0 = +x (driver's right... local +x)
