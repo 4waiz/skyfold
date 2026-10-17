@@ -134,6 +134,9 @@ html, body { margin: 0; background: #0b1114; }
 .cap-big.left { align-items: flex-end; justify-content: flex-start; padding: 0 0 120px 120px; }
 .cap-big.left .cap-inner { align-items: flex-start; }
 .cap-big.left .ln { font-size: 88px; text-align: left; }
+.cap-big.low { align-items: flex-end; padding-bottom: 110px; }
+.cap-big.low .ln { font-size: 84px; }
+.cap-big.high { align-items: flex-start; padding-top: 330px; }
 
 /* objective tracker (top right), styled like the game's HUD panels */
 .obj-wrap { display: flex; justify-content: flex-end; align-items: flex-start; padding: 64px 72px 0 0; }
@@ -285,7 +288,7 @@ def build_html(cfg, audio_data):
     for c in g["big"]:
         lines = "".join(f'<span class="ln{" accent" if (c["id"] == "cb4" and k > 0) else ""}">{esc(t)}</span>'
                         for k, (t, _) in enumerate(c["lines"]))
-        cls = "cap-big left" if c.get("align") == "left" else "cap-big"
+        cls = {"left": "cap-big left", "low": "cap-big low", "high": "cap-big high"}.get(c.get("align"), "cap-big")
         el.append(f'<div id="{c["id"]}" class="clip ov {cls}" data-start="{c["in"]}" data-duration="{round(c["out"] - c["in"], 3)}" data-track-index="6">'
                   f'<div class="cap-inner">{lines}</div></div>')
 

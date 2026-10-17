@@ -680,7 +680,8 @@ def backpack(f, tsurf):
             M @ Vector((0.040, -0.030, 0.196))], 0.008, 6, INK, caps='round', cap_segs=1)
 
     def on(x, z, front, off):
-        loc, n = tsurf.ray(Vector((x, -0.5 if front else 0.5, z)), Vector((0, 1 if front else -1, 0)))
+        loc, n = tsurf.ray(Vector((x, -0.5 if front else 0.5, z)), Vector((0, 1 if front else -1, 0)),
+                           Vector((x, -0.08 if front else 0.08, z)))
         return loc + n * off
     for sx in (1, -1):
         pts = [M @ Vector((sx * 0.100, -0.036, 0.190)), Vector((sx * 0.112, 0.060, 1.426)),
@@ -783,12 +784,14 @@ def shoulder_bag(f, tsurf):
     p.rbox(Vector((0.041, 0.0, -0.004)), (0.006, 0.040, 0.026), 0.0018, 1, BRASS, matrix=M)
 
     def on(x, z, front, off=0.012):
-        loc, n = tsurf.ray(Vector((x, -0.5 if front else 0.5, z)), Vector((0, 1 if front else -1, 0)))
+        loc, n = tsurf.ray(Vector((x, -0.5 if front else 0.5, z)), Vector((0, 1 if front else -1, 0)),
+                           Vector((x, -0.08 if front else 0.08, z)))
         return loc + n * off
-    pts = [M @ Vector((-0.020, -0.100, 0.085)), on(0.165, 1.000, True), on(0.120, 1.110, True, 0.016),
-           on(0.030, 1.250, True, 0.019), on(-0.070, 1.360, True, 0.017), Vector((-0.124, 0.004, 1.438)),
-           on(-0.080, 1.340, False), on(0.010, 1.230, False), on(0.120, 1.100, False),
-           on(0.165, 1.000, False), M @ Vector((-0.020, 0.100, 0.085))]
+    pts = [M @ Vector((-0.020, -0.100, 0.085)), on(0.120, 1.035, True, 0.016),
+           on(0.062, 1.150, True, 0.018), on(-0.008, 1.262, True, 0.019),
+           on(-0.074, 1.362, True, 0.017), Vector((-0.124, 0.004, 1.438)),
+           on(-0.078, 1.345, False), on(0.010, 1.235, False), on(0.090, 1.120, False),
+           on(0.122, 1.035, False), M @ Vector((-0.020, 0.100, 0.085))]
     p.tube(C.spline3(pts, 2), 0.010, 4, m, caps='round', cap_segs=1, scale_xy=(1.9, 0.55),
            up=(0, -1, 0))
 
