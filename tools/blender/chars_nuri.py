@@ -111,7 +111,7 @@ def inset2d(pts, d, maxm=2.4):
 
 
 def plate(part, outline, F, thick, mat, bevel=0.0007, rim=None, rim_w=0.0, rim_wall=True,
-          under=0.0):
+          under=0.0, fill=0, fill_to=0.0):
     """Beveled plate from a CCW 2D outline. F(x, y, h) -> world point (h = 0 at the bottom face,
     thick at the top). Rings: [under chamfer], wall, top chamfer, [rim band], top cap.
     rim: material of the top chamfer + rim band (+ wall when rim_wall)."""
@@ -127,10 +127,15 @@ def plate(part, outline, F, thick, mat, bevel=0.0007, rim=None, rim_w=0.0, rim_w
     rings.append((inset2d(O, bevel), thick))
     if rim and rim_w > 0:
         rings.append((inset2d(O, bevel + rim_w), thick))
+    nb = len(rings) - 1
+    # concentric fill rings keep a plate wrapped on a curved surface on that surface (a flat
+    # n-gon cap would sag under the curve and let the surface poke through)
+    d0 = bevel + (rim_w if rim else 0.0)
+    for k in range(1, fill + 1):
+        rings.append((inset2d(O, d0 + (fill_to - d0) * k / fill), thick))
     pts = [[F(x, y, h) for (x, y) in r] for (r, h) in rings]
     vr, faces = part.grid(pts, mat, True, 'ngon', 'ngon')
     if rim:
-        nb = len(rings) - 1
         b0 = nb - (2 if rim_w > 0 else 1) - (1 if rim_wall else 0)
         part.assign(faces[b0 * n: nb * n], rim)
     return faces
@@ -387,8 +392,8 @@ def chest_scales(p, surf):
     """Overlapping sandstone breast plates laid out in the body's own (th, ph) parameters:
     brick-bonded rows wrapping the breast, tips pointing back along the belly; the front rows
     sit on top of the ones behind like shingles."""
-    rows = [(0.150 * pi, 3, 0.088 * pi, 0.0022), (0.215 * pi, 4, 0.088 * pi, 0.0016),
-            (0.280 * pi, 3, 0.092 * pi, 0.0010), (0.345 * pi, 2, 0.100 * pi, 0.0004)]
+    rows = [(0.150 * pi, 3, 0.088 * pi, 0.0030), (0.215 * pi, 4, 0.088 * pi, 0.0020),
+            (0.280 * pi, 3, 0.092 * pi, 0.0010), (0.345 * pi, 2, 0.100 * pi, 0.0000)]
     for r, (th, n, dph, base) in enumerate(rows):
         L = 0.0190 - 0.0006 * r
         w = 0.0215 - 0.0004 * r
@@ -402,7 +407,9 @@ def chest_scales(p, surf):
 
             def to3d(x, y, c=c, t_th=t_th, t_ph=t_ph, L=L):
                 return c + t_th * (x - L * 0.40) + t_ph * y
-            plate(p, out, conform(surf, to3d, base), 0.0015, CHEST, bevel=0.0005)
+            # neighbours in a row overlap: alternate them 0.5 mm apart (no coplanar tops)
+            plate(p, out, conform(surf, to3d, base + 0.0005 * (k % 2)), 0.0015, CHEST,
+                  bevel=0.0005, fill=1, fill_to=0.0055)
 
 
 def build_body(parent):
@@ -426,7 +433,7 @@ def build_body(parent):
         u = x / SL
         return body_pt(th0 + u * dth, (y / SW) * dph * (1.0 - 0.18 * u))
     plate(p, out, conform(surf, to3d, -0.0001), 0.0015, IVORY, bevel=0.0005, rim=BRASS,
-          rim_w=0.0012)
+          rim_w=0.0012, fill=4, fill_to=0.024)
     for (x, y) in ((0.011, 0.026), (0.011, -0.026), (0.084, 0.017), (0.084, -0.017)):
         loc, n = surf.near(to3d(x, y))
         dome(p, loc + n * 0.0013, n, 0.0019, 0.0011, 7, BRASS)
@@ -469,11 +476,11 @@ def build_body(parent):
         ank = Vector((sx * 0.0165, 0.056, -0.0385))
         p.tube([hip, (hip + ank) / 2 + Vector((0, 0, -0.0012)), ank], [0.0038, 0.0032, 0.0027],
                6, INK, caps='round', cap_segs=1)
-        p.superellipsoid(ank, (0.0034, 0.0034, 0.0034), 1.0, 1.0, 8, 5, BRASS)
-        for spread in (-22.0, 0.0, 22.0):
+        p.superellipsoid(ank, (0.0040, 0.0040, 0.0040), 1.0, 1.0, 8, 5, BRASS)
+        for spread in (-24.0, 0.0, 24.0):
             R = Matrix.Rotation(radians(spread * sx), 3, 'Z')
-            pts = [ank, ank + R @ Vector((0, 0.0068, -0.0026)), ank + R @ Vector((0, 0.0080, -0.0076)),
-                   ank + R @ Vector((0, 0.0052, -0.0098))]
+            pts = [ank + R @ Vector((0, 0.0022, -0.0008)), ank + R @ Vector((0, 0.0072, -0.0028)),
+                   ank + R @ Vector((0, 0.0082, -0.0076)), ank + R @ Vector((0, 0.0054, -0.0098))]
             segs = 5
             vr, fs = p.tube(pts, [0.0020, 0.0016, 0.0010, 0.0003], segs, INK, caps='round',
                             cap_segs=1)
@@ -484,7 +491,7 @@ def build_body(parent):
     for q in [(0.046, 0.030, -0.012), (-0.046, 0.030, -0.012), (0.040, -0.045, -0.018),
               (-0.040, -0.045, -0.018), (0.034, 0.066, -0.004), (-0.034, 0.066, -0.004)]:
         loc, n = surf.near(Vector(q))
-        dome(p, loc + n * 0.0001, n, 0.0021, 0.0012, 7, BRASS)
+        dome(p, loc + n * 0.0001, n, 0.0021, 0.0012, 6, BRASS)
     tmp = p.to_temp()
     return C.merge_to_object("Body", [tmp], pivot=(0, 0, 0), parent=parent, sharp_deg=48)
 
@@ -605,7 +612,8 @@ def build_head(parent):
             u = 0.0142 + d.x * x + q.x * y
             v = 0.0262 + d.y * x + q.y * y
             return Vector((sx * u, -0.30, v))
-        plate(p, out, conform(surf, to3d, -0.0002, axis=(0, 1, 0)), 0.0013, IVORY, bevel=0.0005)
+        plate(p, out, conform(surf, to3d, -0.0002, axis=(0, 1, 0)), 0.0013, IVORY, bevel=0.0005,
+              fill=2, fill_to=0.0042)
         tip = Vector((0.0142, 0.0262)) + d * 0.0128
         loc, n = surf.ray(Vector((sx * tip.x, -0.30, tip.y)), Vector((0, 1, 0)))
         dome(p, loc + n * 0.0010, n, 0.0015, 0.0009, 7, BRASS)
@@ -614,10 +622,10 @@ def build_head(parent):
         M = Matrix.Translation(loc) @ frame(n)
         prof = [(0.0, 0.0034), (0.0024, 0.0031), (0.0036, 0.0022), (0.0040, 0.0016),
                 (0.0054, 0.0014), (0.0060, 0.0006), (0.0060, -0.0012), (0.0, -0.0012)]
-        vr, fs = p.lathe(prof, 14, BRASS, matrix=M)
+        vr, fs = p.lathe(prof, 12, BRASS, matrix=M)
         nb = len(prof) - 3                       # bands; the top fan follows them
-        p.assign(fs[0:2 * 14], CORAL)
-        p.assign(fs[nb * 14:(nb + 1) * 14], CORAL)
+        p.assign(fs[0:2 * 12], CORAL)
+        p.assign(fs[nb * 12:(nb + 1) * 12], CORAL)
     tmp = p.to_temp()
     return C.merge_to_object("Head", [tmp], pivot=NECK, parent=parent, sharp_deg=48)
 
@@ -670,11 +678,11 @@ def build_beak(parent):
     vr, fs = loft(p, path, [beak_section(*s_) for s_ in sec], BRASS, up=(0, 0, 1), tip=tip)
     # cere: raised ink collar at the root with round brass-rimmed nostrils
     cp = [b + f * a + z * c for (a, c) in [(-0.0055, -0.0006), (0.0010, -0.0014), (0.0050, -0.0029)]]
-    cs = [(0.0107, 0.0066, 0.0058), (0.0103, 0.0064, 0.0055), (0.0094, 0.0060, 0.0050)]
+    cs = [(0.0110, 0.0069, 0.0061), (0.0106, 0.0067, 0.0058), (0.0098, 0.0064, 0.0054)]
     loft(p, cp, [beak_section(*s_) for s_ in cs], INK, up=(0, 0, 1))
     for sx in (1, -1):
-        c = b + f * 0.0026 + z * 0.0004 + Vector((sx * 0.0070, 0, 0))
-        n = Vector((sx * 0.85, -0.35, 0.40)).normalized()
+        c = b + f * 0.0030 + z * 0.0012 + Vector((sx * 0.0098, 0, 0))
+        n = Vector((sx * 0.88, -0.30, 0.36)).normalized()
         M = Matrix.Translation(c) @ frame(n)
         vr, fs2 = p.lathe([(0.0, -0.0003), (0.0007, -0.0002), (0.0011, 0.0006), (0.0017, 0.0007),
                            (0.0021, 0.0001), (0.0021, -0.0014), (0.0, -0.0014)], 8, BRASS, matrix=M)
@@ -791,13 +799,13 @@ def build_wing(name, sx, parent):
     d = Vector((cos(radians(P_OUT['ang'])), sin(radians(P_OUT['ang']))))
     o = Vector((d.y, -d.x))                       # outward (leading) side of the outer primary
     hw = P_OUT['w'] / 2
-    edge = [(x, y - r * 0.80, z - 0.0016) for (x, y, z, r) in SPAR[:-1]]
+    edge = [(0.022, -0.0236, 0.0040)] + [(x, y - r * 0.80, z - 0.0016) for (x, y, z, r) in SPAR[1:-1]]
     for (s_, k, zz) in ((0.030, 1.10, 0.0010), (0.060, 1.10, 0.0006), (0.084, 1.04, 0.0003),
                         (0.100, 0.70, 0.0001)):
         q = b + d * s_ + o * (hw * k)
         edge.append((q.x, q.y, zz))
     e_pts = C.spline3(edge, 2)
-    erad = C.resample([0.0030, 0.0029, 0.0028, 0.0026, 0.0023, 0.0020, 0.0017, 0.0015, 0.0013,
+    erad = C.resample([0.0029, 0.0029, 0.0028, 0.0026, 0.0023, 0.0020, 0.0017, 0.0015, 0.0013,
                        0.0010], len(e_pts))
     P.tube([wl(v) for v in e_pts], [r * WING_SCALE for r in erad], 7, BRASS, caps='round',
            cap_segs=1, scale_xy=(1.0, 0.85), up=up)
@@ -841,19 +849,19 @@ def build_tail(parent):
     for i in range(-4, 5):
         L = 0.153 - 0.0042 * abs(i) ** 1.25
         out = feather_outline(L, 0.0300, base_w=0.0170, tip_len=0.0150, ns=2, nt=5, point=0.1)
-        M = place(i * 8.6, -0.010, 0.0016 - 0.0010 * abs(i), 3.0 * (1 if i > 0 else -1 if i < 0 else 0))
+        M = place(i * 8.6, -0.010, 0.0016 - 0.0010 * abs(i), -3.0 * (1 if i > 0 else -1 if i < 0 else 0))
         plate(P, out, lambda x, y, h, M=M: M @ Vector((x, y, h)), 0.0032, FLIGHT, bevel=0.0007,
               rim=BRASS, rim_w=0.0013)
     # upper tail coverts (ivory)
     for (ang, L, w, z) in ((-15.0, 0.050, 0.0270, 0.0036), (15.0, 0.050, 0.0270, 0.0036),
                            (0.0, 0.060, 0.0320, 0.0050)):
         out = feather_outline(L, w, base_w=w * 0.85, tip_len=w * 0.55, ns=2, nt=5)
-        M = place(ang, -0.014, z, 2.0 * (1 if ang > 0 else -1 if ang < 0 else 0))
+        M = place(ang, -0.014, z, -2.0 * (1 if ang > 0 else -1 if ang < 0 else 0))
         plate(P, out, lambda x, y, h, M=M: M @ Vector((x, y, h)), 0.0032, IVORY, bevel=0.0007,
               rim=BRASS, rim_w=0.0012)
     # tail mount: rounded brass saddle
     P.superellipsoid(TAIL_P + Vector((0, -0.004, 0.0035)), (0.0175, 0.0135, 0.0078), 0.55, 0.55,
-                     14, 6, BRASS)
+                     12, 6, BRASS)
     temps = [P.to_temp()]
     return C.merge_to_object("Tail", temps, pivot=TAIL_P, parent=parent, sharp_deg=50)
 

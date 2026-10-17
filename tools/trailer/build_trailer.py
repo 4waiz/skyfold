@@ -445,7 +445,8 @@ TEMPLATE = r"""<!doctype html>
         tl.to("#lightning", { opacity: 0.6, duration: 0.04, ease: "none" }, LB);
         tl.to("#lightning", { opacity: 0, duration: 0.4, ease: "power2.out" }, LB + 0.05);
 
-        // White-out into the title.
+        // White-out into the title. beat-locked: the flash peaks and the letters start on a finale downbeat
+        // (EV.letters); the subtitle lands on the beat two later. The music's key change sits on the lift-off.
         const T0 = EV.title[0], T1 = EV.title[1];
         tl.fromTo("#flash", { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power2.in" }, EV.flash);
         tl.to("#flash", { opacity: 0, duration: 0.65, ease: "power2.out" }, T0 + 0.05);

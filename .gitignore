@@ -68,3 +68,6 @@ desktop.ini
 /brag-output/**/node_modules/
 /brag-output/**/.hyperframes/
 /brag-output/footage/
+/brag-output/**/render.log
+/brag-output/**/.brag.hf-transaction-*/
+/brag-output/**/.*.hf-transaction-*/

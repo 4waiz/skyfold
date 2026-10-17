@@ -348,7 +348,7 @@ def build_legs(f, coat=False):
                up=(0, -1, 0))
         Mh = Matrix.Translation(A + Vector((0, 0, 0.030)))
         if v['style'] == 'quiff':     # ribbed jogger cuff
-            p.lathe([(0.0, -0.008), (0.052, -0.008), (0.053, 0.014), (0.0, 0.018)], 9, v['trim'],
+            p.lathe([(0.0, -0.008), (0.057, -0.008), (0.058, 0.014), (0.0, 0.018)], 9, v['trim'],
                     matrix=Mh)
         else:                         # turned-up hem
             p.torus(0.0555, 0.0055, 10, 3, v['pants'], matrix=Mh @ Matrix.Translation((0, 0, -0.002)))
@@ -474,7 +474,7 @@ def face(f, surf):
         M = Matrix.Translation(loc - n * 0.0012) @ frame(n)
         p.superellipsoid(Vector((0, 0, 0)), (0.0088, 0.0128, 0.0052), 0.9, 0.9, 8, 5, INK, matrix=M)
         side = n.cross(up).normalized()
-        cl = loc + n * 0.0030 + up * 0.0040 - side * sx * 0.0024
+        cl = loc + n * 0.0036 + up * 0.0040 - side * sx * 0.0024
         p.superellipsoid(Vector((0, 0, 0)), (0.0024, 0.0026, 0.0013), 1.0, 1.0, 6, 4, PEARL,
                          matrix=Matrix.Translation(cl) @ frame(n))
         # brows
@@ -489,8 +489,6 @@ def face(f, surf):
         M = Matrix.Translation(loc + n * 0.003) @ frame(n, (0, 0.25, 1))
         p.superellipsoid(Vector((0, 0, 0)), (0.0135, 0.0255, 0.0085), 0.9, 0.9, 8, 5, v['skin'],
                          matrix=M)
-        p.superellipsoid(Vector((0.0015, 0.0, 0.0040)), (0.0070, 0.0150, 0.0040), 0.9, 0.9, 6, 3,
-                         v['skin'], matrix=M)
     # button nose
     loc, n = surf.ray(Vector((0, -0.4, hc.z - 0.034)), Vector((0, 1, 0)))
     M = Matrix.Translation(loc + n * 0.004) @ frame(n)
@@ -620,7 +618,7 @@ def shirt_details(f, tsurf):
     Fp = conform(tsurf, lambda x, y: Vector((0.082 + x, -0.5, 1.255 + y)), -0.001, (0, 1, 0))
     plate(p, out, Fp, 0.004, v['top'], bevel=0.0018, fill=1, fill_to=0.015)
     out = densify([(-0.038, -0.012), (0.038, -0.012), (0.038, 0.008), (-0.038, 0.008)], 0.03)
-    Ff = conform(tsurf, lambda x, y: Vector((0.082 + x, -0.5, 1.290 + y)), 0.003, (0, 1, 0))
+    Ff = conform(tsurf, lambda x, y: Vector((0.082 + x, -0.5, 1.290 + y)), 0.0038, (0, 1, 0))
     plate(p, out, Ff, 0.005, v['top'], bevel=0.0018)
 
 
@@ -745,14 +743,15 @@ def scarf(f):
     p.torus(0.070, 0.026, 16, 6, m, matrix=Mt, scale_minor=(1.0, 1.15))
     p.torus(0.060, 0.020, 14, 4, m, matrix=Matrix.Translation((0.0, -0.002, 1.478)) @
             Matrix.Rotation(radians(-14), 4, 'X'))
-    for (x0, L) in ((0.030, 0.230), (0.058, 0.180)):
-        pts = [Vector((x0, -0.070, 1.430)), Vector((x0 + 0.006, -0.112, 1.350)),
-               Vector((x0 + 0.010, -0.122, 1.430 - L * 0.75)), Vector((x0 + 0.012, -0.118, 1.430 - L))]
+    for (x0, L, dy) in ((0.030, 0.230, -0.008), (0.060, 0.180, 0.0)):
+        pts = [Vector((x0, -0.070, 1.430)), Vector((x0 + 0.006, -0.116 + dy, 1.350)),
+               Vector((x0 + 0.010, -0.128 + dy, 1.430 - L * 0.75)),
+               Vector((x0 + 0.012, -0.124 + dy, 1.430 - L))]
         p.tube(pts, 0.024, 8, m, caps='flat', scale_xy=(1.5, 0.45), up=(0, -1, 0))
         for k in range(3):
             xx = x0 + 0.012 + (k - 1.0) * 0.012
-            p.tube([Vector((xx, -0.118, 1.432 - L)), Vector((xx, -0.118, 1.410 - L))], 0.0032, 4, m,
-                   caps='round', cap_segs=1)
+            p.tube([Vector((xx, -0.124 + dy, 1.432 - L)), Vector((xx, -0.124 + dy, 1.410 - L))], 0.0032,
+                   4, m, caps='round', cap_segs=1)
 
 
 def glasses(f, surf):

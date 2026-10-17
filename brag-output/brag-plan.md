@@ -229,3 +229,16 @@ Same story, tighter, with captions large enough for a phone (about 7–9% of fra
 
 **Music mood:** cinematic, built from the game's own soundtrack.
 **Audio summary:** a radio crackle opens on wonder, impact at the rise, momentum through the drive, dread at the storm, and full release at the takeoff, ending on the game's finale under "MADE BY AWAIZ AHMED".
+
+## As built (what changed from the storyboard, and why)
+- **Reject chip copy, corrected to the game.** For the east crossing the game's real hint is "Not quite. The east end runs into the water. Turn it a quarter." The capture logs it (`A3 wrong-way hint`), so the chip quotes that line instead of the "points into a building" variant. After the turn, the chip shows the game's own "Let go to set it in place."
+- **Gameplay captions became an objective tracker.** Each gameplay beat is a HUD card styled like the game's panels, checked off when the action lands on screen: 01 HOLD THE CITY, 02 FOLD DOWN, 03 CARRY THE POWER, 04 DRIVE THE ROADS YOU BUILT, 05 POWER THE AIRFIELD, 06 LIGHT THE RUNWAY, 07 SEND THE LAST FLIGHT. "Send the last flight" is the Episode 3 briefing's wording. Big statement type is kept for the dramatic beats: ONE STORM / ONE LAST FLIGHT / ONE CITY IN YOUR HANDS, CHANGE ONE / CHANGE THE OTHER, THE STORM WON'T WAIT, GET THEM HOME.
+- **Speakers are labelled.** Noor gets a radio badge with her in-game portrait ("City engineer · radio"); the tower gets a PA badge ("Nacre Tower · Airfield announcement").
+- **Opening label** is "NACRE BAY · STORM WARNING" (no invented clock time).
+- **Power beat:** B6 is a close-up of the cell going into the substation socket. B7 replaces the substation arc: the parked aircraft wakes up (cabin windows, nav lights, beacon, props), because the street-lamp change did not read on camera.
+- **Takeoff:** C5 is head-on from the far end of the runway; the aircraft lifts and passes beside the lens. C6 is the chase climb into the storm.
+- **Runway beacons:** C2 looks down the runway from above its west end, and both beacon rows light in one sweep racing away (the game lights its three groups side by side).
+- **Voice lines:** Noor 1 says "This is Noor…" (written "Nuur" for the voice), Noor 6 is "Power is back on the island! Now light the runway." (from the game's "Power is back on the island"), and the vertical cut also uses narrator line 7.
+- **Beat sync:** `npx hyperframes beats` found no beats in the ducked, ambient bed, so the grid comes from the score's generator (`tools/audio/make_music.py`: finale 96 BPM, beat 0 at the file start). The finale's key change (D to E major, bar 8) sits on the lift-off. The title letters start on a finale downbeat, and the subtitle lands two beats later.
+- **Mix:** voice, music bed (ducked to 0.3 under every line, hushed before the bridge rises) and effects, levelled together to about -14 LUFS with true peaks under -1 dBFS.
+- **Capture:** the shots are recorded from the release build by `Assets/Skyfold/Scripts/Runtime/Cinematic/CineDirector.cs` (`--cine`). It runs a fixed 30 fps clock paced to real time, supersamples 2560x1440 / 1440x2560, adds a light bloom and vignette, and pipes frames to ffmpeg. The edit lists live in `tools/trailer/edits.py`, and `tools/trailer/build_trailer.py` builds the stems and both compositions from them.

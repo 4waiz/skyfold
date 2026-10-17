@@ -427,10 +427,10 @@ def finger(soft, pads, joints, d0, r, curl_axis):
 
 def thumb(soft, pads, grip):
     if grip:
-        ctrl = [(0.029, 0.030, 0.024), (0.016, 0.012, 0.035), (0.000, -0.003, 0.039),
+        ctrl = [(0.033, 0.036, 0.020), (0.016, 0.012, 0.035), (0.000, -0.003, 0.039),
                 (-0.013, -0.013, 0.039)]
     else:
-        ctrl = [(0.029, 0.030, 0.024), (0.018, 0.010, 0.035), (0.007, -0.006, 0.041),
+        ctrl = [(0.033, 0.036, 0.020), (0.018, 0.010, 0.035), (0.007, -0.006, 0.041),
                 (0.001, -0.019, 0.042)]
     pts = C.spline3(ctrl, 3)                       # samples: 3 MCP, 6 IP, 9 tip
     prof = keyed([(0, 1.0), (3, 0.97), (5.4, 0.93), (6, 0.88), (6.6, 0.92), (7, 0.94),
@@ -496,12 +496,12 @@ def build_hand(name, grip, device, parent, mirror=False):
         dome(pads, loc + n * 0.0015, n, 0.0019, 0.0011, 8, BRASS)
     # knuckle guard: teal bridge over the MCP joints with a brass rivet per knuckle
     def kn3d(x, y):
-        return Vector((0.10, -0.0045 + x, y - 0.0005))
-    out = rounded_rect(0.0125, 0.060, 0.0055, 3)
+        return Vector((0.10, -0.0030 + x, y - 0.0005))
+    out = rounded_rect(0.0105, 0.060, 0.0050, 3)
     plate(pads, out, conform(surf, kn3d, -0.0003, axis=(-1, 0, 0)), 0.0026, TEAL, bevel=0.0007,
           rim=BRASS, rim_w=0.0008, fill=1, fill_to=0.0036)
     for (nm, root, lens, r, curls, spread) in FINGERS:
-        loc, n = surf.ray(Vector((0.10, -0.0045, root[2] - 0.0005)), Vector((-1, 0, 0)))
+        loc, n = surf.ray(Vector((0.10, -0.0030, root[2] - 0.0005)), Vector((-1, 0, 0)))
         dome(pads, loc + n * 0.0022, n, 0.0020, 0.0012, 8, BRASS)
     # palm grip pad (sandstone) with stitching
     def palm3d(x, y):
@@ -594,7 +594,7 @@ def bracer(pads, soft, csurf, S):
               0.0010, 1, BRASS)
     # hinged fold plates (pearl) lying on the cuff either side of the housing, brass hinge pins
     for sgn in (1, -1):
-        for k, (yy, wd) in enumerate(((DEVICE_Y - 0.0105, 0.020), (DEVICE_Y + 0.0105, 0.020))):
+        for k, (yy, wd) in enumerate(((DEVICE_Y - 0.0080, 0.0150), (DEVICE_Y + 0.0080, 0.0150))):
             a0 = sgn * radians(36.0)
             F = cuff_F(csurf, S, yy, a0, -0.0003 + 0.0006 * k)
             out = rounded_rect(wd, 0.0105, 0.0030, 1)
