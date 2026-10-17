@@ -292,11 +292,14 @@ namespace Skyfold.EditorTools
                 c.Traffic.Add(v);
                 MirrorProxy(c, "traffic" + i, v.transform, i % 2 == 0 ? "city_car_a" : "city_car_b");
             }
-            // A few boats on the bay for life (static, gently bobbing via the water).
+            // A few moored boats on the bay for life, riding the swell.
             for (int i = 0; i < (ModelLibrary.Has("dhow_small") ? 3 : 0); i++)
             {
                 var b = ModelLibrary.Spawn("dhow_small", c.Env, new Vector3(-40f + i * 130f, CityLayout.WaterLevel + 0.1f, -20f - i * 18f), i * 50f);
-                SetStatic(b);
+                var bob = b.AddComponent<FloatBob>();
+                bob.amplitude = 0.06f;
+                bob.period = 4.2f + i * 0.5f;
+                bob.tilt = 1.8f;
             }
         }
 

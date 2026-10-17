@@ -7,12 +7,12 @@ using UnityEngine.UI;
 namespace Skyfold
 {
     /// <summary>Hover/focus/disabled visuals and sounds for every menu control (mouse, keyboard and XR rays).</summary>
-    public sealed class SelectableFX : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler
+    public sealed class SelectableFX : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler
     {
         Image m_Bg;
         TextMeshProUGUI m_Label, m_Detail;
         Color? m_DetailNormal;
-        bool m_Primary, m_Focused, m_Hovered;
+        bool m_Primary, m_Focused;
         Selectable m_Selectable;
         float m_Scale = 1f;
         Action<bool> m_OnActive;
@@ -37,20 +37,16 @@ namespace Skyfold
         public void OnDeselect(BaseEventData e) { m_Focused = false; Apply(); }
         public void OnPointerEnter(PointerEventData e)
         {
-            m_Hovered = true;
-            Apply();
             if (m_Selectable == null || !m_Selectable.IsInteractable()) return;
             AudioDirector.Instance?.PlayUI("ui_hover", 0.4f);
             // Hover moves keyboard focus here, so the mouse/ray and the keyboard never highlight two rows at once.
             var es = EventSystem.current;
             if (es != null && es.currentSelectedGameObject != gameObject && !es.alreadySelecting) es.SetSelectedGameObject(gameObject);
         }
-        public void OnPointerExit(PointerEventData e) { m_Hovered = false; Apply(); }
 
         void OnDisable()
         {
-            // A rebuilt or hidden menu must not come back stuck in the hover state.
-            m_Hovered = false;
+            // A rebuilt or hidden menu must not come back stuck in the focus state.
             m_Focused = false;
             m_Scale = 1f;
             transform.localScale = Vector3.one;
@@ -59,7 +55,7 @@ namespace Skyfold
 
         void Update()
         {
-            float target = (m_Focused || m_Hovered) && Interactable ? 1.025f : 1f;
+            float target = m_Focused && Interactable ? 1.025f : 1f;
             m_Scale = Mathf.MoveTowards(m_Scale, target, Time.unscaledDeltaTime * 0.6f);
             transform.localScale = new Vector3(m_Scale, m_Scale, 1f);
             if (m_Selectable != null && m_LastInteractable != m_Selectable.IsInteractable()) Apply();
@@ -72,7 +68,10 @@ namespace Skyfold
         {
             if (m_Bg == null) return;
             m_LastInteractable = Interactable;
-            bool active = (m_Focused || m_Hovered) && Interactable;
+            // Only the focused row lights up. Hover moves focus (OnPointerEnter), so the mouse still highlights
+            // what it points at, but a mouse resting on one row can no longer leave it lit while the keyboard
+            // moves focus elsewhere.
+            bool active = m_Focused && Interactable;
             Color bg = m_Primary ? UIStyle.Teal : UIStyle.PearlDeep;
             Color fg = m_Primary ? UIStyle.Pearl : UIStyle.Ink;
             if (active)

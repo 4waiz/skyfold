@@ -31,6 +31,9 @@ namespace Skyfold
         {
             m_Out = string.IsNullOrEmpty(outDir) ? Path.Combine(Application.persistentDataPath, "QA") : outDir;
             Directory.CreateDirectory(m_Out);
+            // Bots queue real keyboard events; by default the Input System drops them while the window is
+            // unfocused, so a QA run on a busy desktop would fail whenever another window took focus.
+            InputSystem.settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
             Running = true;
             m_Start = Time.realtimeSinceStartup;
             Log($"QA scenario '{scenario}' started {DateTime.Now:yyyy-MM-dd HH:mm:ss} · GPU {SystemInfo.graphicsDeviceName} · {Screen.width}x{Screen.height}");
@@ -706,7 +709,7 @@ namespace Skyfold
                 yield return Shot("menu_" + screen);
                 yield return Press(Key.Escape);
                 yield return new WaitForSecondsRealtime(0.4f);
-                Check(MenuController.Instance.Screen == "title", $"Esc returns from '{screen}' to the title");
+                Check(MenuController.Instance.Screen == "title", $"Esc returns from '{screen}' to the title (now '{MenuController.Instance.Screen}', window focused {Application.isFocused})");
             }
             yield return SliderChecks();
             var s = SettingsStore.Current;

@@ -392,21 +392,22 @@ def wheel_hq(R, W, outer=1, seg=40, rim_r=0.62, lugs=18, lug_h=0.010, spokes=5, 
     # ---- chevron tread blocks
     if lugs:
         bm = p.bm
-        L = 2 * pi * Rt / lugs * 0.46
+        L = 2 * pi * Rt / lugs * lug_len
+        ch = 0.0045 * R / 0.32
         for k in range(lugs):
             th = 2 * pi * k / lugs
             rad = Vector((0, cos(th), sin(th)))
             tan = Vector((0, -sin(th), cos(th)))
             for side in (-1, 1):
-                h0, h1 = side * 0.07 * w, side * 0.90 * w
+                h0, h1 = side * 0.06 * w, side * 0.84 * w
                 sk = lug_skew * L
                 corners = ((h0, -L / 2), (h1, -L / 2 + sk), (h1, L / 2 + sk), (h0, L / 2))
                 hc = (h0 + h1) / 2
                 tc = sk / 2
-                fh = 1.0 - 2 * 0.0035 / abs(h1 - h0)
-                ft = 1.0 - 2 * 0.0035 / L
+                fh = 1.0 - 2 * ch / abs(h1 - h0)
+                ft = 1.0 - 2 * ch / L
                 vs = []
-                for (rad_r, shrink) in ((Rt - 0.004, False), (R, True)):
+                for (rad_r, shrink) in ((Rt - 0.012 * R / 0.32, False), (R, True)):
                     for (hh, tt) in corners:
                         if shrink:
                             hh, tt = hc + (hh - hc) * fh, tc + (tt - tc) * ft
@@ -432,26 +433,36 @@ def wheel_hq(R, W, outer=1, seg=40, rim_r=0.62, lugs=18, lug_h=0.010, spokes=5, 
     # ---- brake disc + hat
     if disc:
         dr0, dr1 = 0.22 * R, rr - 0.11 * R
-        dprof = [(dr1, -0.06 * w), (dr1 + 0.004 * R, 0.0), (dr1, 0.07 * w), (dr0, 0.09 * w),
+        dprof = [(dr1 + 0.004 * R, -0.02 * w), (dr1, 0.07 * w), (dr0, 0.09 * w),
                  (0.17 * R, 0.30 * w), (0.0, 0.32 * w)]
-        lathe_m(p, dprof, max(16, seg * 3 // 4), [disc_mat, disc_mat, disc_mat, INK, INK],
-                axis='X')
+        lathe_m(p, dprof, max(16, seg * 3 // 5), [disc_mat, disc_mat, INK, INK], axis='X')
         if caliper:
             a = radians(caliper_angle)
             rc = dr1 - 0.035 * R
             c = Vector((0.03 * w, cos(pi / 2 + a) * rc, sin(pi / 2 + a) * rc))
             Mc = Matrix.Translation(c) @ Matrix.Rotation(a, 4, 'X')
-            p.rbox(Vector((0, 0, 0)), (0.42 * w, 0.30 * R, 0.17 * R), 0.035 * R, 2, caliper_mat,
+            p.rbox(Vector((0, 0, 0)), (0.42 * w, 0.30 * R, 0.17 * R), 0.03 * R, 1, caliper_mat,
                    matrix=Mc)
+    # ---- valve stem on the lip
+    if valve:
+        th = radians(-90 + 180.0 / max(spokes, 1))
+        rad = Vector((0, cos(th), sin(th)))
+        p.tube([Vector((0.70 * w, 0, 0)) + rad * (rr - 0.020 * R),
+                Vector((0.86 * w, 0, 0)) + rad * (rr - 0.034 * R)], 0.012 * R, 6, valve,
+               caps='round', cap_segs=1)
     # ---- spokes (hub -> lip), slightly dished, flared toward the rim
     hub_r = 0.21 * R
+    if spoke_ridge:
+        sw, sd = spoke_w * R / 2, spoke_d * R / 2
+        sec = [(sw, -sd), (sw, sd * 0.35), (0.0, sd), (-sw, sd * 0.35), (-sw, -sd), (0.0, -sd * 1.1)]
+    else:
+        sec = section_rrect(spoke_w * R, spoke_d * R, 0.018 * R, 1)
     for k in range(spokes):
         th = 2 * pi * k / spokes + pi / 2
         rad = Vector((0, cos(th), sin(th)))
         path = [Vector((0.93 * w, 0, 0)) + rad * (hub_r * 0.75),
                 Vector((0.95 * w, 0, 0)) + rad * (hub_r + (rr - hub_r) * 0.40),
                 Vector((0.91 * w, 0, 0)) + rad * (rr - 0.050 * R)]
-        sec = section_rrect(spoke_w * R, spoke_d * R, 0.018 * R, 2)
         sweep(p, path, sec, spoke, up=(1, 0, 0),
               scales=[(1.0, 1.0), (1.0 + (spoke_flare - 1) * 0.45, 0.95), (spoke_flare, 0.85)],
               twist=radians(twist))

@@ -58,6 +58,13 @@ namespace Skyfold.EditorTools
                                 var g = ModelLibrary.Spawn("road_plaza", cellRoot.transform, Vector3.zero);
                                 Ground(g, mini, true);
                                 ModelLibrary.Spawn("fountain_small", cellRoot.transform, new Vector3(0f, 0.15f, 0f));
+                                // Shade sail over the one plaza corner Dress() never uses (it fills (-,-), (+,-), then (-,+)).
+                                if (ModelLibrary.Has("shade_sail"))
+                                {
+                                    var sail = ModelLibrary.Spawn("shade_sail", cellRoot.transform, new Vector3(4.2f, 0.15f, 4.0f), 0f);
+                                    SetStatic(sail);
+                                    if (mini) SetLayer(sail, "MiniCity");
+                                }
                                 Dress(c, cellRoot.transform, rng, mini, 2, 3);
                                 if (!mini) for (int i = 0; i < 2; i++) ModelLibrary.Spawn("bench", cellRoot.transform, new Vector3(i == 0 ? -4f : 4f, 0.15f, -4f), i == 0 ? 90f : 270f);
                                 break;

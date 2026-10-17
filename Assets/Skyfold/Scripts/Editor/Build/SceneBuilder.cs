@@ -77,6 +77,7 @@ namespace Skyfold.EditorTools
             BuildCity(c, c.City, false);
             BuildAtelier(c);
             BuildEntities(c);
+            BuildBayDressing(c);
             BuildRigs(c);
             BuildSystems(c, lib);
             TagMiniatureRenderers();
