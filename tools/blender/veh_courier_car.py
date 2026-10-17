@@ -25,9 +25,9 @@ import sys, os, math
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import chars_common as C
 import veh_common as V
-from veh_common import (PEARL, TEAL, CORAL, LIGHT, INK, RUBBER, BRASS, GLASS, GLOW, METAL,
-                        IVORY, frame, rot_x, rot_z, T, sweep, slab, lathe_m, rr_lathe, bolt,
-                        tile)
+from veh_common import (PEARL, TEAL, TEAL_L, CORAL, LIGHT, INK, RUBBER, BRASS, GLASS, GLOW,
+                        METAL, IVORY, frame, rot_x, rot_z, T, sweep, slab, lathe_m, rr_lathe,
+                        bolt, tile)
 from chars_common import Vector, Matrix, Euler, radians, sin, cos, pi
 import bpy
 
@@ -124,10 +124,7 @@ def bumpers(shell, nose, rear):
     sec = V.section_rrect(0.075, 0.12, 0.03, 2)
     strip = [(x - 0.040, y) for (x, y) in V.section_rrect(0.020, 0.040, 0.008, 1)]
     for (pod, base, zb, sgn) in ((nose, -pi / 2, 0.36, -1), (rear, pi / 2, 0.36, 1)):
-        ts = [base - 0.75 + 1.5 * k / 10 for k in range(11)]
-        if sgn > 0:
-            ts = ts[::-1]
-            ts = [base + 0.75 - 1.5 * k / 10 for k in range(11)]
+        ts = [base - 0.75 + 1.5 * k / 10 for k in range(11)]   # path runs so 'side' faces the car
         pts = [pod.point(t, zb, 0.045) for t in ts]
         a, b = pts[0], pts[-1]
         ea = a + Vector((-math.copysign(0.03, a.x), -sgn * 0.065, 0))
@@ -430,10 +427,13 @@ def canopy(shell, sym):
     sec = ellipse(0.042, 0.054, 12)
     for path in (a_path, r_path):
         sweep(sym, path, sec, INK, up=(0, -1, 0), caps=False)
-    # brass collars at the pillar feet
-    for (p, q) in ((a_path[1], a_path[2]), (r_path[1], r_path[2])):
-        tdir = (q - p).normalized()
-        sym.torus(0.031, 0.0065, 14, 5, BRASS, matrix=frame(p, tdir, (0, -1, 0)))
+    # brass collars where the pillars leave the pods
+    for (path, zc) in ((a_path, 0.918), (r_path, 0.862)):
+        k = min(range(len(path) - 1), key=lambda i: abs(path[i].z - zc))
+        p0, p1 = path[k], path[k + 1]
+        f = (zc - p0.z) / (p1.z - p0.z)
+        p = p0 + (p1 - p0) * f
+        sym.torus(0.031, 0.0065, 14, 5, BRASS, matrix=frame(p, (p1 - p0).normalized(), (0, -1, 0)))
     # grab handle on the left A-pillar (boarding side)
     h0 = Vector((0.452, -0.478, 1.05))
     h1 = Vector((0.441, -0.418, 1.33))
@@ -492,7 +492,7 @@ def cargo_deck(shell, sym):
         sym.tube([Vector((x, 0.76, 0.905)), Vector((x, 1.36, 0.905))], 0.011, 10, BRASS,
                  caps='round', cap_segs=2)
         for xs in (0.17, 0.235, 0.30):
-            tile(sym, (xs, 1.06, 0.869), 0.022, 0.56, 0.004, RUBBER)
+            tile(sym, (xs, 1.06, 0.8668), 0.022, 0.56, 0.0042, RUBBER, sunk=0.003)
     # cradle for the power cell (SOCKET_cargo = bottom centre of the cell)
     c = CARGO
     lathe_m(shell, [(0.138, -0.024), (0.138, -0.010), (0.131, -0.002), (0.118, 0.0),
@@ -507,7 +507,7 @@ def cargo_deck(shell, sym):
         Mp = frame(c + rad * 0.090 + Vector((0, 0, 0.11)), -rad, (0, 0, 1))
         slab(shell, 0.032, 0.060, 0.012, 0.010, 0.004, RUBBER, M=Mp, nc=1, ne=1)
         b = radians(90 * k)
-        bolt(shell, c + Vector((cos(b) * 0.124, sin(b) * 0.124, 0.0)), (0, 0, 1), 0.0068, 0.005,
+        bolt(shell, c + Vector((cos(b) * 0.113, sin(b) * 0.113, 0.0)), (0, 0, 1), 0.0068, 0.005,
              BRASS, segs=6, up=(cos(b), sin(b), 0))
     shell.torus(0.106, 0.0115, 32, 8, BRASS, matrix=T(c.x, c.y, c.z + 0.200))
 
@@ -581,9 +581,9 @@ def build_steering(body):
               scales=[(1.15, 1.0), (1.0, 1.0), (0.80, 0.9)])
     # hub pad + emblem facing the driver (local +Y)
     Mh = W @ rot_x(-90)
-    lathe_m(p, [(0.056, -0.040), (0.056, -0.012), (0.052, 0.000), (0.042, 0.007),
+    lathe_m(p, [(0.0, -0.040), (0.056, -0.040), (0.056, -0.012), (0.052, 0.000), (0.042, 0.007),
                 (0.022, 0.009), (0.019, 0.011), (0.0, 0.015)], 24,
-            [PEARL, PEARL, PEARL, PEARL, BRASS, BRASS], M=Mh @ T(0, 0, -0.012))
+            [INK, PEARL, PEARL, PEARL, PEARL, BRASS, BRASS], M=Mh @ T(0, 0, -0.012))
     lathe_m(p, [(0.0115, 0.0), (0.0115, 0.002), (0.0, 0.006)], 12, [TEAL, TEAL],
             M=Mh @ T(0, 0, 0.0025))
     # column shaft into the dash (inside the static shroud)

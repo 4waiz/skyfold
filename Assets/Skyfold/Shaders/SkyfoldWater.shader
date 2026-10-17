@@ -37,6 +37,10 @@ Shader "Skyfold/Water"
         {
             float t = _Time.y * _WaveSpeed * (1.0 + _Storm * 0.8);
             float h = _WaveHeight * (1.0 + _Storm * 2.5);
+            // The sea mesh gets coarser with distance (quadratic spacing from its centre), so the swell fades out
+            // before the vertex spacing can alias it into bands on the horizon.
+            float2 origin = float2(UNITY_MATRIX_M._m03, UNITY_MATRIX_M._m23);
+            h *= 1.0 - saturate((length(ws.xz - origin) - 260.0) / 340.0);
             float2 p = ws.xz * _WaveScale;
             float a1 = p.x * 0.9 + p.y * 0.4 + t;
             float a2 = p.x * -0.3 + p.y * 1.1 + t * 1.3;
@@ -99,7 +103,11 @@ Shader "Skyfold/Water"
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
                 float t = _Time.y * _WaveSpeed;
                 float2 q = i.positionWS.xz * _RippleScale;
-                float3 ripple = float3(
+                // Ripples fade where they shrink below a pixel (far away, grazing angles) instead of turning into
+                // moire stripes; the strongest term has ~3 cycles per unit of q, so start fading well before Nyquist.
+                float2 footprint = fwidth(q);
+                half rippleAA = 1.0h - smoothstep(0.2, 0.9, max(footprint.x, footprint.y));
+                float3 ripple = rippleAA * float3(
                     sin(q.x * 1.3 + t * 2.1) * 0.5 + sin(q.y * 2.7 - t * 1.7) * 0.3 + sin((q.x + q.y) * 3.1 + t * 2.9) * 0.2,
                     0,
                     cos(q.y * 1.1 - t * 1.9) * 0.5 + cos(q.x * 2.3 + t * 1.3) * 0.3 + cos((q.x - q.y) * 2.9 - t * 2.4) * 0.2);

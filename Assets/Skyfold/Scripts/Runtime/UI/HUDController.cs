@@ -136,6 +136,7 @@ namespace Skyfold
             m_PromptCard = Card("Prompt", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 300f), 640f, new Color(0.13f, 0.2f, 0.23f, 0.86f), out m_Prompt, 28f);
             m_Prompt.color = UIStyle.Pearl;
             m_Prompt.alignment = TextAlignmentOptions.Center;
+            m_PromptFit = m_PromptCard.GetComponent<ContentSizeFitter>();
 
             m_HintCard = Card("Hint", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 380f), 820f, new Color(0.99f, 0.95f, 0.85f, 0.95f), out m_Hint, 26f);
             m_Hint.alignment = TextAlignmentOptions.Center;
@@ -382,7 +383,9 @@ namespace Skyfold
             string prompt = PromptText(input, rigs);
             m_PromptCard.gameObject.SetActive(playing && !vr && !string.IsNullOrEmpty(prompt));
             m_Prompt.text = prompt ?? "";
-            m_Crosshair.gameObject.SetActive(playing && !vr && rigs.desktop != null && rigs.desktop.View == DesktopView.FirstPerson);
+            bool crosshair = playing && !vr && rigs.desktop != null && rigs.desktop.View == DesktopView.FirstPerson;
+            m_Crosshair.gameObject.SetActive(crosshair);
+            PlacePrompt(crosshair && input.Context == InputContext.OnFoot && prompt != null && prompt.Length <= 48);
 
             // Car speed.
             var car = CourierVehicle.Instance;
@@ -394,6 +397,38 @@ namespace Skyfold
 
             UpdateArrow(playing && !vr, o, rigs);
             UpdateVR(vr, playing, o, rigs, input, prompt, held, left);
+        }
+
+        ContentSizeFitter m_PromptFit;
+        bool? m_PromptBesideCrosshair;
+
+        /// <summary>
+        /// On foot, a short "[E] ..." prompt sits just right of the crosshair so it never covers the thing you
+        /// are looking at; car, fold and long prompts stay in the bottom-centre card.
+        /// </summary>
+        void PlacePrompt(bool besideCrosshair)
+        {
+            if (m_PromptBesideCrosshair == besideCrosshair) return;
+            m_PromptBesideCrosshair = besideCrosshair;
+            if (besideCrosshair)
+            {
+                m_PromptCard.anchorMin = m_PromptCard.anchorMax = new Vector2(0.5f, 0.5f);
+                m_PromptCard.pivot = new Vector2(0f, 0.5f);
+                m_PromptCard.anchoredPosition = new Vector2(36f, 0f);
+                m_Prompt.alignment = TextAlignmentOptions.Left;
+                m_Prompt.textWrappingMode = TextWrappingModes.NoWrap;
+                if (m_PromptFit != null) m_PromptFit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            }
+            else
+            {
+                m_PromptCard.anchorMin = m_PromptCard.anchorMax = new Vector2(0.5f, 0f);
+                m_PromptCard.pivot = new Vector2(0.5f, 0f);
+                m_PromptCard.anchoredPosition = new Vector2(0f, 300f);
+                m_Prompt.alignment = TextAlignmentOptions.Center;
+                m_Prompt.textWrappingMode = TextWrappingModes.Normal;
+                if (m_PromptFit != null) m_PromptFit.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                m_PromptCard.sizeDelta = new Vector2(640f, m_PromptCard.sizeDelta.y);
+            }
         }
 
         static string KeyLine(InputRouter input, PlayerRigs rigs)

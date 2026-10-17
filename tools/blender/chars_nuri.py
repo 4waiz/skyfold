@@ -406,8 +406,7 @@ def chest_scales(p, surf):
 
 def build_body(parent):
     p = C.Part()
-    seams = [(0.0, 0.030, 0.30, 0.86), (0.62 * pi, 0.030, 0.22, 0.88),
-             (1.38 * pi, 0.030, 0.22, 0.88)]
+    seams = [(0.62 * pi, 0.030, 0.22, 0.88), (1.38 * pi, 0.030, 0.22, 0.88)]
     shell(p, body_pt, body_center, 17, 28, lambda s, ph: s * pi, [], seams, 0.0012,
           lambda s, ph, g: INK if g > 0.3 else IVORY)
     ref = C.Part()
@@ -416,6 +415,20 @@ def build_body(parent):
     surf = Surf(ref)
     ref.bm.free()
     chest_scales(p, surf)
+    # dorsal saddle: armoured back plate between the wings, brass rim, four screws
+    # (outline in metres; mapped onto the body's (th, ph) so it wraps the back evenly)
+    SL, SW = 0.104, 0.076
+    out = feather_outline(SL, SW, base_w=SW * 0.92, tip_len=SW * 0.34, ns=2, nt=5)
+    th0, dth, dph = 0.395 * pi, 0.395 * pi, 0.50 * pi
+
+    def to3d(x, y):
+        u = x / SL
+        return body_pt(th0 + u * dth, (y / SW) * dph * (1.0 - 0.18 * u))
+    plate(p, out, conform(surf, to3d, -0.0001), 0.0015, IVORY, bevel=0.0005, rim=BRASS,
+          rim_w=0.0012)
+    for (x, y) in ((0.011, 0.026), (0.011, -0.026), (0.084, 0.017), (0.084, -0.017)):
+        loc, n = surf.near(to3d(x, y))
+        dome(p, loc + n * 0.0013, n, 0.0019, 0.0011, 7, BRASS)
     # neck collar (brass) + dark neck core with two ribs so the head can turn without gaps
     ax = (HEAD_C - NECK).normalized()
     M = Matrix.Translation(NECK) @ ax.to_track_quat('Z', 'Y').to_matrix().to_4x4()
@@ -467,9 +480,8 @@ def build_body(parent):
             p.assign(fs[(n - 1) * segs:(n + 1) * segs], BRASS)          # claw
             p.assign(fs[(n + 2) * segs:(n + 3) * segs], BRASS)          # claw tip fan
     # brass screws at the seam ends and on the back plate
-    for q in [(0.0, -0.020, 0.050), (0.0, 0.070, 0.035), (0.022, 0.012, 0.045), (-0.022, 0.012, 0.045),
-              (0.046, 0.030, -0.012), (-0.046, 0.030, -0.012), (0.040, -0.045, -0.018),
-              (-0.040, -0.045, -0.018), (0.018, 0.072, 0.022), (-0.018, 0.072, 0.022)]:
+    for q in [(0.046, 0.030, -0.012), (-0.046, 0.030, -0.012), (0.040, -0.045, -0.018),
+              (-0.040, -0.045, -0.018), (0.034, 0.066, -0.004), (-0.034, 0.066, -0.004)]:
         loc, n = surf.near(Vector(q))
         dome(p, loc + n * 0.0001, n, 0.0021, 0.0012, 7, BRASS)
     tmp = p.to_temp()

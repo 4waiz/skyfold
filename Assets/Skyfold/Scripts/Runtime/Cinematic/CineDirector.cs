@@ -29,7 +29,7 @@ namespace Skyfold
         static bool s_Portrait, s_Stills;
         const int Fps = 30;
 
-        static readonly string[] Order = { "A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "B5", "B6", "C1", "C2", "C3", "C4", "C5", "C6" };
+        static readonly string[] Order = { "A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "C1", "C2", "C3", "C4", "C5", "C6" };
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Boot()
@@ -199,6 +199,8 @@ namespace Skyfold
 
         void LateUpdate()
         {
+            // The game pauses when its window loses focus (another app, a QA run); a capture must not.
+            if (Root != null && Root.IsPaused) { Root.Resume(); Log($"cancelled a focus-loss pause at game t={Time.time:0.0}s"); }
             if (m_Storm >= 0f && StormDirector.Instance != null) StormDirector.Instance.SetProgress(m_Storm);
             if (RouteGuide.Instance != null) RouteGuide.Instance.Hide();
             if (m_CamFn != null) m_CamFn(m_RecDur > 0f ? Mathf.Clamp01((Time.time - m_RecStart) / m_RecDur) : 0f);
@@ -220,7 +222,7 @@ namespace Skyfold
                 yield return new WaitForEndOfFrame();
                 if (s_Stills)
                 {
-                    if (f == 0 || f == frames / 2 || f == frames - 1) SaveStill($"{file}_{f:000}.jpg");
+                    if (f == 0 || f == frames / 4 || f == frames / 2 || f == frames * 3 / 4 || f == frames - 1) SaveStill($"{file}_{f:000}.jpg");
                 }
                 else Grab();
             }
@@ -528,6 +530,7 @@ namespace Skyfold
             m_Shots["B4"] = () => ShotDrive("B4");
             m_Shots["B5"] = () => ShotDrive("B5");
             m_Shots["B6"] = ShotSubstation;
+            m_Shots["B7"] = ShotIslandWakes;
             m_Shots["C1"] = ShotStorm;
             m_Shots["C2"] = ShotBeacons;
             m_Shots["C3"] = ShotBoarding;
@@ -625,8 +628,8 @@ namespace Skyfold
             yield return Record("A4", 7f, 6f, t =>
             {
                 if (!placed && t >= 0.16f) { placed = true; StartCoroutine(PlaceBridgeNow()); }
-                Vector3 pos = Lerp3(new Vector3(F(133.5f, 136f), -0.5f, F(66.5f, 66f)), new Vector3(F(137.5f, 139f), -0.25f, F(68.5f, 67.5f)), Smooth(t));
-                Pose(pos, new Vector3(152f, F(0.6f, 2.2f), 72.5f), F(52f, 74f));
+                Vector3 pos = Lerp3(new Vector3(F(137f, 138.5f), 0.55f, F(66f, 66f)), new Vector3(F(140.5f, 141.5f), 0.85f, F(68f, 67.5f)), Smooth(t));
+                Pose(pos, new Vector3(152f, F(1.3f, 2.6f), 72.5f), F(48f, 70f));
             });
             if (slot != null) slot.buildDuration = 1.6f;
         }
@@ -722,12 +725,12 @@ namespace Skyfold
             else
             {
                 // Low on the island quay beside the bridge end: the car comes over the water at the lens.
-                Vector3 cam = new Vector3(F(146.6f, 147.4f), 0.55f, 82.3f);
-                Vector3 look = new Vector3(152.6f, 0.9f, 68f);
+                Vector3 cam = new Vector3(F(145.4f, 146f), 0.5f, 84.2f);
+                Vector3 look = new Vector3(153f, 1f, 70f);
                 yield return Record("B5", 4f, 3.5f, t =>
                 {
                     look = Vector3.Lerp(look, car.Position + Vector3.up * 0.8f, 1f - Mathf.Exp(-4f / Fps));
-                    Pose(cam + Vector3.up * t * 0.1f, look, F(50f, 70f));
+                    Pose(cam + Vector3.up * t * 0.1f, look, F(46f, 66f));
                 });
             }
             StopDriving();
@@ -736,40 +739,64 @@ namespace Skyfold
         // B6: the cell goes into the substation and the island wakes up.
         IEnumerator ShotSubstation()
         {
-            yield return Fresh(true, 0.45f);
+            yield return Fresh(true, 0.55f);
             yield return PlaceBridgeNow();
             var socket = Substation.Instance.socket;
             var cell = PowerCell.Instance;
             cell.Interact(InteractorKind.Desktop); // out of the dock, as the player does
             cell.transform.SetParent(null, true);
             Vector3 s = socket.attach.position;
-            Vector3 a = s + new Vector3(1.5f, 0.45f, -1.7f);
+            Vector3 a = s + new Vector3(0.95f, 0.4f, -1.35f);
             cell.transform.position = a;
             bool inserted = false;
-            yield return Record("B6", 4f, 3.5f, t =>
+            yield return Record("B6", 3f, 2.5f, t =>
             {
                 if (!inserted)
                 {
-                    float e = InOutCubic(Range01(t, 0.06f, 0.46f));
-                    cell.transform.position = Vector3.Lerp(a, s, e) + Vector3.up * Mathf.Sin(e * Mathf.PI) * 0.3f;
+                    float e = InOutCubic(Range01(t, 0.05f, 0.5f));
+                    cell.transform.position = Vector3.Lerp(a, s, e) + Vector3.up * Mathf.Sin(e * Mathf.PI) * 0.2f;
                     cell.transform.rotation = socket.attach.rotation * Quaternion.Euler(0f, (1f - e) * 50f, (1f - e) * 12f);
-                    if (t >= 0.48f) { cell.InsertInto(socket); inserted = true; }
+                    if (t >= 0.52f) { cell.InsertInto(socket); inserted = true; }
                 }
-                Vector3 pos = Lerp3(s + new Vector3(F(-3.2f, -2.4f), 0.45f, F(-4.6f, -4.9f)), s + new Vector3(F(-2.0f, -1.5f), 0.6f, F(-4.2f, -4.5f)), Smooth(t));
-                Pose(pos, s + new Vector3(0.2f, 0.15f, 0.6f), F(44f, 62f));
-                Dof(Vector3.Distance(pos, s), 4f, 50f);
+                Vector3 pos = Lerp3(s + new Vector3(F(-1.7f, -1.2f), 0.3f, F(-2.5f, -2.7f)), s + new Vector3(F(-1.1f, -0.8f), 0.4f, F(-2.2f, -2.4f)), Smooth(t));
+                Pose(pos, s + new Vector3(0.15f, 0.05f, 0.3f), F(40f, 58f));
+                Dof(Vector3.Distance(pos, s), 3.2f, 50f);
             });
             NoDof();
+        }
+
+        // B7: the island wakes up. Street lamps come on in a wave spreading from the substation.
+        IEnumerator ShotIslandWakes()
+        {
+            yield return Fresh(true, 0.62f);
+            yield return PlaceBridgeNow();
+            var sub = Substation.Instance;
+            Vector3 origin = sub.transform.position;
+            bool powered = false;
+            const float powerAt = 0.22f;
+            yield return Record("B7", 4f, 3.5f, t =>
+            {
+                if (!powered && t >= powerAt) { powered = true; PowerUp(); }
+                float since = (t - powerAt) * m_RecDur;
+                foreach (var l in sub.islandLights)
+                {
+                    if (l == null) continue;
+                    Vector3 d = l.transform.position - origin; d.y = 0f;
+                    l.enabled = since >= d.magnitude / 70f;
+                }
+                Vector3 pos = Lerp3(new Vector3(F(183f, 181f), F(8.5f, 10f), F(73.5f, 72f)), new Vector3(F(181f, 179.5f), F(7.8f, 9.2f), F(75f, 73.5f)), Smooth(t));
+                Pose(pos, new Vector3(F(128f, 140f), 1.5f, F(97f, 99f)), F(44f, 64f));
+            });
         }
 
         // C1: the storm rolls in over the airfield (time-lapse).
         IEnumerator ShotStorm()
         {
-            yield return Fresh(true, 0.15f);
+            yield return Fresh(true, 0.4f);
             yield return PlaceBridgeNow();
             yield return Record("C1", 7f, 5.5f, t =>
             {
-                m_Storm = Mathf.Lerp(0.15f, 0.9f, Smooth(t));
+                m_Storm = Mathf.Lerp(0.4f, 0.92f, Smooth(t));
                 Vector3 pos = Lerp3(new Vector3(112f, 4.2f, 126f), new Vector3(116f, 4.6f, 128.5f), t);
                 Pose(pos, new Vector3(F(300f, 260f), F(46f, 70f), 300f), F(52f, 74f));
             });
@@ -794,8 +821,8 @@ namespace Skyfold
                     foreach (var r in g.lenses) if (r != null) SetBeaconLens(r, since >= (r.transform.position.x - 22f) / 95f);
                     foreach (var l in g.lights) if (l != null) l.enabled = since >= (l.transform.position.x - 22f) / 95f;
                 }
-                Vector3 pos = Lerp3(new Vector3(17.2f, F(0.62f, 0.85f), F(131.4f, 130f)), new Vector3(F(20.5f, 20f), F(0.7f, 0.9f), F(131.6f, 130.1f)), Smooth(t));
-                Pose(pos, new Vector3(140f, F(1.4f, 1f), F(133.2f, 132.5f)), F(30f, 50f));
+                Vector3 pos = Lerp3(new Vector3(17.8f, F(1.25f, 1.4f), 136f), new Vector3(21.5f, F(1.35f, 1.5f), 136f), Smooth(t));
+                Pose(pos, new Vector3(160f, F(0.2f, -0.6f), 136f), F(26f, 44f));
             });
         }
 
