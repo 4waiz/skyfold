@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>SKYFOLD trailer (vertical)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+@font-face { font-family: 'Unbounded'; src: url('assets/fonts/Unbounded-SemiBold.ttf') format('truetype'); font-weight: 600; }
+@font-face { font-family: 'Atkinson'; src: url('assets/fonts/AtkinsonHyperlegible-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Atkinson'; src: url('assets/fonts/AtkinsonHyperlegible-Bold.ttf') format('truetype'); font-weight: 700; }
+:root { --pearl: #F4EFE6; --sand: #D9B98C; --teal: #0F6F73; --tealL: #36E0D1; --coral: #F2714B; --gold: #D9A441; --ink: #22333B; }
+html, body { margin: 0; background: #0b1114; }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #0b1114; font-family: 'Atkinson', sans-serif; color: var(--pearl); }
+.shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ov { position: absolute; inset: 0; pointer-events: none; box-sizing: border-box; }
+.black { background: #000; }
+.flash { background: #fff; opacity: 0; }
+
+/* big statement captions */
+.cap-big { display: flex; align-items: center; justify-content: center; }
+.cap-big .cap-inner { display: flex; flex-direction: column; align-items: center; }
+.cap-big .ln { display: block; font-family: 'Unbounded'; font-weight: 600; font-size: 112px; line-height: 1.06; letter-spacing: 0.035em;
+  color: var(--pearl); text-shadow: 0 4px 30px rgba(8, 18, 22, 0.6), 0 1px 3px rgba(8, 18, 22, 0.45); text-align: center; white-space: nowrap; }
+.cap-big .ln.accent { color: var(--tealL); }
+.cap-big.left { align-items: flex-end; justify-content: flex-start; padding: 0 0 120px 120px; }
+.cap-big.left .cap-inner { align-items: flex-start; }
+.cap-big.left .ln { font-size: 88px; text-align: left; }
+
+/* objective tracker (top right), styled like the game's HUD panels */
+.obj-wrap { display: flex; justify-content: flex-end; align-items: flex-start; padding: 64px 72px 0 0; }
+.obj { display: flex; align-items: center; gap: 22px; background: rgba(244, 239, 230, 0.95); color: var(--ink); border-radius: 28px;
+  padding: 16px 34px 16px 16px; box-shadow: 0 18px 50px rgba(8, 18, 22, 0.35); }
+.obj-num { position: relative; width: 66px; height: 66px; flex: 0 0 66px; border-radius: 50%; background: var(--teal);
+  display: flex; align-items: center; justify-content: center; }
+.obj-num .n { font-family: 'Unbounded'; font-weight: 600; font-size: 26px; color: var(--pearl); }
+.obj-num svg { position: absolute; left: 0; top: 0; width: 66px; height: 66px; }
+.obj-num .tick { fill: none; stroke: var(--pearl); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 44; stroke-dashoffset: 44; }
+.obj-num .pulse { position: absolute; left: -4px; top: -4px; width: 74px; height: 74px; border-radius: 50%; border: 3px solid var(--tealL); opacity: 0; box-sizing: border-box; }
+.obj-text { display: flex; flex-direction: column; gap: 4px; }
+.obj-label { position: relative; height: 22px; font-family: 'Atkinson'; font-weight: 700; font-size: 19px; letter-spacing: 0.24em; }
+.obj-label span { position: absolute; left: 0; top: 0; white-space: nowrap; }
+.obj-label .todo { color: var(--teal); }
+.obj-label .done { color: #14918F; opacity: 0; }
+.obj-title { font-family: 'Unbounded'; font-weight: 600; font-size: 34px; letter-spacing: 0.02em; white-space: nowrap; }
+
+/* radio caller badge (top left) */
+.radio-wrap { display: flex; justify-content: flex-start; align-items: flex-start; padding: 60px 0 0 70px; }
+.radio { display: flex; align-items: center; gap: 20px; background: rgba(34, 51, 59, 0.84); border-radius: 60px; padding: 12px 36px 12px 12px;
+  box-shadow: 0 18px 50px rgba(8, 18, 22, 0.35); }
+.badge { position: relative; width: 84px; height: 84px; flex: 0 0 84px; }
+.badge img { width: 84px; height: 84px; border-radius: 50%; display: block; }
+.badge .ico { width: 84px; height: 84px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; }
+.badge .ico svg { width: 46px; height: 46px; }
+.badge .ring { position: absolute; left: -7px; top: -7px; width: 98px; height: 98px; border-radius: 50%; border: 3px solid var(--tealL); opacity: 0; box-sizing: border-box; }
+.who .name { font-family: 'Unbounded'; font-weight: 600; font-size: 30px; letter-spacing: 0.08em; }
+.who .role { font-family: 'Atkinson'; font-size: 22px; color: var(--tealL); letter-spacing: 0.05em; margin-top: 2px; }
+
+/* in-game style hint chips (bottom centre) */
+.chip-wrap { display: flex; align-items: flex-end; justify-content: center; padding-bottom: 86px; }
+.chip { font-family: 'Atkinson'; font-size: 34px; color: var(--pearl); background: rgba(34, 51, 59, 0.92); border-radius: 22px; padding: 18px 32px;
+  box-shadow: 0 16px 44px rgba(8, 18, 22, 0.42); border: 2px solid transparent; text-align: center; }
+.chip.warn { border-color: rgba(242, 113, 75, 0.55); }
+.chip.warn b { color: var(--coral); margin-right: 10px; }
+.chip.ok { border-color: rgba(54, 224, 209, 0.6); }
+.chip.ok b { color: var(--tealL); margin-right: 10px; }
+
+/* opening location card (bottom left) */
+.loc-wrap { display: flex; align-items: flex-end; justify-content: flex-start; padding: 0 0 92px 96px; }
+.loc .place { font-family: 'Unbounded'; font-weight: 600; font-size: 46px; letter-spacing: 0.34em; }
+.loc .line { width: 440px; height: 3px; background: var(--gold); margin: 16px 0 14px; transform-origin: 0% 50%; }
+.loc .warn { font-family: 'Atkinson'; font-weight: 700; font-size: 24px; letter-spacing: 0.3em; color: var(--coral); display: flex; align-items: center; }
+.loc .warn .dot { width: 13px; height: 13px; border-radius: 50%; background: var(--coral); margin-right: 14px; }
+
+/* paper-fold transition */
+.fold-stage { perspective: 2400px; }
+.leaf { position: absolute; inset: 0; background: linear-gradient(118deg, #F4EFE6 0%, #ECE3D3 58%, #DCC7A4 100%); backface-visibility: hidden;
+  display: flex; align-items: center; justify-content: center; }
+.leaf .mark { font-family: 'Unbounded'; font-weight: 600; font-size: 40px; letter-spacing: 0.6em; color: var(--teal); padding-left: 0.6em; }
+.leaf .edge { position: absolute; top: 0; bottom: 0; width: 10px; background: var(--tealL); }
+.leaf .shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(34, 51, 59, 0.45), rgba(34, 51, 59, 0)); opacity: 0; }
+
+/* title section */
+.bgwrap { position: absolute; inset: -60px; }
+.tbg { filter: blur(18px) brightness(0.42) saturate(1.2); }
+.tgrad { background: radial-gradient(ellipse at 50% 52%, rgba(15, 111, 115, 0.38) 0%, rgba(11, 17, 20, 0.88) 72%); }
+.tglow-wrap { display: flex; align-items: center; justify-content: center; }
+.tglow { width: 1200px; height: 560px; border-radius: 50%; background: radial-gradient(ellipse, rgba(217, 164, 65, 0.5) 0%, rgba(217, 164, 65, 0) 70%); opacity: 0.35; }
+.title-wrap { display: flex; align-items: center; justify-content: center; }
+.title-stack { display: flex; flex-direction: column; align-items: center; }
+.word { display: flex; perspective: 1400px; font-family: 'Unbounded'; font-weight: 600; font-size: 188px; letter-spacing: 0.1em; padding-left: 0.1em;
+  color: var(--pearl); text-shadow: 0 12px 46px rgba(15, 111, 115, 0.7); }
+.word .L { display: block; transform-origin: 50% 0%; backface-visibility: hidden; }
+.rule { width: 600px; height: 4px; background: var(--gold); margin: 30px 0 24px; transform-origin: 50% 50%; box-shadow: 0 0 0 rgba(217, 164, 65, 0); }
+.sub { font-family: 'Unbounded'; font-weight: 600; font-size: 54px; letter-spacing: 0.42em; padding-left: 0.42em; color: var(--gold); white-space: nowrap; }
+.plat-wrap { display: flex; align-items: center; justify-content: center; }
+.plat { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+.pill { display: flex; align-items: center; gap: 20px; font-family: 'Unbounded'; font-weight: 600; font-size: 36px; letter-spacing: 0.08em;
+  padding: 20px 40px 20px 26px; border-radius: 60px; background: rgba(15, 111, 115, 0.9); color: var(--pearl); box-shadow: 0 16px 44px rgba(0, 0, 0, 0.35); white-space: nowrap; }
+.pill.alt { background: rgba(244, 239, 230, 0.94); color: var(--ink); }
+.pill svg { width: 56px; height: 56px; flex: 0 0 56px; }
+.credit-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.credit { display: flex; flex-direction: column; align-items: center; }
+.credit .small { font-family: 'Atkinson'; font-weight: 700; font-size: 30px; letter-spacing: 0.5em; padding-left: 0.5em; color: var(--tealL); }
+.credit .name { font-family: 'Unbounded'; font-weight: 600; font-size: 122px; letter-spacing: 0.08em; padding-left: 0.08em; margin-top: 14px; white-space: nowrap;
+  text-shadow: 0 10px 40px rgba(15, 111, 115, 0.6); }
+.credit .bar { width: 120px; height: 4px; background: var(--gold); margin-top: 26px; transform-origin: 50% 50%; }
+.foot { position: absolute; left: 0; right: 0; bottom: 56px; text-align: center; font-family: 'Atkinson'; font-size: 22px; letter-spacing: 0.14em; color: rgba(244, 239, 230, 0.62); }
+
+/* vertical (Shorts) layout: keep text out of the top 15% and bottom 20% */
+.fmt-v .cap-big .ln { font-size: 108px; }
+.fmt-v .obj-wrap { justify-content: center; padding: 330px 0 0 0; }
+.fmt-v .obj-title { font-size: 30px; }
+.fmt-v .radio-wrap { align-items: flex-end; padding: 0 0 430px 60px; }
+.fmt-v .chip-wrap { padding: 0 60px 560px 60px; }
+.fmt-v .chip { font-size: 32px; max-width: 860px; }
+.fmt-v .loc-wrap { padding: 0 0 430px 72px; }
+.fmt-v .word { font-size: 132px; letter-spacing: 0.06em; padding-left: 0.06em; }
+.fmt-v .rule { width: 460px; }
+.fmt-v .sub { font-size: 40px; letter-spacing: 0.32em; padding-left: 0.32em; }
+.fmt-v .pill { font-size: 28px; }
+.fmt-v .pill svg { width: 46px; height: 46px; flex-basis: 46px; }
+.fmt-v .credit .name { font-size: 92px; }
+.fmt-v .foot { bottom: 420px; }
+</style>
+  </head>
+  <body>
+    <div id="root" class="fmt-v" data-composition-id="skyfold-vertical" data-start="0" data-width="1080" data-height="1920" data-duration="60.0">
+      <video id="v01" class="clip shot" src="assets/footage/A1_portrait.mp4" data-start="0.0" data-duration="5.0" data-media-start="0.3" data-track-index="0" muted playsinline></video>
+      <video id="v02" class="clip shot" src="assets/footage/A2_portrait.mp4" data-start="5.0" data-duration="4.0" data-media-start="1.5" data-track-index="0" muted playsinline></video>
+      <video id="v03" class="clip shot" src="assets/footage/A3_portrait.mp4" data-start="9.0" data-duration="6.0" data-media-start="0.0" data-track-index="0" muted playsinline></video>
+      <video id="v04" class="clip shot" src="assets/footage/A4_portrait.mp4" data-start="15.0" data-duration="6.0" data-media-start="0.0" data-track-index="0" muted playsinline></video>
+      <video id="v05" class="clip shot" src="assets/footage/B1_portrait.mp4" data-start="21.0" data-duration="4.0" data-media-start="0.5" data-track-index="0" muted playsinline></video>
+      <video id="v06" class="clip shot" src="assets/footage/B2_portrait.mp4" data-start="25.0" data-duration="2.9" data-media-start="0.6" data-track-index="0" muted playsinline></video>
+      <video id="v07" class="clip shot" src="assets/footage/B3_portrait.mp4" data-start="27.9" data-duration="3.5" data-media-start="0.3" data-track-index="0" muted playsinline></video>
+      <video id="v08" class="clip shot" src="assets/footage/B5_portrait.mp4" data-start="31.4" data-duration="2.6" data-media-start="0.9" data-track-index="0" muted playsinline></video>
+      <video id="v09" class="clip shot" src="assets/footage/C1_portrait.mp4" data-start="34.0" data-duration="5.0" data-media-start="0.5" data-track-index="0" muted playsinline></video>
+      <video id="v10" class="clip shot" src="assets/footage/C2_portrait.mp4" data-start="39.0" data-duration="3.0" data-media-start="0.4" data-track-index="0" muted playsinline></video>
+      <video id="v11" class="clip shot" src="assets/footage/C4_portrait.mp4" data-start="42.0" data-duration="2.0" data-media-start="0.2" data-track-index="0" muted playsinline></video>
+      <video id="v12" class="clip shot" src="assets/footage/C5_portrait.mp4" data-start="44.0" data-duration="3.6" data-media-start="0.0" data-track-index="0" muted playsinline></video>
+      <video id="v13" class="clip shot" src="assets/footage/C6_portrait.mp4" data-start="47.6" data-duration="4.4" data-media-start="1.0" data-track-index="0" muted playsinline></video>
+      <div id="tbg-wrap" class="bgwrap"><video id="tbg" class="clip shot tbg" src="assets/footage/A1_portrait.mp4" data-start="52.0" data-duration="8.0" data-media-start="0.3" data-track-index="1" muted playsinline></video></div>
+      <div id="tgrad" class="clip ov tgrad" data-start="52.0" data-duration="8.0" data-track-index="2"></div>
+      <div id="tglow" class="clip ov tglow-wrap" data-start="52.0" data-duration="8.0" data-track-index="3"><div id="tglow-in" class="tglow"></div></div>
+      <div id="fadein" class="clip ov black" data-start="0.0" data-duration="1.0" data-track-index="9"></div>
+      <div id="loc" class="clip ov loc-wrap" data-start="5.3" data-duration="3.500000000000001" data-track-index="4"><div class="loc"><div class="place">NACRE BAY</div><div class="line"></div><div class="warn"><span class="dot"></span>STORM WARNING</div></div></div>
+      <div id="rn0" class="clip ov radio-wrap" data-start="0.45" data-duration="3.95" data-track-index="5"><div class="radio"><div class="badge"><img src="assets/img/noor_badge.png" alt=""><div class="ring"></div></div><div class="who"><div class="name">NOOR</div><div class="role">City engineer · radio</div></div></div></div>
+      <div id="rn1" class="clip ov radio-wrap" data-start="16.5" data-duration="2.6999999999999993" data-track-index="5"><div class="radio"><div class="badge"><img src="assets/img/noor_badge.png" alt=""><div class="ring"></div></div><div class="who"><div class="name">NOOR</div><div class="role">City engineer · radio</div></div></div></div>
+      <div id="rtower" class="clip ov radio-wrap" data-start="39.1" data-duration="4.299999999999997" data-track-index="5"><div class="radio"><div class="badge"><div class="ico"><svg viewBox="0 0 48 48"><path d="M8 19h7l11-8v26l-11-8H8z" fill="#22333B"/><path d="M31 17c3 2 4.5 4.6 4.5 7s-1.5 5-4.5 7M35 12c5 3.5 7.5 7.6 7.5 12S40 32.5 35 36" fill="none" stroke="#22333B" stroke-width="3.4" stroke-linecap="round"/></svg></div><div class="ring"></div></div><div class="who"><div class="name">NACRE TOWER</div><div class="role">Airfield announcement</div></div></div></div>
+      <div id="cb1" class="clip ov cap-big" data-start="0.5" data-duration="4.25" data-track-index="6"><div class="cap-inner"><span class="ln">THIS CITY</span><span class="ln">FITS IN</span><span class="ln">YOUR HANDS</span></div></div>
+      <div id="cb4" class="clip ov cap-big" data-start="16.7" data-duration="3.7" data-track-index="6"><div class="cap-inner"><span class="ln">CHANGE ONE.</span><span class="ln accent">CHANGE</span><span class="ln accent">THE OTHER.</span></div></div>
+      <div id="cb5" class="clip ov cap-big" data-start="34.8" data-duration="4.0" data-track-index="6"><div class="cap-inner"><span class="ln">THE STORM</span><span class="ln">WON'T WAIT.</span></div></div>
+      <div id="cb6" class="clip ov cap-big" data-start="48.5" data-duration="3.1" data-track-index="6"><div class="cap-inner"><span class="ln">GET THEM</span><span class="ln">HOME.</span></div></div>
+      <div id="ob1" class="clip ov obj-wrap" data-start="9.3" data-duration="5.45" data-track-index="7"><div class="obj"><div class="obj-num"><span class="n">01</span><svg viewBox="0 0 66 66"><path class="tick" d="M20 34 L29 43 L46 24"/></svg><div class="pulse"></div></div><div class="obj-text"><div class="obj-label"><span class="todo">OBJECTIVE</span><span class="done">DONE</span></div><div class="obj-title">HOLD THE CITY</div></div></div></div>
+      <div id="ob2" class="clip ov obj-wrap" data-start="21.4" data-duration="3.5" data-track-index="7"><div class="obj"><div class="obj-num"><span class="n">02</span><svg viewBox="0 0 66 66"><path class="tick" d="M20 34 L29 43 L46 24"/></svg><div class="pulse"></div></div><div class="obj-text"><div class="obj-label"><span class="todo">OBJECTIVE</span><span class="done">DONE</span></div><div class="obj-title">FOLD DOWN</div></div></div></div>
+      <div id="ob3" class="clip ov obj-wrap" data-start="25.2" data-duration="2.6" data-track-index="7"><div class="obj"><div class="obj-num"><span class="n">03</span><svg viewBox="0 0 66 66"><path class="tick" d="M20 34 L29 43 L46 24"/></svg><div class="pulse"></div></div><div class="obj-text"><div class="obj-label"><span class="todo">OBJECTIVE</span><span class="done">DONE</span></div><div class="obj-title">CARRY THE POWER</div></div></div></div>
+      <div id="ob4" class="clip ov obj-wrap" data-start="28.1" data-duration="5.8" data-track-index="7"><div class="obj"><div class="obj-num"><span class="n">04</span><svg viewBox="0 0 66 66"><path class="tick" d="M20 34 L29 43 L46 24"/></svg><div class="pulse"></div></div><div class="obj-text"><div class="obj-label"><span class="todo">OBJECTIVE</span><span class="done">DONE</span></div><div class="obj-title">DRIVE THE ROADS YOU BUILT</div></div></div></div>
+      <div id="ob6" class="clip ov obj-wrap" data-start="39.5" data-duration="2.48" data-track-index="7"><div class="obj"><div class="obj-num"><span class="n">06</span><svg viewBox="0 0 66 66"><path class="tick" d="M20 34 L29 43 L46 24"/></svg><div class="pulse"></div></div><div class="obj-text"><div class="obj-label"><span class="todo">OBJECTIVE</span><span class="done">DONE</span></div><div class="obj-title">LIGHT THE RUNWAY</div></div></div></div>
+      <div id="ob7" class="clip ov obj-wrap" data-start="42.05" data-duration="1.85" data-track-index="7"><div class="obj"><div class="obj-num"><span class="n">07</span><svg viewBox="0 0 66 66"><path class="tick" d="M20 34 L29 43 L46 24"/></svg><div class="pulse"></div></div><div class="obj-text"><div class="obj-label"><span class="todo">OBJECTIVE</span><span class="done">DONE</span></div><div class="obj-title">SEND THE LAST FLIGHT</div></div></div></div>
+      <div id="ch1" class="clip ov chip-wrap" data-start="10.25" data-duration="1.35" data-track-index="8"><div class="chip warn"><b>Not quite.</b>The east end runs into the water. Turn it a quarter.</div></div>
+      <div id="ch2" class="clip ov chip-wrap" data-start="11.7" data-duration="1.8" data-track-index="8"><div class="chip ok"><b>✓</b>Let go to set it in place.</div></div>
+      <div id="fold" class="clip ov fold-stage" data-start="20.5" data-duration="1.0" data-track-index="10"><div id="leaf" class="leaf"><div class="mark">SKYFOLD</div><div class="edge" id="leaf-edge"></div><div class="shade" id="leaf-shade"></div></div></div>
+      <div id="lightning" class="clip ov flash" data-start="37.25" data-duration="0.82" data-track-index="11"></div>
+      <div id="flash" class="clip ov flash" data-start="51.85" data-duration="0.95" data-track-index="12"></div>
+      <div id="ttitle" class="clip ov title-wrap" data-start="52.0" data-duration="4.0" data-track-index="13"><div class="title-stack" id="tstack"><div class="word" id="word"><span class="L">S</span><span class="L">K</span><span class="L">Y</span><span class="L">F</span><span class="L">O</span><span class="L">L</span><span class="L">D</span></div><div class="rule" id="trule"></div><div class="sub" id="tsub">THE LAST FLIGHT</div></div></div>
+      <div id="tplat" class="clip ov plat-wrap" data-start="56.0" data-duration="1.75" data-track-index="13"><div class="plat"><div class="pill"><svg viewBox="0 0 56 56"><rect x="6" y="17" width="44" height="23" rx="10" fill="#F4EFE6"/><rect x="12" y="23" width="13" height="11" rx="4" fill="#0F6F73"/><rect x="31" y="23" width="13" height="11" rx="4" fill="#0F6F73"/><path d="M25 40c1-3 5-3 6 0" fill="#0F6F73"/><path d="M10 17c2-6 8-9 18-9s16 3 18 9" fill="none" stroke="#F4EFE6" stroke-width="3"/></svg><span>PLAY IN VR · META QUEST 3 VIA LINK</span></div><div class="pill alt"><svg viewBox="0 0 56 56"><rect x="11" y="12" width="34" height="23" rx="3" fill="#22333B"/><rect x="14" y="15" width="28" height="17" rx="1.5" fill="#36E0D1"/><path d="M5 39h46l-4 5H9z" fill="#22333B"/></svg><span>OR ON YOUR LAPTOP</span></div></div></div>
+      <div id="tcredit" class="clip ov credit-wrap" data-start="57.65" data-duration="2.35" data-track-index="14"><div class="credit"><div class="small">MADE BY</div><div class="name">AWAIZ AHMED</div><div class="bar" id="cbar"></div></div><div class="foot">Captured in engine · Hobby project</div></div>
+      <div id="fadeout" class="clip ov black" data-start="59.3" data-duration="0.7" data-track-index="15"></div>
+      <audio id="music" src="assets/audio/music.wav" data-start="0" data-duration="60.0" data-track-index="20" data-volume="1"></audio>
+      <audio id="vo" src="assets/audio/vo.wav" data-start="0" data-duration="60.0" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="assets/audio/sfx.wav" data-start="0" data-duration="60.0" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      (function () {
+        const EV = {"id": "skyfold-vertical", "fadeIn": [0.0, 1.0], "location": [5.3, 8.8], "radio": [["#rn0", 0.45, 4.4], ["#rn1", 16.5, 19.2], ["#rtower", 39.1, 43.4]], "big": [{"id": "cb1", "in": 0.5, "out": 4.75, "delays": [0, 0.2, 0.4]}, {"id": "cb4", "in": 16.7, "out": 20.4, "delays": [0, 1.2, 1.3]}, {"id": "cb5", "in": 34.8, "out": 38.8, "delays": [0, 0.55]}, {"id": "cb6", "in": 48.5, "out": 51.6, "delays": [0, 0.15]}], "objectives": [["ob1", 9.3, 13.56, 14.75], ["ob2", 21.4, 24.0, 24.9], ["ob3", 25.2, 26.64, 27.8], ["ob4", 28.1, 33.0, 33.9], ["ob6", 39.5, 41.85, 41.98], ["ob7", 42.05, 42.55, 43.9]], "chips": [["ch1", 10.25, 11.6], ["ch2", 11.7, 13.5]], "fold": 21.0, "lightning": [37.3, 37.52], "flash": 51.85, "title": [52.0, 56.0], "letters": 52.25, "letterStep": 0.13, "platforms": [56.0, 57.75], "credit": [57.65, 60.0], "fadeOut": [59.3, 60.0], "duration": 60.0};
+        const AUDIO = {"fps":30,"start":52.0,"frames":[[0.202,0.707],[0.238,0.704],[0.261,0.778],[0.248,0.666],[0.247,0.685],[0.224,0.619],[0.248,0.618],[0.288,0.625],[0.281,1.0],[0.267,0.844],[0.272,0.738],[0.264,0.612],[0.258,0.818],[0.259,0.766],[0.196,0.698],[0.064,0.506],[0.003,0.312],[0.157,0.367],[0.266,0.281],[0.131,0.194],[0.1,0.184],[0.167,0.198],[0.152,0.166],[0.045,0.141],[0.125,0.157],[0.12,0.142],[0.067,0.196],[0.074,0.239],[0.105,0.184],[0.083,0.17],[0.052,0.136],[0.091,0.146],[0.185,0.103],[0.1,0.131],[0.1,0.148],[0.148,0.118],[0.128,0.413],[0.038,0.168],[0.122,0.144],[0.118,0.149],[0.057,0.181],[0.072,0.168],[0.106,0.138],[0.07,0.109],[0.045,0.114],[0.076,0.184],[0.077,0.2],[0.055,0.154],[0.06,0.152],[0.081,0.178],[0.077,0.124],[0.07,0.116],[0.09,0.095],[0.093,0.115],[0.093,0.152],[0.218,0.228],[0.188,0.132],[0.095,0.131],[0.215,0.141],[0.174,0.153],[0.094,0.137],[0.129,0.15],[0.151,0.102],[0.071,0.132],[0.075,0.27],[0.121,0.179],[0.106,0.165],[0.053,0.153],[0.098,0.184],[0.106,0.143],[0.139,0.132],[0.063,0.123],[0.109,0.12],[0.159,0.294],[0.093,0.244],[0.075,0.159],[0.116,0.161],[0.107,0.131],[0.059,0.161],[0.111,0.136],[0.12,0.149],[0.081,0.125],[0.089,0.145],[0.134,0.335],[0.143,0.306],[0.128,0.262],[0.187,0.28],[0.229,0.361],[0.211,0.421],[0.176,0.366],[0.11,0.374],[0.05,0.362],[0.467,0.669],[0.579,0.723],[0.575,0.712],[0.544,0.807],[0.554,0.8],[0.477,0.744],[0.466,0.643],[0.42,0.629],[0.46,0.6],[0.42,0.785],[0.435,0.893],[0.413,0.754],[0.426,0.67],[0.408,0.547],[0.653,0.563],[0.518,0.586],[0.522,0.598],[0.427,0.543],[0.531,0.527],[0.472,1.0],[0.514,0.741],[0.458,0.672],[0.461,0.565],[0.413,0.543],[0.394,0.494],[0.366,0.56],[0.352,0.501],[0.356,0.394],[0.345,0.777],[0.351,0.805],[0.351,0.673],[0.353,0.56],[0.358,0.576],[0.354,0.595],[0.359,0.543],[0.353,0.529],[0.356,0.528],[0.45,0.551],[0.752,0.861],[0.782,0.753],[0.73,0.614],[0.683,0.591],[0.615,0.657],[0.56,0.582],[0.501,0.629],[0.48,0.618],[0.426,0.528],[0.425,1.0],[0.394,0.752],[0.406,0.697],[0.386,0.668],[0.371,0.652],[0.545,0.595],[0.632,0.566],[0.54,0.603],[0.504,0.572],[0.438,1.0],[0.443,0.932],[0.389,0.761],[0.387,0.675],[0.331,0.586],[0.344,0.58],[0.344,0.527],[0.361,0.539],[0.356,0.543],[0.338,0.594],[0.337,0.996],[0.339,0.708],[0.337,0.688],[0.333,0.555],[0.321,0.73],[0.314,0.631],[0.253,0.566],[0.133,0.509],[0.077,0.514],[1.0,0.743],[1.0,0.802],[1.0,0.704],[1.0,0.662],[0.525,0.739],[0.78,0.739],[1.0,0.649],[0.97,0.619],[0.861,0.582],[0.978,0.78],[0.716,0.896],[0.47,0.709],[0.789,0.554],[0.781,0.525],[0.614,0.498],[0.582,0.591],[0.46,0.494],[0.581,0.432],[0.627,0.445],[0.642,1.0],[0.677,0.611],[0.535,0.505],[0.238,0.486],[0.315,0.519],[0.343,0.5],[0.226,0.467],[0.391,0.443],[0.421,0.408],[0.261,0.634],[0.236,0.722],[0.289,0.58],[0.233,0.483],[0.238,0.311],[0.279,0.4],[0.238,0.447],[0.231,0.4],[0.176,0.328],[0.181,0.251],[0.297,0.484],[0.312,0.349],[0.347,0.328],[0.381,0.281],[0.272,0.266],[0.164,0.25],[0.136,0.173],[0.099,0.174],[0.097,0.179],[0.135,0.298],[0.122,0.205],[0.091,0.158],[0.066,0.118],[0.05,0.091],[0.082,0.099],[0.081,0.056],[0.08,0.063],[0.068,0.037],[0.055,0.1],[0.029,0.073],[0.011,0.023],[0.006,0.016],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0]]};
+        const tl = gsap.timeline({ paused: true });
+
+        // Opening: out of black.
+        tl.fromTo("#fadein", { opacity: 1 }, { opacity: 0, duration: EV.fadeIn[1] - EV.fadeIn[0], ease: "power1.inOut" }, EV.fadeIn[0]);
+
+        // Location card.
+        const L0 = EV.location[0], L1 = EV.location[1];
+        tl.fromTo("#loc .place", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out" }, L0);
+        tl.fromTo("#loc .line", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }, L0 + 0.15);
+        tl.fromTo("#loc .warn", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, L0 + 0.45);
+        tl.to("#loc .warn .dot", { opacity: 0.2, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: Math.max(1, Math.floor((L1 - L0 - 1.4) / 0.45)) }, L0 + 0.9);
+        tl.to("#loc .loc", { opacity: 0, y: 10, duration: 0.4, ease: "power2.in" }, L1 - 0.4);
+
+        // Radio callers: slide in, a listening ring pulses, slide out.
+        EV.radio.forEach(function (r) {
+          const sel = r[0], a = r[1], b = r[2];
+          tl.fromTo(sel + " .radio", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, a);
+          tl.fromTo(sel + " .ring", { scale: 0.92, opacity: 0.85 }, { scale: 1.3, opacity: 0, duration: 0.9, ease: "power1.out", repeat: Math.max(0, Math.floor((b - a - 0.9) / 0.9)) }, a + 0.3);
+          tl.to(sel + " .radio", { opacity: 0, x: -24, duration: 0.35, ease: "power2.in" }, b - 0.35);
+        });
+
+        // Statement captions: each line lands out of a blur; all leave together.
+        EV.big.forEach(function (c) {
+          const lines = document.querySelectorAll("#" + c.id + " .ln");
+          lines.forEach(function (ln, k) {
+            tl.fromTo(ln, { opacity: 0, y: 34, scale: 1.06, filter: "blur(14px)" },
+              { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.5, ease: "power3.out" }, c.in + c.delays[k]);
+          });
+          tl.to(lines, { opacity: 0, y: -18, filter: "blur(10px)", duration: 0.32, ease: "power2.in" }, c.out - 0.32);
+        });
+        // The storm line shudders with the lightning.
+        tl.fromTo("#cb5 .cap-inner", { x: 0 }, { x: 7, duration: 0.04, ease: "none", yoyo: true, repeat: 5 }, EV.lightning[0]);
+
+        // Objectives: in, checked off when the action lands, out.
+        EV.objectives.forEach(function (o) {
+          const s = "#" + o[0], a = o[1], c = o[2], b = o[3];
+          tl.fromTo(s + " .obj", { opacity: 0, x: 70 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, a);
+          tl.to(s + " .n", { opacity: 0, scale: 0.6, duration: 0.18, ease: "power2.in" }, c);
+          tl.to(s + " .obj-num", { backgroundColor: "#14918F", duration: 0.2 }, c);
+          tl.to(s + " .tick", { strokeDashoffset: 0, duration: 0.32, ease: "power2.out" }, c + 0.06);
+          tl.fromTo(s + " .pulse", { scale: 1, opacity: 0.9 }, { scale: 1.9, opacity: 0, duration: 0.6, ease: "power2.out" }, c);
+          tl.to(s + " .todo", { opacity: 0, duration: 0.2 }, c);
+          tl.to(s + " .done", { opacity: 1, duration: 0.2 }, c + 0.1);
+          tl.to(s + " .obj", { opacity: 0, x: 40, duration: 0.35, ease: "power2.in" }, b - 0.35);
+        });
+
+        // Hint chips, like the in-game toast.
+        EV.chips.forEach(function (ch) {
+          const s = "#" + ch[0] + " .chip";
+          tl.fromTo(s, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, ch[1]);
+          tl.fromTo(s, { x: ch[0] === "ch1" ? -12 : 0 }, { x: 0, duration: 0.45, ease: "elastic.out(1, 0.35)" }, ch[1] + 0.05);
+          tl.to(s, { opacity: 0, y: 12, duration: 0.22, ease: "power2.in" }, ch[2] - 0.22);
+        });
+
+        // Paper fold: a pearl leaf swings in over the cut and folds away on the other side.
+        const F = EV.fold;
+        tl.set("#leaf", { transformOrigin: "100% 50%", rotationY: -90 }, F - 0.5);
+        tl.set("#leaf-edge", { left: 0, right: "auto" }, F - 0.5);
+        tl.to("#leaf", { rotationY: 0, duration: 0.42, ease: "power2.in" }, F - 0.46);
+        tl.fromTo("#leaf-shade", { opacity: 0.55 }, { opacity: 0, duration: 0.42, ease: "power2.in" }, F - 0.46);
+        tl.set("#leaf", { transformOrigin: "0% 50%" }, F);
+        tl.set("#leaf-edge", { left: "auto", right: 0 }, F);
+        tl.to("#leaf", { rotationY: 90, duration: 0.44, ease: "power2.out" }, F + 0.02);
+        tl.to("#leaf-shade", { opacity: 0.55, duration: 0.44, ease: "power2.out" }, F + 0.02);
+
+        // Lightning: a double strike.
+        const LA = EV.lightning[0], LB = EV.lightning[1];
+        tl.fromTo("#lightning", { opacity: 0 }, { opacity: 0.85, duration: 0.04, ease: "none" }, LA);
+        tl.to("#lightning", { opacity: 0.08, duration: 0.09, ease: "none" }, LA + 0.05);
+        tl.to("#lightning", { opacity: 0.6, duration: 0.04, ease: "none" }, LB);
+        tl.to("#lightning", { opacity: 0, duration: 0.4, ease: "power2.out" }, LB + 0.05);
+
+        // White-out into the title.
+        const T0 = EV.title[0], T1 = EV.title[1];
+        tl.fromTo("#flash", { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power2.in" }, EV.flash);
+        tl.to("#flash", { opacity: 0, duration: 0.65, ease: "power2.out" }, T0 + 0.05);
+
+        // Title: blurred miniature behind, letters fold down like paper, then the gold line and subtitle.
+        tl.fromTo("#tbg-wrap", { scale: 1.04 }, { scale: 1.13, duration: EV.duration - T0, ease: "none" }, T0);
+        tl.fromTo("#tgrad", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, T0);
+        tl.fromTo("#word .L", { rotationX: -100, opacity: 0, y: -24 },
+          { rotationX: 0, opacity: 1, y: 0, duration: 0.6, ease: "back.out(1.7)", stagger: EV.letterStep }, EV.letters);
+        const subAt = EV.letters + 7 * EV.letterStep + 0.3;
+        tl.fromTo("#trule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.inOut" }, subAt - 0.2);
+        tl.fromTo("#tsub", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, subAt);
+        tl.to("#tstack", { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" }, T1 - 0.4);
+
+        // Platforms, then the credit.
+        const P0 = EV.platforms[0], P1 = EV.platforms[1];
+        tl.fromTo("#tplat .pill", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.35 }, P0 + 0.1);
+        tl.to("#tplat .pill", { opacity: 0, y: -12, duration: 0.3, ease: "power2.in" }, P1 - 0.3);
+        const C0 = EV.credit[0];
+        tl.fromTo("#tcredit .small", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, C0 + 0.05);
+        tl.fromTo("#tcredit .name", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, C0 + 0.15);
+        tl.fromTo("#cbar", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.inOut" }, C0 + 0.45);
+        tl.fromTo("#tcredit .foot", { opacity: 0 }, { opacity: 1, duration: 0.6 }, C0 + 0.6);
+        tl.fromTo("#fadeout", { opacity: 0 }, { opacity: 1, duration: EV.fadeOut[1] - EV.fadeOut[0], ease: "power1.in" }, EV.fadeOut[0]);
+
+        // Audio-reactive warmth behind the title: the music's low end swells the glow, its top end lights the gold line.
+        const glow = document.getElementById("tglow-in"), rule = document.getElementById("trule");
+        AUDIO.frames.forEach(function (fr, i) {
+          tl.call(function () {
+            glow.style.opacity = (0.22 + 0.5 * fr[0]).toFixed(3);
+            glow.style.transform = "scale(" + (1 + 0.07 * fr[0]).toFixed(3) + ")";
+            rule.style.boxShadow = "0 0 " + (6 + 26 * fr[1]).toFixed(1) + "px rgba(217, 164, 65, " + (0.25 + 0.6 * fr[1]).toFixed(2) + ")";
+          }, [], AUDIO.start + i / AUDIO.fps);
+        });
+
+        window.__timelines[EV.id] = tl;
+      })();
+    </script>
+  </body>
+</html>

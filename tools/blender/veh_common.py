@@ -499,6 +499,43 @@ def ribbon(part, pts, normals, width, d_in, d_out, mat, closed=False):
     return part.grid(rings, mat, True, c0, c1)
 
 
+def surface_skin(part, outline, mapfn, offset, mat, scales=(1.0, 0.5)):
+    """Single-sided skin over a 2D outline (u, v) hugging a surface at `offset` along its normal
+    (window glass seen only from outside). Concentric rings about the centroid + centre fan;
+    faces are oriented along the surface normal. Convert with to_temp(recalc=False)."""
+    cx = sum(p[0] for p in outline) / len(outline)
+    cy = sum(p[1] for p in outline) / len(outline)
+    bm = part.bm
+    rings, norms = [], []
+    for s in scales:
+        ring, nr = [], []
+        for (u, v) in outline:
+            p, n = mapfn(cx + (u - cx) * s, cy + (v - cy) * s)
+            ring.append(bm.verts.new(p + n * offset))
+            nr.append(n)
+        rings.append(ring)
+        norms.append(nr)
+    pc, nc = mapfn(cx, cy)
+    cv = bm.verts.new(pc + nc * offset)
+    m = len(outline)
+    fs = []
+    for i in range(len(rings) - 1):
+        a, b = rings[i], rings[i + 1]
+        for j in range(m):
+            j2 = (j + 1) % m
+            fs.append((bm.faces.new((a[j], a[j2], b[j2], b[j])), norms[i][j]))
+    for j in range(m):
+        fs.append((bm.faces.new((rings[-1][j], rings[-1][(j + 1) % m], cv)), nc))
+    out = []
+    for f, n in fs:
+        f.normal_update()
+        if f.normal.dot(n) < 0:
+            f.normal_flip()
+        out.append(f)
+    part.assign(out, mat)
+    return out
+
+
 def surface_patch(part, outline, mapfn, d_in, d_out, mat, scales=(1.0, 0.62, 0.25)):
     """Closed solid hugging a surface over a 2D outline (CCW in (u, v)): mapfn(u, v) ->
     (point, normal). Back face d_in below, front face d_out above the surface. Boolean recess
@@ -623,13 +660,16 @@ def mapper(shell, kind, side=1, off=0.0):
     return lambda u, v: shell.face(u, v, f, off)
 
 
-def window(cut, glass, shell, kind, outline, side=1, inset=0.016, depth=0.014, pane_mat=GLASS):
-    """Recess cutter (ink walls) + glass pane set 5 mm below the body surface."""
+def window(cut, glass, shell, kind, outline, side=1, inset=0.016, depth=0.014, pane_mat=GLASS,
+           rings=(1.0, 0.5)):
+    """Recess cutter (ink walls) + glass pane set 4-8 mm below the body surface. The cutter
+    reaches 8 cm proud of the surface so it always cuts through on curved panels; use more
+    `rings` where the surface bends a lot under the window."""
     loop = poly_loop(outline, 0.05, 2)
     loop = densify2(loop, 0.16, closed=True)
     loop = ccw(loop)
     m = mapper(shell, kind, side)
-    surface_patch(cut, loop, m, depth, 0.03, INK, scales=(1.0, 0.5))
+    surface_patch(cut, loop, m, depth, 0.08, INK, scales=rings)
     cx = sum(p[0] for p in loop) / len(loop)
     cy = sum(p[1] for p in loop) / len(loop)
     small = []
@@ -638,11 +678,8 @@ def window(cut, glass, shell, kind, outline, side=1, inset=0.016, depth=0.014, p
         L = math.hypot(du, dv)
         k = max(0.0, (L - inset)) / L if L > 1e-9 else 0.0
         small.append((cx + du * k, cy + dv * k))
-    # glass: thin pane hugging the surface 4-8 mm below it
-    def deform(v, m=m):
-        p, n = m(v.x, v.y)
-        return p + n * (-0.004 if v.z > 0 else -0.008)
-    pane(glass, small, 2.0, pane_mat, deform=deform, scales=(1.0, 0.5))
+    # glass: single-sided skin 5 mm below the body surface (inside the dark recess)
+    surface_skin(glass, small, m, -0.005, pane_mat, scales=rings)
 
 
 def arches(cut, axle, track, r_arch, z_hub, x_in=0.47):

@@ -203,10 +203,11 @@ class Surf:
         loc, nrm, idx, d = self.bvh.find_nearest(Vector(p))
         return loc, self._n(loc, idx)
 
-    def ray(self, o, d):
+    def ray(self, o, d, fallback=None):
+        """First hit along d from o; on a miss, the closest point to `fallback` (or to o)."""
         loc, nrm, idx, dist = self.bvh.ray_cast(Vector(o), Vector(d).normalized())
         if loc is None:
-            return self.near(o)
+            return self.near(o if fallback is None else fallback)
         return loc, self._n(loc, idx)
 
 
@@ -222,7 +223,7 @@ def conform(surf, to3d, base, axis=None):
             p = to3d(x, y)
             if axis is not None:
                 a = Vector(axis).normalized()
-                cache[k] = surf.ray(p - a * 0.3, a)
+                cache[k] = surf.ray(p - a * 0.3, a, p)
             else:
                 cache[k] = surf.near(p)
         loc, n = cache[k]

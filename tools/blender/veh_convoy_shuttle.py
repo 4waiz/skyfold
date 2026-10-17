@@ -58,8 +58,8 @@ def door_leaves(d, sh):
         zr = -h / 2 + 0.47
         slab(d, wl - 0.06, 0.06, 0.022, 0.010, 0.006, TEAL, M=M @ T(0, zr, 0), nc=1, ne=1)
         for (a, b) in ((zr + 0.03, h / 2 - 0.045), (-h / 2 + 0.045, zr - 0.03)):
-            slab(d, wl - 0.085, b - a, 0.006, 0.012, 0.002, GLASS, M=M @ T(0, (a + b) / 2, -0.004),
-                 nc=1, ne=1)
+            tile(d, (0, (a + b) / 2, -0.006), wl - 0.085, b - a, 0.002, GLASS, M=M, ch=0.0,
+                 sunk=0.0)
         # brass grab rail on the closing edge of each leaf
         xr = (wl / 2 - 0.07) * (1 if k == 0 else -1)
         a = M @ Vector((xr, -0.20, 0.016))
@@ -118,11 +118,11 @@ def build():
         w = [(0.045, 1.30), (0.84, 1.30), (0.82, 2.00), (0.045, 2.00)]
         if sx < 0:
             w = [(-x, z) for (x, z) in w][::-1]
-        window(cut, glass, sh, 'front', w, depth=0.02)
+        window(cut, glass, sh, 'front', w, depth=0.02, rings=(1.0, 0.72, 0.42))
     window(cut, glass, sh, 'front', [(-0.62, 2.07), (0.62, 2.07), (0.62, 2.205), (-0.62, 2.205)],
-           depth=0.02, pane_mat=GLOW)
-    window(cut, glass, sh, 'back', [(-0.80, 1.40), (0.80, 1.40), (0.80, 1.98), (-0.80, 1.98)],
-           depth=0.02)
+           depth=0.02, pane_mat=GLOW, rings=(1.0, 0.7, 0.4))
+    window(cut, glass, sh, 'back', [(-0.74, 1.40), (0.74, 1.40), (0.74, 1.98), (-0.74, 1.98)],
+           depth=0.02, rings=(1.0, 0.78, 0.52, 0.26))
     # side windows: five on the left, door + four on the right
     left = [(-2.10, -1.32), (-1.20, -0.42), (-0.30, 0.48), (0.60, 1.38), (1.50, 2.14)]
     right = [(-2.10, -1.32), (-0.16, 0.62), (0.74, 1.52), (1.64, 2.14)]
@@ -148,12 +148,12 @@ def build():
     # ---- seams: battery hatch (left), roof hatch outline
     seam(lines, sh, 'flank', poly_loop([(-0.95, 0.47), (0.95, 0.47), (0.95, 0.98), (-0.95, 0.98)],
                                        0.05), closed=True, side=1)
-    seam(lines, sh, 'flank', poly_loop([(0.95, 0.47), (-0.95, 0.47), (-0.95, 0.98), (0.95, 0.98)],
+    seam(lines, sh, 'flank', poly_loop([(1.06, 0.47), (-0.18, 0.47), (-0.18, 0.98), (1.06, 0.98)],
                                        0.05), closed=True, side=-1)
-    for side in (1, -1):
-        for y in (-0.55, 0.55):
+    for (side, ys) in ((1, (-0.55, 0.55)), (-1, (0.12, 0.76))):
+        for y in ys:
             p, n = sh.flank(y, 0.90, side)
-            slab(d, 0.10, 0.024, 0.014, 0.010, 0.005, PEARL, M=frame(p, n, (0, 0, 1)), nc=2,
+            slab(d, 0.10, 0.024, 0.014, 0.010, 0.005, PEARL, M=frame(p, n, (0, 0, 1)), nc=1,
                  ne=1)
     # ---- slats in the grille / vent recesses
     gp, gn = sh.face(0.0, 0.80, -1)
@@ -180,7 +180,7 @@ def build():
         # side marker lights along the teal skirt
         for y in (-1.95, 0.0, 1.95):
             p, n = sh.flank(y, 0.66, sx)
-            V.lamp_round(d, p, n, 0.020, body=TEAL, bezel=PEARL, lens=LIGHT, segs=8,
+            V.lamp_round(d, p, n, 0.020, body=TEAL, bezel=PEARL, lens=LIGHT, segs=6,
                          simple=True, proud=0.6, depth=0.015)
         bus_mirror(d, sx)
     bp, bn = sh.face(0.0, 1.02, -1)
@@ -202,15 +202,15 @@ def build():
     d.tube([Vector((-1.028, yc - 0.39, 0.338)), Vector((-1.028, yc + 0.39, 0.338))], 0.009, 8,
            BRASS, caps='round', cap_segs=1)
     roof_unit(d, sh)
-    temps = [body, d.to_temp(), glass.to_temp(), lines.to_temp(recalc=False)]
+    temps = [body, d.to_temp(), glass.to_temp(recalc=False), lines.to_temp(recalc=False)]
     bodyob = C.merge_to_object("Body", temps, pivot=(0, 0, 0), parent=root, sharp_deg=50)
     wheels = []
     for name, sx, sy in (("Wheel_FL", 1, -1), ("Wheel_FR", -1, -1), ("Wheel_RL", 1, 1),
                          ("Wheel_RR", -1, 1)):
         c = Vector((sx * TRACK, sy * AXLE, WR))
-        w = V.wheel_hq(WR, 0.28, sx, seg=24, lugs=0, grooves=1, spokes=8, spoke_w=0.085,
-                       spoke_d=0.06, spoke_flare=1.25, disc=False, caliper=False, nuts=8,
-                       hub_seg=14, valve=None, lip=PEARL, spoke=PEARL, hub=TEAL, cap=BRASS,
+        w = V.wheel_hq(WR, 0.28, sx, seg=24, lugs=0, grooves=0, spokes=8, spoke_w=0.085,
+                       spoke_d=0.06, spoke_flare=1.25, disc=False, caliper=False, nuts=6,
+                       hub_seg=12, valve=None, lip=PEARL, spoke=PEARL, hub=TEAL, cap=BRASS,
                        rim_r=0.60)
         w.transform(w.bm.verts, Matrix.Translation(c))
         wheels.append(C.merge_to_object(name, [w.to_temp()], pivot=c, parent=root,

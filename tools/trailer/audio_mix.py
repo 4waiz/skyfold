@@ -74,11 +74,7 @@ def automation(seconds, points):
 
 def duck_envelope(seconds, spans, depth=0.3, attack=0.18, release=0.45):
     """Gain lane that dips to `depth` during each (start, end) voice span, with smooth ramps."""
-    pts = [(0.0, 1.0)]
-    for a, b in sorted(spans):
-        pts += [(max(0.0, a - attack), 1.0), (a, depth), (b, depth), (b + release, 1.0)]
-    pts.append((seconds, 1.0))
-    # Merge overlapping ramps by taking the minimum of independent lanes.
+    # One lane per span; overlapping ramps merge by taking the minimum.
     n = int(round(seconds * SR))
     env = np.ones(n, dtype=np.float32)
     for a, b in spans:
