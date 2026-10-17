@@ -16,18 +16,21 @@ Hierarchy (pivots):
 Faces Blender -Y (Unity +Z). Wings are modelled half-spread; a flap is a rotation about
 the forward axis (Unity Z) at the shoulder pivot.
 
-Detail pass: every wing and tail feather is its own beveled plate with a brass rim (primaries,
-secondaries, three covert rows, a nine-feather tail fan); a protruding lens housing with an ink
-pupil; brow ridge, cheek panels, sensor lights; a sculpted beak with cere and nostrils; chest
-scale plates, seams and screws; a vaned thruster and tucked talons. The game drives the whole
-Lens renderer with one emission property block, so the lens iris is built from two glass rings
-with dark gaps (the socket and pupil belong to the Head) instead of material bands.
+Detail pass: every wing and tail feather is its own beveled plate with a brass rim, shingled so
+overlaps never share a plane (primaries, secondaries, three covert rows, a nine-feather tail
+fan), an ivory leading-edge spar with the brass wing edge, shoulder pauldrons with coral status
+lights; a protruding lens housing with an ink pupil, brow ridge, jaw (cheek) plates, sensor
+lights; a sculpted beak with cere and nostrils; shingled chest scales, a brass-rimmed dorsal
+plate, seams and screws; a vaned thruster and tucked talons. The game drives the whole Lens
+renderer with one emission property block, so the iris is two glass rings with dark gaps (the
+socket and pupil belong to the Head) instead of material bands. Plates that wrap a curved
+surface carry concentric fill rings so the surface never pokes through a flat cap.
 """
 import sys, os, math
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import chars_common as C
-from chars_common import Vector, Matrix, Euler, Quaternion, radians, sin, cos, pi, sqrt
-import bpy, bmesh
+from chars_common import Vector, Matrix, radians, sin, cos, pi, sqrt
+import bmesh
 from mathutils.bvhtree import BVHTree
 
 ARGS = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
@@ -72,18 +75,6 @@ def cdist(a, b):
     return min(d, 2 * pi - d)
 
 
-def catmull(points, n_per, closed=True):
-    P = [Vector((p[0], p[1], 0.0)) for p in points]
-    m = len(P)
-    out = []
-    for i in (range(m) if closed else range(m - 1)):
-        p0, p1, p2, p3 = P[(i - 1) % m], P[i], P[(i + 1) % m], P[(i + 2) % m]
-        for k in range(n_per):
-            t = k / n_per
-            v = 0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
-                       (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t)
-            out.append((v.x, v.y))
-    return out
 
 
 # ---------------------------------------------------------------------------- plates
@@ -160,14 +151,6 @@ def feather_outline(L, w, base_w=None, tip_len=None, ns=2, nt=5, point=0.0, shif
     return right + tip + left[::-1]
 
 
-def rounded_rect(w, h, r, n=3):
-    pts = []
-    for (cx, cy, a0) in ((w / 2 - r, h / 2 - r, 0), (-w / 2 + r, h / 2 - r, 90),
-                         (-w / 2 + r, -h / 2 + r, 180), (w / 2 - r, -h / 2 + r, 270)):
-        for k in range(n + 1):
-            a = radians(a0 + 90 * k / n)
-            pts.append((cx + r * cos(a), cy + r * sin(a)))
-    return pts
 
 
 # ---------------------------------------------------------------------------- projection
@@ -445,7 +428,7 @@ def build_body(parent):
     # neck collar (brass) + dark neck core with two ribs so the head can turn without gaps
     ax = (HEAD_C - NECK).normalized()
     M = Matrix.Translation(NECK) @ ax.to_track_quat('Z', 'Y').to_matrix().to_4x4()
-    p.torus(0.0228, 0.0044, 22, 5, BRASS, matrix=M @ Matrix.Translation((0, 0, -0.002)))
+    p.torus(0.0228, 0.0044, 20, 4, BRASS, matrix=M @ Matrix.Translation((0, 0, -0.002)))
     p.lathe([(0.0, -0.016), (0.0200, -0.016), (0.0208, 0.002), (0.0196, 0.004), (0.0204, 0.008),
              (0.0192, 0.012), (0.0, 0.012)], 16, INK, matrix=M)
     # shoulder sockets (ink cup + brass ring), both sides
@@ -454,11 +437,11 @@ def build_body(parent):
         n = Vector((sx * 1.0, 0.0, 0.55)).normalized()
         Ms = Matrix.Translation(s - n * 0.004) @ n.to_track_quat('Z', 'Y').to_matrix().to_4x4()
         vr, fs = p.lathe([(0, -0.006), (0.0124, -0.006), (0.0134, -0.0004), (0.0138, 0.0010),
-                          (0.0122, 0.0020), (0, 0.0020)], 16, INK, matrix=Ms)
-        p.assign(fs[1 * 16:3 * 16], BRASS)
+                          (0.0122, 0.0020), (0, 0.0020)], 14, INK, matrix=Ms)
+        p.assign(fs[1 * 14:3 * 14], BRASS)
     # thruster housing: brass lip, ink nacelle, six vanes and a brass hub over the glow disc
     Mt = Matrix.Translation(THR_C)
-    seg = 20
+    seg = 18
     vr, fs = p.lathe([(0.0, 0.0110), (0.0196, 0.0110), (0.0214, 0.0062), (0.0213, 0.0002),
                       (0.0204, -0.0034), (0.0192, -0.0050), (0.0170, -0.0047), (0.0160, -0.0030),
                       (0.0156, -0.0002), (0.0, -0.0002)], seg, INK, matrix=Mt)
@@ -646,7 +629,7 @@ def build_lens(parent):
              (0.0100, 0.0014), (0.0103, -0.0030)]
     outer = [(0.0117, -0.0040), (0.0117, 0.0006), (0.0126, 0.0018), (0.0146, 0.0018),
              (0.0158, 0.0008), (0.0161, -0.0040)]
-    seg = 22
+    seg = 20
     lathe_ring(p, inner, seg, GLOW, Mf)
     fs = lathe_ring(p, outer, seg, GLOW, Mf)
     p.assign(fs[0:seg], TEAL)         # inner wall of the outer ring (seen through the gap)
@@ -855,7 +838,7 @@ def build_tail(parent):
     # nine-feather fan, centre feather on top
     for i in range(-4, 5):
         L = 0.153 - 0.0042 * abs(i) ** 1.25
-        out = feather_outline(L, 0.0300, base_w=0.0170, tip_len=0.0150, ns=2, nt=5, point=0.1)
+        out = feather_outline(L, 0.0300, base_w=0.0170, tip_len=0.0150, ns=2, nt=4, point=0.1)
         M = place(i * 8.6, -0.010, 0.0016 - 0.0010 * abs(i), -3.0 * (1 if i > 0 else -1 if i < 0 else 0))
         plate(P, out, lambda x, y, h, M=M: M @ Vector((x, y, h)), 0.0032, FLIGHT, bevel=0.0007,
               rim=BRASS, rim_w=0.0013)
@@ -877,7 +860,7 @@ def build_thruster(parent):
     p = C.Part()
     M = Matrix.Translation(THR_C)
     p.lathe([(0.0, -0.0016), (0.0050, -0.0018), (0.0100, -0.0016), (0.0140, -0.0010),
-             (0.0152, -0.0002), (0.0152, 0.0010), (0.0, 0.0010)], 20, GLOW, matrix=M)
+             (0.0152, -0.0002), (0.0152, 0.0010), (0.0, 0.0010)], 18, GLOW, matrix=M)
     tmp = p.to_temp()
     return C.merge_to_object("Thruster", [tmp], pivot=THR_C, parent=parent, sharp_deg=60)
 

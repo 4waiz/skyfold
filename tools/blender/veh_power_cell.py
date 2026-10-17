@@ -4,78 +4,114 @@ Original procedural model (Awaiz Ahmed / Team Kanban), not AI-generated.
     blender -b --factory-startup -P tools/blender/veh_power_cell.py [-- --no-render]
 
 Hierarchy (pivots, Blender metres, Z up):
-    PowerCell        bottom centre (0,0,0) - pearl shell, brass end caps, carry handle
-      Core           centre of the glowing core (separate mesh, SKY_TealGlow; the game
-                     animates its emission / scale)
+    PowerCell        bottom centre (0,0,0) - pearl shell, brass end caps, glass window, handle
+      Core           centre of the glowing core (separate mesh, SKY_TealGlow only; the game
+                     animates its emission with a property block, so it stays one material)
       ANCHOR_handle  centre of the handle grip (suggested hand attach point)
-Total height 0.35 m (handle included), body diameter 0.14 m. Prop budget < 500 tris.
+Total height 0.35 m (handle included), body diameter 0.14 m. Budget < 2.5k tris.
+Detail pass (it is held in the hand in VR, ~30 cm from the eye): diamond-knurled brass base
+with a recessed contact disc, ink seal grooves, pearl shell with teal lips, glass window with
+four brass guard bars, three indicator lights, coral warning ring, fluted brass top cap with a
+grooved top face and two connector pins, brass handle on mounts with a rubber grip and ink
+wraps; the core has raised energy rings.
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import chars_common as C
+import veh_common as V
+from veh_common import lathe_m, frame, T
 from chars_common import Vector, Matrix, radians, sin, cos, pi
 
 ARGS = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 RENDER = '--no-render' not in ARGS
 OUT = os.path.join(C.MODELS, 'Props', 'power_cell.fbx')
 
-PEARL, BRASS, TEAL, GLOW, GLASS, INK, CORAL, RUBBER = ('SKY_Pearl', 'SKY_Brass', 'SKY_Teal',
-    'SKY_TealGlow', 'SKY_Glass', 'SKY_Ink', 'SKY_Coral', 'SKY_Rubber')
-SEG = 14
-R = 0.070            # body radius (0.14 m diameter)
-WIN0, WIN1 = 0.092, 0.218   # window band
-TOP = 0.300          # top of the upper cap (handle rises to 0.35)
+PEARL, BRASS, TEAL, GLOW, GLASS, INK, CORAL, RUBBER, LIGHT = (
+    'SKY_Pearl', 'SKY_Brass', 'SKY_Teal', 'SKY_TealGlow', 'SKY_Glass', 'SKY_Ink', 'SKY_Coral',
+    'SKY_Rubber', 'SKY_Light')
+SEG = 28
+WIN0, WIN1 = 0.092, 0.218   # window band (core centre at 0.155)
+TOP = 0.300                 # top of the upper cap (handle rises to 0.35)
 
 
-def band(faces, k, mat, p):
-    p.assign(faces[k * SEG:(k + 1) * SEG], mat)
+def pattern(vr, ring_idx, amp, phase):
+    """Push alternate vertices of one lathe ring in/out radially (knurling / flutes)."""
+    for j, v in enumerate(vr[ring_idx]):
+        r = Vector((v.co.x, v.co.y, 0.0))
+        if r.length < 1e-9:
+            continue
+        s = amp if (j + phase) % 2 == 0 else -amp
+        v.co += r.normalized() * s
 
 
 def build():
     C.reset_scene()
     p = C.Part()
-    # lower body: brass base cap -> ink groove -> pearl shell -> teal lip into the window
-    lo = [(0.0, 0.0), (0.056, 0.0), (0.0695, 0.014), (0.0695, 0.034), (0.0665, 0.040),
-          (0.0665, 0.082), (0.0575, WIN0 + 0.003), (0.0, WIN0 + 0.003)]
-    vr, fs = p.lathe(lo, SEG, PEARL)
-    for k, m in ((0, BRASS), (1, BRASS), (2, INK), (4, TEAL)):
-        band(fs, k, m, p)
-    nb = len(lo) - 3
-    p.assign(fs[nb * SEG:(nb + 1) * SEG], BRASS)        # bottom pole fan
-    p.assign(fs[(nb + 1) * SEG:(nb + 2) * SEG], INK)    # inner floor under the core
-    # upper body: teal lip -> pearl shell -> coral warning ring -> brass top cap
-    up = [(0.0, WIN1 - 0.003), (0.0575, WIN1 - 0.003), (0.0665, WIN1 + 0.010),
-          (0.0665, 0.250), (0.0665, 0.260), (0.0695, 0.272), (0.0600, 0.293), (0.0, TOP)]
-    vr, fs = p.lathe(up, SEG, PEARL)
-    for k, m in ((0, TEAL), (2, CORAL), (3, BRASS), (4, BRASS)):
-        band(fs, k, m, p)
-    nb = len(up) - 3
-    p.assign(fs[nb * SEG:(nb + 1) * SEG], INK)
-    p.assign(fs[(nb + 1) * SEG:(nb + 2) * SEG], BRASS)
-    # window: open glass tube between the lips (core glows through it)
-    p.lathe([(0.0600, WIN0 - 0.002), (0.0600, WIN1 + 0.002)], SEG, GLASS)
-    # three pearl ribs guarding the window (open-ended boxes, ends hidden in the lips)
-    for k in range(3):
-        a = 2 * pi * k / 3 + pi / 6
-        M = Matrix.Rotation(a, 4, 'Z') @ Matrix.Translation((0.0640, 0, (WIN0 + WIN1) / 2))
-        vs, fs = p.box((0, 0, 0), (0.0095, 0.013, WIN1 - WIN0 + 0.016), PEARL, matrix=M)
-        ends = [f for f in fs if abs(f.normal.z) > 0.9]
-        import bmesh as _bm
-        _bm.ops.delete(p.bm, geom=ends, context='FACES_ONLY')
-    # carry handle: brass arch with a rubber grip
-    hp = [Vector((-0.040, 0, 0.292)), Vector((-0.038, 0, 0.326)), Vector((-0.016, 0, 0.343)),
-          Vector((0.016, 0, 0.343)), Vector((0.038, 0, 0.326)), Vector((0.040, 0, 0.292))]
-    vr, fs = p.tube(hp, 0.0075, 6, BRASS, caps='flat')
-    grip = [f for f in fs if abs(f.calc_center_median().x) < 0.026 and
-            f.calc_center_median().z > 0.33]
-    p.assign(grip, RUBBER)
-    shell = C.merge_to_object("PowerCell", [p.to_temp(recalc=False)], pivot=(0, 0, 0),
-                              parent=None, sharp_deg=40)
-    # core (separate) - glowing capsule inside the window
+    # ---- lower body: recessed contact disc, brass foot, knurled band, seal groove, flange,
+    #      pearl shell, teal lip into the window, ink chamber floor
+    lo = [(0.0, 0.008), (0.040, 0.008), (0.046, 0.0), (0.064, 0.0), (0.0695, 0.007),
+          (0.0695, 0.014), (0.0695, 0.022), (0.0695, 0.030), (0.0695, 0.038), (0.0662, 0.041),
+          (0.0662, 0.045), (0.0695, 0.049), (0.0665, 0.054), (0.0665, 0.083),
+          (0.0610, WIN0), (0.0, WIN0 - 0.002)]
+    mats = [BRASS, INK, BRASS, BRASS, BRASS, BRASS, BRASS, BRASS, INK, INK, BRASS, PEARL,
+            PEARL, TEAL, INK]
+    vr, fs = lathe_m(p, lo, SEG, mats)
+    # rings after popping the pole: index = profile index - 1 -> knurl rings at 22 and 30 mm
+    pattern(vr, 5, 0.0011, 0)
+    pattern(vr, 6, 0.0011, 1)
+    # ---- upper body: ink chamber ceiling, teal lip, pearl band (lights), coral ring,
+    #      fluted brass cap, chamfer, grooved top face
+    up = [(0.0, WIN1 + 0.002), (0.0610, WIN1), (0.0665, WIN1 + 0.009),
+          (0.0665, 0.246), (0.0665, 0.252), (0.0695, 0.256), (0.0695, 0.264), (0.0695, 0.280),
+          (0.0695, 0.287), (0.0620, 0.297), (0.0500, TOP), (0.0460, TOP - 0.003),
+          (0.0420, TOP), (0.0, TOP)]
+    mats = [INK, TEAL, PEARL, CORAL, BRASS, BRASS, BRASS, BRASS, BRASS, BRASS, INK, INK,
+            BRASS]
+    vr, fs = lathe_m(p, up, SEG, mats)
+    pattern(vr, 5, 0.0012, 0)
+    pattern(vr, 6, 0.0012, 0)
+    # ---- glass window tube (the core glows through it)
+    lathe_m(p, [(0.0600, WIN0 - 0.002), (0.0600, WIN1 + 0.002)], SEG, [GLASS])
+    # ---- four brass guard bars outside the glass
+    for k in range(4):
+        a = 2 * pi * k / 4 + pi / 4
+        d = Vector((cos(a), sin(a), 0))
+        p.tube([d * 0.0642 + Vector((0, 0, WIN0 - 0.006)), d * 0.0642 + Vector((0, 0, WIN1 + 0.006))],
+               0.0042, 6, BRASS, caps='flat')
+    # ---- indicator lights on the upper pearl band
+    for k, m in enumerate((GLOW, GLOW, CORAL)):
+        a = radians(-90 + 30 * (k - 1))
+        d = Vector((cos(a), sin(a), 0))
+        c = d * 0.0665 + Vector((0, 0, 0.233))
+        lathe_m(p, [(0.0056, -0.002), (0.0056, 0.0008), (0.0034, 0.0026), (0.0, 0.0034)], 8,
+                [INK, m, m], M=frame(c, d, (0, 0, 1)))
+    # ---- connector pins on the top face
+    for sx in (1, -1):
+        c = Vector((0.0, sx * 0.024, TOP))
+        lathe_m(p, [(0.0045, -0.002), (0.0045, 0.006), (0.0, 0.0085)], 6, [BRASS, BRASS],
+                M=T(c))
+    # ---- handle: brass mounts, brass arch, rubber grip with ink wraps
+    for sx in (1, -1):
+        p.box(Vector((sx * 0.040, 0, 0.300)), (0.016, 0.022, 0.012), BRASS)
+    arch = [Vector((-0.040, 0, 0.298)), Vector((-0.039, 0, 0.318)), Vector((-0.031, 0, 0.333)),
+            Vector((-0.014, 0, 0.339)), Vector((0.014, 0, 0.339)), Vector((0.031, 0, 0.333)),
+            Vector((0.039, 0, 0.318)), Vector((0.040, 0, 0.298))]
+    p.tube(arch, 0.0068, 8, BRASS, caps='flat')
+    p.tube([Vector((-0.020, 0, 0.3385)), Vector((0.020, 0, 0.3385))], 0.0103, 10, RUBBER,
+           caps='round', cap_segs=1)
+    for x in (-0.011, 0.011):
+        p.torus(0.0104, 0.0019, 8, 3, INK, matrix=T(x, 0, 0.3385) @ V.rot_y(90))
+    shell = C.merge_to_object("PowerCell", [p.to_temp()], pivot=(0, 0, 0), parent=None,
+                              sharp_deg=40)
+    # ---- core (separate, single material): capsule with three raised energy rings
     q = C.Part()
-    q.lathe([(0.0, WIN0 + 0.004), (0.046, WIN0 + 0.024), (0.046, WIN1 - 0.024),
-             (0.0, WIN1 - 0.004)], 8, GLOW)
     zc = (WIN0 + WIN1) / 2
+    prof = [(0.0, WIN0 + 0.006), (0.024, WIN0 + 0.010), (0.038, WIN0 + 0.020),
+            (0.043, zc - 0.034), (0.047, zc - 0.029), (0.043, zc - 0.024), (0.043, zc - 0.005),
+            (0.047, zc), (0.043, zc + 0.005), (0.043, zc + 0.024), (0.047, zc + 0.029),
+            (0.043, zc + 0.034), (0.038, WIN1 - 0.020), (0.024, WIN1 - 0.010),
+            (0.0, WIN1 - 0.006)]
+    lathe_m(q, prof, 12, GLOW)
     core = C.merge_to_object("Core", [q.to_temp()], pivot=(0, 0, zc), parent=shell,
                              sharp_deg=50)
     C.new_empty("ANCHOR_handle", shell, (0.0, 0.0, 0.336), size=0.03)

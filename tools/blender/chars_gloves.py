@@ -26,7 +26,7 @@ thumb pose and the cupped palm.
 import sys, os, math
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import chars_common as C
-from chars_common import Vector, Matrix, radians, sin, cos, pi, sqrt, atan2
+from chars_common import Vector, Matrix, radians, sin, cos, pi, atan2
 import bpy, bmesh
 from mathutils.bvhtree import BVHTree
 
@@ -82,9 +82,6 @@ def rounded_rect(w, h, r, n=3):
     return pts
 
 
-def back_matrix(x, y, z):
-    """Local XY plane -> world (Y, Z) plane, local +Z -> world +X."""
-    return Matrix(((0, 0, 1, x), (1, 0, 0, y), (0, 1, 0, z), (0, 0, 0, 1)))
 
 
 def cup(v):
@@ -601,7 +598,6 @@ def bracer(pads, soft, csurf, S):
             plate(pads, out, F, 0.0016, PEARL, bevel=0.0005, rim=BRASS, rim_w=0.0007, fill=1,
                   fill_to=0.0035)
         hy = Vector((top - 0.0030, DEVICE_Y, sgn * 0.0192))
-        M = Matrix.Translation(hy) @ Matrix.Rotation(radians(90), 4, 'X')
         pads.cylinder(0.0014, 0.040, 8, BRASS,
                       matrix=Matrix.Translation(hy + Vector((0, -0.020, 0))) @
                       Matrix.Rotation(radians(-90), 4, 'X'))

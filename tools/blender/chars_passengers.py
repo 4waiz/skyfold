@@ -19,7 +19,7 @@ passenger_c: belted double-breasted long coat, scarf, auburn bun, round glasses,
 import sys, os, math
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import chars_common as C
-from chars_common import Vector, Matrix, radians, degrees, sin, cos, pi, sqrt, atan2
+from chars_common import Vector, Matrix, radians, degrees, sin, cos, pi
 import bmesh
 from mathutils.bvhtree import BVHTree
 

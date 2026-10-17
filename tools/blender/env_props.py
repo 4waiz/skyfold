@@ -641,7 +641,7 @@ def awning_striped(a):
 
 # --------------------------------------------------------------------------- shade sail
 
-def sail_curved(mb, corners, mat='SKY_Fabric', sag=0.25, curve=0.1, n=8, t=0.03):
+def sail_curved(mb, corners, mat='SKY_Fabric', sag=0.25, curve=0.1, n=8, t=0.03, band=None):
     """Tensioned triangular sail with concave (catenary-cut) edges and a sagging belly; closed thin shell.
     Returns the three edge polylines (top surface, mid-thickness) for hems."""
     C = [Vector(c) for c in corners]
@@ -677,8 +677,10 @@ def sail_curved(mb, corners, mat='SKY_Fabric', sag=0.25, curve=0.1, n=8, t=0.03)
     fs = []
     cnt = {}
     for f in faces:
-        fs.append(mb.f([T[k] for k in f], mat))
-        fs.append(mb.f([B[k] for k in reversed(f)], mat))
+        dists = [min(k[0], k[1], n - k[0] - k[1]) for k in f]
+        m = band if band and max(dists) <= 1 and min(dists) == 0 else mat     # outermost strip only
+        fs.append(mb.f([T[k] for k in f], m))
+        fs.append(mb.f([B[k] for k in reversed(f)], m))
         for k in range(3):
             key = tuple(sorted((f[k], f[(k + 1) % 3])))
             cnt[key] = cnt.get(key, 0) + 1
@@ -697,8 +699,9 @@ def sail_curved(mb, corners, mat='SKY_Fabric', sag=0.25, curve=0.1, n=8, t=0.03)
 
 @asset("shade_sail", "Props", "props", ao=dict(PROP_AO, dist=0.8), render=dict(PROP_RENDER, el=28.0))
 def shade_sail(a):
-    """Free-standing triangular shade sail (~4.6 m span): catenary-cut fabric with a cable hem, brass corner
-    plates and tension cables to three tapered teal masts (brass collars and finials) on pearl footings."""
+    """Free-standing triangular shade sail (~4.6 m span): catenary-cut fabric with a teal border band and
+    cable hem, brass corner plates and tension cables to three tapered teal masts (brass collars and
+    finials) on pearl footings."""
     pts = [(-2.3, -1.3, 3.2), (2.3, -1.3, 2.7), (0.0, 2.6, 3.4)]
     mbm = MB(); mbf = MB(); mbc = MB()
     tops = []
@@ -720,11 +723,11 @@ def shade_sail(a):
     a.part(mbm, name="masts")
     a.part(mbf, name="footings")
     mb = MB()
-    edges, nrm = sail_curved(mb, pts, sag=0.26, curve=0.11, n=7, t=0.03)
+    edges, nrm = sail_curved(mb, pts, sag=0.3, curve=0.11, n=8, t=0.03, band='SKY_TealLight')
     a.part(mb, name="sail")
     # hem cable along the curved edges, corner plates, tension cables to the masts
     for e in edges:
-        mbc.sweep(e, circle(0.019, 4, a0=45), 'SKY_Teal')
+        mbc.sweep(e[::2] if len(e) % 2 else e, circle(0.019, 4, a0=45), 'SKY_Teal')
     cen = sum((Vector(p) for p in pts), Vector()) / 3
     for k, (x, y, z) in enumerate(pts):
         c = Vector((x, y, z)) - nrm * 0.015
