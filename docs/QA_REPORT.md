@@ -41,7 +41,7 @@ What they cannot do: judge fun, feel or readability, listen to the audio, or tes
 | `perf` | Frame timing across a whole demo (table below) | PASSED 12/12 |
 | `tour` | Screenshot tour of the city for the docs | PASSED 1/1 |
 | `lookdev` | Re-creates the Episode 1 street frame and checks what is drawn in the sky (used to find the floating overlook disc) | PASSED 5/5 |
-| `soak` | 15 minutes of back-to-back demos | see "Soak" below |
+| `soak` | 15 minutes of back-to-back demos | PASSED 301/301 (15 loops) |
 
 The older `campaign` scenario (Episode 1 unlocks Episode 2 and saves the route) passed 27/27 on an earlier build. `fullcampaign` now covers the same checks.
 
@@ -112,7 +112,7 @@ VR through Link renders two eyes at a much higher resolution (Quest 3 default is
 
 ## Soak
 
-_Pending: filled in after the 15-minute run._
+`soak` on the final build: **15 complete demos back to back in 15 minutes, 301/301 checks passed**, no failures. The managed heap stayed between 5 and 7 MB (4 MB at the start, 6 MB at the end), so there is no managed-memory growth. The frame rate stayed at the display refresh (about 240 fps with vsync on) at the end of every loop. Native (non-managed) memory was not measured.
 
 ## Bugs found and fixed in this QA pass
 
