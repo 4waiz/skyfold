@@ -15,7 +15,7 @@ namespace Skyfold
     /// screenshots, check invariants and write a report, then quit with exit code 0 (pass) or 1 (fail).
     /// This is evidence for desktop logic only; it does not replace headset testing.
     /// </summary>
-    public sealed class QARunner : MonoBehaviour
+    public sealed partial class QARunner : MonoBehaviour
     {
         public bool Running { get; private set; }
 
@@ -60,6 +60,7 @@ namespace Skyfold
                 case "lookdev": body = LookDev(); break;
                 case "menus": body = Menus(); break;
                 case "walk": body = Walk(); break;
+                case "vrsim": body = VRSim(); break;
                 default: Check(false, "unknown scenario " + scenario); body = null; break;
             }
             if (body != null) yield return StartCoroutine(Guard(body));
