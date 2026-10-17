@@ -3,6 +3,19 @@ chars_common.
 
 Original procedural work for SKYFOLD: The Last Flight (Awaiz Ahmed / Team Kanban).
 
+What lives here:
+  * primitives: lathe_m (per-band materials), rr_lathe (rounded-rect "lathes": plates, lamp
+    clusters, recesses), slab (rounded slabs), sweep (any section along a path), tile, bolt,
+    rivet, pane (closed thin panes with a world-space deform);
+  * Pod: smooth monotone-cubic horizontal-slice body loft with raised ribs, true V-grooves,
+    crowned ring-filled tops and analytic surface lookups (flank / face / top / normal);
+  * Shell + surface tools: seams (thin ink strips), window (boolean recess cutter + inset
+    single-sided glass), surface_patch / surface_skin / ribbon, arches, bumper, mirror_unit,
+    wiper; boolean() wraps Blender's exact solver (cutter material transfers to new faces,
+    slivers cleaned, re-triangulated);
+  * lamps (round projector lamp, rounded-rect clusters), plate_recess, wheel_hq (tyre with
+    chevron tread or ribs, spoked or dished rim, hub cap, nuts, disc, calliper, valve).
+
 Geometry conventions (same as chars_common.Part):
   * lathe profiles are (r, h) pairs listed counter-clockwise in the (r, h) half plane
     (axis -> out -> up -> back to the axis) so face normals point outward;
