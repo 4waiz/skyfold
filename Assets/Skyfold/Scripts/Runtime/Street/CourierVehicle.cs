@@ -133,6 +133,14 @@ namespace Skyfold
 
         public void ClearVisited() => m_Visited.Clear();
 
+        /// <summary>Stops the car dead (mission end): a seated VR driver must not roll past the menu placed in front.</summary>
+        public void Halt()
+        {
+            if (m_Rb == null || m_Rb.isKinematic) return;
+            m_Rb.linearVelocity = Vector3.zero;
+            m_Rb.angularVelocity = Vector3.zero;
+        }
+
         // ------------------------------------------------------------------ enter / exit
         public bool CanEnter(out string reason)
         {

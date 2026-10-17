@@ -45,6 +45,8 @@ namespace Skyfold.EditorTools
             var cam = camGo.AddComponent<Camera>();
             cam.fieldOfView = 70f;
             SetupCamera(cam, 0.03f);
+            // Belt and braces for VR: the laptop camera must never render into the headset.
+            cam.GetUniversalAdditionalCameraData().allowXRRendering = false;
             camGo.AddComponent<AudioListener>();
             var dp = desk.AddComponent<DesktopPlayer>();
             dp.cam = cam;

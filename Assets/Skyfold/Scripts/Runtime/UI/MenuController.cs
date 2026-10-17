@@ -64,9 +64,12 @@ namespace Skyfold
         public void Back()
         {
             if (m_Screen == "pause" || m_Screen == "title" || m_Screen == "launcher") { if (m_Screen == "pause") GameRoot.Instance.Resume(); return; }
-            if (m_Screen == "results" || m_Screen == "failed" || m_Screen == "vrstart") return;
+            // These screens need an explicit choice; with no history behind them, Back would close every menu.
+            if (m_Screen == "results" || m_Screen == "failed" || m_Screen == "vrstart" || m_Screen == "vrfail" || m_Screen == "firstcomfort") return;
             SettingsStore.Save();
             m_Screen = m_History.Count > 0 ? m_History.Pop() : null;
+            // Nothing to go back to and no game running: land on the title rather than on no menu at all.
+            if (m_Screen == null && GameRoot.Instance != null && !GameRoot.Instance.IsPlaying) m_Screen = "title";
             if (m_Screen == null) Close(); else Build();
         }
 
@@ -92,6 +95,10 @@ namespace Skyfold
         {
             if (m_Screen == null) return;
             if (m_PanelRoot != null && (m_PanelRoot.rect.size - m_FittedFor).sqrMagnitude > 1f) FitPanel(); // window resized
+            // A VR panel is placed in front of the head once; if the head has since moved well away (a car still
+            // rolling to a stop, a fade-teleport, walking in the room), bring the panel back in front of it.
+            if (VRMode && PlayerRigs.Instance != null && PlayerRigs.Instance.Head != null &&
+                (PlayerRigs.Instance.Head.position - m_PlacedHead).sqrMagnitude > 0.36f) PlaceVR();
             var input = InputRouter.Instance;
             bool escBack = input != null && input.Pause.WasPressedThisFrame() && m_Screen != "pause";
             if (input != null && (input.Back.WasPressedThisFrame() || escBack) && Time.unscaledTime - m_OpenedAt > 0.2f) Back();
@@ -181,6 +188,7 @@ namespace Skyfold
         }
 
         RectTransform m_Panel, m_PanelRoot;
+        Vector3 m_PlacedHead;
         float m_PanelTop; // distance from the canvas top to a top-anchored panel; -1 when centred
         Vector2 m_FittedFor;
 
@@ -260,6 +268,7 @@ namespace Skyfold
             var head = rigs.Head;
             Vector3 fwd = rigs.Forward;
             Vector3 pos = head.position + fwd * 1.45f + Vector3.up * -0.08f;
+            m_PlacedHead = head.position;
             var rt = (RectTransform)m_VR.transform;
             rt.position = pos;
             rt.rotation = Quaternion.LookRotation(fwd, Vector3.up);
@@ -438,6 +447,9 @@ namespace Skyfold
             b.Toggle("Seated play (raises your view)", s.seated, v => { s.seated = v; Apply(); });
             if (vr)
             {
+                b.Para(Mathf.Abs(s.heightOffset) > 0.001f
+                    ? $"Height set: your eyes sit at about 1.62 m ({s.heightOffset:+0.00;-0.00} m from the headset)."
+                    : "Height comes straight from the headset. Stand or sit naturally, then press the button.", UIStyle.SmallSize);
                 b.Button("Set my height (stand or sit naturally)", () => { Root.CalibrateHeight(); Refresh(); });
                 b.Button("Recenter view", () => Root.Recenter());
             }
@@ -468,7 +480,7 @@ namespace Skyfold
         {
             var s = SettingsStore.Current;
             b.Heading("Display & mouse");
-            b.Choice("Window", new[] { "Fullscreen", "Windowed" }, s.fullscreen ? 0 : 1, i => { s.fullscreen = i == 0; Root.ApplyDisplay(); Apply(); });
+            b.Choice("Window", new[] { "Fullscreen", "Windowed" }, s.fullscreen && !GameRoot.WindowedOverride ? 0 : 1, i => { s.fullscreen = i == 0; GameRoot.WindowedOverride = false; Root.ApplyDisplay(); Apply(); });
             var res = DisplayResolutions();
             int cur = Mathf.Clamp(s.resolutionIndex < 0 ? res.Count - 1 : s.resolutionIndex, 0, res.Count - 1);
             b.Choice("Resolution", res.Select(r => r.x + " × " + r.y).ToArray(), cur, i => { s.resolutionIndex = i; Root.ApplyDisplay(); Apply(); });

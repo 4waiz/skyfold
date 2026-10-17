@@ -104,7 +104,12 @@ namespace Skyfold
             if (Location != CellLocation.Held) return;
             var s = NearestSocket(transform.position);
             if (s != null) InsertInto(s);
-            else { Location = CellLocation.Loose; SetPhysics(true); }
+            else
+            {
+                Location = CellLocation.Loose;
+                transform.SetParent(null, true); // never stay a child of the cradle, dock or socket it came from
+                SetPhysics(true);
+            }
         }
 
         CellSocket NearestSocket(Vector3 p)

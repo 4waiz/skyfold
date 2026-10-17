@@ -102,6 +102,13 @@ def inset2d(pts, d, maxm=2.4):
     return out
 
 
+def ccw(pts):
+    """Return the outline counter-clockwise (the inset helper assumes CCW)."""
+    a = sum(pts[i][0] * pts[(i + 1) % len(pts)][1] - pts[(i + 1) % len(pts)][0] * pts[i][1]
+            for i in range(len(pts)))
+    return list(pts) if a > 0 else list(pts)[::-1]
+
+
 def densify(pts, max_len):
     out = []
     n = len(pts)
@@ -303,6 +310,8 @@ def build_torso(f, coat=False):
     faces = C.loft_z(tp, secs, nu, v['top'], n=2.5)
     if not coat:
         tp.assign(faces[0:2 * nu], v['pants'])
+        if v['style'] == 'quiff':
+            tp.assign(faces[nu:2 * nu], v['trim'])          # ribbed jacket hem band
     return tp, secs
 
 
@@ -353,9 +362,16 @@ def build_shoes(f):
         p.assign(fs[5 * nsec:7 * nsec], v['shoe2'])        # toe cap
         p.assign(fs[7 * nsec + nsec:], v['shoe2'])          # toe tip fan
         # laces: three bars across the instep, plus a heel tab
-        for k, yy in enumerate((-0.028, -0.054, -0.080)):
-            z = 0.022 + (0.098 - 0.012 * k)
-            M = Matrix.Translation((cx + sx * 0.003, cy + yy, z)) @ Matrix.Rotation(radians(-14), 4, 'X')
+        prof = [(0.004, 0.104), (-0.040, 0.090), (-0.090, 0.070), (-0.135, 0.056)]
+
+        def top_h(yy):
+            for (y0, h0), (y1, h1) in zip(prof, prof[1:]):
+                if y1 <= yy <= y0:
+                    return h0 + (h1 - h0) * (y0 - yy) / (y0 - y1)
+            return prof[-1][1]
+        for k, yy in enumerate((-0.026, -0.050, -0.074)):
+            z = 0.022 + top_h(yy) - 0.0008
+            M = Matrix.Translation((cx + sx * 0.003, cy + yy, z)) @ Matrix.Rotation(radians(-16), 4, 'X')
             p.box(Vector((0, 0, 0)), (0.040, 0.007, 0.005), v['shoe2'] if v['shoe2'] != v['shoe'] else PEARL,
                   matrix=M)
         p.box(Vector((cx + sx * 0.003, cy + 0.066, 0.070)), (0.020, 0.008, 0.030), v['shoe2'])
@@ -427,8 +443,7 @@ def build_head(f):
     hp.superellipsoid(Vector((0, 0, 0)), (rx, ry, rz), 0.92, 0.95, 24, 18, v['skin'],
                       matrix=Matrix.Translation(hc), deform=shape)
     surf = Surf(hp.bm)
-    # merge the head into the figure
-    me_tmp = C.bpy.data.meshes.new("h") if hasattr(C, 'bpy') else None
+    f.head_shape = shape
     return hp, surf
 
 
@@ -443,22 +458,22 @@ def face(f, surf, mouth=True):
         M = Matrix.Translation(loc - n * 0.0012) @ frame(n)
         p.superellipsoid(Vector((0, 0, 0)), (0.0088, 0.0128, 0.0052), 0.9, 0.9, 10, 6, INK, matrix=M)
         side = n.cross(up).normalized()
-        cl = loc + n * 0.0034 + up * 0.0042 - side * sx * 0.0026
-        p.superellipsoid(cl, (0.0024, 0.0024, 0.0016), 1.0, 1.0, 6, 4, PEARL,
-                         matrix=Matrix.Identity(4))
+        cl = loc + n * 0.0030 + up * 0.0040 - side * sx * 0.0024
+        p.superellipsoid(Vector((0, 0, 0)), (0.0024, 0.0026, 0.0013), 1.0, 1.0, 6, 4, PEARL,
+                         matrix=Matrix.Translation(cl) @ frame(n))
         # brows
         bp = []
         for (bx, bz) in ((0.017, 0.023), (0.031, 0.029), (0.045, 0.024)):
             l2, n2 = surf.ray(Vector((sx * bx, -0.4, ey + bz)), Vector((0, 1, 0)))
             bp.append(l2 + n2 * 0.0016)
-        p.tube(bp, 0.0030, 6, v['hair'] if v['style'] != 'cap' else v['hair'], caps='round',
-               cap_segs=1, scale_xy=(0.65, 1.0), up=(0, -1, 0))
+        p.tube(bp, 0.0030, 6, v['hair'], caps='round', cap_segs=1, scale_xy=(0.65, 1.0),
+               up=(0, -1, 0))
         # ears
         loc, n = surf.ray(Vector((sx * 0.3, 0.012, hc.z - 0.016)), Vector((-sx, 0, 0)))
         M = Matrix.Translation(loc + n * 0.003) @ frame(n, (0, 0.25, 1))
-        p.superellipsoid(Vector((0, 0, 0)), (0.019, 0.028, 0.0085), 0.9, 0.9, 10, 6, v['skin'],
+        p.superellipsoid(Vector((0, 0, 0)), (0.0135, 0.0255, 0.0085), 0.9, 0.9, 10, 6, v['skin'],
                          matrix=M)
-        p.superellipsoid(Vector((0.0, 0.0, 0.0035)), (0.010, 0.017, 0.004), 0.9, 0.9, 8, 4,
+        p.superellipsoid(Vector((0.0015, 0.0, 0.0040)), (0.0070, 0.0150, 0.0040), 0.9, 0.9, 8, 4,
                          v['skin'], matrix=M)
     # nose
     loc, n = surf.ray(Vector((0, -0.4, hc.z - 0.034)), Vector((0, 1, 0)))
@@ -474,13 +489,15 @@ def face(f, surf, mouth=True):
         p.tube(mp, 0.0019, 5, 'SKY_Terracotta', caps='round', cap_segs=1)
 
 
-def hair_shell(p, hc, radii, thick, region, mat, nu=24, nv=18, extra=None):
+def hair_shell(p, hc, radii, thick, region, mat, nu=24, nv=18, extra=None, shape=None):
     """Closed shell a little bigger than the head; outside `region` (weight 0..1 of a unit
     direction) it shrinks under the scalp, so the visible hair ends on a clean hairline."""
     rx, ry, rz = radii
 
     def dfm(q):
         u = Vector((q.x / (rx + thick), q.y / (ry + thick), q.z / (rz + thick)))
+        if shape is not None:
+            q = shape(q)
         w = region(u)
         k = lerp(0.84, 1.0, w)
         q = q * k
@@ -512,7 +529,8 @@ def build_hair(f, surf):
             lift = w * smoothstep(0.2, 0.9, u.z) * 0.010
             fr = w * smoothstep(-0.2, -0.85, u.y) * smoothstep(0.25, 0.75, u.z) * 0.012
             return q + Vector((0, -fr * 0.4, lift + fr))
-        hair_shell(p, hc, r, 0.0085, hairline(0.40, -0.02, -0.52), v['hair'], extra=extra)
+        hair_shell(p, hc, r, 0.0085, hairline(0.40, -0.02, -0.52), v['hair'], extra=extra,
+                   shape=f.head_shape)
         # quiff tufts swept up and back from the front hairline
         for k, (x, s_) in enumerate(((-0.030, 0.85), (-0.004, 1.0), (0.022, 0.92))):
             c = hc + Vector((x, -0.058, 0.084))
@@ -526,7 +544,8 @@ def build_hair(f, surf):
             part = w * math.exp(-(u.x / 0.06) ** 2) * smoothstep(0.3, 0.9, u.z) * smoothstep(0.2, -0.6, u.y)
             side = w * smoothstep(0.5, 0.95, abs(u.x)) * smoothstep(-0.3, 0.3, u.z) * 0.006
             return q * (1.0 - 0.020 * part) + Vector((math.copysign(side, u.x), 0, 0))
-        hair_shell(p, hc, r, 0.0090, hairline(0.44, -0.08, -0.48), v['hair'], extra=extra)
+        hair_shell(p, hc, r, 0.0090, hairline(0.44, -0.08, -0.48), v['hair'], extra=extra,
+                   shape=f.head_shape)
         bc = hc + Vector((0.0, 0.078, 0.070))
         p.superellipsoid(bc, (0.046, 0.042, 0.044), 0.9, 0.9, 14, 10, v['hair'])
         Mt = Matrix.Translation(hc + Vector((0, 0.058, 0.060))) @ Matrix.Rotation(radians(62), 4, 'X')
@@ -540,21 +559,21 @@ def build_hair(f, surf):
                              v['hair'], matrix=M)
     elif st == 'cap':
         # short grey hair round the sides and back, under the cap
-        hair_shell(p, hc, r, 0.0055, hairline(0.30, -0.06, -0.50), v['hair'])
-        # beard and moustache
+        hair_shell(p, hc, r, 0.0055, hairline(0.30, -0.06, -0.50), v['hair'], shape=f.head_shape)
+        # short beard along the jaw, rising to the sideburns, and a moustache
         def beard(u):
             th = abs(atan2(u.x, -u.y))
-            return smoothstep(-0.05, -0.22, u.z) * smoothstep(1.85, 1.45, th) * \
-                (1.0 - 0.0 * u.z)
+            b = -0.66 + 0.58 * (1.0 - cos(min(th, pi / 2)))
+            return smoothstep(b + 0.05, b - 0.05, u.z) * smoothstep(1.95, 1.60, th)
 
         def bextra(q, u, w):
-            return q + Vector((0, -0.004 * w * smoothstep(-0.5, -0.9, u.z), -0.006 * w * smoothstep(-0.6, -0.95, u.z)))
-        hair_shell(p, hc, r, 0.0070, beard, v['hair'], extra=bextra)
+            return q + Vector((0, -0.003 * w, -0.005 * w * smoothstep(-0.7, -0.95, u.z)))
+        hair_shell(p, hc, r, 0.0068, beard, v['hair'], extra=bextra, shape=f.head_shape)
         mp = []
-        for (mx, mz) in ((-0.024, -0.008), (-0.012, 0.0), (0.0, 0.002), (0.012, 0.0), (0.024, -0.008)):
-            l2, n2 = surf.ray(Vector((mx, -0.4, hc.z - 0.052 + mz)), Vector((0, 1, 0)))
-            mp.append(l2 + n2 * 0.004)
-        p.tube(mp, [0.0050, 0.0070, 0.0072, 0.0070, 0.0050], 7, v['hair'], caps='round',
+        for (mx, mz) in ((-0.022, -0.006), (-0.011, 0.0), (0.0, 0.0015), (0.011, 0.0), (0.022, -0.006)):
+            l2, n2 = surf.ray(Vector((mx, -0.4, hc.z - 0.049 + mz)), Vector((0, 1, 0)))
+            mp.append(l2 + n2 * 0.0035)
+        p.tube(mp, [0.0036, 0.0050, 0.0054, 0.0050, 0.0036], 7, v['hair'], caps='round',
                cap_segs=1, scale_xy=(1.0, 0.75), up=(0, -1, 0.3))
         # flat cap: crown dome, brim, top button
         def capreg(u):
@@ -563,7 +582,8 @@ def build_hair(f, surf):
         def cextra(q, u, w):
             # flatten the crown and push it slightly forward
             return Vector((q.x * 1.02, q.y - 0.006 * w, q.z * (1.0 - 0.10 * w * smoothstep(0.5, 1.0, u.z))))
-        hair_shell(p, hc + Vector((0, 0.004, 0.010)), r, 0.0130, capreg, INK, extra=cextra)
+        hair_shell(p, hc + Vector((0, 0.004, 0.010)), r, 0.0130, capreg, INK, extra=cextra,
+                   shape=f.head_shape)
         brim = catmull([(-0.078, 0.000), (-0.060, -0.040), (0.0, -0.058), (0.060, -0.040),
                         (0.078, 0.000), (0.0, 0.012)], 3)
         Mb = Matrix.Translation(hc + Vector((0, -0.062, 0.048))) @ Matrix.Rotation(radians(10), 4, 'X')
@@ -601,9 +621,6 @@ def jacket_details(f, tsurf):
     out = densify(out, 0.02)
     plate(p, out, conform(tsurf, lambda x, y: Vector((x, -0.5, 0.955 + y)), -0.001, (0, 1, 0)),
           0.006, top, bevel=0.0025, fill=1, fill_to=0.02)
-    # ribbed hem band at the waist
-    hem = [(0.905, 0.0), (0.875, 0.0)]
-    return
 
 
 def shirt_details(f, tsurf):
@@ -611,9 +628,7 @@ def shirt_details(f, tsurf):
     v = f.v
     p = f.p
     for sx in (1, -1):
-        out = [(0.0, 0.0), (sx * 0.060, 0.010), (sx * 0.074, -0.030), (sx * 0.010, -0.058)]
-        if sx < 0:
-            out = out[::-1]
+        out = ccw([(0.0, 0.0), (sx * 0.060, 0.010), (sx * 0.074, -0.030), (sx * 0.010, -0.058)])
         F = conform(tsurf, lambda x, y: Vector((x, -0.5, 1.448 + y)), 0.001, (0, 1, 0.55))
         plate(p, out, F, 0.006, v['trim'], bevel=0.0022)
     # placket + buttons
@@ -634,14 +649,8 @@ def shirt_details(f, tsurf):
 
 def belt(f, tsurf, z, mat, buckle=BRASS):
     p = f.p
-    secs = torso_sections(f)
-    # belt band: a slightly inflated slice of the torso at z
-    Mb = Matrix.Translation((0, 0, z))
-    pts = []
-    vv = C.superellipse_ring
-    # use a loft of two rings just outside the torso
-    from chars_common import loft_z
-    s0 = [s for s in secs]
+    s0 = torso_sections(f)
+    # belt band: a slightly inflated slice of the torso round z
 
     def at(zz):
         for a, b in zip(s0, s0[1:]):
@@ -653,7 +662,7 @@ def belt(f, tsurf, z, mat, buckle=BRASS):
     for (zz, grow) in ((z - 0.022, 0.003), (z - 0.018, 0.007), (z + 0.018, 0.007), (z + 0.022, 0.003)):
         zz_, yf, yb, hw = at(zz)
         bands.append((zz, yf - grow, yb + grow, hw + grow))
-    loft_z(p, bands, 26, mat, n=2.5)
+    C.loft_z(p, bands, 26, mat, n=2.5)
     loc, n = tsurf.ray(Vector((0.0, -0.5, z)), Vector((0, 1, 0)))
     M = Matrix.Translation(loc + n * 0.008) @ frame(n)
     p.rbox(Vector((0, 0, 0)), (0.058, 0.040, 0.008), 0.004, 1, buckle, matrix=M)
@@ -665,10 +674,8 @@ def coat_details(f, tsurf):
     v = f.v
     p = f.p
     for sx in (1, -1):
-        out = [(0.0, 0.0), (sx * 0.070, -0.010), (sx * 0.090, -0.060), (sx * 0.030, -0.200)]
-        if sx < 0:
-            out = out[::-1]
-        out = densify(out, 0.03)
+        out = densify(ccw([(0.0, 0.0), (sx * 0.070, -0.010), (sx * 0.090, -0.060),
+                           (sx * 0.030, -0.200)]), 0.03)
         F = conform(tsurf, lambda x, y: Vector((x, -0.5, 1.430 + y)), 0.0005, (0, 1, 0.25))
         plate(p, out, F, 0.006, v['top'], bevel=0.0024, fill=1, fill_to=0.010)
         for z in (1.180, 1.080, 0.760, 0.680):
@@ -686,7 +693,7 @@ def backpack(f):
     v = f.v
     p = f.p
     m = v['acc_mat']
-    c = Vector((0.0, 0.180, 1.120))
+    c = Vector((0.0, 0.166, 1.120))
     tilt = Matrix.Rotation(radians(6), 4, 'X')
     M = Matrix.Translation(c) @ tilt
     p.rbox(Vector((0, 0, 0)), (0.270, 0.130, 0.380), 0.050, 3, m, matrix=M)
@@ -769,7 +776,7 @@ def scarf(f):
     m = v['acc_mat']
     Mt = Matrix.Translation((0.0, 0.002, 1.445)) @ Matrix.Rotation(radians(-8), 4, 'X')
     p.torus(0.070, 0.026, 20, 8, m, matrix=Mt, scale_minor=(1.0, 1.15))
-    p.torus(0.066, 0.022, 20, 7, m, matrix=Matrix.Translation((0.0, -0.004, 1.488)) @
+    p.torus(0.060, 0.020, 20, 7, m, matrix=Matrix.Translation((0.0, -0.002, 1.478)) @
             Matrix.Rotation(radians(-14), 4, 'X'))
     for (x0, L, tw) in ((0.030, 0.230, 6.0), (0.058, 0.180, -8.0)):
         pts = [Vector((x0, -0.070, 1.430)), Vector((x0 + 0.006, -0.112, 1.350)),
@@ -804,7 +811,7 @@ def glasses(f, surf):
            caps='round', cap_segs=1)
 
 
-def shoulder_bag(f):
+def shoulder_bag(f, tsurf):
     v = f.v
     p = f.p
     m = 'SKY_Coral'
@@ -814,10 +821,12 @@ def shoulder_bag(f):
     p.rbox(Vector((0.020, 0.0, 0.040)), (0.040, 0.244, 0.110), 0.030, 2, m, matrix=M)
     p.rbox(Vector((0.041, 0.0, -0.004)), (0.006, 0.040, 0.026), 0.003, 1, BRASS, matrix=M)
     # strap across the body from the right shoulder to the bag
-    pts = [M @ Vector((0.0, -0.100, 0.085)), Vector((0.150, -0.110, 1.080)),
-           Vector((0.020, -0.128, 1.260)), Vector((-0.110, -0.090, 1.410)),
-           Vector((-0.130, 0.020, 1.430)), Vector((-0.060, 0.120, 1.330)),
-           Vector((0.120, 0.120, 1.050)), M @ Vector((0.0, 0.100, 0.085))]
+    def on(x, z, front, off=0.010):
+        loc, n = tsurf.ray(Vector((x, -0.5 if front else 0.5, z)), Vector((0, 1 if front else -1, 0)))
+        return loc + n * off
+    pts = [M @ Vector((0.0, -0.100, 0.085)), on(0.140, 1.080, True), on(0.030, 1.250, True),
+           on(-0.090, 1.390, True, 0.012), Vector((-0.128, 0.004, 1.438)),
+           on(-0.070, 1.330, False), on(0.120, 1.060, False), M @ Vector((0.0, 0.100, 0.085))]
     p.tube(C.spline3(pts, 2), 0.010, 5, m, caps='round', cap_segs=1, scale_xy=(1.9, 0.55),
            up=(0, -1, 0))
 
@@ -843,7 +852,7 @@ def figure(name):
     p.lathe([(0.0, 1.400), (0.050, 1.400), (0.048, 1.470), (0.046, 1.540), (0.0, 1.540)], 14,
             v['skin'], matrix=Matrix.Translation((0, 0.012, 0)))
     hp, hsurf = build_head(f)
-    face(f, hsurf, mouth=v['style'] != 'cap')
+    face(f, hsurf, mouth=True)
     build_hair(f, hsurf)
     if v['acc'] == 'backpack':
         jacket_details(f, tsurf)
@@ -851,13 +860,13 @@ def figure(name):
     elif v['acc'] == 'suitcase':
         shirt_details(f, tsurf)
         belt(f, tsurf, 0.960, 'SKY_Wood')
-        hw = hands[1][0] + hands[1][1] * 0.075
-        suitcase(f, hw)
+        (w, d, pn, sx) = hands[1]
+        suitcase(f, w + d * 0.090 + pn * 0.018)
     else:
         coat_details(f, tsurf)
         scarf(f)
         glasses(f, hsurf)
-        shoulder_bag(f)
+        shoulder_bag(f, tsurf)
     return f, [tp, hp]
 
 
@@ -865,13 +874,14 @@ def build(name):
     C.reset_scene()
     root = C.new_empty(name, None, (0, 0, 0), size=0.3)
     f, extra = figure(name)
-    temps = [f.p.to_temp()] + [e.to_temp() for e in extra]
-    body = C.merge_to_object("Body", temps, pivot=(0, 0, 0), parent=root, sharp_deg=50)
+    parts = [f.p] + extra
     # scale the nominal figure to its target height (ground stays at Z 0)
-    zmax = max(vv.co.z for vv in body.data.vertices)
+    zmax = max(vv.co.z for prt in parts for vv in prt.bm.verts)
     k = VARIANTS[name]['H'] / zmax
-    body.data.transform(Matrix.Diagonal((k, k, k, 1.0)))
-    body.data.update()
+    for prt in parts:
+        bmesh.ops.transform(prt.bm, matrix=Matrix.Diagonal((k, k, k, 1.0)), verts=prt.bm.verts)
+    temps = [prt.to_temp() for prt in parts]
+    body = C.merge_to_object("Body", temps, pivot=(0, 0, 0), parent=root, sharp_deg=50)
     C.bake_ao([body], dist=0.12, samples=40, floor=0.45, ground_z=0.0)
     return root
 

@@ -509,7 +509,8 @@ namespace Skyfold
         void UpdateVR(bool vr, bool playing, ObjectiveDef o, PlayerRigs rigs, InputRouter input, string prompt, bool held, float left)
         {
             bool showPanel = vr && (playing || m_VRSub.text.Length > 0);
-            if (m_VRPanel.gameObject.activeSelf != showPanel) m_VRPanel.gameObject.SetActive(showPanel);
+            bool snapPanel = false;
+            if (m_VRPanel.gameObject.activeSelf != showPanel) { m_VRPanel.gameObject.SetActive(showPanel); snapPanel = showPanel; }
             if (showPanel && rigs.Head != null)
             {
                 // Lazy follow: stays put until you look well away, then glides back below your gaze.
@@ -519,9 +520,17 @@ namespace Skyfold
                 var t = m_VRPanel.transform;
                 Vector3 toPanel = t.position - head.position;
                 float angle = Vector3.Angle(Vector3.ProjectOnPlane(toPanel, Vector3.up), fwd);
-                if (angle > 28f || toPanel.magnitude > 2.2f || toPanel.magnitude < 0.6f || m_PanelVel.sqrMagnitude > 0.0001f)
+                // Just shown, or left behind by a fold or teleport: appear in front of the player at once instead of
+                // drifting across the city at the lazy-follow speed. In the car, follow fast enough to keep up.
+                if (snapPanel || (t.position - goal).sqrMagnitude > 9f)
                 {
-                    t.position = Vector3.SmoothDamp(t.position, goal, ref m_PanelVel, 0.35f, 4f, Time.unscaledDeltaTime);
+                    t.position = goal;
+                    m_PanelVel = Vector3.zero;
+                }
+                else if (angle > 28f || toPanel.magnitude > 2.2f || toPanel.magnitude < 0.6f || m_PanelVel.sqrMagnitude > 0.0001f)
+                {
+                    bool riding = rigs.IsDriving;
+                    t.position = Vector3.SmoothDamp(t.position, goal, ref m_PanelVel, riding ? 0.12f : 0.35f, riding ? 40f : 4f, Time.unscaledDeltaTime);
                     if ((t.position - goal).sqrMagnitude < 0.0004f) m_PanelVel = Vector3.zero;
                 }
                 t.rotation = Quaternion.LookRotation(t.position - head.position, Vector3.up);

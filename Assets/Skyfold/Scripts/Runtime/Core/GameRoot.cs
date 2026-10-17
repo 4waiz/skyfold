@@ -49,6 +49,8 @@ namespace Skyfold
         public PlayMode Mode => rigs != null ? rigs.Mode : PlayMode.Desktop;
 
         InputContext m_ContextBeforePause;
+        bool m_PauseWhenIdle;
+        float m_PauseRequestedAt;
         bool m_VRStarting;
         bool m_PendingDemo;
         int m_PendingEpisode;
@@ -69,7 +71,8 @@ namespace Skyfold
             }
             SettingsStore.Load();
             ProgressStore.Load();
-            if (opts.Windowed) SettingsStore.Current.fullscreen = false;
+            // --windowed applies to this launch only; writing it into the settings would make every later launch windowed.
+            WindowedOverride = opts.Windowed;
             QualitySettings.vSyncCount = 1;
             Application.targetFrameRate = -1;
 
@@ -181,9 +184,21 @@ namespace Skyfold
             StartMission(MissionCatalog.Episode1);
         }
 
-        public void Pause()
+        bool TransitionBusy => (fold != null && fold.Busy) || (car != null && car.Busy);
+
+        public void Pause() => Pause(false);
+
+        void Pause(bool force)
         {
             if (!IsPlaying || IsPaused) return;
+            // A fold or a car entry/exit switches the input context when its fade ends; pausing in the middle would
+            // save the old context and restore it on Resume. Pause as soon as the transition is over instead.
+            if (!force && TransitionBusy)
+            {
+                if (!m_PauseWhenIdle) { m_PauseWhenIdle = true; m_PauseRequestedAt = Time.unscaledTime; }
+                return;
+            }
+            m_PauseWhenIdle = false;
             IsPaused = true;
             m_ContextBeforePause = input.Context;
             tabletop.ForceDrop();
@@ -339,13 +354,16 @@ namespace Skyfold
             if (rigs.desktop != null) rigs.desktop.ApplySettings(s);
         }
 
+        /// <summary>Set by --windowed for this launch; cleared when the player picks a window mode in the menu.</summary>
+        public static bool WindowedOverride;
+
         public void ApplyDisplay()
         {
             var s = SettingsStore.Current;
             if (Application.isEditor) return;
             var list = MenuController.DisplayResolutions();
             var res = s.resolutionIndex >= 0 && s.resolutionIndex < list.Count ? list[s.resolutionIndex] : new Vector2Int(Display.main.systemWidth, Display.main.systemHeight);
-            if (s.fullscreen) Screen.SetResolution(res.x, res.y, FullScreenMode.FullScreenWindow);
+            if (s.fullscreen && !WindowedOverride) Screen.SetResolution(res.x, res.y, FullScreenMode.FullScreenWindow);
             else
             {
                 var w = s.resolutionIndex >= 0 ? res : new Vector2Int(Mathf.Min(1600, Display.main.systemWidth - 80), Mathf.Min(900, Display.main.systemHeight - 120));
@@ -361,6 +379,12 @@ namespace Skyfold
                 if (IsPlaying && !IsPaused && missions.State == MissionState.Active) Pause();
                 else if (IsPaused && menu.Screen == "pause") Resume();
             }
+            // Deferred pause: once the transition ends (or after 2 s at most, should one ever hang).
+            if (m_PauseWhenIdle && (!TransitionBusy || Time.unscaledTime - m_PauseRequestedAt > 2f))
+            {
+                m_PauseWhenIdle = false;
+                if (IsPlaying && !IsPaused && missions.State == MissionState.Active) Pause(true);
+            }
             if (IsPlaying && !IsPaused && input.Objectives.WasPressedThisFrame()) hud.ToggleObjectives();
             if (input.OperatorReset.WasPressedThisFrame() && missions.Current != null && missions.Current.IsDemo) OperatorResetDemo();
             if (input.Screenshot.WasPressedThisFrame()) TakeScreenshot(null);
@@ -375,6 +399,7 @@ namespace Skyfold
             {
                 if (missions.State == MissionState.Failed && menu.Screen != "failed")
                 {
+                    if (car != null && car.HasDriver) car.Halt();
                     tabletop.ForceDrop();
                     input.SetContext(InputContext.Results);
                     if (rigs.Mode == PlayMode.VR) rigs.vr.SetContext(InputContext.Results); else rigs.desktop.UpdateCursor();
@@ -382,6 +407,7 @@ namespace Skyfold
                 }
                 else if (missions.State == MissionState.Results && menu.Screen != "results")
                 {
+                    if (car != null && car.HasDriver) car.Halt();
                     input.SetContext(InputContext.Results);
                     if (rigs.Mode == PlayMode.VR) rigs.vr.SetContext(InputContext.Results); else rigs.desktop.UpdateCursor();
                     menu.Show("results", false);

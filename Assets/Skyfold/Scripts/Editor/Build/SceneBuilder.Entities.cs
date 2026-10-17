@@ -151,6 +151,8 @@ namespace Skyfold.EditorTools
             grab.movementType = XRBaseInteractable.MovementType.Instantaneous;
             grab.throwOnDetach = false;
             grab.useDynamicAttach = true;
+            // XRI otherwise re-parents a dropped object to where it was picked up (the car's cradle).
+            grab.retainTransformParent = false;
             var cell = cellGo.AddComponent<PowerCell>();
             cell.dock = c.Dock;
             cell.sockets = new[] { c.Dock, c.Car.cradle, c.SubstationSocket };

@@ -465,8 +465,11 @@ namespace Skyfold
         {
             yield return ScreenFader.Instance.FadeOut(0.25f);
             if (Ctx.Car.HasDriver) Ctx.Car.EndDriving(Ctx.Car.Position, 0f);
+            // Begin() calls StopAllCoroutines(), which ends this routine at its next yield, so the fade back in
+            // has to run on the fader itself or the screen stays black.
+            var fader = ScreenFader.Instance;
             Begin(MissionCatalog.Get(Current.Id));
-            yield return ScreenFader.Instance.FadeIn(0.35f);
+            fader.StartCoroutine(fader.FadeIn(0.35f));
         }
 
         /// <summary>The living title-screen city: broken causeway, traffic, no objectives or timer.</summary>

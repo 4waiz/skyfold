@@ -52,9 +52,14 @@ namespace Skyfold
             catch { return false; }
         }
 
+        /// <summary>Bumped by every start and stop; a start that sees a newer generation was cancelled and stops
+        /// touching the XR manager, so a stale attempt timing out cannot shut down a later session.</summary>
+        int m_Generation;
+
         public IEnumerator StartXR(float displayTimeout = 6f)
         {
             if (State == XRState.Running || State == XRState.Starting) yield break;
+            int generation = ++m_Generation;
             Attempts++;
             LastError = "";
             SetState(XRState.Starting);
@@ -72,10 +77,17 @@ namespace Skyfold
                 manager.StopSubsystems();
                 manager.DeinitializeLoader();
                 yield return null;
+                if (generation != m_Generation) yield break;
             }
 
             Debug.Log("[SKYFOLD] XR: initialising OpenXR loader (attempt " + Attempts + ")");
             yield return manager.InitializeLoader();
+            if (generation != m_Generation)
+            {
+                // Cancelled while the loader was starting: release it unless a newer attempt now owns it.
+                if (State != XRState.Starting && State != XRState.Running && manager.activeLoader != null) manager.DeinitializeLoader();
+                yield break;
+            }
             if (manager.activeLoader == null)
             {
                 Fail(MetaLinkServiceRunning()
@@ -91,6 +103,7 @@ namespace Skyfold
             {
                 t += Time.unscaledDeltaTime;
                 yield return null;
+                if (generation != m_Generation) yield break;
             }
             if (display == null || !display.running)
             {
@@ -124,6 +137,7 @@ namespace Skyfold
         public void StopXR()
         {
             var manager = XRGeneralSettings.Instance != null ? XRGeneralSettings.Instance.Manager : null;
+            m_Generation++;
             if (manager == null || manager.activeLoader == null) { SetState(XRState.Off); return; }
             SetState(XRState.Stopping);
             manager.StopSubsystems();

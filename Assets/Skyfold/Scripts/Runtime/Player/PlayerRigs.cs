@@ -40,6 +40,10 @@ namespace Skyfold
         {
             Mode = mode;
             if (desktop != null) desktop.gameObject.SetActive(mode == PlayMode.Desktop);
+            // The desktop camera is unparented from its rig for the title, Atelier and driving views, so switching
+            // the rig off does not switch it off. Left on in VR it would draw over the headset image (it renders
+            // after the XR camera) and keep a second AudioListener.
+            if (desktop != null && desktop.cam != null) desktop.cam.gameObject.SetActive(mode == PlayMode.Desktop);
             if (vr != null) vr.gameObject.SetActive(mode == PlayMode.VR);
             if (mode == PlayMode.VR && vr != null) vr.Setup();
             Debug.Log("[SKYFOLD] Active rig: " + mode);

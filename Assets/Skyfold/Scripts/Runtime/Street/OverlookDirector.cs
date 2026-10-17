@@ -89,6 +89,13 @@ namespace Skyfold
         {
             m_Switching = true;
             yield return ScreenFader.Instance.FadeOut(0.2f);
+            if (m_Car == null)
+            {
+                // Remote Drive ended during the fade: just fade back in.
+                yield return ScreenFader.Instance.FadeIn(0.2f);
+                m_Switching = false;
+                yield break;
+            }
             m_Current = next;
             ShowOnly(next);
             PlayerRigs.Instance.TeleportTo(next.position, YawTowards(next.position, m_Car.Position));

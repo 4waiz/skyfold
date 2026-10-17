@@ -41,6 +41,8 @@ namespace Skyfold
         Transform m_Seat, m_SeatEye;
         InputContext m_Context = InputContext.Menu;
         bool m_Ready;
+        float m_LastYaw;
+        bool m_HasLastYaw;
 
         public Camera Camera => m_Camera;
         public Transform Head => m_Camera != null ? m_Camera.transform : transform;
@@ -188,6 +190,10 @@ namespace Skyfold
                 if (m_LeftTeleport != null) m_LeftTeleport.gameObject.SetActive(false);
                 if (m_RightTeleport != null) m_RightTeleport.gameObject.SetActive(false);
             }
+            // XRI hides a hand's near-far pointer while A aims a teleport and restores it only from the release
+            // callback, which a disabled controller manager never gets: make sure both pointers exist again.
+            if (m_LeftNearFar != null && !m_LeftNearFar.gameObject.activeSelf) m_LeftNearFar.gameObject.SetActive(true);
+            if (m_RightNearFar != null && !m_RightNearFar.gameObject.activeSelf) m_RightNearFar.gameObject.SetActive(true);
             // Near-far interactors stay on for UI rays; grabbing is limited by interaction layers.
             if (m_LeftNearFar != null) m_LeftNearFar.interactionLayers = grab ? m_DefaultLayers : 0;
             if (m_RightNearFar != null) m_RightNearFar.interactionLayers = grab ? m_DefaultLayers : 0;
@@ -199,6 +205,8 @@ namespace Skyfold
         public void TeleportTo(Vector3 feet, float yaw)
         {
             if (!m_Ready) return;
+            m_LastYaw = yaw;
+            m_HasLastYaw = true;
             bool bodyWasEnabled = m_Body != null && m_Body.enabled;
             if (m_Body != null) m_Body.enabled = false;
             var forward = Quaternion.Euler(0f, yaw, 0f) * Vector3.forward;
@@ -232,11 +240,11 @@ namespace Skyfold
                 origin.MatchOriginUpCameraForward(Vector3.up, fwd);
                 origin.Origin.transform.position += m_SeatEye.position - m_Camera.transform.position;
             }
-            else
+            else if (m_HasLastYaw)
             {
-                Vector3 fwd = Vector3.ProjectOnPlane(m_Camera.transform.forward, Vector3.up);
-                if (fwd.sqrMagnitude < 0.01f) fwd = origin.transform.forward;
-                origin.MatchOriginUpCameraForward(Vector3.up, fwd.normalized);
+                // Standing: turn back to the facing of the last placement (the plinth, a kiosk, a start spot)
+                // where you stand now. Matching the camera's own forward, as before, was a no-op.
+                TeleportTo(FeetPosition, m_LastYaw);
             }
         }
 

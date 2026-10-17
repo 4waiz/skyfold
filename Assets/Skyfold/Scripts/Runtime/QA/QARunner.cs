@@ -482,8 +482,14 @@ namespace Skyfold
             {
                 Root.StartMission(i % 2 == 0 ? MissionCatalog.Demo : MissionCatalog.Episode1);
                 yield return new WaitForSecondsRealtime(0.8f);
-                if (i % 3 == 0) MD.Restart();
-                yield return new WaitForSecondsRealtime(0.8f);
+                if (i % 3 == 0)
+                {
+                    MD.Restart();
+                    yield return new WaitForSecondsRealtime(1.2f);
+                    float alpha = ScreenFader.Instance != null ? ScreenFader.Instance.Alpha : 0f;
+                    Check(alpha < 0.05f, $"restart {i + 1}: the screen fades back in after Restart (fader alpha {alpha:0.00})");
+                }
+                else yield return new WaitForSecondsRealtime(0.8f);
                 Root.QuitToMenu();
                 yield return new WaitForSecondsRealtime(0.4f);
                 int listeners = Root.City.ListenerCount;
@@ -712,6 +718,15 @@ namespace Skyfold
                 Check(MenuController.Instance.Screen == "title", $"Esc returns from '{screen}' to the title (now '{MenuController.Instance.Screen}', window focused {Application.isFocused})");
             }
             yield return SliderChecks();
+
+            // Screens that need an explicit choice ignore Back instead of closing every menu.
+            MenuController.Instance.Show("vrfail", false);
+            yield return new WaitForSecondsRealtime(0.5f);
+            yield return Press(Key.Escape);
+            yield return new WaitForSecondsRealtime(0.4f);
+            Check(MenuController.Instance.Screen == "vrfail", $"Esc on 'VR did not start' keeps that screen (now '{MenuController.Instance.Screen}')");
+            MenuController.Instance.Show("title", false);
+            yield return new WaitForSecondsRealtime(0.3f);
             var s = SettingsStore.Current;
             float music = s.music;
             bool subs = s.subtitles;

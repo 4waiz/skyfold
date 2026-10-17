@@ -133,6 +133,9 @@ namespace Skyfold
             if (rigs.IsDriving) return;
             if (GameRoot.Instance != null && !GameRoot.Instance.IsPlaying) return;
             input.SetContext(InAtelier ? InputContext.Architect : InputContext.OnFoot);
+            // The VR rig keeps its own context (locomotion, grab layers, controller managers); without this a
+            // mission started from a menu left the player in VR unable to move or grab.
+            if (rigs.Mode == PlayMode.VR && rigs.vr != null) rigs.vr.SetContext(input.Context);
             if (rigs.Mode == PlayMode.Desktop && rigs.desktop != null)
                 rigs.desktop.SetView(InAtelier ? DesktopView.Architect : DesktopView.FirstPerson);
             AudioDirector.Instance?.SetMusic(InAtelier ? "music_architect_loop" : "music_street_loop");
