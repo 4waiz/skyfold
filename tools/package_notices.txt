@@ -12,6 +12,11 @@ Voice
   run through kokoro-onnx (MIT), using the stock voice af_heart. No voice cloning.
   The generated audio files belong to the project.
 
+Images
+- Noor's radio portrait (the subtitle badge) was generated with ChatGPT image generation (OpenAI)
+  on the team's ChatGPT account, then cropped into a circle. OpenAI's terms of use assign rights in
+  output to the user. Noor is a fictional character, not a real person.
+
 Sound effects
 - Some effects layer processed recordings from Kenney.nl sound packs (Impact Sounds,
   Interface Sounds, Casino Audio). The source documents these as public-domain sounds from
@@ -24,4 +29,4 @@ Engine and packages
   sample) and TextMesh Pro are used under the Unity Terms of Service / Unity Companion License.
 
 Everything else (3D models, materials, shaders, music, ambience, synthesised effects, icons and
-UI art) is original work made for SKYFOLD by Awaiz Ahmed / Team Kanban.
+UI art other than Noor's portrait) is original work made for SKYFOLD by Awaiz Ahmed / Team Kanban.
