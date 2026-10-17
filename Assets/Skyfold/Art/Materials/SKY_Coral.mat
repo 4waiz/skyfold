@@ -32,9 +32,13 @@ Material:
     m_Floats:
     - _AOStrength: 0.85
     - _Cull: 2
+    - _DetailScale: 0.9
+    - _DetailStrength: 0
     - _DstBlend: 0
+    - _EnvStrength: 1
     - _Highlight: 0
-    - _Smoothness: 0.3
+    - _Metallic: 0
+    - _Smoothness: 0.38
     - _SrcBlend: 1
     - _Wrap: 0.35
     - _ZWrite: 1

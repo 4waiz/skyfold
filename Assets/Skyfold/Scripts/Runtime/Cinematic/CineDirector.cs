@@ -532,11 +532,12 @@ namespace Skyfold
             m_Shots["C2"] = ShotBeacons;
             m_Shots["C3"] = ShotBoarding;
             m_Shots["C4"] = ShotLever;
-            m_Shots["C5"] = ShotTakeoffSide;
+            m_Shots["C5"] = ShotTakeoffHeadOn;
             m_Shots["C6"] = ShotTakeoffChase;
         }
 
-        // A1: tilt-shift glide over the miniature towards the broken east causeway.
+        // A1: tilt-shift glide over the miniature towards the broken east causeway. The path follows the
+        // island road (row 5), which has no buildings to fly through.
         IEnumerator ShotMiniGlide()
         {
             yield return Fresh(false, 0.05f);
@@ -544,8 +545,8 @@ namespace Skyfold
             yield return Record("A1", 7f, 5.5f, t =>
             {
                 float e = Smooth(t);
-                Vector3 pos = Lerp3(Mini(F(132f, 140f), 11f, F(122f, 118f)), Mini(F(141f, 145f), 7.5f, F(98f, 99f)), e);
-                Vector3 look = Lerp3(Mini(150f, 0f, 70f), Mini(154f, 0f, 74f), e);
+                Vector3 pos = Lerp3(Mini(F(104f, 112f), F(13f, 14f), 88.5f), Mini(F(139f, 141f), 7.5f, 88f), e);
+                Vector3 look = Lerp3(Mini(148f, 0f, 70f), Mini(153f, 0f, 72.5f), e);
                 Pose(pos, look, F(40f, 62f), 0.003f);
                 Dof(Vector3.Distance(pos, focus), 2.0f, 50f);
             });
@@ -571,7 +572,9 @@ namespace Skyfold
             });
         }
 
-        // A3: macro placement. Wrong turn (coral, cross), one quarter turn (teal, check), drop, snap.
+        // A3: macro placement over the channel. Held the wrong way round (coral ghost), one quarter turn
+        // (teal ghost), lowered, set in. Landscape looks east along the channel; portrait looks in from the
+        // island road so the bridge fits the narrow frame.
         IEnumerator ShotPlacement()
         {
             yield return Fresh(false, 0.05f);
@@ -581,36 +584,34 @@ namespace Skyfold
             Vector3 s = socket.transform.position;
             tt.BeginHold(piece);
             piece.BeginDesktopHold();
-            piece.DesktopRotate(); // wrong way round first
-            Vector3 start = s + new Vector3(-0.07f, 0.085f, -0.06f);
-            for (int i = 0; i < 20; i++) { piece.DesktopFollow(start); yield return null; }
+            int good = ValidQuarter(piece);
+            TurnTo(piece, good + 1); // wrong way round first
+            Vector3 start = Mini(F(144f, 160f), F(15f, 17f), F(79f, 81f));
+            piece.transform.SetPositionAndRotation(start, QuarterRotation(piece.CurrentQuarter));
+            Vector3 hover = s + Vector3.up * 0.036f;
             bool turned = false, released = false;
-            Vector3 camBase = s + new Vector3(F(0.105f, 0.075f), F(0.05f, 0.06f), F(-0.085f, -0.075f));
+            Vector3 c0 = Mini(F(133.5f, 138f), F(10.5f, 11.5f), F(66.5f, 88f)), c1 = Mini(F(136.5f, 140f), F(9f, 10f), F(70.5f, 86.5f));
+            Vector3 look = Mini(152f, 3f, 72.3f);
             yield return Record("A3", 7f, 6f, t =>
             {
-                // Piece choreography.
                 if (!released)
                 {
                     Vector3 target;
-                    if (t < 0.18f) target = Lerp3(start, s + Vector3.up * 0.036f, OutCubic(Range01(t, 0f, 0.18f)));
-                    else if (t < 0.56f) target = s + Vector3.up * (0.036f + Mathf.Sin(t * 30f) * 0.0015f);
-                    else target = Lerp3(s + Vector3.up * 0.036f, s + Vector3.up * 0.006f, Smooth(Range01(t, 0.6f, 0.74f)));
-                    if (!turned && t >= 0.46f) { piece.DesktopRotate(); turned = true; }
-                    piece.DesktopFollow(target);
+                    if (t < 0.2f) target = Lerp3(start, hover, OutCubic(Range01(t, 0f, 0.2f)));
+                    else if (t < 0.6f) target = hover + Vector3.up * (Mathf.Sin((t - 0.2f) * 18f) * 0.0012f);
+                    else target = Lerp3(hover, s + Vector3.up * 0.004f, Smooth(Range01(t, 0.6f, 0.74f)));
+                    if (!turned && t >= 0.44f) { TurnTo(piece, good); turned = true; }
+                    HoldPiece(piece, target, t < 0.2f ? 30f : 14f);
                     if (t >= 0.76f)
                     {
-                        piece.EndDesktopHold();
-                        tt.Release(piece);
+                        ReleaseIntoSocket(piece, socket);
                         released = true;
+                        Log("A3 bridge placed: " + !Root.City.GetPlacement("bridge_east").IsEmpty);
                     }
                 }
-                // Camera: a slow macro orbit around the socket.
-                float a = Mathf.Lerp(-8f, 10f, Smooth(t)) * Mathf.Deg2Rad;
-                Vector3 rel = camBase - s;
-                Vector3 orbit = new Vector3(rel.x * Mathf.Cos(a) - rel.z * Mathf.Sin(a), rel.y, rel.x * Mathf.Sin(a) + rel.z * Mathf.Cos(a));
-                Vector3 pos = s + orbit;
-                Pose(pos, s + Vector3.up * 0.012f, F(34f, 52f), 0.003f);
-                Dof(Vector3.Distance(pos, s), 2.4f, 50f);
+                Vector3 pos = Lerp3(c0, c1, Smooth(t));
+                Pose(pos, look, F(36f, 54f), 0.003f);
+                Dof(Vector3.Distance(pos, s + Vector3.up * 0.012f), 2.4f, 50f);
             });
         }
 
@@ -624,7 +625,7 @@ namespace Skyfold
             yield return Record("A4", 7f, 6f, t =>
             {
                 if (!placed && t >= 0.16f) { placed = true; StartCoroutine(PlaceBridgeNow()); }
-                Vector3 pos = Lerp3(new Vector3(F(133.5f, 136f), -0.5f, F(66.5f, 64f)), new Vector3(F(137.5f, 139f), -0.25f, F(68.5f, 66.5f)), Smooth(t));
+                Vector3 pos = Lerp3(new Vector3(F(133.5f, 136f), -0.5f, F(66.5f, 66f)), new Vector3(F(137.5f, 139f), -0.25f, F(68.5f, 67.5f)), Smooth(t));
                 Pose(pos, new Vector3(152f, F(0.6f, 2.2f), 72.5f), F(52f, 74f));
             });
             if (slot != null) slot.buildDuration = 1.6f;
@@ -694,7 +695,7 @@ namespace Skyfold
             StartCoroutine(Drive(10.5f));
             // Start filming as the car turns towards the bridge.
             float wait = 0f;
-            float startZ = id == "B3" ? 49f : (id == "B4" ? 58f : 64f);
+            float startZ = id == "B3" ? 49f : (id == "B4" ? 61f : 58f);
             while (car.Position.z < startZ && wait < 30f) { wait += Time.deltaTime; yield return null; }
             Vector3 vel = Vector3.zero, smoothPos = car.Position - car.transform.forward * 7f + Vector3.up * 2.4f;
             if (id == "B3")
@@ -720,31 +721,45 @@ namespace Skyfold
             }
             else
             {
-                Vector3 cam = new Vector3(157.6f, 0.38f, 86.5f);
+                // Low on the island quay beside the bridge end: the car comes over the water at the lens.
+                Vector3 cam = new Vector3(F(146.6f, 147.4f), 0.55f, 82.3f);
+                Vector3 look = new Vector3(152.6f, 0.9f, 68f);
                 yield return Record("B5", 4f, 3.5f, t =>
                 {
-                    Vector3 look = Vector3.Lerp(new Vector3(153.5f, 0.9f, 68f), car.Position + Vector3.up * 0.7f, Range01(t, 0f, 0.35f));
-                    Pose(cam + Vector3.up * t * 0.15f, look, F(48f, 70f));
+                    look = Vector3.Lerp(look, car.Position + Vector3.up * 0.8f, 1f - Mathf.Exp(-4f / Fps));
+                    Pose(cam + Vector3.up * t * 0.1f, look, F(50f, 70f));
                 });
             }
             StopDriving();
         }
 
-        // B6: the substation wakes up.
+        // B6: the cell goes into the substation and the island wakes up.
         IEnumerator ShotSubstation()
         {
-            yield return Fresh(true, 0.3f);
+            yield return Fresh(true, 0.45f);
             yield return PlaceBridgeNow();
-            Vector3 c = new Vector3(168f, 2.4f, 103.5f);
-            bool powered = false;
+            var socket = Substation.Instance.socket;
+            var cell = PowerCell.Instance;
+            cell.Interact(InteractorKind.Desktop); // out of the dock, as the player does
+            cell.transform.SetParent(null, true);
+            Vector3 s = socket.attach.position;
+            Vector3 a = s + new Vector3(1.5f, 0.45f, -1.7f);
+            cell.transform.position = a;
+            bool inserted = false;
             yield return Record("B6", 4f, 3.5f, t =>
             {
-                if (!powered && t >= 0.28f) { powered = true; PowerUp(); }
-                float ang = Mathf.Lerp(208f, 236f, Smooth(t)) * Mathf.Deg2Rad;
-                float r = F(13.5f, 15f);
-                Vector3 pos = c + new Vector3(Mathf.Sin(ang) * r, F(1.2f, 2.4f) + t * 0.6f, Mathf.Cos(ang) * r);
-                Pose(pos, c, F(46f, 66f));
+                if (!inserted)
+                {
+                    float e = InOutCubic(Range01(t, 0.06f, 0.46f));
+                    cell.transform.position = Vector3.Lerp(a, s, e) + Vector3.up * Mathf.Sin(e * Mathf.PI) * 0.3f;
+                    cell.transform.rotation = socket.attach.rotation * Quaternion.Euler(0f, (1f - e) * 50f, (1f - e) * 12f);
+                    if (t >= 0.48f) { cell.InsertInto(socket); inserted = true; }
+                }
+                Vector3 pos = Lerp3(s + new Vector3(F(-3.2f, -2.4f), 0.45f, F(-4.6f, -4.9f)), s + new Vector3(F(-2.0f, -1.5f), 0.6f, F(-4.2f, -4.5f)), Smooth(t));
+                Pose(pos, s + new Vector3(0.2f, 0.15f, 0.6f), F(44f, 62f));
+                Dof(Vector3.Distance(pos, s), 4f, 50f);
             });
+            NoDof();
         }
 
         // C1: the storm rolls in over the airfield (time-lapse).
@@ -766,12 +781,21 @@ namespace Skyfold
             yield return Fresh(true, 0.84f);
             yield return PlaceBridgeNow();
             PowerUp();
+            var beacons = BeaconSystem.Instance;
             bool lit = false;
+            const float sweepAt = 0.2f;
             yield return Record("C2", 5f, 4f, t =>
             {
-                if (!lit && t >= 0.22f) { lit = true; BeaconSystem.Instance.masterSwitch.Interact(InteractorKind.Desktop); }
-                Vector3 pos = Lerp3(new Vector3(10f, 0.75f, F(132.2f, 133f)), new Vector3(15f, 0.9f, F(132.6f, 133.2f)), t);
-                Pose(pos, new Vector3(120f, 1.2f, 136.5f), F(40f, 64f));
+                if (!lit && t >= sweepAt) { lit = true; beacons.masterSwitch.Interact(InteractorKind.Desktop); }
+                // One sweep racing away from the lens (the game lights its three groups side by side).
+                float since = (t - sweepAt) * m_RecDur;
+                foreach (var g in beacons.groups)
+                {
+                    foreach (var r in g.lenses) if (r != null) SetBeaconLens(r, since >= (r.transform.position.x - 22f) / 95f);
+                    foreach (var l in g.lights) if (l != null) l.enabled = since >= (l.transform.position.x - 22f) / 95f;
+                }
+                Vector3 pos = Lerp3(new Vector3(17.2f, F(0.62f, 0.85f), F(131.4f, 130f)), new Vector3(F(20.5f, 20f), F(0.7f, 0.9f), F(131.6f, 130.1f)), Smooth(t));
+                Pose(pos, new Vector3(140f, F(1.4f, 1f), F(133.2f, 132.5f)), F(30f, 50f));
             });
         }
 
@@ -789,10 +813,11 @@ namespace Skyfold
             float w = 0f;
             while (plane.State != AircraftState.Boarding && w < 5f) { w += Time.deltaTime; yield return null; }
             Log("aircraft state for boarding: " + plane.State);
+            // From the apron in front of the aircraft's nose: passengers cross from the shuttles to the door.
             yield return Record("C3", 5f, 4f, t =>
             {
-                Vector3 pos = Lerp3(new Vector3(F(99f, 98.5f), 1.9f, F(108.5f, 107.5f)), new Vector3(F(97.6f, 97.4f), 2.1f, F(110f, 109f)), Smooth(t));
-                Pose(pos, new Vector3(90f, 1.7f, 119.5f), F(50f, 72f));
+                Vector3 pos = Lerp3(new Vector3(75.5f, 1.9f, F(113.8f, 114.5f)), new Vector3(77.2f, 2.05f, F(114.6f, 115f)), Smooth(t));
+                Pose(pos, new Vector3(95f, 1.5f, 116.6f), F(46f, 66f));
             });
             plane.RequireConvoy = false;
         }
@@ -813,8 +838,9 @@ namespace Skyfold
             });
         }
 
-        // C5: takeoff roll and lift, side-on from over the water, in the rain.
-        IEnumerator ShotTakeoffSide()
+        // C5: head-on from the far end of the runway, in the rain: the aircraft rolls at the lens, lifts and
+        // passes just overhead.
+        IEnumerator ShotTakeoffHeadOn()
         {
             yield return Fresh(true, 0.86f);
             yield return ClearForTakeoff();
@@ -822,16 +848,18 @@ namespace Skyfold
             float w = 0f;
             while (plane.State != AircraftState.TakeoffRoll && w < 60f) { w += Time.deltaTime; yield return null; }
             Log($"takeoff roll at game t={Time.time:0.0}s");
-            Vector3 look = plane.transform.position;
-            yield return Record("C5", 8f, 6.5f, t =>
+            yield return Wait(F(0.6f, 1.6f));
+            Vector3 cam = new Vector3(171.5f, 0.7f, F(140f, 139.6f));
+            yield return Record("C5", 7f, 6f, t =>
             {
-                look = Vector3.Lerp(look, plane.transform.position + Vector3.up * 2f, 1f - Mathf.Exp(-5f / Fps));
-                Vector3 pos = new Vector3(Mathf.Lerp(F(78f, 82f), F(104f, 100f), t), F(2.4f, 3f), F(166f, 170f));
-                Pose(pos, look, F(38f, 62f));
+                Vector3 look = Vector3.Lerp(new Vector3(100f, F(3.2f, 5.5f), 135.4f), new Vector3(100f, F(9f, 14f), 135.4f), Smooth(t));
+                Pose(cam + Vector3.up * t * 0.12f, look, F(42f, 64f));
             });
+            Log($"C5 end: aircraft at {plane.transform.position}");
         }
 
-        // C6: chase the aircraft up into the storm.
+        // C6: chase the aircraft up into the storm. The camera rides a fixed offset (smoothed in direction
+        // only) that slowly lengthens, so the aircraft pulls away into the weather.
         IEnumerator ShotTakeoffChase()
         {
             yield return Fresh(true, 0.88f);
@@ -841,15 +869,22 @@ namespace Skyfold
             while (plane.State != AircraftState.TakeoffRoll && w < 60f) { w += Time.deltaTime; yield return null; }
             // A beat before lift-off.
             w = 0f;
-            while (plane.transform.position.x < 108f && w < 20f) { w += Time.deltaTime; yield return null; }
+            while (plane.transform.position.x < 104f && w < 20f) { w += Time.deltaTime; yield return null; }
             Transform tr = plane.transform;
-            Vector3 vel = Vector3.zero, smooth = tr.position - tr.forward * 26f + Vector3.up * 3f;
+            Vector3 Flat(Vector3 v) { v.y = 0f; return v.sqrMagnitude > 1e-6f ? v.normalized : Vector3.forward; }
+            Vector3 OffsetAt(float t)
+            {
+                Vector3 f = Flat(tr.forward), side = Vector3.Cross(Vector3.up, f);
+                float e = Smooth(t);
+                return -f * Mathf.Lerp(F(20f, 24f), F(42f, 46f), e) + Vector3.up * Mathf.Lerp(F(2.6f, 2.2f), F(-2f, -3f), e) + side * F(6f, 4f);
+            }
+            Vector3 offset = OffsetAt(0f), offVel = Vector3.zero;
             yield return Record("C6", 7f, 6f, t =>
             {
-                Vector3 fwd = tr.forward;
-                Vector3 want = tr.position - fwd * F(26f, 30f) + Vector3.up * F(2.5f, 1.5f) + Vector3.Cross(Vector3.up, fwd).normalized * F(7f, 5f);
-                smooth = Vector3.SmoothDamp(smooth, want, ref vel, 0.35f, Mathf.Infinity, 1f / Fps);
-                Pose(smooth, tr.position + fwd * 24f + Vector3.up * F(4f, 10f), F(54f, 76f));
+                offset = Vector3.SmoothDamp(offset, OffsetAt(t), ref offVel, 0.5f, Mathf.Infinity, 1f / Fps);
+                Vector3 pos = tr.position + offset;
+                pos.y = Mathf.Max(pos.y, 0.8f);
+                Pose(pos, tr.position + tr.forward * 10f + Vector3.up * 1.5f, F(50f, 72f));
             });
         }
     }

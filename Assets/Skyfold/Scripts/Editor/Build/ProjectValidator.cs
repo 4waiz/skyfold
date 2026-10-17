@@ -85,6 +85,24 @@ namespace Skyfold.EditorTools
                 }
             }
 
+            // Rendering: the lit shader feeds and reads SSAO, and the renderer actually runs it.
+            var lit = Shader.Find("Skyfold/StylizedLit");
+            Ok(lit != null && !ShaderUtil.ShaderHasError(lit), "Skyfold/StylizedLit compiles without errors");
+            bool depthNormals = false;
+            if (lit != null)
+                for (int i = 0; i < lit.passCount; i++)
+                    if (lit.FindPassTagValue(i, new UnityEngine.Rendering.ShaderTagId("LightMode")).name == "DepthNormals") depthNormals = true;
+            Ok(depthNormals, "Skyfold/StylizedLit has a DepthNormals pass (SSAO input)");
+            var rendererData = AssetDatabase.LoadAssetAtPath<UnityEngine.Rendering.Universal.ScriptableRendererData>(ProjectSetup.RendererPath);
+            Ok(rendererData != null && rendererData.rendererFeatures.Any(f => f != null && f.GetType().Name == "ScreenSpaceAmbientOcclusion" && f.isActive), "SSAO renderer feature is active on " + ProjectSetup.RendererPath);
+            var urp = AssetDatabase.LoadAssetAtPath<UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset>(ProjectSetup.UrpAssetPath);
+            Ok(urp != null && urp.shadowCascadeCount == 4, "main light shadows use 4 cascades");
+            foreach (var name in MaterialLibrary.PaletteNames)
+            {
+                var mat = MaterialLibrary.TryGet(name);
+                if (mat == null || !mat.HasProperty("_DetailStrength")) { Ok(false, "palette material on the current lit shader: " + name); }
+            }
+
             // Player / input / XR settings.
             var ps = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset").FirstOrDefault();
             if (ps != null)
