@@ -128,15 +128,19 @@ namespace Skyfold.EditorTools
             SetInt(so, "m_MainLightShadowmapResolution", 4096);
             SetBool(so, "m_AdditionalLightShadowsSupported", false);
             SetInt(so, "m_AdditionalLightsPerObjectLimit", 4);
-            SetFloat(so, "m_ShadowDistance", 120f);
-            SetInt(so, "m_ShadowCascadeCount", 2);
-            SetFloat(so, "m_Cascade2Split", 0.2f);
+            // Four cascades: the first covers ~9 m, so the street at your feet and the 1:160 miniature on
+            // the plinth get crisp shadows, while the far cascades still reach across the bay.
+            SetFloat(so, "m_ShadowDistance", 140f);
+            SetInt(so, "m_ShadowCascadeCount", 4);
+            var c4 = so.FindProperty("m_Cascade4Split");
+            if (c4 != null) c4.vector3Value = new Vector3(0.067f, 0.2f, 0.467f);
             SetBool(so, "m_SoftShadowsSupported", true);
             SetInt(so, "m_SoftShadowQuality", 2);
             SetBool(so, "m_UseSRPBatcher", true);
             SetBool(so, "m_UseAdaptivePerformance", false);
             so.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(urp);
+            ConfigureSSAO();
 
             GraphicsSettings.defaultRenderPipeline = urp;
             int current = QualitySettings.GetQualityLevel();
@@ -150,6 +154,37 @@ namespace Skyfold.EditorTools
                 QualitySettings.lodBias = 1.5f;
             }
             QualitySettings.SetQualityLevel(Math.Max(0, current), false);
+        }
+
+        public const string RendererPath = "Assets/Settings/PC_Renderer.asset";
+
+        /// <summary>
+        /// Screen-space AO from depth + normals (Skyfold/StylizedLit has a DepthNormals pass and samples it):
+        /// soft contact shadows in corners, under ledges and around props, kept gentle so the pastel palette
+        /// stays bright and the 1:160 miniature does not drown in it.
+        /// </summary>
+        static void ConfigureSSAO()
+        {
+            var data = AssetDatabase.LoadAssetAtPath<ScriptableRendererData>(RendererPath);
+            if (data == null) { Debug.LogWarning("[SKYFOLD] Renderer data missing at " + RendererPath); return; }
+            var feature = data.rendererFeatures.FirstOrDefault(f => f != null && f.GetType().Name == "ScreenSpaceAmbientOcclusion");
+            if (feature == null) { Debug.LogWarning("[SKYFOLD] SSAO renderer feature not found on " + RendererPath); return; }
+            feature.SetActive(true);
+            var so = new SerializedObject(feature);
+            SetInt(so, "m_Settings.AOMethod", 0);          // blue noise
+            SetBool(so, "m_Settings.Downsample", false);
+            SetBool(so, "m_Settings.AfterOpaque", false);  // sampled by the lit shader, so direct light is barely touched
+            SetInt(so, "m_Settings.Source", 1);            // depth + normals
+            SetInt(so, "m_Settings.NormalSamples", 1);
+            SetFloat(so, "m_Settings.Intensity", 0.55f);
+            SetFloat(so, "m_Settings.DirectLightingStrength", 0.2f);
+            SetFloat(so, "m_Settings.Radius", 0.22f);
+            SetInt(so, "m_Settings.Samples", 1);           // medium
+            SetInt(so, "m_Settings.BlurQuality", 0);       // high
+            SetFloat(so, "m_Settings.Falloff", 120f);
+            so.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(feature);
+            EditorUtility.SetDirty(data);
         }
 
         static void ConfigureXR()

@@ -16,33 +16,43 @@ namespace Skyfold.EditorTools
         {
             public string Name, Hex;
             public float Smooth, Emission, Alpha;
-            public Entry(string n, string h, float s, float e = 0f, float a = 1f) { Name = n; Hex = h; Smooth = s; Emission = e; Alpha = a; }
+            /// <summary>Metallic tint for highlights and sky reflections (brass, gold, metal).</summary>
+            public float Metallic;
+            /// <summary>Gentle world-space mottling (fraction of albedo) and its frequency per metre.</summary>
+            public float Detail, DetailScale;
+            /// <summary>Strength of the sky reflection; glass gets more so windows read as glazing.</summary>
+            public float Env;
+            public Entry(string n, string h, float s, float e = 0f, float a = 1f, float metallic = 0f, float detail = 0f, float detailScale = 0.9f, float env = 1f)
+            {
+                Name = n; Hex = h; Smooth = s; Emission = e; Alpha = a;
+                Metallic = metallic; Detail = detail; DetailScale = detailScale; Env = env;
+            }
         }
 
         static readonly Entry[] Palette =
         {
-            new Entry("SKY_Pearl", "#F4EFE6", 0.3f),
+            new Entry("SKY_Pearl", "#F4EFE6", 0.3f, detail: 0.045f),
             new Entry("SKY_Ivory", "#EFE6D2", 0.45f),
-            new Entry("SKY_Sandstone", "#D9B98C", 0.12f),
-            new Entry("SKY_SandstoneDeep", "#C49A6C", 0.1f),
-            new Entry("SKY_Terracotta", "#C8754F", 0.15f),
-            new Entry("SKY_Teal", "#0F6F73", 0.45f),
+            new Entry("SKY_Sandstone", "#D9B98C", 0.12f, detail: 0.085f),
+            new Entry("SKY_SandstoneDeep", "#C49A6C", 0.1f, detail: 0.095f),
+            new Entry("SKY_Terracotta", "#C8754F", 0.15f, detail: 0.08f, detailScale: 1.6f),
+            new Entry("SKY_Teal", "#0F6F73", 0.5f),
             new Entry("SKY_TealLight", "#3FA7A3", 0.55f),
             new Entry("SKY_TealGlow", "#35E0D0", 0.6f, 2.4f),
-            new Entry("SKY_Coral", "#F2714B", 0.3f),
-            new Entry("SKY_Gold", "#D9A441", 0.6f),
-            new Entry("SKY_Brass", "#B8893B", 0.7f),
+            new Entry("SKY_Coral", "#F2714B", 0.38f),
+            new Entry("SKY_Gold", "#D9A441", 0.7f, metallic: 0.9f),
+            new Entry("SKY_Brass", "#B8893B", 0.7f, metallic: 0.85f),
             new Entry("SKY_Ink", "#22333B", 0.35f),
-            new Entry("SKY_Glass", "#6FB7C4", 0.9f, 0f, 0.42f),
-            new Entry("SKY_Road", "#3E4A52", 0.12f),
-            new Entry("SKY_RoadLine", "#F4EFE6", 0.2f),
-            new Entry("SKY_Kerb", "#CDBFA9", 0.15f),
-            new Entry("SKY_Wood", "#9A6B45", 0.2f),
-            new Entry("SKY_PalmTrunk", "#8B6B4A", 0.1f),
-            new Entry("SKY_PalmLeaf", "#5E8C4A", 0.25f),
+            new Entry("SKY_Glass", "#6FB7C4", 0.9f, 0f, 0.42f, env: 1.6f),
+            new Entry("SKY_Road", "#3E4A52", 0.12f, detail: 0.11f, detailScale: 1.3f),
+            new Entry("SKY_RoadLine", "#F4EFE6", 0.2f, detail: 0.05f, detailScale: 1.3f),
+            new Entry("SKY_Kerb", "#CDBFA9", 0.15f, detail: 0.07f, detailScale: 1.4f),
+            new Entry("SKY_Wood", "#9A6B45", 0.2f, detail: 0.1f, detailScale: 2.6f),
+            new Entry("SKY_PalmTrunk", "#8B6B4A", 0.1f, detail: 0.08f, detailScale: 2f),
+            new Entry("SKY_PalmLeaf", "#5E8C4A", 0.25f, detail: 0.07f, detailScale: 1.8f),
             new Entry("SKY_Flower", "#E0557A", 0.25f),
-            new Entry("SKY_Fabric", "#F7F1E6", 0.1f),
-            new Entry("SKY_Metal", "#AEB6BA", 0.6f),
+            new Entry("SKY_Fabric", "#F7F1E6", 0.1f, detail: 0.03f, detailScale: 2f),
+            new Entry("SKY_Metal", "#AEB6BA", 0.6f, metallic: 0.75f),
             new Entry("SKY_Rubber", "#2B2F33", 0.15f),
             new Entry("SKY_Light", "#FFD9A0", 0.3f, 1.8f),
         };
@@ -97,6 +107,10 @@ namespace Skyfold.EditorTools
                 c.a = e.Alpha;
                 m.SetColor("_BaseColor", c);
                 m.SetFloat("_Smoothness", e.Smooth);
+                m.SetFloat("_Metallic", e.Metallic);
+                m.SetFloat("_DetailStrength", e.Detail);
+                m.SetFloat("_DetailScale", e.DetailScale);
+                m.SetFloat("_EnvStrength", e.Env);
                 m.SetColor("_EmissionColor", e.Emission > 0f ? c * e.Emission : Color.black);
                 m.SetFloat("_AOStrength", e.Emission > 0f ? 0.2f : 0.85f);
                 SetTransparent(m, e.Alpha < 1f);
