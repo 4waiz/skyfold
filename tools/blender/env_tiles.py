@@ -745,9 +745,9 @@ def circle_pts(r, n, cx=0.0, cy=0.0, extra=()):
 
 @asset("ground_paving", "Roads", "roads", ao=ROAD_AO, render=TILE_RENDER)
 def ground_paving(a):
-    """Lot paving (placed at +0.15 m): kerb-stone edging band (4 m stones), sandstone ring of 2 m slabs
-    (dressing props stand here), 4 m field slabs under the building footprint; half joints on the cell
-    edges so neighbouring lots read as one continuous pavement."""
+    """Lot paving (placed at +0.15 m): kerb-stone edging band (4 m stones), ring of 2 m slabs in alternating
+    sandstone / light stone (dressing props stand here), 4 m field slabs under the building footprint; half
+    joints on the cell edges so neighbouring lots read as one continuous pavement."""
     R = [reg(SQ, 0.0, 'SKY_Kerb', 0), reg(rect(-7.4, 7.4, -7.4, 7.4), 0.0, 'SKY_Sandstone', 1)]
     J0 = lambda pts: joint(pts, JZ0, 3)
     R.append(J0(rect(-H, H, -H, -H + JW / 2)))
@@ -766,6 +766,11 @@ def ground_paving(a):
     for k in (-2.0, 2.0):
         R.append(J0(rect(k - JW / 2, k + JW / 2, -6.0, 6.0)))
         R.append(J0(rect(-6.0, 6.0, k - JW / 2, k + JW / 2)))
+    # every other ring slab in a lighter stone (edges sit under the joints, so no extra outlines show)
+    for k in (-6, -2, 2):
+        for s in (-1, 1):
+            R.append(reg(rect(k, k + 2, s * 6.0, s * 7.4), 0.0, 'SKY_Kerb', 2))
+            R.append(reg(rect(s * 6.0, s * 7.4, -k - 2, -k), 0.0, 'SKY_Kerb', 2))
     surf(a, R)
 
 

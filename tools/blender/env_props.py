@@ -158,7 +158,7 @@ def street_lamp(a):
     LX, LY = 0.0, -0.92
     # step + pedestal (octagonal, flats facing the axes)
     mb = MB()
-    mb.lathe([(0, 0), (0.262, 0), (0.262, 0.05), (0.246, 0.068), (0, 0.068)], 8, 'SKY_SandstoneDeep', a0=22.5)
+    mb.lathe([(0, 0), (0.252, 0), (0.252, 0.05), (0.238, 0.068), (0, 0.068)], 8, 'SKY_SandstoneDeep', a0=22.5)
     a.part(mb, name="step")
     mb = MB()
     prof = [(0, 0.066), (0.226, 0.066), (0.226, 0.098), (0.214, 0.114), (0.194, 0.122), (0.184, 0.14),
