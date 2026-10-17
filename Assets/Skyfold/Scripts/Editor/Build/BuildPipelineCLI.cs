@@ -55,7 +55,10 @@ namespace Skyfold.EditorTools
             int problems = ProjectValidator.Validate(true);
             if (problems > 0) Debug.LogWarning($"[SKYFOLD] Validation reported {problems} problem(s); see log.");
 
-            string dir = development ? DevDir : ReleaseDir;
+            // SKYFOLD_BUILD_DIR lets a test build go elsewhere (e.g. Builds/Staging/SKYFOLD) so it never deletes a
+            // release folder another process (a capture, a QA run) is still playing from.
+            string dir = Environment.GetEnvironmentVariable("SKYFOLD_BUILD_DIR");
+            if (string.IsNullOrEmpty(dir)) dir = development ? DevDir : ReleaseDir;
             if (Directory.Exists(dir)) Directory.Delete(dir, true);
             Directory.CreateDirectory(dir);
             var options = new BuildPlayerOptions
@@ -66,7 +69,14 @@ namespace Skyfold.EditorTools
                 targetGroup = BuildTargetGroup.Standalone,
                 options = development ? BuildOptions.Development | BuildOptions.AllowDebugging : BuildOptions.None
             };
-            var report = BuildPipeline.BuildPlayer(options);
+            // A staging build may need to run beside another SKYFOLD (a trailer capture, a release QA run), so it
+            // drops the single-instance lock for this build only; release builds keep it (XR runtime safety).
+            bool staging = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SKYFOLD_BUILD_DIR"));
+            bool singleInstance = PlayerSettings.forceSingleInstance;
+            if (staging) PlayerSettings.forceSingleInstance = false;
+            BuildReport report;
+            try { report = BuildPipeline.BuildPlayer(options); }
+            finally { PlayerSettings.forceSingleInstance = singleInstance; }
             var s = report.summary;
             Debug.Log($"[SKYFOLD] Build {(development ? "development" : "release")}: {s.result}, {s.totalSize / (1024 * 1024)} MB, {s.totalTime.TotalSeconds:0}s, errors {s.totalErrors}, warnings {s.totalWarnings} -> {dir}");
             if (s.result != BuildResult.Succeeded) throw new Exception("Player build failed: " + s.result);

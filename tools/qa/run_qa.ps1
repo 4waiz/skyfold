@@ -4,7 +4,8 @@
 param([Parameter(ValueFromRemainingArguments = $true)][string[]]$Scenarios)
 
 $root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
-$exe = Join-Path $root "Builds\Release\SKYFOLD\SKYFOLD.exe"
+# SKYFOLD_EXE points QA at another build (e.g. Builds\Staging\SKYFOLD\SKYFOLD.exe); default is the release build.
+$exe = if ($env:SKYFOLD_EXE) { $env:SKYFOLD_EXE } else { Join-Path $root "Builds\Release\SKYFOLD\SKYFOLD.exe" }
 $playerLog = Join-Path $env:USERPROFILE "AppData\LocalLow\Team Kanban\SKYFOLD\Player.log"
 if (-not (Test-Path $exe)) { Write-Error "Build not found: $exe"; exit 2 }
 if (-not $Scenarios -or $Scenarios.Count -eq 0) { $Scenarios = @("smoke") }

@@ -238,8 +238,7 @@ def frame(n):
 def dome(part, p, n, r, h, segs, mat, cap_mat=None, sink=0.0010):
     """Small domed fitting (screw head / light) standing on a surface point along normal n."""
     M = Matrix.Translation(p) @ frame(n)
-    prof = [(0.0, h), (r * 0.62, h * 0.86), (r * 0.94, h * 0.42), (r, 0.0), (r * 0.96, -sink),
-            (0.0, -sink)]
+    prof = [(0.0, h), (r * 0.72, h * 0.78), (r, 0.0), (r * 0.92, -sink), (0.0, -sink)]
     vr, fs = part.lathe(prof, segs, mat, matrix=M)
     if cap_mat:
         nb = len(prof) - 3
@@ -301,7 +300,8 @@ def merge_samples(n, breaks, minsep, lo=0.0, hi=1.0, closed=False):
     return sorted(set(round(v, 9) for v in allv))
 
 
-def shell(part, fn, center_fn, n_s, n_ph, theta_of, ring_grooves, col_grooves, depth, mat_fn):
+def shell(part, fn, center_fn, n_s, n_ph, theta_of, ring_grooves, col_grooves, depth, mat_fn,
+          extra=()):
     """Watertight shell around an axis. s in [0,1] runs pole to pole, theta_of(s, ph) warps
     the rings (so a ring can follow a design line). ring_grooves [(s, w)], col_grooves
     [(ph, w, s_from, s_to)] are V grooves. mat_fn(s, ph, g) -> material."""
@@ -311,7 +311,8 @@ def shell(part, fn, center_fn, n_s, n_ph, theta_of, ring_grooves, col_grooves, d
     ph_br = []
     for (pc, w, a, b) in col_grooves:
         ph_br += [pc - w, pc, pc + w]
-    S = merge_samples(n_s, s_br, min(w for _, w in ring_grooves) * 0.7 if ring_grooves else 0)
+    S = merge_samples(n_s, s_br + list(extra),
+                      min(w for _, w in ring_grooves) * 0.7 if ring_grooves else 0.02)
     PH = merge_samples(n_ph, ph_br, min(c[1] for c in col_grooves) * 0.7 if col_grooves else 0,
                        0.0, 2 * pi, closed=True)
 
@@ -487,14 +488,21 @@ def theta_hood(ph):
     return t
 
 
+S_LENS = 0.12          # shell ring that runs exactly round the lens housing seat
+R_SEAT = 0.0214        # housing seat radius (the housing's outer wall is r 0.0213)
+
+
 def head_theta(s, ph):
     th = theta_hood(ph)
+    tl = theta_lens(ph)
+    if s <= S_LENS:
+        return tl * (s / S_LENS)
     if s <= S_HOOD:
-        return th * (s / S_HOOD)
+        return tl + (th - tl) * (s - S_LENS) / (S_HOOD - S_LENS)
     return th + (pi - th) * (s - S_HOOD) / (1 - S_HOOD)
 
 
-def head_pt(th, ph):
+def head_pt_raw(th, ph):
     c, s = cos(th), sin(th)
     fw = sp(c, 0.72)
     rad = sp(s, 0.86)
@@ -508,11 +516,34 @@ def head_pt(th, ph):
     th_e = theta_hood(ph) + 0.05
     brow = math.exp(-((th - th_e) / 0.075) ** 2) * max(0.0, cos(ph)) ** 1.5
     d = (p - HEAD_C).normalized()
-    p = p + d * 0.0034 * brow
-    # lens socket: the face is pushed back behind the protruding lens housing
+    return p + d * 0.0034 * brow
+
+
+_TL = {}
+
+
+def theta_lens(ph):
+    """Polar angle at which the (undimpled) head surface is R_SEAT from the lens axis."""
+    k = round(ph % (2 * pi), 7)
+    if k not in _TL:
+        lo, hi = 0.0, 0.5 * pi
+        for _ in range(40):
+            m = (lo + hi) / 2
+            q = head_pt_raw(m, ph) - LENS_C
+            if sqrt(q.x * q.x + q.z * q.z) < R_SEAT:
+                lo = m
+            else:
+                hi = m
+        _TL[k] = (lo + hi) / 2
+    return _TL[k]
+
+
+def head_pt(th, ph):
+    p = head_pt_raw(th, ph)
+    # lens socket: inside the seat ring the face is pushed back behind the housing
     rel = p - LENS_C
     lat = sqrt(rel.x * rel.x + rel.z * rel.z)
-    k = 1.0 - smoothstep(0.0165, 0.0203, lat)       # stays inside the housing wall (r 0.0212)
+    k = 1.0 - smoothstep(0.0150, R_SEAT - 0.0004, lat)
     if k > 0.0:
         ty = LENS_C.y + 0.0070
         if p.y < ty:
@@ -663,9 +694,29 @@ def wrist(v):
     return Vector((WRIST_X + dx * cos(a) + v.z * sin(a), v.y, -dx * sin(a) + v.z * cos(a)))
 
 
+# leading-edge spar (wing-local, pre-scale): x, y, z and radius; it bends back over the hand
+# along the outermost primary
+SPAR = [(0.000, -0.012, 0.0052, 0.0094), (0.040, -0.030, 0.0062, 0.0088),
+        (0.085, -0.040, 0.0064, 0.0076), (0.118, -0.041, 0.0058, 0.0066),
+        (0.150, -0.037, 0.0046, 0.0054), (0.181, -0.030, 0.0034, 0.0044),
+        (0.206, -0.019, 0.0024, 0.0034)]
+P_OUT = dict(base=(0.200, -0.016), ang=44.0, L=0.114, w=0.0200)   # outermost primary
+
+
+def spar_y(x):
+    if x <= SPAR[0][0]:
+        return SPAR[0][1]
+    for a, b in zip(SPAR, SPAR[1:]):
+        if a[0] <= x <= b[0]:
+            t = (x - a[0]) / (b[0] - a[0])
+            return a[1] + (b[1] - a[1]) * t
+    return SPAR[-1][1]
+
+
 def build_wing(name, sx, parent):
     P = C.Part()
     W = wing_matrix()
+    up = W.to_3x3() @ Vector((0, 0, 1))
 
     def place(base, ang, z, roll):
         L = (Matrix.Translation((base[0], base[1], z)) @ Matrix.Rotation(radians(ang), 4, 'Z') @
@@ -674,71 +725,75 @@ def build_wing(name, sx, parent):
 
     def wl(v):
         return W @ wrist(Vector(v))
-    # secondaries (the two innermost are ivory tertials), outer ones stacked higher
+    # secondaries (the two innermost are ivory tertials); each sits a little higher than the
+    # one inboard of it and is rolled so the covered edge dips (shingled)
     for j in range(8):
         t = j / 7
-        base = (lerp(-0.004, 0.104, t), lerp(0.010, -0.020, t))
-        Lf = lerp(0.074, 0.079, t)
+        x = lerp(-0.004, 0.104, t)
+        Lf = lerp(0.074, 0.090, t)
         out = feather_outline(Lf, 0.0250, base_w=0.0170, tip_len=0.0150, point=0.25)
-        plate(P, out, place(base, lerp(97, 86, t), lerp(-0.0064, -0.0008, t), 3.0), 0.0030,
-              IVORY if j < 2 else FLIGHT, bevel=0.0007, rim=BRASS, rim_w=0.0012)
+        plate(P, out, place((x, spar_y(x) + 0.014), lerp(97, 86, t), lerp(-0.0064, -0.0008, t), 3.0),
+              0.0030, IVORY if j < 2 else FLIGHT, bevel=0.0007, rim=BRASS, rim_w=0.0012)
     # primaries: a fan from the hand, outermost on top
     for i in range(8):
         t = i / 7
-        base = (lerp(0.112, 0.200, t), lerp(-0.024, -0.016, t))
-        Lf = lerp(0.085, 0.114, t)
-        w = lerp(0.0245, 0.0200, t)
+        base = (lerp(0.112, P_OUT['base'][0], t), lerp(-0.024, P_OUT['base'][1], t))
+        Lf = lerp(0.085, P_OUT['L'], t)
+        w = lerp(0.0245, P_OUT['w'], t)
         out = feather_outline(Lf, w, base_w=w * 0.70, tip_len=w * 0.95, point=0.50, shift=0.18)
-        plate(P, out, place(base, lerp(86, 44, t), lerp(-0.0068, -0.0012, t), 3.0), 0.0030,
+        plate(P, out, place(base, lerp(86, P_OUT['ang'], t), lerp(-0.0068, -0.0012, t), 3.0), 0.0030,
               FLIGHT, bevel=0.0007, rim=BRASS, rim_w=0.0012)
-    # greater coverts (ivory, brass rims)
+    # greater coverts (ivory, brass rims) following the spar curve
     for k in range(6):
         t = k / 5
-        base = (lerp(0.004, 0.110, t), lerp(0.012, -0.016, t))
-        out = feather_outline(0.031, 0.0225, base_w=0.0205, tip_len=0.0115, ns=1, nt=5)
-        plate(P, out, place(base, lerp(93, 88, t), lerp(0.0004, 0.0024, t), 2.5), 0.0032,
-              IVORY, bevel=0.0007, rim=BRASS, rim_w=0.0011)
-    # primary coverts over the hand
+        x = lerp(0.002, 0.110, t)
+        out = feather_outline(0.032, 0.0250, base_w=0.0230, tip_len=0.0120, ns=1, nt=5)
+        plate(P, out, place((x, spar_y(x) + 0.016), lerp(93, 88, t), lerp(0.0004, 0.0024, t), 2.5),
+              0.0032, IVORY, bevel=0.0007, rim=BRASS, rim_w=0.0011)
+    # primary coverts over the hand, angled with the primaries
     for k in range(4):
         t = k / 3
-        base = (lerp(0.118, 0.186, t), lerp(-0.030, -0.024, t))
-        out = feather_outline(lerp(0.032, 0.027, t), 0.0200, base_w=0.0180, tip_len=0.0105,
+        x = lerp(0.122, 0.190, t)
+        out = feather_outline(lerp(0.031, 0.026, t), 0.0215, base_w=0.0195, tip_len=0.0110,
                               ns=1, nt=5)
-        plate(P, out, place(base, lerp(82, 54, t), lerp(0.0006, 0.0018, t), 2.5), 0.0032,
-              IVORY, bevel=0.0007, rim=BRASS, rim_w=0.0011)
-    # lesser coverts (ivory scales) just behind the leading edge
+        plate(P, out, place((x, spar_y(x) + 0.006), lerp(80, 52, t), lerp(0.0006, 0.0018, t), 2.5),
+              0.0032, IVORY, bevel=0.0007, rim=BRASS, rim_w=0.0011)
+    # lesser coverts (ivory scales) tucked under the spar
     for k in range(5):
         t = k / 4
-        base = (lerp(0.010, 0.104, t), lerp(-0.008, -0.034, t))
-        out = feather_outline(0.024, 0.0215, base_w=0.0200, tip_len=0.0105, ns=1, nt=5)
-        plate(P, out, place(base, lerp(94, 88, t), lerp(0.0030, 0.0046, t), 2.0), 0.0034,
-              IVORY, bevel=0.0007, rim=BRASS, rim_w=0.0011)
-    # leading-edge armour (ivory spar) and the continuous brass wing edge
-    spar = [(0.000, -0.012, 0.0050), (0.040, -0.030, 0.0060), (0.085, -0.040, 0.0062),
-            (0.118, -0.041, 0.0056), (0.146, -0.037, 0.0042)]
-    sp_pts = C.spline3(spar, 3)
-    rad = C.resample([0.0094, 0.0086, 0.0074, 0.0064, 0.0044], len(sp_pts))
-    P.tube([wl(v) for v in sp_pts], [r * WING_SCALE for r in rad], 12, IVORY, caps='round',
-           cap_segs=2, scale_xy=(1.0, 0.58), up=W.to_3x3() @ Vector((0, 0, 1)))
-    edge = [(-0.002, -0.0195, 0.0036), (0.040, -0.0372, 0.0042), (0.085, -0.0472, 0.0042),
-            (0.118, -0.0478, 0.0036), (0.152, -0.0430, 0.0024), (0.186, -0.0318, 0.0014),
-            (0.216, -0.0150, 0.0008), (0.244, 0.0090, 0.0004), (0.266, 0.0360, 0.0002),
-            (0.281, 0.0620, 0.0000)]
-    e_pts = C.spline3(edge, 3)
-    erad = C.resample([0.0030, 0.0029, 0.0028, 0.0026, 0.0023, 0.0020, 0.0018, 0.0016, 0.0014,
-                       0.0011], len(e_pts))
-    P.tube([wl(v) for v in e_pts], [r * WING_SCALE for r in erad], 8, BRASS, caps='round',
-           cap_segs=2, scale_xy=(1.0, 0.85), up=W.to_3x3() @ Vector((0, 0, 1)))
+        x = lerp(0.010, 0.106, t)
+        out = feather_outline(0.026, 0.0265, base_w=0.0250, tip_len=0.0125, ns=1, nt=5)
+        plate(P, out, place((x, spar_y(x) + 0.002), lerp(92, 88, t), lerp(0.0030, 0.0046, t), 2.0),
+              0.0034, IVORY, bevel=0.0007, rim=BRASS, rim_w=0.0011)
+    # leading-edge armour (ivory spar) and the continuous brass wing edge in front of it
+    sp_pts = C.spline3([q[:3] for q in SPAR], 2)
+    rad = C.resample([q[3] for q in SPAR], len(sp_pts))
+    P.tube([wl(v) for v in sp_pts], [r * WING_SCALE for r in rad], 10, IVORY, caps='round',
+           cap_segs=2, scale_xy=(1.0, 0.58), up=up)
+    b = Vector(P_OUT['base'])
+    d = Vector((cos(radians(P_OUT['ang'])), sin(radians(P_OUT['ang']))))
+    o = Vector((d.y, -d.x))                       # outward (leading) side of the outer primary
+    hw = P_OUT['w'] / 2
+    edge = [(x, y - r * 0.80, z - 0.0016) for (x, y, z, r) in SPAR[:-1]]
+    for (s_, k, zz) in ((0.030, 1.10, 0.0010), (0.060, 1.10, 0.0006), (0.084, 1.04, 0.0003),
+                        (0.100, 0.70, 0.0001)):
+        q = b + d * s_ + o * (hw * k)
+        edge.append((q.x, q.y, zz))
+    e_pts = C.spline3(edge, 2)
+    erad = C.resample([0.0030, 0.0029, 0.0028, 0.0026, 0.0023, 0.0020, 0.0017, 0.0015, 0.0013,
+                       0.0010], len(e_pts))
+    P.tube([wl(v) for v in e_pts], [r * WING_SCALE for r in erad], 7, BRASS, caps='round',
+           cap_segs=2, scale_xy=(1.0, 0.85), up=up)
     # wrist knuckle: brass rivet hub on top of the bend
     Mw = W @ Matrix.Translation((0.117, -0.040, 0.0))
-    P.lathe([(0.0, 0.0118), (0.0026, 0.0114), (0.0040, 0.0100), (0.0044, 0.0080),
-             (0.0044, 0.0000), (0.0, 0.0000)], 14, BRASS, matrix=Mw)
+    P.lathe([(0.0, 0.0120), (0.0026, 0.0116), (0.0040, 0.0102), (0.0044, 0.0082),
+             (0.0044, 0.0000), (0.0, 0.0000)], 12, BRASS, matrix=Mw)
     # shoulder pauldron: ivory dome, brass rim, coral status light in a brass bezel
     Mp = W @ Matrix.Translation((0.010, -0.006, 0.0058))
     prof = [(0.0, 0.0080), (0.0026, 0.0079), (0.0034, 0.0075), (0.0040, 0.0071), (0.0048, 0.0075),
             (0.0056, 0.0071), (0.0095, 0.0062), (0.0132, 0.0045), (0.0158, 0.0022), (0.0168, 0.0004),
             (0.0168, -0.0040), (0.0, -0.0040)]
-    ps = 20
+    ps = 18
     vr, fs = P.lathe(prof, ps, IVORY, matrix=Mp)
     nb = len(prof) - 3
     P.assign(fs[nb * ps:(nb + 1) * ps], CORAL)      # light lens (top fan)
@@ -749,7 +804,7 @@ def build_wing(name, sx, parent):
     n = Vector((1.0, 0.0, 0.55)).normalized()
     Mh = Matrix.Translation(SHOULDER - n * 0.006) @ n.to_track_quat('Z', 'Y').to_matrix().to_4x4()
     P.lathe([(0, 0.0), (0.0102, 0.0), (0.0106, 0.0055), (0.0084, 0.0088), (0.0, 0.0094)],
-            16, BRASS, matrix=Mh)
+            14, BRASS, matrix=Mh)
     if sx < 0:
         P.mirror_x()
     temps = [P.to_temp()]
@@ -767,8 +822,8 @@ def build_tail(parent):
                 Matrix.Translation((x0, 0.0, z)) @ Matrix.Rotation(radians(roll), 4, 'X'))
     # nine-feather fan, centre feather on top
     for i in range(-4, 5):
-        L = 0.142 - 0.0042 * abs(i) ** 1.25
-        out = feather_outline(L, 0.0300, base_w=0.0170, tip_len=0.0150, ns=2, nt=7, point=0.1)
+        L = 0.153 - 0.0042 * abs(i) ** 1.25
+        out = feather_outline(L, 0.0300, base_w=0.0170, tip_len=0.0150, ns=2, nt=6, point=0.1)
         M = place(i * 8.6, -0.010, 0.0016 - 0.0010 * abs(i), 3.0 * (1 if i > 0 else -1 if i < 0 else 0))
         plate(P, out, lambda x, y, h, M=M: M @ Vector((x, y, h)), 0.0032, FLIGHT, bevel=0.0007,
               rim=BRASS, rim_w=0.0013)
@@ -781,7 +836,7 @@ def build_tail(parent):
               rim=BRASS, rim_w=0.0012)
     # tail mount: rounded brass saddle
     P.superellipsoid(TAIL_P + Vector((0, -0.004, 0.0035)), (0.0175, 0.0135, 0.0078), 0.55, 0.55,
-                     16, 8, BRASS)
+                     14, 6, BRASS)
     temps = [P.to_temp()]
     return C.merge_to_object("Tail", temps, pivot=TAIL_P, parent=parent, sharp_deg=50)
 

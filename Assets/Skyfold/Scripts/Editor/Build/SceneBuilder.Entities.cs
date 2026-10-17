@@ -293,9 +293,11 @@ namespace Skyfold.EditorTools
                 MirrorProxy(c, "traffic" + i, v.transform, i % 2 == 0 ? "city_car_a" : "city_car_b");
             }
             // A few moored boats on the bay for life, riding the swell.
-            for (int i = 0; i < (ModelLibrary.Has("dhow_small") ? 3 : 0); i++)
+            // (The middle boat used to sit at (90, -38), inside the Atelier headland's rock, where nobody could see it.)
+            var moorings = new[] { new Vector2(-40f, -20f), new Vector2(58f, -17f), new Vector2(220f, -56f) };
+            for (int i = 0; i < (ModelLibrary.Has("dhow_small") ? moorings.Length : 0); i++)
             {
-                var b = ModelLibrary.Spawn("dhow_small", c.Env, new Vector3(-40f + i * 130f, CityLayout.WaterLevel + 0.1f, -20f - i * 18f), i * 50f);
+                var b = ModelLibrary.Spawn("dhow_small", c.Env, new Vector3(moorings[i].x, CityLayout.WaterLevel + 0.1f, moorings[i].y), i * 50f);
                 var bob = b.AddComponent<FloatBob>();
                 bob.amplitude = 0.06f;
                 bob.period = 4.2f + i * 0.5f;

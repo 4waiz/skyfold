@@ -64,6 +64,43 @@ def rounded_rect(w, h, r, n=3):
     return pts
 
 
+def rrect_dense(w, h, r, n=3, max_seg=0.06):
+    """Rounded rectangle (CCW) whose long straight edges are subdivided to <= max_seg."""
+    base = rounded_rect(w, h, r, n)
+    out = []
+    m = len(base)
+    for i in range(m):
+        a, b = base[i], base[(i + 1) % m]
+        out.append(a)
+        L = math.hypot(b[0] - a[0], b[1] - a[1])
+        k = int(L / max_seg)
+        for s in range(1, k + 1):
+            t = s / (k + 1)
+            out.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
+    return out
+
+
+def pane(part, outline, thick, mat, M=None, deform=None, scales=(1.0, 0.66, 0.33), rim_mat=None):
+    """Closed thin pane (glass, screens): concentric scaled copies of the CCW 2D `outline` on
+    both faces joined by a rim band. deform(Vector) -> Vector is applied to every vertex."""
+    M = M or Matrix.Identity(4)
+    rings = []
+    for s in reversed(scales):
+        rings.append([M @ Vector((x * s, y * s, -thick / 2)) for (x, y) in outline])
+    for s in scales:
+        rings.append([M @ Vector((x * s, y * s, thick / 2)) for (x, y) in outline])
+    c0 = M @ Vector((0, 0, -thick / 2))
+    c1 = M @ Vector((0, 0, thick / 2))
+    vr, fs = part.grid(rings, mat, True, c0, c1)
+    if rim_mat:
+        k = (len(scales) - 1) * len(outline)
+        part.assign(fs[k:k + len(outline)], rim_mat)
+    if deform:
+        for v in {v for f in fs for v in f.verts}:
+            v.co = deform(v.co.copy())
+    return vr, fs
+
+
 def circle2(r, n, phase=0.0, sx=1.0, sy=1.0):
     return [(r * sx * cos(phase + 2 * pi * k / n), r * sy * sin(phase + 2 * pi * k / n))
             for k in range(n)]
@@ -597,7 +634,7 @@ class Pod:
 
     # -- mesh ------------------------------------------------------------------------
     def build(self, part, nu, mat, grooves=(), bands=(), groove_mat=INK, crown=0.006,
-              fill=3, cap_bottom=True, phase=0.0, ribs=()):
+              fill=3, cap_bottom=True, phase=0.0, ribs=(), bottom_mat=None):
         """grooves: [(z, depth, half_width)] V-grooves; ribs: [(z0, z1, height)] raised bands
         with steep edges; bands: [(z0, z1, mat)] material by band mid height."""
         zs = [(sl[0], 0.0) for sl in self.s]
@@ -644,6 +681,9 @@ class Pod:
                         m = bm_
             if m:
                 part.assign(fs[bnd * nu:(bnd + 1) * nu], m)
+        if cap_bottom and bottom_mat:
+            k = (len(rings) - 1) * nu
+            part.assign(fs[k:k + nu], bottom_mat)
         self.faces = fs
         self.nu = nu
         self.ring_z = zall
