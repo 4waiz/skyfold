@@ -13,31 +13,33 @@
    "root": "Nuri",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 5908,
-   "tri_budget": 6000,
+   "tris_total": 15446,
+   "tri_budget": 16000,
    "materials": [
     "SKY_Brass",
+    "SKY_Coral",
     "SKY_Ink",
     "SKY_Ivory",
+    "SKY_Sandstone",
     "SKY_Teal",
     "SKY_TealGlow"
    ],
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -0.27799,
-     -0.054,
-     -0.22957
+     -0.27788,
+     -0.0555,
+     -0.22724
     ],
     "max": [
-     0.27799,
-     0.0848,
-     0.14799
+     0.27788,
+     0.08398,
+     0.14433
     ],
     "size": [
-     0.55597,
-     0.1388,
-     0.37756
+     0.55576,
+     0.13948,
+     0.37157
     ]
    },
    "hierarchy": [
@@ -60,7 +62,7 @@
       0.0225,
       0.117
      ],
-     "tris": 272,
+     "tris": 580,
      "materials": [
       "SKY_Brass",
       "SKY_Ink"
@@ -88,10 +90,11 @@
       0.0,
       -0.0
      ],
-     "tris": 1080,
+     "tris": 4146,
      "materials": [
       "SKY_Ivory",
       "SKY_Ink",
+      "SKY_Sandstone",
       "SKY_Brass"
      ],
      "color_attributes": [
@@ -117,11 +120,12 @@
       0.019,
       0.054
      ],
-     "tris": 1048,
+     "tris": 2584,
      "materials": [
       "SKY_Ivory",
       "SKY_Ink",
-      "SKY_Brass"
+      "SKY_Brass",
+      "SKY_Coral"
      ],
      "color_attributes": [
       "Col"
@@ -146,7 +150,7 @@
       0.0455,
       0.1205
      ],
-     "tris": 396,
+     "tris": 480,
      "materials": [
       "SKY_TealGlow",
       "SKY_Teal"
@@ -194,10 +198,11 @@
       0.004,
       -0.086
      ],
-     "tris": 1076,
+     "tris": 1056,
      "materials": [
-      "SKY_Ivory",
-      "SKY_Brass"
+      "SKY_Teal",
+      "SKY_Brass",
+      "SKY_Ivory"
      ],
      "color_attributes": [
       "Col"
@@ -222,7 +227,7 @@
       -0.0495,
       -0.006
      ],
-     "tris": 128,
+     "tris": 180,
      "materials": [
       "SKY_TealGlow"
      ],
@@ -249,10 +254,12 @@
       0.025,
       0.028
      ],
-     "tris": 954,
+     "tris": 3210,
      "materials": [
       "SKY_Ivory",
-      "SKY_Brass"
+      "SKY_Brass",
+      "SKY_Teal",
+      "SKY_Coral"
      ],
      "color_attributes": [
       "Col"
@@ -277,10 +284,12 @@
       0.025,
       0.028
      ],
-     "tris": 954,
+     "tris": 3210,
      "materials": [
       "SKY_Ivory",
-      "SKY_Brass"
+      "SKY_Brass",
+      "SKY_Teal",
+      "SKY_Coral"
      ],
      "color_attributes": [
       "Col"
@@ -298,8 +307,8 @@
    "root": "glove_L",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 7520,
-   "tri_budget": null,
+   "tris_total": 13080,
+   "tri_budget": 14000,
    "materials": [
     "SKY_Brass",
     "SKY_Ink",
@@ -312,19 +321,19 @@
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -0.07082,
-     -0.04026,
+     -0.06982,
+     -0.03977,
      -0.1078
     ],
     "max": [
-     0.03502,
-     0.0509,
-     0.07749
+     0.03517,
+     0.05183,
+     0.07772
     ],
     "size": [
-     0.10584,
-     0.09116,
-     0.18529
+     0.10499,
+     0.0916,
+     0.18552
     ]
    },
    "hierarchy": [
@@ -384,15 +393,15 @@
       0.0,
       -0.0
      ],
-     "tris": 3760,
+     "tris": 6540,
      "materials": [
       "SKY_Ivory",
-      "SKY_Teal",
-      "SKY_Ink",
-      "SKY_Brass",
       "SKY_Sandstone",
-      "SKY_TealGlow",
-      "SKY_Pearl"
+      "SKY_Brass",
+      "SKY_Teal",
+      "SKY_Pearl",
+      "SKY_Ink",
+      "SKY_TealGlow"
      ],
      "color_attributes": [
       "Col"
@@ -417,15 +426,15 @@
       0.0,
       -0.0
      ],
-     "tris": 3760,
+     "tris": 6540,
      "materials": [
       "SKY_Ivory",
-      "SKY_Teal",
-      "SKY_Ink",
-      "SKY_Brass",
       "SKY_Sandstone",
-      "SKY_TealGlow",
-      "SKY_Pearl"
+      "SKY_Brass",
+      "SKY_Teal",
+      "SKY_Pearl",
+      "SKY_Ink",
+      "SKY_TealGlow"
      ],
      "color_attributes": [
       "Col"
@@ -500,31 +509,32 @@
    "root": "glove_R",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 5976,
-   "tri_budget": null,
+   "tris_total": 11416,
+   "tri_budget": 14000,
    "materials": [
     "SKY_Brass",
     "SKY_Ink",
     "SKY_Ivory",
+    "SKY_Pearl",
     "SKY_Sandstone",
     "SKY_Teal"
    ],
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -0.03502,
-     -0.03878,
+     -0.03517,
+     -0.03938,
      -0.1078
     ],
     "max": [
-     0.06064,
-     0.0509,
-     0.07749
+     0.06143,
+     0.05183,
+     0.07772
     ],
     "size": [
-     0.09566,
-     0.08968,
-     0.18529
+     0.0966,
+     0.09121,
+     0.18552
     ]
    },
    "hierarchy": [
@@ -547,13 +557,14 @@
       0.0,
       -0.0
      ],
-     "tris": 2988,
+     "tris": 5708,
      "materials": [
       "SKY_Ivory",
-      "SKY_Teal",
-      "SKY_Ink",
+      "SKY_Sandstone",
       "SKY_Brass",
-      "SKY_Sandstone"
+      "SKY_Teal",
+      "SKY_Pearl",
+      "SKY_Ink"
      ],
      "color_attributes": [
       "Col"
@@ -578,13 +589,14 @@
       0.0,
       -0.0
      ],
-     "tris": 2988,
+     "tris": 5708,
      "materials": [
       "SKY_Ivory",
-      "SKY_Teal",
-      "SKY_Ink",
+      "SKY_Sandstone",
       "SKY_Brass",
-      "SKY_Sandstone"
+      "SKY_Teal",
+      "SKY_Pearl",
+      "SKY_Ink"
      ],
      "color_attributes": [
       "Col"
@@ -622,35 +634,38 @@
    "root": "courier_car",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 7680,
-   "tri_budget": 8000,
+   "tris_total": 23432,
+   "tri_budget": 24000,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
     "SKY_Glass",
     "SKY_Ink",
+    "SKY_Ivory",
     "SKY_Light",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Rubber",
     "SKY_Teal",
-    "SKY_TealGlow"
+    "SKY_TealGlow",
+    "SKY_TealLight"
    ],
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -0.807,
-     -0.002,
-     -1.71223
+     -0.8184,
+     0.0,
+     -1.7055
     ],
     "max": [
-     0.807,
-     1.65,
-     1.64348
+     0.8184,
+     1.6605,
+     1.61613
     ],
     "size": [
-     1.614,
-     1.652,
-     3.35571
+     1.6368,
+     1.6605,
+     3.32163
     ]
    },
    "hierarchy": [
@@ -753,15 +768,19 @@
       0.0,
       -0.0
      ],
-     "tris": 4920,
+     "tris": 15944,
      "materials": [
       "SKY_Pearl",
       "SKY_Teal",
       "SKY_Ink",
+      "SKY_Rubber",
       "SKY_Coral",
-      "SKY_Light",
       "SKY_Brass",
+      "SKY_Metal",
+      "SKY_Light",
+      "SKY_Ivory",
       "SKY_TealGlow",
+      "SKY_TealLight",
       "SKY_Glass"
      ],
      "color_attributes": [
@@ -824,12 +843,13 @@
       0.9,
       0.27
      ],
-     "tris": 472,
+     "tris": 1048,
      "materials": [
       "SKY_Ink",
       "SKY_Coral",
       "SKY_Pearl",
-      "SKY_Brass"
+      "SKY_Brass",
+      "SKY_Teal"
      ],
      "color_attributes": [
       "Col"
@@ -854,12 +874,14 @@
       0.32,
       1.1
      ],
-     "tris": 572,
+     "tris": 1610,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Brass",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Metal",
+      "SKY_Coral",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -884,12 +906,14 @@
       0.32,
       1.1
      ],
-     "tris": 572,
+     "tris": 1610,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Brass",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Metal",
+      "SKY_Coral",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -914,12 +938,14 @@
       0.32,
       -1.1
      ],
-     "tris": 572,
+     "tris": 1610,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Brass",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Metal",
+      "SKY_Coral",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -944,12 +970,14 @@
       0.32,
       -1.1
      ],
-     "tris": 572,
+     "tris": 1610,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Brass",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Metal",
+      "SKY_Coral",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1083,34 +1111,37 @@
    "root": "convoy_shuttle",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 4800,
-   "tri_budget": 8000,
+   "tris_total": 15284,
+   "tri_budget": 18000,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
     "SKY_Glass",
     "SKY_Ink",
+    "SKY_Ivory",
     "SKY_Light",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Rubber",
-    "SKY_Teal"
+    "SKY_Teal",
+    "SKY_TealGlow"
    ],
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -1.00678,
-     -0.0024,
-     -2.6
+     -1.0425,
+     -0.0,
+     -2.60743
     ],
     "max": [
-     1.04,
-     2.545,
-     2.6
+     1.0425,
+     2.60138,
+     2.645
     ],
     "size": [
-     2.04678,
-     2.5474,
-     5.2
+     2.085,
+     2.60138,
+     5.25243
     ]
    },
    "hierarchy": [
@@ -1133,14 +1164,19 @@
       0.0,
       -0.0
      ],
-     "tris": 2512,
+     "tris": 11060,
      "materials": [
       "SKY_Pearl",
       "SKY_Teal",
+      "SKY_Brass",
       "SKY_Ink",
+      "SKY_Metal",
       "SKY_Light",
       "SKY_Coral",
-      "SKY_Glass"
+      "SKY_Rubber",
+      "SKY_Ivory",
+      "SKY_Glass",
+      "SKY_TealGlow"
      ],
      "color_attributes": [
       "Col"
@@ -1165,12 +1201,13 @@
       0.4,
       1.65
      ],
-     "tris": 572,
+     "tris": 1056,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Brass",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Teal",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1195,12 +1232,13 @@
       0.4,
       1.65
      ],
-     "tris": 572,
+     "tris": 1056,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Brass",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Teal",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1225,12 +1263,13 @@
       0.4,
       -1.65
      ],
-     "tris": 572,
+     "tris": 1056,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Brass",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Teal",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1255,12 +1294,13 @@
       0.4,
       -1.65
      ],
-     "tris": 572,
+     "tris": 1056,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Brass",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Teal",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1298,13 +1338,16 @@
    "root": "city_car_a",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 2460,
-   "tri_budget": 4000,
+   "tris_total": 9000,
+   "tri_budget": 12000,
    "materials": [
+    "SKY_Brass",
     "SKY_Coral",
     "SKY_Glass",
     "SKY_Ink",
+    "SKY_Ivory",
     "SKY_Light",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Rubber",
     "SKY_Sandstone"
@@ -1312,19 +1355,19 @@
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -0.85,
+     -0.852,
      -0.0,
-     -1.9
+     -1.90098
     ],
     "max": [
-     0.85,
-     1.50406,
-     1.9
+     0.852,
+     1.51652,
+     1.88464
     ],
     "size": [
-     1.7,
-     1.50406,
-     3.8
+     1.704,
+     1.51652,
+     3.78563
     ]
    },
    "hierarchy": [
@@ -1347,13 +1390,17 @@
       0.0,
       -0.0
      ],
-     "tris": 1596,
+     "tris": 6304,
      "materials": [
-      "SKY_Ink",
       "SKY_Sandstone",
+      "SKY_Ink",
       "SKY_Pearl",
+      "SKY_Metal",
       "SKY_Light",
       "SKY_Coral",
+      "SKY_Brass",
+      "SKY_Rubber",
+      "SKY_Ivory",
       "SKY_Glass"
      ],
      "color_attributes": [
@@ -1379,11 +1426,12 @@
       0.31,
       1.225
      ],
-     "tris": 216,
+     "tris": 674,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1408,11 +1456,12 @@
       0.31,
       1.225
      ],
-     "tris": 216,
+     "tris": 674,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1437,11 +1486,12 @@
       0.31,
       -1.225
      ],
-     "tris": 216,
+     "tris": 674,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1466,11 +1516,12 @@
       0.31,
       -1.225
      ],
-     "tris": 216,
+     "tris": 674,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1508,13 +1559,16 @@
    "root": "city_car_b",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 2400,
-   "tri_budget": 4000,
+   "tris_total": 9665,
+   "tri_budget": 12000,
    "materials": [
+    "SKY_Brass",
     "SKY_Coral",
     "SKY_Glass",
     "SKY_Ink",
+    "SKY_Ivory",
     "SKY_Light",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Rubber",
     "SKY_Teal"
@@ -1522,19 +1576,19 @@
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -0.856,
+     -0.86998,
      -0.0,
-     -1.911
+     -1.9124
     ],
     "max": [
-     0.856,
-     1.89905,
-     1.905
+     0.86998,
+     1.92935,
+     1.89039
     ],
     "size": [
-     1.712,
-     1.89905,
-     3.816
+     1.73995,
+     1.92935,
+     3.80279
     ]
    },
    "hierarchy": [
@@ -1557,13 +1611,17 @@
       0.0,
       -0.0
      ],
-     "tris": 1536,
+     "tris": 7113,
      "materials": [
-      "SKY_Ink",
       "SKY_Teal",
       "SKY_Pearl",
+      "SKY_Ink",
+      "SKY_Metal",
       "SKY_Light",
       "SKY_Coral",
+      "SKY_Brass",
+      "SKY_Rubber",
+      "SKY_Ivory",
       "SKY_Glass"
      ],
      "color_attributes": [
@@ -1589,11 +1647,12 @@
       0.3,
       1.2
      ],
-     "tris": 216,
+     "tris": 638,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1618,11 +1677,12 @@
       0.3,
       1.2
      ],
-     "tris": 216,
+     "tris": 638,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1647,11 +1707,12 @@
       0.3,
       -1.2
      ],
-     "tris": 216,
+     "tris": 638,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1676,11 +1737,12 @@
       0.3,
       -1.2
      ],
-     "tris": 216,
+     "tris": 638,
      "materials": [
       "SKY_Rubber",
       "SKY_Pearl",
-      "SKY_Ink"
+      "SKY_Ink",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1718,9 +1780,10 @@
    "root": "aircraft",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 9124,
-   "tri_budget": 15000,
+   "tris_total": 32646,
+   "tri_budget": 40000,
    "materials": [
+    "SKY_Brass",
     "SKY_Coral",
     "SKY_Glass",
     "SKY_Gold",
@@ -1735,18 +1798,18 @@
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -8.1,
-     0.00752,
+     -8.105,
+     -0.0,
      -7.5
     ],
     "max": [
-     8.1,
+     8.105,
      5.15,
      5.82
     ],
     "size": [
-     16.2,
-     5.14248,
+     16.21,
+     5.15,
      13.32
     ]
    },
@@ -1790,16 +1853,18 @@
       0.0,
       -0.0
      ],
-     "tris": 7500,
+     "tris": 28286,
      "materials": [
       "SKY_Pearl",
       "SKY_Teal",
       "SKY_Gold",
       "SKY_Ink",
-      "SKY_Rubber",
       "SKY_Coral",
-      "SKY_TealGlow",
       "SKY_Light",
+      "SKY_TealGlow",
+      "SKY_Metal",
+      "SKY_Brass",
+      "SKY_Rubber",
       "SKY_Glass"
      ],
      "color_attributes": [
@@ -1825,12 +1890,16 @@
       0.97067,
       2.56
      ],
-     "tris": 408,
+     "tris": 1592,
      "materials": [
       "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_Gold",
       "SKY_Ink",
+      "SKY_Glass",
       "SKY_Metal",
-      "SKY_Glass"
+      "SKY_Rubber",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -1861,8 +1930,8 @@
      "type": "Empty",
      "parent": "Body",
      "local_position": [
-      0.0,
-      1.37665,
+      -0.0,
+      1.3767,
       5.58
      ],
      "local_rotation_euler": [
@@ -1871,8 +1940,8 @@
       0.0
      ],
      "world_position": [
-      0.0,
-      1.37665,
+      -0.0,
+      1.3767,
       5.58
      ]
     },
@@ -1882,7 +1951,7 @@
      "parent": "Body",
      "local_position": [
       -8.08,
-      3.03346,
+      3.0335,
       0.605
      ],
      "local_rotation_euler": [
@@ -1892,7 +1961,7 @@
      ],
      "world_position": [
       -8.08,
-      3.03346,
+      3.0335,
       0.605
      ]
     },
@@ -1902,7 +1971,7 @@
      "parent": "Body",
      "local_position": [
       8.08,
-      3.03346,
+      3.0335,
       0.605
      ],
      "local_rotation_euler": [
@@ -1912,7 +1981,7 @@
      ],
      "world_position": [
       8.08,
-      3.03346,
+      3.0335,
       0.605
      ]
     },
@@ -1935,11 +2004,12 @@
       2.62,
       3.18
      ],
-     "tris": 608,
+     "tris": 1384,
      "materials": [
+      "SKY_Ink",
+      "SKY_Teal",
       "SKY_Pearl",
       "SKY_Gold",
-      "SKY_Ink",
       "SKY_Coral"
      ],
      "color_attributes": [
@@ -1965,11 +2035,12 @@
       2.62,
       3.18
      ],
-     "tris": 608,
+     "tris": 1384,
      "materials": [
+      "SKY_Ink",
+      "SKY_Teal",
       "SKY_Pearl",
       "SKY_Gold",
-      "SKY_Ink",
       "SKY_Coral"
      ],
      "color_attributes": [
@@ -2040,13 +2111,13 @@
      "name": "LIGHT_landing",
      "parent": "Body",
      "local_position": [
-      0.0,
-      1.37665,
+      -0.0,
+      1.3767,
       5.58
      ],
      "world_position": [
-      0.0,
-      1.37665,
+      -0.0,
+      1.3767,
       5.58
      ],
      "local_rotation_euler": [
@@ -2060,12 +2131,12 @@
      "parent": "Body",
      "local_position": [
       -8.08,
-      3.03346,
+      3.0335,
       0.605
      ],
      "world_position": [
       -8.08,
-      3.03346,
+      3.0335,
       0.605
      ],
      "local_rotation_euler": [
@@ -2079,12 +2150,12 @@
      "parent": "Body",
      "local_position": [
       8.08,
-      3.03346,
+      3.0335,
       0.605
      ],
      "world_position": [
       8.08,
-      3.03346,
+      3.0335,
       0.605
      ],
      "local_rotation_euler": [
@@ -2104,8 +2175,8 @@
    "root": "PowerCell",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 492,
-   "tri_budget": 500,
+   "tris_total": 2416,
+   "tri_budget": 2500,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
@@ -2119,19 +2190,19 @@
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -0.0695,
+     -0.07032,
      -0.0,
-     -0.06776
+     -0.07032
     ],
     "max": [
-     0.0695,
-     0.34915,
-     0.06875
+     0.07032,
+     0.3508,
+     0.07032
     ],
     "size": [
-     0.139,
-     0.34915,
-     0.13651
+     0.14064,
+     0.3508,
+     0.14064
     ]
    },
    "hierarchy": [
@@ -2174,7 +2245,7 @@
       0.155,
       -0.0
      ],
-     "tris": 32,
+     "tris": 260,
      "materials": [
       "SKY_TealGlow"
      ],
@@ -2201,14 +2272,15 @@
       0.0,
       -0.0
      ],
-     "tris": 460,
+     "tris": 2156,
      "materials": [
-      "SKY_Pearl",
       "SKY_Brass",
       "SKY_Ink",
+      "SKY_Pearl",
       "SKY_Teal",
       "SKY_Coral",
       "SKY_Glass",
+      "SKY_TealGlow",
       "SKY_Rubber"
      ],
      "color_attributes": [
@@ -2247,31 +2319,34 @@
    "root": "passenger_a",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 1644,
-   "tri_budget": null,
+   "tris_total": 5900,
+   "tri_budget": 7000,
    "materials": [
+    "SKY_Brass",
     "SKY_Coral",
     "SKY_Ink",
+    "SKY_Pearl",
     "SKY_Rubber",
     "SKY_SandstoneDeep",
-    "SKY_Teal"
+    "SKY_Teal",
+    "SKY_Terracotta"
    ],
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -0.30484,
+     -0.2609,
      -0.0,
-     -0.25
+     -0.26836
     ],
     "max": [
-     0.30484,
-     1.70389,
-     0.16
+     0.2609,
+     1.7,
+     0.19906
     ],
     "size": [
-     0.60968,
-     1.70389,
-     0.41
+     0.52181,
+     1.7,
+     0.46742
     ]
    },
    "hierarchy": [
@@ -2294,13 +2369,16 @@
       0.0,
       -0.0
      ],
-     "tris": 1644,
+     "tris": 5900,
      "materials": [
-      "SKY_Rubber",
       "SKY_Ink",
+      "SKY_Rubber",
+      "SKY_Pearl",
+      "SKY_Coral",
       "SKY_Teal",
       "SKY_SandstoneDeep",
-      "SKY_Coral"
+      "SKY_Terracotta",
+      "SKY_Brass"
      ],
      "color_attributes": [
       "Col"
@@ -2338,32 +2416,35 @@
    "root": "passenger_b",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 1620,
-   "tri_budget": null,
+   "tris_total": 6620,
+   "tri_budget": 7000,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
     "SKY_Ink",
+    "SKY_Metal",
+    "SKY_Pearl",
     "SKY_Rubber",
     "SKY_Teal",
+    "SKY_Terracotta",
     "SKY_Wood"
    ],
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -0.31398,
+     -0.28048,
      -0.0,
-     -0.2163
+     -0.24577
     ],
     "max": [
-     0.3811,
-     1.75295,
-     0.2163
+     0.42282,
+     1.74,
+     0.20315
     ],
     "size": [
-     0.69508,
-     1.75295,
-     0.4326
+     0.7033,
+     1.74,
+     0.44892
     ]
    },
    "hierarchy": [
@@ -2386,14 +2467,17 @@
       0.0,
       -0.0
      ],
-     "tris": 1620,
+     "tris": 6620,
      "materials": [
-      "SKY_Rubber",
       "SKY_Ink",
-      "SKY_Coral",
+      "SKY_Rubber",
       "SKY_Wood",
-      "SKY_Teal",
-      "SKY_Brass"
+      "SKY_Coral",
+      "SKY_Pearl",
+      "SKY_Metal",
+      "SKY_Terracotta",
+      "SKY_Brass",
+      "SKY_Teal"
      ],
      "color_attributes": [
       "Col"
@@ -2431,32 +2515,35 @@
    "root": "passenger_c",
    "fbx_version": 7400,
    "fbx_unit_scale_to_m": 1.0,
-   "tris_total": 1776,
-   "tri_budget": null,
+   "tris_total": 6714,
+   "tri_budget": 7000,
    "materials": [
-    "SKY_PalmTrunk",
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Ink",
     "SKY_Pearl",
     "SKY_Rubber",
     "SKY_Sandstone",
     "SKY_Teal",
-    "SKY_TealLight"
+    "SKY_TealLight",
+    "SKY_Terracotta"
    ],
    "vertex_color_attribute": "Col",
    "bounds_unity": {
     "min": [
-     -0.2896,
+     -0.23973,
      -0.0,
-     -0.13362
+     -0.11976
     ],
     "max": [
-     0.2896,
-     1.6245,
-     0.152
+     0.2392,
+     1.63,
+     0.19126
     ],
     "size": [
-     0.57919,
-     1.6245,
-     0.28562
+     0.47893,
+     1.63,
+     0.31102
     ]
    },
    "hierarchy": [
@@ -2479,14 +2566,17 @@
       0.0,
       -0.0
      ],
-     "tris": 1776,
+     "tris": 6714,
      "materials": [
-      "SKY_Rubber",
       "SKY_Teal",
-      "SKY_TealLight",
+      "SKY_Rubber",
+      "SKY_Ink",
       "SKY_Pearl",
+      "SKY_TealLight",
       "SKY_Sandstone",
-      "SKY_PalmTrunk"
+      "SKY_Terracotta",
+      "SKY_Brass",
+      "SKY_Coral"
      ],
      "color_attributes": [
       "Col"

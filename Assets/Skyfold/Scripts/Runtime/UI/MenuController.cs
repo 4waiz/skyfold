@@ -232,15 +232,25 @@ namespace Skyfold
             var outline = t.gameObject.AddComponent<Shadow>();
             outline.effectColor = new Color(0.05f, 0.12f, 0.14f, 0.55f);
             outline.effectDistance = new Vector2(3f, -4f);
-            var s = UIKit.Text(w, SkyfoldInfo.Subtitle, UIStyle.HeadingSize, UIStyle.Gold, true);
-            s.rectTransform.anchorMin = Vector2.zero;
-            s.rectTransform.anchorMax = new Vector2(1f, 0.42f);
-            s.rectTransform.offsetMin = s.rectTransform.offsetMax = Vector2.zero;
-            s.gameObject.AddComponent<Shadow>().effectColor = new Color(0.05f, 0.12f, 0.14f, 0.5f);
-            // A faint outline keeps the gold subtitle legible against the pale horizon.
-            var ring = s.gameObject.AddComponent<Outline>();
-            ring.effectColor = new Color(0.05f, 0.12f, 0.14f, 0.5f);
-            ring.effectDistance = new Vector2(2f, -2f);
+            // The gold subtitle sits on a dark pill: gold is as bright as the warm sky behind it, and the title
+            // camera orbits, so no shadow or backdrop keeps it legible over every background.
+            var pill = UIKit.Rect(w, "Subtitle Pill");
+            pill.anchorMin = pill.anchorMax = Vector2.zero;
+            pill.pivot = Vector2.zero;
+            pill.anchoredPosition = new Vector2(-4f, 8f);
+            var pillBg = pill.gameObject.AddComponent<Image>();
+            pillBg.sprite = UIKit.Rounded;
+            pillBg.type = Image.Type.Sliced;
+            pillBg.color = new Color(0.08f, 0.13f, 0.16f, 0.72f);
+            pillBg.raycastTarget = false;
+            var pillRow = pill.gameObject.AddComponent<HorizontalLayoutGroup>();
+            pillRow.padding = new RectOffset(24, 26, 6, 10);
+            pillRow.childControlWidth = pillRow.childControlHeight = true;
+            pillRow.childForceExpandWidth = pillRow.childForceExpandHeight = false;
+            var pillFit = pill.gameObject.AddComponent<ContentSizeFitter>();
+            pillFit.horizontalFit = pillFit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            var s = UIKit.Text(pill, SkyfoldInfo.Subtitle, UIStyle.HeadingSize, UIStyle.Gold, true, TextAlignmentOptions.Left, "Subtitle");
+            s.textWrappingMode = TextWrappingModes.NoWrap;
 
             // Credit line on a small dark pill so it stays readable over the bright terrace.
             var footBg = UIKit.Rect(root, "Footer");
