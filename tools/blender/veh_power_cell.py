@@ -5,7 +5,7 @@ Original procedural model (Awaiz Ahmed / Team Kanban), not AI-generated.
 
 Hierarchy (pivots, Blender metres, Z up):
     PowerCell        bottom centre (0,0,0) - pearl shell, brass end caps, glass window, handle
-      Core           centre of the glowing core (separate mesh, SKY_TealGlow only; the game
+      Core           centre of the glowing core column (separate mesh, SKY_TealGlow only; the game
                      animates its emission with a property block, so it stays one material)
       ANCHOR_handle  centre of the handle grip (suggested hand attach point)
 Total height 0.35 m (handle included), body diameter 0.14 m. Budget < 2.5k tris.
@@ -13,10 +13,12 @@ Detail pass (it is held in the hand in VR, ~30 cm from the eye): diamond-knurled
 with a recessed contact disc, ink seal grooves, pearl shell with teal lips, glass window with
 four brass guard bars, three indicator lights, coral warning ring, fluted brass top cap with a
 grooved top face and two connector pins, brass handle on mounts with a rubber grip and ink
-wraps; the core has raised energy rings.
+wraps; the core is a slim glowing column (diameter ~42% of the glass, chamfered ends, three
+rings 1.2 mm proud) seated in two brass collars, so its in-game emissive silhouette is clean.
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import bpy
 import chars_common as C
 import veh_common as V
 from veh_common import lathe_m, frame, T
@@ -93,16 +95,24 @@ def build():
            caps='round', cap_segs=1)
     for x in (-0.011, 0.011):
         p.torus(0.0104, 0.0019, 8, 3, INK, matrix=T(x, 0, 0.3385) @ V.rot_y(90))
+    # ---- dim brass collars the energy column is mounted in (chamber floor and ceiling)
+    lathe_m(p, [(0.0325, WIN0 - 0.0035), (0.0325, WIN0 + 0.0045), (0.0262, WIN0 + 0.0065)], 10,
+            [BRASS, BRASS])
+    lathe_m(p, [(0.0262, WIN1 - 0.0065), (0.0325, WIN1 - 0.0045), (0.0325, WIN1 + 0.0035)], 10,
+            [BRASS, BRASS])
     shell = C.merge_to_object("PowerCell", [p.to_temp()], pivot=(0, 0, 0), parent=None,
                               sharp_deg=40)
-    # ---- core (separate, single material): capsule with three raised energy rings
+    # ---- core (separate, single material): a slim, clean energy column (diameter ~42% of
+    #      the glass) with chamfered ends seated in the collars and three thin rings standing
+    #      1.2 mm proud, so its glowing silhouette stays smooth in game
     q = C.Part()
     zc = (WIN0 + WIN1) / 2
-    prof = [(0.0, WIN0 + 0.006), (0.024, WIN0 + 0.010), (0.038, WIN0 + 0.020),
-            (0.043, zc - 0.034), (0.047, zc - 0.029), (0.043, zc - 0.024), (0.043, zc - 0.005),
-            (0.047, zc), (0.043, zc + 0.005), (0.043, zc + 0.024), (0.047, zc + 0.029),
-            (0.043, zc + 0.034), (0.038, WIN1 - 0.020), (0.024, WIN1 - 0.010),
-            (0.0, WIN1 - 0.006)]
+    rc, rr = 0.0255, 0.0267
+    z0, z1 = WIN0 + 0.0045, WIN1 - 0.0045
+    prof = [(0.0, z0), (rc - 0.004, z0), (rc, z0 + 0.004)]
+    for zr in (zc - 0.030, zc, zc + 0.030):
+        prof += [(rc, zr - 0.0015), (rr, zr), (rc, zr + 0.0015)]
+    prof += [(rc, z1 - 0.004), (rc - 0.004, z1), (0.0, z1)]
     lathe_m(q, prof, 10, GLOW)
     core = C.merge_to_object("Core", [q.to_temp()], pivot=(0, 0, zc), parent=shell,
                              sharp_deg=50)
@@ -116,5 +126,13 @@ if __name__ == "__main__":
     C.summary(root)
     C.export_fbx(root, OUT)
     if RENDER:
+        # preview only (the FBX is already written): Unity draws SKY_Glass with plain alpha
+        # blending, not as a refracting solid; render the window the same way so the glass
+        # tube does not magnify the core like a lens and misrepresent its size
+        g = bpy.data.materials.get('SKY_Glass')
+        if g is not None:
+            b = next(n for n in g.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
+            b.inputs['Transmission Weight'].default_value = 0.0
+            b.inputs['Alpha'].default_value = 0.42
         C.render_previews("power_cell", root, res=(900, 900), samples=128, ground_z=0.0,
                           lens=70, margin=1.25, views=(("fl", 38, 16), ("br", -142, 18)))
