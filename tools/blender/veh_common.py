@@ -389,28 +389,30 @@ def bevel_edges_of(part, faces, width, segs=1):
 
 # ============================================================================ lamps
 def lamp_round(part, center, normal, R, body=PEARL, bezel=BRASS, refl=METAL, lens=LIGHT,
-               gap=INK, segs=20, depth=0.03, up=(0, 0, 1), proud=1.0, rings=1):
+               gap=INK, segs=20, depth=0.03, up=(0, 0, 1), proud=1.0, rings=1, simple=False):
     """Round lamp: body-coloured housing flange, raised bezel ring, recessed reflector cone and
-    a domed lens with `rings` concentric steps. ~300 tris at segs=20."""
+    a domed lens with an optional concentric step (rings=1). simple=True: small indicator
+    (flange, bezel, dark gap, dome lens). ~380 tris at segs=20 with a ring."""
     M = frame(center, normal, up)
     s = R / 0.11 * proud
-    prof = [(1.28 * R, -depth), (1.28 * R, 0.004 * s), (1.18 * R, 0.014 * s),
-            (1.12 * R, 0.023 * s), (1.03 * R, 0.026 * s), (0.95 * R, 0.015 * s),
-            (0.66 * R, 0.002 * s), (0.60 * R, 0.008 * s)]
+    if simple:
+        prof = [(1.30 * R, -depth), (1.30 * R, 0.004 * s), (1.08 * R, 0.014 * s),
+                (0.90 * R, 0.013 * s), (0.82 * R, 0.006 * s), (0.0, 0.016 * s)]
+        return lathe_m(part, prof, segs, [body, bezel, bezel, gap, lens], M=M)
+    prof = [(1.28 * R, -depth), (1.28 * R, 0.004 * s), (1.16 * R, 0.016 * s),
+            (1.10 * R, 0.025 * s), (1.02 * R, 0.025 * s), (0.95 * R, 0.014 * s),
+            (0.64 * R, 0.002 * s), (0.58 * R, 0.010 * s)]
     mats = [body, body, bezel, bezel, bezel, refl, gap]
     if rings:
-        prof += [(0.46 * R, 0.017 * s), (0.42 * R, 0.014 * s), (0.36 * R, 0.020 * s)]
+        prof += [(0.40 * R, 0.019 * s), (0.36 * R, 0.0165 * s), (0.31 * R, 0.0215 * s)]
         mats += [lens, lens, lens]
-    else:
-        prof += [(0.36 * R, 0.020 * s)]
-        mats += [lens]
-    prof += [(0.16 * R, 0.0245 * s), (0.0, 0.025 * s)]
-    mats += [lens, lens]
+    prof += [(0.0, 0.025 * s)]
+    mats += [lens]
     return lathe_m(part, prof, segs, mats, M=M)
 
 
 def lamp_rrect(part, center, normal, w, h, r, body=PEARL, bezel=PEARL, lens=CORAL,
-               inner=None, depth=0.03, up=(0, 0, 1), nc=3, proud=1.0, ribs=0, rib_mat=None):
+               inner=None, depth=0.03, up=(0, 0, 1), nc=2, proud=1.0, ribs=0, rib_mat=None):
     """Rounded-rectangle lamp cluster: housing flange, bezel, inset lens; optional horizontal
     lens ribs and an `inner` (w, h, mat) second lens segment at the inner end."""
     M = frame(center, normal, up)
@@ -439,7 +441,7 @@ def plate_recess(part, center, normal, w, h, frame_mat=PEARL, plate_mat=IVORY, s
     prof = [(0.018, -depth), (0.018, 0.002), (0.014, 0.010), (0.006, 0.012), (0.0, 0.006),
             (-0.002, -0.004), (-0.004, -0.006)]
     mats = [frame_mat, frame_mat, frame_mat, frame_mat, INK, plate_mat, plate_mat]
-    rr_lathe(part, w, h, 0.02, prof, mats, M=M, nc=3)
+    rr_lathe(part, w, h, 0.02, prof, mats, M=M, nc=2)
     for sx in (-1, 1):
         p = M @ Vector((sx * (w / 2 - 0.035), 0.0, -0.006))
         n = (M.to_3x3() @ Vector((0, 0, 1))).normalized()
@@ -448,9 +450,9 @@ def plate_recess(part, center, normal, w, h, frame_mat=PEARL, plate_mat=IVORY, s
 
 
 # ============================================================================ wheels
-def wheel_hq(R, W, outer=1, seg=40, rim_r=0.62, lugs=18, lug_h=0.010, spokes=5, spoke_w=0.11,
+def wheel_hq(R, W, outer=1, seg=32, rim_r=0.62, lugs=14, lug_h=0.010, spokes=5, spoke_w=0.11,
              spoke_d=0.075, spoke_flare=1.35, twist=0.0, disc=True, caliper=True, nuts=5,
-             hub_seg=20, tyre=RUBBER, lip=PEARL, barrel=INK, spoke=PEARL, hub=PEARL, cap=BRASS,
+             hub_seg=16, tyre=RUBBER, lip=PEARL, barrel=INK, spoke=PEARL, hub=PEARL, cap=BRASS,
              nut=BRASS, disc_mat=METAL, caliper_mat=CORAL, caliper_angle=60.0, grooves=0,
              sidewall_ring=None, lug_skew=0.65, lug_len=0.50, valve=BRASS, spoke_ridge=True):
     """Detailed wheel as a Part at the origin: axle along X, outer face toward +X (mirrored when
@@ -461,27 +463,25 @@ def wheel_hq(R, W, outer=1, seg=40, rim_r=0.62, lugs=18, lug_h=0.010, spokes=5, 
     rr = rim_r * R
     Rt = R - (lug_h if lugs else 0.0)
     # ---- tyre (open lathe; inner side coarse because it faces the car)
-    prof = [(rr - 0.012 * R, -0.80 * w), (0.80 * R, -0.985 * w), (0.935 * R, -0.90 * w),
-            (Rt, -0.74 * w)]
-    mats = [tyre, tyre, tyre]
+    prof = [(rr - 0.012 * R, -0.80 * w), (0.88 * R, -0.965 * w), (Rt, -0.74 * w)]
+    mats = [tyre, tyre]
     if grooves:
         # circumferential ribs: shallow grooves across the tread
-        xs = [-0.74 + 1.48 * (k + 0.5) / (grooves + 1) for k in range(grooves + 1)]
         gpos = [-0.74 + 1.48 * (k + 1) / (grooves + 1) for k in range(grooves)]
         for g in gpos:
             prof += [(Rt, (g - 0.07) * w), (Rt - 0.018 * R, (g - 0.04) * w),
                      (Rt - 0.018 * R, (g + 0.04) * w), (Rt, (g + 0.07) * w)]
             mats += [tyre, tyre, tyre, tyre]
-    prof += [(Rt, 0.74 * w), (0.935 * R, 0.90 * w), (0.875 * R, 0.975 * w)]
-    mats += [tyre, tyre, tyre]
+    prof += [(Rt, 0.74 * w), (0.935 * R, 0.90 * w)]
+    mats += [tyre, tyre]
     if sidewall_ring:
-        prof += [(0.80 * R, 0.99 * w), (0.775 * R, 1.005 * w), (0.745 * R, 0.995 * w)]
+        prof += [(0.85 * R, 0.985 * w), (0.80 * R, 1.00 * w), (0.76 * R, 0.99 * w)]
         mats += [tyre, sidewall_ring, sidewall_ring]
     else:
-        prof += [(0.78 * R, 0.99 * w)]
+        prof += [(0.84 * R, 0.985 * w)]
         mats += [tyre]
-    prof += [(0.70 * R, 0.955 * w), (rr + 0.012 * R, 0.86 * w), (rr - 0.012 * R, 0.80 * w)]
-    mats += [tyre, tyre, tyre]
+    prof += [(0.72 * R, 0.96 * w), (rr - 0.012 * R, 0.80 * w)]
+    mats += [tyre, tyre]
     lathe_m(p, prof, seg, mats, axis='X')
     # ---- chevron tread blocks
     if lugs:
@@ -521,15 +521,15 @@ def wheel_hq(R, W, outer=1, seg=40, rim_r=0.62, lugs=18, lug_h=0.010, spokes=5, 
                 p.assign(fs, tyre)
     # ---- rim: lip + barrel + dark back wall (open toward the tyre side)
     rim = [(rr + 0.006 * R, 0.78 * w), (rr + 0.030 * R, 0.84 * w), (rr + 0.020 * R, 0.91 * w),
-           (rr - 0.012 * R, 0.90 * w), (rr - 0.045 * R, 0.80 * w), (rr - 0.058 * R, 0.70 * w),
-           (rr - 0.058 * R, -0.55 * w), (0.0, -0.55 * w)]
-    lathe_m(p, rim, seg, [lip, lip, lip, lip, barrel, barrel, barrel], axis='X')
+           (rr - 0.014 * R, 0.89 * w), (rr - 0.058 * R, 0.72 * w), (rr - 0.058 * R, -0.55 * w),
+           (0.0, -0.55 * w)]
+    lathe_m(p, rim, seg, [lip, lip, lip, barrel, barrel, barrel], axis='X')
     # ---- brake disc + hat
     if disc:
         dr0, dr1 = 0.22 * R, rr - 0.11 * R
         dprof = [(dr1 + 0.004 * R, -0.02 * w), (dr1, 0.07 * w), (dr0, 0.09 * w),
                  (0.17 * R, 0.30 * w), (0.0, 0.32 * w)]
-        lathe_m(p, dprof, max(16, seg * 3 // 5), [disc_mat, disc_mat, INK, INK], axis='X')
+        lathe_m(p, dprof, max(16, seg * 5 // 8), [disc_mat, disc_mat, INK, INK], axis='X')
         if caliper:
             a = radians(caliper_angle)
             rc = dr1 - 0.035 * R
@@ -561,10 +561,10 @@ def wheel_hq(R, W, outer=1, seg=40, rim_r=0.62, lugs=18, lug_h=0.010, spokes=5, 
               scales=[(1.0, 1.0), (1.0 + (spoke_flare - 1) * 0.45, 0.95), (spoke_flare, 0.85)],
               twist=radians(twist))
     # ---- hub + centre cap
-    hp = [(hub_r * 1.05, 0.70 * w), (hub_r * 1.05, 0.90 * w), (hub_r * 0.93, 1.00 * w),
-          (hub_r * 0.62, 1.03 * w), (hub_r * 0.52, 1.06 * w), (hub_r * 0.50, 1.11 * w),
-          (hub_r * 0.30, 1.16 * w), (0.0, 1.18 * w)]
-    lathe_m(p, hp, hub_seg, [hub, hub, hub, cap, cap, cap, cap], axis='X')
+    hp = [(hub_r * 1.05, 0.70 * w), (hub_r * 1.05, 0.92 * w), (hub_r * 0.86, 1.02 * w),
+          (hub_r * 0.54, 1.05 * w), (hub_r * 0.48, 1.12 * w), (hub_r * 0.26, 1.165 * w),
+          (0.0, 1.18 * w)]
+    lathe_m(p, hp, hub_seg, [hub, hub, hub, cap, cap, cap], axis='X')
     # ---- lug nuts on the hub face
     for k in range(nuts):
         th = 2 * pi * k / nuts + pi / nuts + pi / 2

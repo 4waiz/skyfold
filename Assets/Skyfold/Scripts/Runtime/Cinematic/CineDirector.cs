@@ -589,6 +589,7 @@ namespace Skyfold
             piece.BeginDesktopHold();
             int good = ValidQuarter(piece);
             TurnTo(piece, good + 1); // wrong way round first
+            Log("A3 wrong-way hint: " + Root.City.Check("bridge_east", piece.type, piece.CurrentQuarter).Message);
             Vector3 start = Mini(F(144f, 160f), F(15f, 17f), F(79f, 81f));
             piece.transform.SetPositionAndRotation(start, QuarterRotation(piece.CurrentQuarter));
             Vector3 hover = s + Vector3.up * 0.036f;

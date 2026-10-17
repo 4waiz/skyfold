@@ -51,11 +51,11 @@ Z = Vector((0, 0, 1))
 NOSE = [(0.24, -1.45, -0.50, 0.55), (0.30, -1.51, -0.50, 0.575), (0.40, -1.530, -0.50, 0.584),
         (0.62, -1.535, -0.50, 0.585), (0.72, -1.522, -0.50, 0.579), (0.79, -1.47, -0.50, 0.565),
         (0.86, -1.36, -0.50, 0.54), (0.905, -1.19, -0.505, 0.50), (0.935, -0.97, -0.52, 0.42)]
-NOSE_STEPS = [2, 1, 1, 1, 1, 2, 2, 3]
+NOSE_STEPS = [1, 1, 1, 1, 1, 1, 2, 2]
 REAR = [(0.24, 0.66, 1.52, 0.55), (0.30, 0.64, 1.58, 0.575), (0.40, 0.64, 1.600, 0.584),
         (0.62, 0.64, 1.605, 0.585), (0.72, 0.64, 1.595, 0.58), (0.80, 0.645, 1.56, 0.56),
         (0.845, 0.66, 1.49, 0.52), (0.865, 0.70, 1.40, 0.46)]
-REAR_STEPS = [2, 1, 1, 1, 2, 2, 2]
+REAR_STEPS = [1, 1, 1, 1, 1, 2, 2]
 
 
 def spline(pts, n=3):
@@ -69,13 +69,13 @@ def ellipse(w, h, n=12):
 # ---------------------------------------------------------------------------- body: shell
 def pods(shell):
     nose = V.Pod(NOSE, n=3.4, step=NOSE_STEPS)
-    nose.build(shell, 40, PEARL, ribs=[(STRIPE[0], STRIPE[1], 0.004)],
+    nose.build(shell, 32, PEARL, ribs=[(STRIPE[0], STRIPE[1], 0.004)],
                bands=[(STRIPE[0], STRIPE[1], TEAL)], grooves=[(0.835, 0.0045, 0.003)],
-               crown=0.008, bottom_mat=INK)
+               crown=0.008, bottom_mat=INK, fill=2)
     rear = V.Pod(REAR, n=3.6, step=REAR_STEPS)
-    rear.build(shell, 40, PEARL, ribs=[(STRIPE[0], STRIPE[1], 0.004)],
+    rear.build(shell, 32, PEARL, ribs=[(STRIPE[0], STRIPE[1], 0.004)],
                bands=[(STRIPE[0], STRIPE[1], TEAL)], grooves=[(0.775, 0.0045, 0.003)],
-               crown=0.006, bottom_mat=INK)
+               crown=0.006, bottom_mat=INK, fill=2)
     return nose, rear
 
 
@@ -97,21 +97,20 @@ def chassis(shell, sym):
 
 def fenders(sym):
     """Flared arches over each (left) wheel: pearl top, ink underside and rubber lip, bolts."""
-    sec = [(-0.170, -0.018), (0.095, -0.012), (0.117, -0.020), (0.121, -0.044), (0.137, -0.050),
-           (0.148, -0.024), (0.147, 0.004), (0.133, 0.020), (0.050, 0.028), (-0.080, 0.025),
-           (-0.170, 0.012)]
-    smats = [INK, INK, INK, RUBBER, PEARL, PEARL, PEARL, PEARL, PEARL, PEARL, INK]
+    sec = [(-0.170, -0.018), (0.112, -0.014), (0.121, -0.044), (0.137, -0.050), (0.148, -0.024),
+           (0.146, 0.006), (0.128, 0.022), (0.020, 0.028), (-0.170, 0.014)]
+    smats = [INK, INK, RUBBER, PEARL, PEARL, PEARL, PEARL, PEARL, INK]
     R0 = 0.405
     for sy in (-1, 1):
         c = Vector((TRACK_X, sy * AXLE_Y, WHEEL_R))
-        n = 16
-        angs = [radians(-8 + 196 * k / n) for k in range(n + 1)]
+        n = 12
+        angs = [radians(-6 + 192 * k / n) for k in range(n + 1)]
         path = [c + Vector((0, cos(a) * R0, sin(a) * R0)) for a in angs]
         up = (path[0] - c).normalized()
         sc = []
         for k in range(n + 1):
             e = min(k, n - k)
-            f = 1.0 if e >= 2 else (0.90 if e == 1 else 0.80)
+            f = 1.0 if e >= 1 else 0.82
             sc.append((1.0, f))
         sweep(sym, path, sec, PEARL, up=up, scales=sc, sec_mats=smats, cap_mat=PEARL)
         for a in (radians(48), radians(132)):
@@ -124,7 +123,7 @@ def bumpers(shell, nose, rear):
     sec = V.section_rrect(0.075, 0.12, 0.03, 2)
     strip = [(x - 0.040, y) for (x, y) in V.section_rrect(0.020, 0.040, 0.008, 1)]
     for (pod, base, zb, sgn) in ((nose, -pi / 2, 0.36, -1), (rear, pi / 2, 0.36, 1)):
-        ts = [base - 0.75 + 1.5 * k / 10 for k in range(11)]   # path runs so 'side' faces the car
+        ts = [base - 0.75 + 1.5 * k / 8 for k in range(9)]   # path runs so 'side' faces the car
         pts = [pod.point(t, zb, 0.045) for t in ts]
         a, b = pts[0], pts[-1]
         ea = a + Vector((-math.copysign(0.03, a.x), -sgn * 0.065, 0))
@@ -136,8 +135,7 @@ def bumpers(shell, nose, rear):
         # mounting brackets to the chassis
         for sx in (-1, 1):
             p = pod.point(base + sx * sgn * -0.32, 0.31, -0.02)
-            slab(shell, 0.05, 0.13, 0.035, 0.012, 0.006, INK,
-                 M=T(p.x, p.y + sgn * 0.02, 0.315), nc=1, ne=1)
+            shell.box(Vector((p.x, p.y + sgn * 0.02, 0.315)), (0.045, 0.13, 0.032), INK)
 
 
 def front_face(shell, nose):
@@ -147,14 +145,14 @@ def front_face(shell, nose):
         t = nose.t_of_x(sx * 0.31, z, -1)
         p = nose.point(t, z)
         n = (nose.normal(t, z) + Vector((0, -0.7, 0.0))).normalized()
-        V.lamp_round(shell, p, n, 0.098, segs=24, depth=0.04)
+        V.lamp_round(shell, p, n, 0.098, segs=22, depth=0.04)
         # indicators on the front corners
         z2 = 0.585
         t2 = nose.t_of_x(sx * 0.505, z2, -1)
         p2 = nose.point(t2, z2)
         n2 = nose.normal(t2, z2)
-        V.lamp_round(shell, p2, n2, 0.026, body=PEARL, bezel=BRASS, refl=INK, lens=LIGHT,
-                     segs=12, depth=0.02, rings=0, proud=0.7)
+        V.lamp_round(shell, p2, n2, 0.026, body=PEARL, bezel=BRASS, gap=INK, lens=LIGHT,
+                     segs=10, depth=0.02, proud=0.7, simple=True)
     # grille between the headlights: brass frame, dark recess, pearl slats
     z = 0.672
     t = -pi / 2
@@ -164,17 +162,17 @@ def front_face(shell, nose):
     prof = [(0.014, -0.03), (0.014, 0.004), (0.009, 0.011), (0.002, 0.012), (-0.004, 0.006),
             (-0.006, -0.012), (-0.008, -0.014)]
     rr_lathe(shell, 0.25, 0.115, 0.035, prof, [PEARL, PEARL, BRASS, BRASS, INK, INK, INK], M=M,
-             nc=3)
+             nc=2)
     for k in range(4):
         yk = -0.041 + k * 0.0273
-        slab(shell, 0.228, 0.012, 0.016, 0.0055, 0.005, PEARL, M=M @ T(0, yk, -0.006), nc=1, ne=1)
+        tile(shell, (0, yk, -0.014), 0.226, 0.013, 0.018, PEARL, M=M, ch=0.0035)
     # small brass badge with a teal enamel centre (no text)
     zb = 0.775
     pb = nose.point(-pi / 2, zb)
     nb = nose.normal(-pi / 2, zb)
     Mb = frame(pb, nb, (0, 0, 1))
     lathe_m(shell, [(0.026, -0.01), (0.026, 0.004), (0.022, 0.008), (0.016, 0.007),
-                    (0.0, 0.010)], 16, [BRASS, BRASS, BRASS, TEAL], M=Mb)
+                    (0.0, 0.010)], 12, [BRASS, BRASS, BRASS, TEAL], M=Mb)
 
 
 def rear_face(shell, rear):
@@ -185,15 +183,14 @@ def rear_face(shell, rear):
         n = (rear.normal(t, z) + Vector((0, 0.6, 0))).normalized()
         w, h = 0.16, 0.095
         M = V.lamp_rrect(shell, p, n, w, h, 0.03, body=PEARL, bezel=BRASS, lens=CORAL,
-                         depth=0.035, nc=3)
+                         depth=0.035, nc=2)
         # local +x points to world -X here; reverse lamp toward the centre, lens ribs outside
         ix = sx * 0.047
-        slab(shell, 0.034, 0.062, 0.008, 0.010, 0.003, LIGHT, M=M @ T(ix, 0, 0.012), nc=2, ne=1,
+        slab(shell, 0.034, 0.062, 0.008, 0.010, 0.003, LIGHT, M=M @ T(ix, 0, 0.012), nc=1, ne=1,
              cap_bottom=False)
         for k in range(2):
             yk = -0.016 + 0.032 * k
-            slab(shell, 0.072, 0.007, 0.006, 0.0028, 0.0026, CORAL, M=M @ T(-sx * 0.020, yk, 0.013),
-                 nc=1, ne=1, cap_bottom=False)
+            tile(shell, (-sx * 0.020, yk, 0.010), 0.072, 0.008, 0.0045, CORAL, M=M, ch=0.002)
     # blank plate recess between the tail lights
     z = 0.668
     p = rear.point(pi / 2, z)
@@ -213,7 +210,7 @@ def rear_face(shell, rear):
             M=Mp @ T(-0.062, 0.018, 0))
     # tow loop under the rear bumper
     slab(shell, 0.07, 0.05, 0.03, 0.012, 0.008, INK, M=T(0, 1.635, 0.285), nc=1, ne=1)
-    shell.torus(0.026, 0.0075, 14, 6, BRASS, matrix=T(0, 1.672, 0.262) @ V.rot_y(90))
+    shell.torus(0.026, 0.0075, 12, 5, BRASS, matrix=T(0, 1.672, 0.262) @ V.rot_y(90))
 
 
 # ---------------------------------------------------------------------------- body: cabin
@@ -223,7 +220,7 @@ def seat(shell):
     for sx in (-1, 1):
         tile(shell, (sx * 0.12, 0.20, 0.401), 0.03, 0.40, 0.006, METAL)
     # cushion: base, side bolsters, three pleats
-    slab(shell, 0.50, 0.46, 0.08, 0.06, 0.03, TEAL, M=T(0, 0.17, 0.488), nc=3, ne=2)
+    slab(shell, 0.50, 0.46, 0.08, 0.06, 0.03, TEAL, M=T(0, 0.17, 0.488), nc=2, ne=2)
     for sx in (-1, 1):
         shell.rbox(Vector((sx * 0.207, 0.165, 0.540)), (0.086, 0.44, 0.068), 0.032, 2, TEAL)
     for k in (-1, 0, 1):
@@ -231,9 +228,9 @@ def seat(shell):
     # backrest (leans back 12 deg): board, pearl shell, bolsters, five pleats, top roll
     Mb = T(0, 0.435, 0.80) @ rot_x(-12)
     shell.rbox(Vector((0, 0, 0)), (0.50, 0.10, 0.58), 0.04, 2, TEAL, matrix=Mb)
-    shell.rbox(Vector((0, 0.046, 0.005)), (0.52, 0.035, 0.60), 0.016, 2, PEARL, matrix=Mb)
+    shell.rbox(Vector((0, 0.046, 0.005)), (0.52, 0.035, 0.60), 0.016, 1, PEARL, matrix=Mb)
     for sx in (-1, 1):
-        shell.rbox(Vector((sx * 0.21, -0.04, -0.02)), (0.09, 0.09, 0.52), 0.04, 2, TEAL,
+        shell.rbox(Vector((sx * 0.21, -0.04, -0.02)), (0.09, 0.09, 0.52), 0.04, 1, TEAL,
                    matrix=Mb)
     for k in range(5):
         shell.rbox(Vector((0, -0.058, -0.20 + k * 0.092)), (0.32, 0.03, 0.084), 0.013, 1, TEAL,
@@ -245,7 +242,7 @@ def seat(shell):
     for sx in (-1, 1):
         a = Mh @ Vector((sx * 0.07, 0.0, -0.05))
         b = Mh @ Vector((sx * 0.07, 0.0, -0.13))
-        shell.tube([a, b], 0.0075, 8, BRASS, caps='flat')
+        shell.tube([a, b], 0.0075, 6, BRASS, caps='flat')
 
 
 def gauge(part, M, R, needle_deg):
