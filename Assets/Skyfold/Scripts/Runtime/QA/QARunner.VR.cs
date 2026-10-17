@@ -39,11 +39,61 @@ namespace Skyfold
 
         /// <summary>Natural hold in tracking space: hands in front of the chest, handle tilted 35 deg forward,
         /// wrists turned 12 deg inward. Returns the OpenXR grip pose (+Z handle toward the thumb, +Y toward the wrist).</summary>
+        static bool s_SimCanonical;          // probe: a textbook handshake hold (handle vertical, knuckles forward)
+
         static void SimGrip(bool left, out Vector3 pos, out Quaternion rot)
         {
             pos = new Vector3(left ? -0.17f : 0.17f, SimEye - 0.34f, 0.36f);
             var canonical = Quaternion.LookRotation(Vector3.up, Vector3.back); // handle vertical, thumb up, palm across
-            rot = Quaternion.Euler(0f, left ? 12f : -12f, 0f) * Quaternion.Euler(35f, 0f, 0f) * canonical;
+            rot = s_SimCanonical ? canonical : Quaternion.Euler(0f, left ? 12f : -12f, 0f) * Quaternion.Euler(35f, 0f, 0f) * canonical;
+        }
+
+        /// <summary>Where the glove model's fingers, little finger and back of the hand really point, measured from
+        /// the left glove's bracer anchor (local +X toward the fingertips, +Y toward the little finger, -Z out of the
+        /// bracer face), in the glove root's own axes and against the grip pose.</summary>
+        IEnumerator GloveProbe(VRRigController vr, ControllerHints hints)
+        {
+            s_SimCanonical = true;
+            yield return new WaitForSecondsRealtime(0.3f);
+            var anchor = hints.leftAnchor;
+            var glove = anchor.childCount > 0 ? anchor.GetChild(0) : null;
+            var wrist = glove != null ? VRRigController.FindDeep(glove, "ANCHOR_wristui") : null;
+            if (wrist != null)
+            {
+                string V(Vector3 v) => $"({v.x:+0.00;-0.00},{v.y:+0.00;-0.00},{v.z:+0.00;-0.00})";
+                Log("glove_L root axes: fingertips " + V(glove.InverseTransformDirection(wrist.right)) +
+                    ", little finger " + V(glove.InverseTransformDirection(wrist.up)) +
+                    ", out of bracer " + V(glove.InverseTransformDirection(-wrist.forward)) +
+                    ", bracer at " + V(glove.InverseTransformPoint(wrist.position)));
+                Log("glove_L vs grip pose: fingertips " + V(anchor.InverseTransformDirection(wrist.right)) +
+                    ", little finger " + V(anchor.InverseTransformDirection(wrist.up)) +
+                    ", out of bracer " + V(anchor.InverseTransformDirection(-wrist.forward)) +
+                    " (want fingertips (0,-1,0) and little finger (0,0,-1) in grip axes)");
+            }
+            // Photos of both gloves in the handshake hold: from the side, from above and from the front.
+            var go = new GameObject("QA Glove Camera");
+            var cam = go.AddComponent<Camera>();
+            cam.depth = 100f;
+            cam.nearClipPlane = 0.01f;
+            cam.fieldOfView = 50f;
+            Vector3 mid = (hints.leftAnchor.position + hints.rightAnchor.position) * 0.5f;
+            Vector3 fwd = Vector3.ProjectOnPlane(vr.Head.forward, Vector3.up).normalized;
+            Vector3 right = Vector3.Cross(Vector3.up, fwd);
+            var views = new (string name, Vector3 pos)[]
+            {
+                ("vr_00a_gloves_side", hints.rightAnchor.position + right * 0.45f + Vector3.up * 0.05f),
+                ("vr_00b_gloves_top", mid + Vector3.up * 0.6f - fwd * 0.05f),
+                ("vr_00c_gloves_front", mid + fwd * 0.6f + Vector3.up * 0.08f),
+            };
+            foreach (var view in views)
+            {
+                go.transform.position = view.pos;
+                go.transform.rotation = Quaternion.LookRotation(mid - view.pos, view.name.EndsWith("top") ? fwd : Vector3.up);
+                yield return Shot(view.name);
+            }
+            Object.Destroy(go);
+            s_SimCanonical = false;
+            yield return null;
         }
 
         void SimDevices()
@@ -143,6 +193,8 @@ namespace Skyfold
                 Check(glove != null && glove.name.StartsWith("Courier Glove") && Quaternion.Angle(glove.localRotation, Quaternion.Euler(90f, 0f, 0f)) < 0.5f,
                       $"{(left ? "left" : "right")} glove sits on its anchor, handle along the grip pose");
             }
+
+            yield return GloveProbe(vr, hints);
 
             // Look at your hands: both cards, with Grip lit for the grab step.
             yield return SimLook(32f);
