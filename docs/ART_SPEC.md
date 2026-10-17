@@ -49,7 +49,7 @@ Assign these material names in Blender. Viewport colours are only for preview re
 - **Pivots**: road, bridge, quay and building modules sit at the bottom center of their 16 m x 16 m cell footprint (ground = Z 0). Vehicles sit on the ground, centered between the axles. Parts that rotate pivot at their hinge or hub.
 - **Vertex colour AO**: after bevels are applied, add a colour attribute named `Col` holding a soft dirty-vertex-colour / AO bake (white = unoccluded). Unity multiplies albedo by it.
 - **Empties** are named `ANCHOR_*`, `SOCKET_*` or `LIGHT_*` and mark gameplay points. Keep them in the FBX.
-- Smooth shading with sharp edges, or auto-smooth equivalent. No n-gons that break FBX triangulation. Keep tri counts modest: building 1.5–6k, road tile under 800, bridge under 3k, palm under 1.5k, car under 8k, aircraft under 15k, NURI under 6k, prop under 500.
+- Smooth shading with sharp edges, or auto-smooth equivalent. No n-gons that break FBX triangulation. Tri budgets (raised in the detail pass; the laptop renders the demo at roughly 900 fps, so geometry is not the bottleneck, but VR draws every mesh twice: once in the street and once in the 1:160 miniature): building up to 16k (hangar and terminal up to 20k), road and ground tiles under 2k, quays under 4k, bridges under 9k, palm under 4.5k, shrub under 2.5k, prop under 1.5k (street lamp under 2k), Atelier pieces under 12k, courier car under 24k, convoy shuttle under 18k, city car under 12k, aircraft under 40k, power cell under 2.5k, NURI under 16k, each glove under 14k, passenger under 7k. Spend triangles where they read: silhouettes, openings, trims and moving parts, not hidden faces.
 
 ## City grid (for sizing)
 
