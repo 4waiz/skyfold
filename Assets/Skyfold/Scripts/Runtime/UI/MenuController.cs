@@ -213,11 +213,11 @@ namespace Skyfold
         void BuildWordmark(RectTransform root)
         {
             // Soft dark falloff behind the title so the pearl wordmark and gold subtitle read over a bright sky.
-            var backdrop = UIKit.Image(root, "Wordmark Backdrop", new Color(0.03f, 0.08f, 0.1f, 0.34f), UIKit.Glow, false);
+            var backdrop = UIKit.Image(root, "Wordmark Backdrop", new Color(0.03f, 0.08f, 0.1f, 0.46f), UIKit.Glow, false);
             backdrop.rectTransform.anchorMin = backdrop.rectTransform.anchorMax = new Vector2(0f, 1f);
             backdrop.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            backdrop.rectTransform.anchoredPosition = new Vector2(520f, -150f);
-            backdrop.rectTransform.sizeDelta = new Vector2(1500f, 560f);
+            backdrop.rectTransform.anchoredPosition = new Vector2(300f, -110f);
+            backdrop.rectTransform.sizeDelta = new Vector2(1700f, 720f);
 
             var w = UIKit.Rect(root, "Wordmark");
             w.anchorMin = w.anchorMax = new Vector2(0f, 1f);
@@ -239,8 +239,8 @@ namespace Skyfold
             s.gameObject.AddComponent<Shadow>().effectColor = new Color(0.05f, 0.12f, 0.14f, 0.5f);
             // A faint outline keeps the gold subtitle legible against the pale horizon.
             var ring = s.gameObject.AddComponent<Outline>();
-            ring.effectColor = new Color(0.05f, 0.12f, 0.14f, 0.32f);
-            ring.effectDistance = new Vector2(1.6f, -1.6f);
+            ring.effectColor = new Color(0.05f, 0.12f, 0.14f, 0.5f);
+            ring.effectDistance = new Vector2(2f, -2f);
 
             // Credit line on a small dark pill so it stays readable over the bright terrace.
             var footBg = UIKit.Rect(root, "Footer");

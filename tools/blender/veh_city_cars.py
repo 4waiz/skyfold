@@ -22,178 +22,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import chars_common as C
 import veh_common as V
 from veh_common import (PEARL, TEAL, CORAL, LIGHT, INK, RUBBER, BRASS, GLASS, METAL, SAND,
-                        frame, T, sweep, slab, lathe_m, tile)
+                        frame, T, sweep, slab, lathe_m, tile, Shell, poly_path, poly_loop, seam,
+                        window, arches, bumper, mirror_unit, wiper)
 from chars_common import Vector, Matrix, radians, sin, cos, pi
 
 ARGS = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 RENDER = '--no-render' not in ARGS
-
-
-# ---------------------------------------------------------------------------- shared helpers
-class Shell:
-    """Two Pods (lower body + cabin) treated as one surface: picks whichever is outermost."""
-
-    def __init__(self, lower, cabin, z_split):
-        self.lo, self.ca, self.zs = lower, cabin, z_split
-
-    def _pods(self, z):
-        out = []
-        if z <= self.lo.s[-1][0]:
-            out.append(self.lo)
-        if z >= self.ca.s[0][0]:
-            out.append(self.ca)
-        return out or [self.lo]
-
-    def flank(self, y, z, side, off=0.0):
-        best = None
-        for p in self._pods(z):
-            q, n = p.flank(y, z, side)
-            if best is None or abs(q.x) > abs(best[0].x):
-                best = (q, n)
-        return best[0] + best[1] * off, best[1]
-
-    def face(self, x, z, face, off=0.0):
-        best = None
-        for p in self._pods(z):
-            q, n = p.face(x, z, face)
-            if best is None or q.y * face > best[0].y * face:
-                best = (q, n)
-        return best[0] + best[1] * off, best[1]
-
-    def top(self, x, y):
-        a = self.lo.top(x, y)
-        b = self.ca.top(x, y)
-        if a is None:
-            return b
-        if b is None:
-            return a
-        return a if a[0].z > b[0].z else b
-
-
-def poly_path(pts, r=0.04, n=3):
-    """Rounded polyline corners (open path) -> dense 2D points."""
-    out = [pts[0]]
-    for i in range(1, len(pts) - 1):
-        a, b, c = Vector(pts[i - 1]), Vector(pts[i]), Vector(pts[i + 1])
-        d1, d2 = (a - b).normalized(), (c - b).normalized()
-        rr = min(r, (a - b).length * 0.45, (c - b).length * 0.45)
-        p0, p1 = b + d1 * rr, b + d2 * rr
-        for k in range(n + 1):
-            t = k / n
-            q = p0 * (1 - t) ** 2 + b * 2 * t * (1 - t) + p1 * t * t
-            out.append((q.x, q.y))
-    out.append(pts[-1])
-    return out
-
-
-def poly_loop(pts, r=0.05, n=3):
-    """Closed rounded polygon (CCW input) -> dense 2D points."""
-    m = len(pts)
-    out = []
-    for i in range(m):
-        a, b, c = Vector(pts[i - 1]), Vector(pts[i]), Vector(pts[(i + 1) % m])
-        d1, d2 = (a - b).normalized(), (c - b).normalized()
-        rr = min(r, (a - b).length * 0.45, (c - b).length * 0.45)
-        p0, p1 = b + d1 * rr, b + d2 * rr
-        for k in range(n + 1):
-            t = k / n
-            q = p0 * (1 - t) ** 2 + b * 2 * t * (1 - t) + p1 * t * t
-            out.append((q.x, q.y))
-    return out
-
-
-def densify2(pts, step, closed=False):
-    out = []
-    m = len(pts)
-    rng = range(m) if closed else range(m - 1)
-    for i in rng:
-        a, b = Vector(pts[i]), Vector(pts[(i + 1) % m])
-        k = max(1, int((b - a).length / step))
-        for s in range(k):
-            q = a + (b - a) * (s / k)
-            out.append((q.x, q.y))
-    if not closed:
-        out.append(pts[-1])
-    return out
-
-
-def seam(lines, shell, kind, pts2d, closed=False, side=1, width=0.006, step=0.07):
-    """Panel seam: thin ink strip lying 1.5 mm above a surface curve. kind: 'flank'
-    (u=y, v=z), 'back'/'front' (u=x, v=z) or 'top' (u=x, v=y)."""
-    d = densify2(pts2d, step, closed)
-    P, N = [], []
-    for (u, v) in d:
-        if kind == 'flank':
-            p, n = shell.flank(u, v, side)
-        elif kind == 'top':
-            p, n = shell.top(u, v)
-        else:
-            p, n = shell.face(u, v, 1 if kind == 'back' else -1)
-        P.append(p)
-        N.append(n)
-    V.surface_strip(lines, P, N, width, 0.0015, INK, closed=closed)
-
-
-def mapper(shell, kind, side=1, off=0.0):
-    if kind == 'flank':
-        return lambda u, v: shell.flank(u, v, side, off)
-    if kind == 'top':
-        return lambda u, v: shell.top(u, v)
-    f = 1 if kind == 'back' else -1
-    return lambda u, v: shell.face(u, v, f, off)
-
-
-def window(cut, glass, shell, kind, outline, side=1, inset=0.016, depth=0.014):
-    """Recess cutter (ink walls) + glass pane set 5 mm below the body surface."""
-    loop = poly_loop(outline, 0.05, 2)
-    loop = densify2(loop, 0.16, closed=True)
-    loop = V.ccw(loop)
-    m = mapper(shell, kind, side)
-    V.surface_patch(cut, loop, m, depth, 0.03, INK, scales=(1.0, 0.5))
-    cx = sum(p[0] for p in loop) / len(loop)
-    cy = sum(p[1] for p in loop) / len(loop)
-    small = []
-    for (u, v) in loop:
-        du, dv = u - cx, v - cy
-        L = math.hypot(du, dv)
-        k = max(0.0, (L - inset)) / L if L > 1e-9 else 0.0
-        small.append((cx + du * k, cy + dv * k))
-    # glass: thin pane hugging the surface 4-8 mm below it
-    def deform(v, m=m):
-        p, n = m(v.x, v.y)
-        return p + n * (-0.004 if v.z > 0 else -0.008)
-    V.pane(glass, small, 2.0, GLASS, deform=deform, scales=(1.0, 0.5))
-
-
-def arches(cut, axle, track, r_arch, z_hub, x_in=0.47):
-    for sx in (1, -1):
-        for sy in (1, -1):
-            M = T(0, sy * axle, z_hub)
-            p = C.Part()
-            lathe_m(p, [(0.0, x_in), (r_arch, x_in), (r_arch, 1.2), (0.0, 1.2)], 24, INK,
-                    M=M, axis='X')
-            if sx < 0:
-                p.mirror_x()
-            V.part_add(cut, p)
-
-
-def bumper(part, shell, face, z, sec_w, sec_h, mat, strip_mat=RUBBER, span=0.78, n=8,
-           off=0.026):
-    base = -pi / 2 if face < 0 else pi / 2
-    pod = shell.lo
-    ts = [base - span + 2 * span * k / (n - 1) for k in range(n)]
-    pts = [pod.point(t, z, off) for t in ts]
-    a, b = pts[0], pts[-1]
-    ea = a + Vector((-math.copysign(0.025, a.x), -face * 0.06, 0))
-    eb = b + Vector((-math.copysign(0.025, b.x), -face * 0.06, 0))
-    sec = V.section_rrect(sec_w, sec_h, min(sec_w, sec_h) * 0.42, 2)
-    scl = [(0.78, 0.76)] + [(1.0, 1.0)] * len(pts) + [(0.78, 0.76)]
-    sweep(part, [ea] + pts + [eb], sec, mat, up=(0, 0, 1), scales=scl)
-    if strip_mat:
-        st = [(x - sec_w / 2 - 0.002, y) for (x, y) in
-              V.ccw([(0.008, -0.014), (0.008, 0.014), (0.0, 0.018), (-0.008, 0.014),
-                     (-0.008, -0.014), (0.0, -0.018)])]
-        sweep(part, pts[1:-1], st, strip_mat, up=(0, 0, 1))
 
 
 def wheels(root, axle, track, r, width, spokes, hub_mat=PEARL):
@@ -207,25 +41,6 @@ def wheels(root, axle, track, r, width, spokes, hub_mat=PEARL):
         p.transform(p.bm.verts, Matrix.Translation(c))
         out.append(C.merge_to_object(name, [p.to_temp()], pivot=c, parent=root, sharp_deg=40))
     return out
-
-
-def mirror_unit(part, shell, y, z, side, body_mat, reach=0.10):
-    p, n = shell.flank(y, z, side)
-    hc = p + Vector((side * reach, 0.02, 0.03))
-    part.tube([p - Vector((side * 0.01, 0, 0)), hc - Vector((side * 0.03, 0, 0.01))], 0.010, 6,
-              INK, caps='flat')
-    M = frame(hc, (-side * 0.25, 1, 0.05), (0, 0, 1))
-    g = slab(part, 0.085, 0.060, 0.040, 0.024, 0.014, body_mat, M=M, nc=2, ne=1)
-    part.assign(g['top'][-12:], METAL)
-
-
-def wiper(part, shell, x0, x1, z):
-    pts = []
-    for k in range(4):
-        x = x0 + (x1 - x0) * k / 3
-        p, n = shell.face(x, z + 0.012 * k / 3, -1, 0.006)
-        pts.append(p)
-    sweep(part, pts, V.section_rrect(0.010, 0.007, 0.002, 1), INK, up=(0, -0.6, 1))
 
 
 # ---------------------------------------------------------------------------- city_car_a
@@ -245,7 +60,7 @@ def build_a():
     paint = SAND
     lo = V.Pod(LB_A, n=3.6, step=[1, 1, 2, 1, 1, 1, 1])
     ca = V.Pod(CB_A, n=3.2, step=[1, 1, 1, 1, 1, 1, 1])
-    sh = Shell(lo, ca, 0.955)
+    sh = Shell(lo, ca)
     pb, pc = C.Part(), C.Part()
     lo.build(pb, 32, paint, crown=0.010, fill=2, bottom_mat=INK)
     ca.build(pc, 32, paint, bands=[(1.38, 2.0, PEARL)], crown=0.010, fill=2)
@@ -273,8 +88,8 @@ def build_a():
                                        0.02), closed=True, side=-1, step=0.03)
     V.boolean(body, [cut.to_temp(name="cut")])
     for side in (1, -1):
-        seam(lines, sh, 'flank', [(-1.52, 0.715), (1.52, 0.715)], side=side, width=0.022,
-             step=0.10)
+        seam(lines, sh, 'flank', [(-1.50, 0.715), (1.50, 0.715)], side=side, width=0.020,
+             step=0.10, mat=PEARL, lift=0.002)
     # ---- details
     d = C.Part()
     for sx in (1, -1):
@@ -346,7 +161,7 @@ def build_b():
     paint = TEAL
     lo = V.Pod(LB_B, n=4.4, step=[1, 1, 2, 1, 1, 1])
     ca = V.Pod(CB_B, n=4.4, step=[1, 2, 2, 1, 1, 1])
-    sh = Shell(lo, ca, 1.02)
+    sh = Shell(lo, ca)
     pb, pc = C.Part(), C.Part()
     lo.build(pb, 32, paint, bands=[(0.80, 0.86, PEARL)], ribs=[(0.80, 0.86, 0.004)],
              crown=0.008, fill=2, bottom_mat=INK)
@@ -362,8 +177,8 @@ def build_b():
             cab = cab[::-1]
         window(cut, glass, sh, 'flank', cab, side=side)
         # cab door seam, sliding door outline and its rail groove
-        seam(lines, sh, 'flank', poly_path([(-1.20, 1.56), (-1.20, 0.42), (-0.44, 0.42),
-                                            (-0.44, 1.58)], 0.05), side=side)
+        seam(lines, sh, 'flank', poly_path([(-1.00, 1.57), (-1.19, 1.06), (-1.19, 0.42),
+                                            (-0.44, 0.42), (-0.44, 1.58)], 0.05), side=side)
         seam(lines, sh, 'flank', poly_loop([(-0.36, 0.40), (0.62, 0.40), (0.62, 1.58),
                                             (-0.36, 1.58)], 0.05), closed=True, side=side)
         seam(lines, sh, 'flank', [(0.66, 1.42), (1.66, 1.42)], side=side, width=0.010)

@@ -509,6 +509,193 @@ def surface_patch(part, outline, mapfn, d_in, d_out, mat, scales=(1.0, 0.62, 0.2
     return pane(part, outline, 2.0, mat, deform=deform, scales=scales)
 
 
+# ============================================================================ body surfaces
+class Shell:
+    """Several Pods (e.g. lower body + cabin, already unioned) treated as one surface: lookups
+    pick whichever pod is outermost at that height."""
+
+    def __init__(self, *pods):
+        self.pods = pods
+        self.lo = pods[0]
+
+    def _pods(self, z):
+        out = [p for p in self.pods if p.s[0][0] <= z <= p.s[-1][0]]
+        if out:
+            return out
+        return [min(self.pods, key=lambda p: min(abs(z - p.s[0][0]), abs(z - p.s[-1][0])))]
+
+    def flank(self, y, z, side, off=0.0):
+        best = None
+        for p in self._pods(z):
+            q, n = p.flank(y, z, side)
+            if best is None or abs(q.x) > abs(best[0].x):
+                best = (q, n)
+        return best[0] + best[1] * off, best[1]
+
+    def face(self, x, z, face, off=0.0):
+        best = None
+        for p in self._pods(z):
+            q, n = p.face(x, z, face)
+            if best is None or q.y * face > best[0].y * face:
+                best = (q, n)
+        return best[0] + best[1] * off, best[1]
+
+    def top(self, x, y):
+        best = None
+        for p in self.pods:
+            r = p.top(x, y)
+            if r is not None and (best is None or r[0].z > best[0].z):
+                best = r
+        return best
+
+
+def poly_path(pts, r=0.04, n=3):
+    """Rounded polyline corners (open path) -> dense 2D points."""
+    out = [pts[0]]
+    for i in range(1, len(pts) - 1):
+        a, b, c = Vector(pts[i - 1]), Vector(pts[i]), Vector(pts[i + 1])
+        d1, d2 = (a - b).normalized(), (c - b).normalized()
+        rr = min(r, (a - b).length * 0.45, (c - b).length * 0.45)
+        p0, p1 = b + d1 * rr, b + d2 * rr
+        for k in range(n + 1):
+            t = k / n
+            q = p0 * (1 - t) ** 2 + b * 2 * t * (1 - t) + p1 * t * t
+            out.append((q.x, q.y))
+    out.append(pts[-1])
+    return out
+
+
+def poly_loop(pts, r=0.05, n=3):
+    """Closed rounded polygon (CCW input) -> dense 2D points."""
+    m = len(pts)
+    out = []
+    for i in range(m):
+        a, b, c = Vector(pts[i - 1]), Vector(pts[i]), Vector(pts[(i + 1) % m])
+        d1, d2 = (a - b).normalized(), (c - b).normalized()
+        rr = min(r, (a - b).length * 0.45, (c - b).length * 0.45)
+        p0, p1 = b + d1 * rr, b + d2 * rr
+        for k in range(n + 1):
+            t = k / n
+            q = p0 * (1 - t) ** 2 + b * 2 * t * (1 - t) + p1 * t * t
+            out.append((q.x, q.y))
+    return out
+
+
+def densify2(pts, step, closed=False):
+    out = []
+    m = len(pts)
+    rng = range(m) if closed else range(m - 1)
+    for i in rng:
+        a, b = Vector(pts[i]), Vector(pts[(i + 1) % m])
+        k = max(1, int((b - a).length / step))
+        for s in range(k):
+            q = a + (b - a) * (s / k)
+            out.append((q.x, q.y))
+    if not closed:
+        out.append(pts[-1])
+    return out
+
+
+def seam(lines, shell, kind, pts2d, closed=False, side=1, width=0.006, step=0.07, mat=INK,
+         lift=0.0015):
+    """Panel seam: thin ink strip lying 1.5 mm above a surface curve. kind: 'flank'
+    (u=y, v=z), 'back'/'front' (u=x, v=z) or 'top' (u=x, v=y)."""
+    d = densify2(pts2d, step, closed)
+    P, N = [], []
+    for (u, v) in d:
+        if kind == 'flank':
+            p, n = shell.flank(u, v, side)
+        elif kind == 'top':
+            p, n = shell.top(u, v)
+        else:
+            p, n = shell.face(u, v, 1 if kind == 'back' else -1)
+        P.append(p)
+        N.append(n)
+    surface_strip(lines, P, N, width, lift, mat, closed=closed)
+
+
+def mapper(shell, kind, side=1, off=0.0):
+    if kind == 'flank':
+        return lambda u, v: shell.flank(u, v, side, off)
+    if kind == 'top':
+        return lambda u, v: shell.top(u, v)
+    f = 1 if kind == 'back' else -1
+    return lambda u, v: shell.face(u, v, f, off)
+
+
+def window(cut, glass, shell, kind, outline, side=1, inset=0.016, depth=0.014):
+    """Recess cutter (ink walls) + glass pane set 5 mm below the body surface."""
+    loop = poly_loop(outline, 0.05, 2)
+    loop = densify2(loop, 0.16, closed=True)
+    loop = ccw(loop)
+    m = mapper(shell, kind, side)
+    surface_patch(cut, loop, m, depth, 0.03, INK, scales=(1.0, 0.5))
+    cx = sum(p[0] for p in loop) / len(loop)
+    cy = sum(p[1] for p in loop) / len(loop)
+    small = []
+    for (u, v) in loop:
+        du, dv = u - cx, v - cy
+        L = math.hypot(du, dv)
+        k = max(0.0, (L - inset)) / L if L > 1e-9 else 0.0
+        small.append((cx + du * k, cy + dv * k))
+    # glass: thin pane hugging the surface 4-8 mm below it
+    def deform(v, m=m):
+        p, n = m(v.x, v.y)
+        return p + n * (-0.004 if v.z > 0 else -0.008)
+    pane(glass, small, 2.0, GLASS, deform=deform, scales=(1.0, 0.5))
+
+
+def arches(cut, axle, track, r_arch, z_hub, x_in=0.47):
+    for sx in (1, -1):
+        for sy in (1, -1):
+            M = T(0, sy * axle, z_hub)
+            p = C.Part()
+            lathe_m(p, [(0.0, x_in), (r_arch, x_in), (r_arch, 1.2), (0.0, 1.2)], 24, INK,
+                    M=M, axis='X')
+            if sx < 0:
+                p.mirror_x()
+            part_add(cut, p)
+
+
+def bumper(part, shell, face, z, sec_w, sec_h, mat, strip_mat=RUBBER, span=0.78, n=8,
+           off=0.026):
+    base = -pi / 2 if face < 0 else pi / 2
+    pod = shell.lo
+    ts = [base - span + 2 * span * k / (n - 1) for k in range(n)]
+    pts = [pod.point(t, z, off) for t in ts]
+    a, b = pts[0], pts[-1]
+    ea = a + Vector((-math.copysign(0.025, a.x), -face * 0.06, 0))
+    eb = b + Vector((-math.copysign(0.025, b.x), -face * 0.06, 0))
+    sec = section_rrect(sec_w, sec_h, min(sec_w, sec_h) * 0.42, 2)
+    scl = [(0.78, 0.76)] + [(1.0, 1.0)] * len(pts) + [(0.78, 0.76)]
+    sweep(part, [ea] + pts + [eb], sec, mat, up=(0, 0, 1), scales=scl)
+    if strip_mat:
+        st = [(x - sec_w / 2 - 0.002, y) for (x, y) in
+              ccw([(0.008, -0.014), (0.008, 0.014), (0.0, 0.018), (-0.008, 0.014),
+                     (-0.008, -0.014), (0.0, -0.018)])]
+        sweep(part, pts[1:-1], st, strip_mat, up=(0, 0, 1))
+
+
+def mirror_unit(part, shell, y, z, side, body_mat, reach=0.10):
+    p, n = shell.flank(y, z, side)
+    hc = p + Vector((side * reach, 0.02, 0.03))
+    part.tube([p - Vector((side * 0.01, 0, 0)), hc - Vector((side * 0.03, 0, 0.01))], 0.010, 6,
+              INK, caps='flat')
+    M = frame(hc, (-side * 0.25, 1, 0.05), (0, 0, 1))
+    g = slab(part, 0.085, 0.060, 0.040, 0.024, 0.014, body_mat, M=M, nc=2, ne=1)
+    part.assign(g['top'][-12:], METAL)
+
+
+def wiper(part, shell, x0, x1, z):
+    pts = []
+    for k in range(4):
+        x = x0 + (x1 - x0) * k / 3
+        p, n = shell.face(x, z + 0.012 * k / 3, -1, 0.006)
+        pts.append(p)
+    sweep(part, pts, section_rrect(0.010, 0.007, 0.002, 1), INK, up=(0, -0.6, 1))
+
+
+
 # ============================================================================ lamps
 def lamp_round(part, center, normal, R, body=PEARL, bezel=BRASS, refl=METAL, lens=LIGHT,
                gap=INK, segs=20, depth=0.03, up=(0, 0, 1), proud=1.0, rings=1, simple=False):
@@ -760,14 +947,41 @@ class Pod:
         t = math.asin(max(-1.0, min(1.0, s)))
         return t if side > 0 else pi - t
 
+    def corner45(self, z):
+        """(x, dy) of the 45-degree point of the rounded corner at height z."""
+        y0, y1, a = self.section(z)
+        b = (y1 - y0) / 2
+        e = 2.0 / self.n
+        lo, hi = 1e-5, pi / 2 - 1e-5
+        for _ in range(40):
+            t = (lo + hi) / 2
+            x = a * cos(t) ** e
+            y = b * sin(t) ** e
+            nx = (x / a) ** (self.n - 1) / a
+            ny = (y / b) ** (self.n - 1) / b
+            if nx > ny:
+                lo = t
+            else:
+                hi = t
+        t = (lo + hi) / 2
+        return a * cos(t) ** e, b * sin(t) ** e
+
     def flank(self, y, z, side, off=0.0):
-        """(point, normal) on the +X (side=1) / -X flank at (y, z)."""
+        """(point, normal) on the +X (side=1) / -X flank at (y, z); y is clamped to the flank
+        (never wraps round the corner onto the front or back)."""
+        y0, y1, a = self.section(z)
+        cy = (y0 + y1) / 2
+        dy = self.corner45(z)[1] * 1.12
+        y = max(cy - dy, min(cy + dy, y))
         t = self.t_of_y(y, z, side)
         n = self.normal(t, z)
         return self.point(t, z) + n * off, n
 
     def face(self, x, z, face, off=0.0):
-        """(point, normal) on the front (face=-1) / back (face=1) at (x, z)."""
+        """(point, normal) on the front (face=-1) / back (face=1) at (x, z); x is clamped to
+        the face region."""
+        dx = self.corner45(z)[0] * 1.12
+        x = max(self.x0 - dx, min(self.x0 + dx, x))
         t = self.t_of_x(x, z, face)
         n = self.normal(t, z)
         return self.point(t, z) + n * off, n
