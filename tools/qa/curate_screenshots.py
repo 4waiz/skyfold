@@ -22,6 +22,7 @@ PICKS = [
     ("fullcampaign/e3_05_takeoff.png", "08_takeoff.jpg"),
     ("episode1east/e1_07_results.png", "09_results.jpg"),
     ("menus/menu_controls.png", "10_controls.jpg"),
+    ("menus/menu_audio_focus.png", "11_audio_settings.jpg"),
 ]
 
 

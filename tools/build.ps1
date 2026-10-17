@@ -4,7 +4,9 @@
 #   powershell -NoProfile -ExecutionPolicy Bypass -File tools\build.ps1                 # build only
 #   powershell -NoProfile -ExecutionPolicy Bypass -File tools\build.ps1 -QA smoke demo   # build + QA
 #   powershell -NoProfile -ExecutionPolicy Bypass -File tools\build.ps1 -Package         # build + package
-param([string[]]$QA = @(), [switch]$Package, [switch]$Dev)
+param([string[]]$QA = @(), [switch]$Package, [switch]$Dev, [Parameter(ValueFromRemainingArguments = $true)][string[]]$MoreQA = @())
+# With -File, "-QA smoke demo" binds only "smoke" to -QA; the rest arrive in $MoreQA. Commas work too.
+$QA = @(@($QA) + @($MoreQA) | ForEach-Object { $_ -split '[,\s]+' } | Where-Object { $_ })
 $ErrorActionPreference = "Stop"
 
 $root = Split-Path -Parent $PSScriptRoot
