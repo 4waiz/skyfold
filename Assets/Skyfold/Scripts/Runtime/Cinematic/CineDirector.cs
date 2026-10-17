@@ -175,6 +175,19 @@ namespace Skyfold
             m_Dof.aperture.Override(2.8f);
             m_Dof.focalLength.Override(50f);
             m_DofVolume.sharedProfile = profile;
+            // Lens look for every shot: a soft bloom on emissive lights and a light vignette.
+            var lens = new GameObject("Cine Lens").AddComponent<Volume>();
+            lens.isGlobal = true;
+            lens.priority = 90f;
+            var lensProfile = ScriptableObject.CreateInstance<VolumeProfile>();
+            var bloom = lensProfile.Add<Bloom>(true);
+            bloom.threshold.Override(1.25f);
+            bloom.intensity.Override(0.55f);
+            bloom.scatter.Override(0.68f);
+            var vignette = lensProfile.Add<Vignette>(true);
+            vignette.intensity.Override(0.2f);
+            vignette.smoothness.Override(0.45f);
+            lens.sharedProfile = lensProfile;
             Log($"camera ready {m_W}x{m_H} -> {m_OutW}x{m_OutH}");
         }
 
@@ -815,14 +828,14 @@ namespace Skyfold
                     foreach (var r in g.lenses)
                     {
                         if (r == null) continue;
-                        float age = since - (r.transform.position.x - 22f) / 95f;
+                        float age = since - (r.transform.position.x - 22f) / 60f;
                         SetBeaconLens(r, age >= 0f, age >= 0f ? 1f + 1.6f * Mathf.Exp(-age * 7f) : 1f);
                     }
-                    foreach (var l in g.lights) if (l != null) l.enabled = since >= (l.transform.position.x - 22f) / 95f;
+                    foreach (var l in g.lights) if (l != null) l.enabled = since >= (l.transform.position.x - 22f) / 60f;
                 }
-                // Low along the north beacon row, the sea on the left.
-                Vector3 pos = Lerp3(new Vector3(19.5f, 0.32f, F(143.5f, 143.2f)), new Vector3(21f, 0.36f, F(143.4f, 143.1f)), Smooth(t));
-                Pose(pos, new Vector3(170f, 0.35f, F(142f, 142.3f)), F(18f, 30f));
+                // Raised over the west end of the runway: both beacon rows race away to the vanishing point.
+                Vector3 pos = Lerp3(new Vector3(13.5f, F(5.6f, 6.4f), 136f), new Vector3(17.5f, F(5.1f, 5.9f), 136f), Smooth(t));
+                Pose(pos, new Vector3(120f, 0f, 136f), F(34f, 54f));
             });
         }
 

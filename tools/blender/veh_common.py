@@ -84,13 +84,17 @@ def pane(part, outline, thick, mat, M=None, deform=None, scales=(1.0, 0.66, 0.33
     """Closed thin pane (glass, screens): concentric scaled copies of the CCW 2D `outline` on
     both faces joined by a rim band. deform(Vector) -> Vector is applied to every vertex."""
     M = M or Matrix.Identity(4)
+    cx = sum(p[0] for p in outline) / len(outline)
+    cy = sum(p[1] for p in outline) / len(outline)
     rings = []
     for s in reversed(scales):
-        rings.append([M @ Vector((x * s, y * s, -thick / 2)) for (x, y) in outline])
+        rings.append([M @ Vector((cx + (x - cx) * s, cy + (y - cy) * s, -thick / 2))
+                      for (x, y) in outline])
     for s in scales:
-        rings.append([M @ Vector((x * s, y * s, thick / 2)) for (x, y) in outline])
-    c0 = M @ Vector((0, 0, -thick / 2))
-    c1 = M @ Vector((0, 0, thick / 2))
+        rings.append([M @ Vector((cx + (x - cx) * s, cy + (y - cy) * s, thick / 2))
+                      for (x, y) in outline])
+    c0 = M @ Vector((cx, cy, -thick / 2))
+    c1 = M @ Vector((cx, cy, thick / 2))
     vr, fs = part.grid(rings, mat, True, c0, c1)
     if rim_mat:
         k = (len(scales) - 1) * len(outline)
@@ -406,10 +410,6 @@ def boolean(obj, cutters, op='DIFFERENCE', solver='EXACT', use_self=False):
     md.material_mode = 'TRANSFER'
     if solver == 'EXACT':
         md.use_self = use_self
-    tri = obj.modifiers.new("Tri", 'TRIANGULATE')
-    tri.min_vertices = 5
-    tri.quad_method = 'BEAUTY'
-    tri.ngon_method = 'BEAUTY'
     C.apply_modifiers(obj)
     for c in cutters:
         me = c.data
@@ -417,7 +417,58 @@ def boolean(obj, cutters, op='DIFFERENCE', solver='EXACT', use_self=False):
         if me.users == 0:
             bpy.data.meshes.remove(me)
     bpy.data.collections.remove(coll)
+    # clean slivers: merge near-coincident verts, dissolve zero-area faces, re-triangulate
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=2e-5)
+    bmesh.ops.dissolve_degenerate(bm, dist=2e-5, edges=bm.edges)
+    ng = [f for f in bm.faces if len(f.verts) > 4]
+    if ng:
+        bmesh.ops.triangulate(bm, faces=ng, quad_method='BEAUTY', ngon_method='BEAUTY')
+    bad = [f for f in bm.faces if f.calc_area() < 1e-9]
+    if bad:
+        bmesh.ops.delete(bm, geom=bad, context='FACES')
+    bm.to_mesh(obj.data)
+    bm.free()
     return obj
+
+
+def surface_strip(part, pts, normals, width, lift, mat, closed=False):
+    """Flat strip lying `lift` above a surface curve (2 tris per segment): cheap panel seam
+    lines and pinstripes. Faces point along the surface normal."""
+    P = [Vector(p) for p in pts]
+    N = [Vector(n).normalized() for n in normals]
+    n = len(P)
+    bm = part.bm
+    left, right = [], []
+    for i in range(n):
+        if closed:
+            t = P[(i + 1) % n] - P[(i - 1) % n]
+        elif i == 0:
+            t = P[1] - P[0]
+        elif i == n - 1:
+            t = P[-1] - P[-2]
+        else:
+            t = P[i + 1] - P[i - 1]
+        t.normalize()
+        s = N[i].cross(t).normalized()
+        q = P[i] + N[i] * lift
+        left.append(bm.verts.new(q + s * (width / 2)))
+        right.append(bm.verts.new(q - s * (width / 2)))
+    fs = []
+    m = n if closed else n - 1
+    for i in range(m):
+        j = (i + 1) % n
+        f = bm.faces.new((right[i], right[j], left[j], left[i]))
+        fs.append(f)
+    for f in fs:
+        f.normal_update()
+    # orient along the surface normal
+    for f, i in zip(fs, range(m)):
+        if f.normal.dot(N[i]) < 0:
+            f.normal_flip()
+    part.assign(fs, mat)
+    return fs
 
 
 def ribbon(part, pts, normals, width, d_in, d_out, mat, closed=False):
@@ -728,36 +779,40 @@ class Pod:
             return False
         return abs((x - self.x0) / a) ** self.n + abs((y - cy) / b) ** self.n <= 1.0
 
-    def top(self, x, y, crown=0.0):
-        """(point, normal) on the upper surface above (x, y) (binary search over z)."""
-        z0, z1 = self.s[0][0], self.s[-1][0]
-        if not self.inside(x, y, z0):
+    def _ztop(self, x, y):
+        S = self.s
+        idx = None
+        for i in range(len(S) - 1, -1, -1):
+            if self.inside(x, y, S[i][0]):
+                idx = i
+                break
+        if idx is None:
             return None
-        if self.inside(x, y, z1):
-            y0, y1, a = self.section(z1)
+        if idx == len(S) - 1:
+            y0, y1, a = self.section(S[-1][0])
             cy, b = (y0 + y1) / 2, (y1 - y0) / 2
             r = (abs((x - self.x0) / a) ** self.n + abs((y - cy) / b) ** self.n) ** (1 / self.n)
-            return Vector((x, y, z1 + crown * (1 - r * r))), Vector((0, 0, 1))
-        lo, hi = z0, z1
-        for _ in range(30):
+            return S[-1][0] + getattr(self, 'crown', 0.0) * max(0.0, 1 - r * r)
+        lo, hi = S[idx][0], S[idx + 1][0]
+        for _ in range(28):
             m = (lo + hi) / 2
             if self.inside(x, y, m):
                 lo = m
             else:
                 hi = m
-        z = (lo + hi) / 2
+        return (lo + hi) / 2
+
+    def top(self, x, y):
+        """(point, normal) on the upper surface above (x, y), or None outside the plan."""
+        z = self._ztop(x, y)
+        if z is None:
+            return None
         e = 0.004
-        def h(xx, yy):
-            l2, h2 = z0, z1
-            for _ in range(24):
-                m = (l2 + h2) / 2
-                if self.inside(xx, yy, m):
-                    l2 = m
-                else:
-                    h2 = m
-            return (l2 + h2) / 2
-        gx = (h(x + e, y) - h(x - e, y)) / (2 * e)
-        gy = (h(x, y + e) - h(x, y - e)) / (2 * e)
+        zs = [self._ztop(x + e, y), self._ztop(x - e, y), self._ztop(x, y + e),
+              self._ztop(x, y - e)]
+        zs = [z if q is None else q for q in zs]
+        gx = (zs[0] - zs[1]) / (2 * e)
+        gy = (zs[2] - zs[3]) / (2 * e)
         return Vector((x, y, z)), Vector((-gx, -gy, 1)).normalized()
 
     # -- mesh ------------------------------------------------------------------------
@@ -765,6 +820,7 @@ class Pod:
               fill=3, cap_bottom=True, phase=0.0, ribs=(), bottom_mat=None):
         """grooves: [(z, depth, half_width)] V-grooves; ribs: [(z0, z1, height)] raised bands
         with steep edges; bands: [(z0, z1, mat)] material by band mid height."""
+        self.crown = crown
         zs = [(sl[0], 0.0) for sl in self.s]
         for (zg, dep, hw) in grooves:
             zs = [(z, i) for (z, i) in zs if abs(z - zg) > hw * 1.6]
@@ -812,6 +868,12 @@ class Pod:
         if cap_bottom and bottom_mat:
             k = (len(rings) - 1) * nu
             part.assign(fs[k:k + nu], bottom_mat)
+        # the top fan takes whatever band covers the top height
+        ktop = (len(rings) - 1) * nu + (nu if cap_bottom else 0)
+        zt = ztop + crown
+        for (z0, z1, bm_) in bands:
+            if z0 <= zt <= z1:
+                part.assign(fs[ktop:ktop + nu], bm_)
         self.faces = fs
         self.nu = nu
         self.ring_z = zall

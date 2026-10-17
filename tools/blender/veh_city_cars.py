@@ -318,7 +318,7 @@ def build_a():
             [METAL, METAL, INK], M=frame(ex, (0, 1, -0.05)))
     for (a, b) in ((0.48, -0.02), (-0.04, -0.54)):
         wiper(d, sh, a, b, 1.02)
-    temps = [body, d.to_temp(), glass.to_temp(recalc=False)]
+    temps = [body, d.to_temp(), glass.to_temp()]
     bodyob = C.merge_to_object("Body", temps, pivot=(0, 0, 0), parent=root, sharp_deg=50)
     ws = wheels(root, axle, track, r, 0.21, 6)
     C.bake_ao([bodyob] + ws, dist=0.35, samples=40, floor=0.38, ground_z=0.0)
@@ -426,7 +426,7 @@ def build_b():
             [METAL, METAL, INK], M=frame(ex, (0, 1, -0.05)))
     for (a, b) in ((0.55, -0.02), (-0.05, -0.60)):
         wiper(d, sh, a, b, 1.12)
-    temps = [body, d.to_temp(), glass.to_temp(recalc=False)]
+    temps = [body, d.to_temp(), glass.to_temp()]
     bodyob = C.merge_to_object("Body", temps, pivot=(0, 0, 0), parent=root, sharp_deg=50)
     ws = wheels(root, axle, track, r, 0.21, 5, hub_mat=PEARL)
     C.bake_ao([bodyob] + ws, dist=0.35, samples=40, floor=0.38, ground_z=0.0)
