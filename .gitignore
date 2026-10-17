@@ -56,3 +56,15 @@ desktop.ini
 # Transient files the Performance Testing package writes during a player build
 /Assets/Resources/
 /Assets/Resources.meta
+
+# Trailer production (/brag): plans, briefs, compositions and copy are tracked; media is not
+/brag-output/**/*.mp4
+/brag-output/**/*.wav
+/brag-output/**/*.mp3
+/brag-output/**/*.ogg
+/brag-output/**/*.jpg
+/brag-output/**/*.png
+/brag-output/**/*.ttf
+/brag-output/**/node_modules/
+/brag-output/**/.hyperframes/
+/brag-output/footage/

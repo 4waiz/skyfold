@@ -62,6 +62,7 @@ CREDITS AND LICENCES
 Design, code and direction: Awaiz Ahmed / Team Kanban.
 All 3D models, music, ambience and most sound effects are original, made by scripts for this game.
 Noor's voice lines are AI-generated with the open Kokoro TTS model (stock voice, no voice cloning).
+Noor's radio portrait (the subtitle badge) is AI-generated with ChatGPT image generation.
 Some sound effects layer CC0 Kenney.nl recordings. Fonts: Unbounded and Atkinson Hyperlegible
 (SIL Open Font License). Built with Unity.
 Details: docs\ASSET_MANIFEST.md and the licenses folder.

@@ -45,6 +45,14 @@ What they cannot do: judge fun, feel or readability, listen to the audio, or tes
 
 The older `campaign` scenario (Episode 1 unlocks Episode 2 and saves the route) passed 27/27 on an earlier build. `fullcampaign` now covers the same checks.
 
+**Rebuild for the ChatGPT images (later on 2026-10-17).** The release was rebuilt after Noor's ChatGPT portrait badge and the new credits line went in. Results:
+- Validation: 0 problems, including a new check that the HUD has the badge sprite.
+- Release build: 178 MB, 0 errors, the same 4 warnings.
+- QA: `smoke` 5/5, `menus` 14/14.
+- Evidence: `qa\_captures\smoke\02_atelier.png` shows the portrait in the subtitle badge beside Noor's first line, and `qa\_captures\menus\menu_credits.png` shows the credits.
+
+The other scenarios in the table ran on the build before this change and were not re-run. The change only swaps the badge sprite and the credits text.
+
 ## Launch tests through the real shortcuts
 
 Run with `tools\qa\launch_test.ps1` on the packaged folder `Release\SKYFOLD\`, fullscreen at 2560×1600. Each test captures only the game window and reads the log.
@@ -75,7 +83,7 @@ Run with `tools\qa\launch_test.ps1` on the packaged folder `Release\SKYFOLD\`, f
 | Storm timer, failure, retry from checkpoint | PASSED | fail |
 | Medals computed from the run (time left, rejections, hints, route) | PASSED | Gold (east), Silver (west) |
 | Campaign progress and unlocks; demo progress kept separate; F5 operator reset | PASSED | fullcampaign, demo, walk |
-| Subtitles with speaker badge; key hints | PASSED (screenshots) | `docs\screenshots\` |
+| Subtitles with speaker badge (Noor's portrait); key hints | PASSED (screenshots) | `docs\screenshots\`, `qa\_captures\smoke\02_atelier.png` |
 | Audio actually audible and mixed well | **NOT TESTED** (nobody listened; the validator confirms 125 clips load) | |
 | Feel of mouse sensitivity and driving handling for a human | **NOT TESTED** | |
 
@@ -131,6 +139,5 @@ VR through Link renders two eyes at a much higher resolution (Quest 3 default is
 
 - **No headset testing.** Everything in the VR table needs the checklist run on a real Quest 3.
 - **Bot coverage, not human coverage.** The bots prove the flows work; they do not prove the game is fun or comfortable.
-- **ChatGPT images not made.** Claude in Chrome was not connected, so there is no key art and no portrait. Noor's badge uses a drawn radio glyph.
 - **Episode 1's storm timer mostly waits.** With Full tutorial guidance, most of Episode 1 holds the timer, so its medal mostly reflects the route and placements. This is intentional.
 - **Build warnings.** 4 warnings, all deprecation notices from Unity / TextMesh Pro package shaders.
