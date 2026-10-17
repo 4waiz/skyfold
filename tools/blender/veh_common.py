@@ -387,6 +387,77 @@ def bevel_edges_of(part, faces, width, segs=1):
                         profile=0.5, affect='EDGES', clamp_overlap=True)
 
 
+# ============================================================================ booleans
+def boolean(obj, cutters, op='DIFFERENCE', solver='EXACT', use_self=False):
+    """Apply one exact boolean between `obj` and the cutter objects (consumed). New faces take
+    the cutter's material (material_mode TRANSFER), so ink cutters make ink arch liners,
+    recess walls and seams. Result is re-triangulated (no n-gons)."""
+    coll = bpy.data.collections.new("cutters_tmp")
+    bpy.context.scene.collection.children.link(coll)
+    for c in cutters:
+        for uc in list(c.users_collection):
+            uc.objects.unlink(c)
+        coll.objects.link(c)
+    md = obj.modifiers.new("Bool", 'BOOLEAN')
+    md.operation = op
+    md.operand_type = 'COLLECTION'
+    md.collection = coll
+    md.solver = solver
+    md.material_mode = 'TRANSFER'
+    if solver == 'EXACT':
+        md.use_self = use_self
+    tri = obj.modifiers.new("Tri", 'TRIANGULATE')
+    tri.min_vertices = 5
+    tri.quad_method = 'BEAUTY'
+    tri.ngon_method = 'BEAUTY'
+    C.apply_modifiers(obj)
+    for c in cutters:
+        me = c.data
+        bpy.data.objects.remove(c)
+        if me.users == 0:
+            bpy.data.meshes.remove(me)
+    bpy.data.collections.remove(coll)
+    return obj
+
+
+def ribbon(part, pts, normals, width, d_in, d_out, mat, closed=False):
+    """Thin closed solid along a surface curve: width across the curve (tangent plane), from
+    d_in below to d_out above the surface along each point's normal. Use as a boolean seam
+    cutter (or, with d_in = 0, as a raised strip)."""
+    P = [Vector(p) for p in pts]
+    N = [Vector(n).normalized() for n in normals]
+    n = len(P)
+    rings = []
+    for i in range(n):
+        if closed:
+            t = P[(i + 1) % n] - P[(i - 1) % n]
+        elif i == 0:
+            t = P[1] - P[0]
+        elif i == n - 1:
+            t = P[-1] - P[-2]
+        else:
+            t = P[i + 1] - P[i - 1]
+        t.normalize()
+        s = t.cross(N[i]).normalized()
+        rings.append([P[i] + s * (width / 2) - N[i] * d_in, P[i] + s * (width / 2) + N[i] * d_out,
+                      P[i] - s * (width / 2) + N[i] * d_out, P[i] - s * (width / 2) - N[i] * d_in])
+    if closed:
+        return part.grid(rings, mat, True, closed_v=True)
+    c0 = sum(rings[0], Vector()) / 4
+    c1 = sum(rings[-1], Vector()) / 4
+    return part.grid(rings, mat, True, c0, c1)
+
+
+def surface_patch(part, outline, mapfn, d_in, d_out, mat, scales=(1.0, 0.62, 0.25)):
+    """Closed solid hugging a surface over a 2D outline (CCW in (u, v)): mapfn(u, v) ->
+    (point, normal). Back face d_in below, front face d_out above the surface. Boolean recess
+    cutter (windows, grilles, lamp pockets) or, with negative values, an inset panel."""
+    def deform(v):
+        p, n = mapfn(v.x, v.y)
+        return p + n * (d_out if v.z > 0 else -d_in)
+    return pane(part, outline, 2.0, mat, deform=deform, scales=scales)
+
+
 # ============================================================================ lamps
 def lamp_round(part, center, normal, R, body=PEARL, bezel=BRASS, refl=METAL, lens=LIGHT,
                gap=INK, segs=20, depth=0.03, up=(0, 0, 1), proud=1.0, rings=1, simple=False):
@@ -637,6 +708,57 @@ class Pod:
         s = math.copysign(abs(u) ** (self.n / 2), u)
         t = math.asin(max(-1.0, min(1.0, s)))
         return t if side > 0 else pi - t
+
+    def flank(self, y, z, side, off=0.0):
+        """(point, normal) on the +X (side=1) / -X flank at (y, z)."""
+        t = self.t_of_y(y, z, side)
+        n = self.normal(t, z)
+        return self.point(t, z) + n * off, n
+
+    def face(self, x, z, face, off=0.0):
+        """(point, normal) on the front (face=-1) / back (face=1) at (x, z)."""
+        t = self.t_of_x(x, z, face)
+        n = self.normal(t, z)
+        return self.point(t, z) + n * off, n
+
+    def inside(self, x, y, z):
+        y0, y1, a = self.section(z)
+        cy, b = (y0 + y1) / 2, (y1 - y0) / 2
+        if a <= 0 or b <= 0:
+            return False
+        return abs((x - self.x0) / a) ** self.n + abs((y - cy) / b) ** self.n <= 1.0
+
+    def top(self, x, y, crown=0.0):
+        """(point, normal) on the upper surface above (x, y) (binary search over z)."""
+        z0, z1 = self.s[0][0], self.s[-1][0]
+        if not self.inside(x, y, z0):
+            return None
+        if self.inside(x, y, z1):
+            y0, y1, a = self.section(z1)
+            cy, b = (y0 + y1) / 2, (y1 - y0) / 2
+            r = (abs((x - self.x0) / a) ** self.n + abs((y - cy) / b) ** self.n) ** (1 / self.n)
+            return Vector((x, y, z1 + crown * (1 - r * r))), Vector((0, 0, 1))
+        lo, hi = z0, z1
+        for _ in range(30):
+            m = (lo + hi) / 2
+            if self.inside(x, y, m):
+                lo = m
+            else:
+                hi = m
+        z = (lo + hi) / 2
+        e = 0.004
+        def h(xx, yy):
+            l2, h2 = z0, z1
+            for _ in range(24):
+                m = (l2 + h2) / 2
+                if self.inside(xx, yy, m):
+                    l2 = m
+                else:
+                    h2 = m
+            return (l2 + h2) / 2
+        gx = (h(x + e, y) - h(x - e, y)) / (2 * e)
+        gy = (h(x, y + e) - h(x, y - e)) / (2 * e)
+        return Vector((x, y, z)), Vector((-gx, -gy, 1)).normalized()
 
     # -- mesh ------------------------------------------------------------------------
     def build(self, part, nu, mat, grooves=(), bands=(), groove_mat=INK, crown=0.006,

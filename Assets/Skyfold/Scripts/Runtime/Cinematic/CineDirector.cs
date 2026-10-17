@@ -776,8 +776,9 @@ namespace Skyfold
             yield return Record("B7", 4f, 3.5f, t =>
             {
                 if (!powered && t >= 0.25f) { powered = true; PowerUp(); }
-                Vector3 pos = Lerp3(new Vector3(F(108f, 112f), F(1.4f, 1.6f), F(131f, 133f)), new Vector3(F(106.5f, 110.5f), F(1.55f, 1.75f), F(130.6f, 132.5f)), Smooth(t));
-                Pose(pos, new Vector3(88f, 2f, 121.5f), F(42f, 62f));
+                // From the runway, off the aircraft's front-right (it faces west), lit by the low sun behind.
+                Vector3 pos = Lerp3(new Vector3(73f, 1.7f, F(131.5f, 132.5f)), new Vector3(74.5f, 1.85f, F(131.2f, 132.2f)), Smooth(t));
+                Pose(pos, new Vector3(88.5f, 2.1f, 121.2f), F(40f, 60f));
             });
             Log("B7 aircraft state: " + AircraftSequence.Instance.State);
         }
@@ -819,8 +820,9 @@ namespace Skyfold
                     }
                     foreach (var l in g.lights) if (l != null) l.enabled = since >= (l.transform.position.x - 22f) / 95f;
                 }
-                Vector3 pos = Lerp3(new Vector3(19.5f, 0.32f, F(128.3f, 128.6f)), new Vector3(21f, 0.36f, F(128.4f, 128.7f)), Smooth(t));
-                Pose(pos, new Vector3(170f, 0.35f, F(129.9f, 129.7f)), F(18f, 30f));
+                // Low along the north beacon row, the sea on the left.
+                Vector3 pos = Lerp3(new Vector3(19.5f, 0.32f, F(143.5f, 143.2f)), new Vector3(21f, 0.36f, F(143.4f, 143.1f)), Smooth(t));
+                Pose(pos, new Vector3(170f, 0.35f, F(142f, 142.3f)), F(18f, 30f));
             });
         }
 
