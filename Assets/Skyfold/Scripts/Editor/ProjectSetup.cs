@@ -64,7 +64,7 @@ namespace Skyfold.EditorTools
         {
             PlayerSettings.companyName = "Team Kanban";
             PlayerSettings.productName = "SKYFOLD";
-            PlayerSettings.bundleVersion = "0.9.0";
+            PlayerSettings.bundleVersion = "0.9.1";
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Standalone, "com.teamkanban.skyfold");
             PlayerSettings.colorSpace = ColorSpace.Linear;
 
