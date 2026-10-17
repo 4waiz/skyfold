@@ -16,6 +16,10 @@ namespace Skyfold
         public static readonly Color Gold = Hex("#D9A441");
         public static readonly Color Ink = Hex("#22333B");
         public static readonly Color InkSoft = Hex("#4A5A61");
+        /// <summary>Unfilled slider rail and switch-off track: a shade darker than a row so it reads as inset.</summary>
+        public static readonly Color Rail = Hex("#D3C8B4");
+        /// <summary>Slider and switch knobs: warm white so they stand off both pearl and teal rows.</summary>
+        public static readonly Color Knob = Hex("#FFFCF6");
         public static readonly Color Shadow = new Color(0.05f, 0.1f, 0.12f, 0.28f);
         public static readonly Color PanelGlass = new Color(0.96f, 0.94f, 0.9f, 0.96f);
         public static readonly Color Scrim = new Color(0.07f, 0.12f, 0.14f, 0.45f);
