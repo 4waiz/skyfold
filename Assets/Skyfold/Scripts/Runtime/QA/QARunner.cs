@@ -446,6 +446,7 @@ namespace Skyfold
             yield return new WaitForSecondsRealtime(6f);
             yield return Shot("d_04_taxi");
             yield return WaitUntil(() => AircraftSequence.Instance.State == AircraftState.Climb, 40f, "takeoff roll to climb");
+            Check(AircraftSequence.Instance.MaxRollOffset < 1.5f, $"the takeoff roll stays on the runway centreline (max {AircraftSequence.Instance.MaxRollOffset:0.0} m off)");
             yield return Shot("d_05_takeoff");
             yield return WaitUntil(() => MD.State == MissionState.Results, 60f, "demo results");
             yield return Shot("d_06_results");
@@ -629,6 +630,8 @@ namespace Skyfold
             yield return WaitUntil(() => AircraftSequence.Instance.State >= AircraftState.TakeoffRoll, 45f, "taxi to the runway");
             yield return new WaitForSecondsRealtime(2.5f);
             yield return Shot("e3_05_takeoff");
+            yield return WaitUntil(() => AircraftSequence.Instance.State >= AircraftState.Climb, 40f, "episode 3 takeoff roll to climb");
+            Check(AircraftSequence.Instance.MaxRollOffset < 1.5f, $"episode 3 takeoff roll stays on the runway centreline (max {AircraftSequence.Instance.MaxRollOffset:0.0} m off)");
             yield return WaitUntil(() => MD.State == MissionState.Results, 60f, "episode 3 results");
             yield return new WaitForSecondsRealtime(1.5f);
             yield return Shot("e3_06_results");

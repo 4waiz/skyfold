@@ -21,6 +21,8 @@ namespace Skyfold
         public List<Transform> passengers = new List<Transform>();
 
         public AircraftState State { get; private set; } = AircraftState.Dark;
+        /// <summary>Largest sideways distance from the runway centreline once the roll is under way (QA).</summary>
+        public float MaxRollOffset { get; private set; }
         public bool RequireBeacons = true;
         public bool RequireConvoy = true;
 
@@ -28,6 +30,7 @@ namespace Skyfold
         readonly List<Vector3> m_Path = new List<Vector3>();
         int m_PathIndex;
         float m_Speed;
+        bool m_LinedUp;
         float m_PropSpeed;
         float m_DoorAngle;
         Quaternion m_DoorBase;
@@ -122,6 +125,7 @@ namespace Skyfold
             m_Pitch = m_Bank = 0f;
             m_Speed = 0f;
             m_PropSpeed = 0f;
+            MaxRollOffset = 0f;
             m_DoorAngle = 0f;
             m_BoardTimer = 0f;
             gameObject.SetActive(true);
@@ -145,7 +149,13 @@ namespace Skyfold
                 AudioDirector.Instance?.PlayAt("plane_spoolup", transform.position, 1f, 1f, 15f);
                 AudioDirector.Instance?.SetMusic("music_finale", 1.5f);
             }
-            if (s == AircraftState.TakeoffRoll) { AudioDirector.Instance?.PlayAt("plane_takeoff", transform.position, 1f, 1f, 25f); BeginDesktopCinematic(); }
+            if (s == AircraftState.TakeoffRoll)
+            {
+                m_LinedUp = false;
+                MaxRollOffset = 0f;
+                AudioDirector.Instance?.PlayAt("plane_takeoff", transform.position, 1f, 1f, 25f);
+                BeginDesktopCinematic();
+            }
             if (s == AircraftState.Departed) { Debug.Log("[SKYFOLD] The last flight has departed."); EndDesktopCinematic(); }
         }
 
@@ -247,10 +257,23 @@ namespace Skyfold
 
         void Roll(float dt)
         {
-            m_Speed = Mathf.MoveTowards(m_Speed, 42f, dt * 7.5f);
-            Quaternion want = m_RunwayStart.Rotation;
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, want, 30f * dt);
+            // Line up, then power up. The plane reaches the runway on a diagonal from the taxiway; turning onto
+            // the heading while already accelerating carried it ~8 m sideways onto the seaward quay. Now it
+            // steers at a point on the centreline ahead (pure pursuit) and holds taxi speed until it is aligned.
+            Vector3 axis = m_RunwayStart.Forward;
+            Vector3 origin = m_RunwayStart.Position;
+            Vector3 pos = transform.position;
+            float along = Vector3.Dot(pos - origin, axis);
+            Vector3 side = pos - (origin + axis * along);
+            side.y = 0f;
+            Vector3 to = origin + axis * (along + Mathf.Max(16f, m_Speed * 1.5f)) - pos;
+            to.y = 0f;
+            Quaternion want = to.sqrMagnitude > 0.01f ? Quaternion.LookRotation(to.normalized, Vector3.up) : m_RunwayStart.Rotation;
+            if (!m_LinedUp && Quaternion.Angle(transform.rotation, want) < 8f) m_LinedUp = true;
+            m_Speed = Mathf.MoveTowards(m_Speed, m_LinedUp ? 42f : 4f, dt * 7.5f);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, want, 45f * dt);
             transform.position += transform.forward * m_Speed * dt;
+            if (m_Speed > 10f) MaxRollOffset = Mathf.Max(MaxRollOffset, side.magnitude);
             if (transform.position.x >= m_Liftoff.Position.x) SetState(AircraftState.Climb);
         }
 
