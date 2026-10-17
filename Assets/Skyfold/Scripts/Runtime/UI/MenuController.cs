@@ -91,6 +91,7 @@ namespace Skyfold
         void Update()
         {
             if (m_Screen == null) return;
+            if (m_PanelRoot != null && (m_PanelRoot.rect.size - m_FittedFor).sqrMagnitude > 1f) FitPanel(); // window resized
             var input = InputRouter.Instance;
             bool escBack = input != null && input.Pause.WasPressedThisFrame() && m_Screen != "pause";
             if (input != null && (input.Back.WasPressedThisFrame() || escBack) && Time.unscaledTime - m_OpenedAt > 0.2f) Back();
@@ -172,11 +173,44 @@ namespace Skyfold
             }
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(panel);
+            m_Panel = panel;
+            m_PanelRoot = root;
+            m_PanelTop = vr ? 10f : title ? 262f : -1f;
+            FitPanel();
             if (m_First != null && EventSystem.current != null) EventSystem.current.SetSelectedGameObject(m_First.gameObject);
+        }
+
+        RectTransform m_Panel, m_PanelRoot;
+        float m_PanelTop; // distance from the canvas top to a top-anchored panel; -1 when centred
+        Vector2 m_FittedFor;
+
+        /// <summary>
+        /// Shrinks the panel uniformly when it would not fit the window (short or ultrawide windows, the
+        /// VR canvas with its extra comfort rows) instead of letting rows run off the screen.
+        /// </summary>
+        void FitPanel()
+        {
+            if (m_Panel == null || m_PanelRoot == null) return;
+            var avail = m_PanelRoot.rect.size;
+            m_FittedFor = avail;
+            const float margin = 28f;
+            float h = m_Panel.rect.height, w = m_Panel.rect.width;
+            if (h <= 0f || w <= 0f || avail.y <= 0f) return;
+            float roomY = m_PanelTop >= 0f ? avail.y - m_PanelTop - margin : avail.y - 2f * margin;
+            float roomX = avail.x - 2f * margin;
+            float s = Mathf.Clamp(Mathf.Min(roomY / h, roomX / w), 0.6f, 1f);
+            m_Panel.localScale = new Vector3(s, s, 1f);
         }
 
         void BuildWordmark(RectTransform root)
         {
+            // Soft dark falloff behind the title so the pearl wordmark and gold subtitle read over a bright sky.
+            var backdrop = UIKit.Image(root, "Wordmark Backdrop", new Color(0.03f, 0.08f, 0.1f, 0.5f), UIKit.Glow, false);
+            backdrop.rectTransform.anchorMin = backdrop.rectTransform.anchorMax = new Vector2(0f, 1f);
+            backdrop.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            backdrop.rectTransform.anchoredPosition = new Vector2(520f, -150f);
+            backdrop.rectTransform.sizeDelta = new Vector2(1500f, 560f);
+
             var w = UIKit.Rect(root, "Wordmark");
             w.anchorMin = w.anchorMax = new Vector2(0f, 1f);
             w.pivot = new Vector2(0f, 1f);

@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -12,15 +13,18 @@ namespace Skyfold
         int m_Index;
         TextMeshProUGUI m_Value;
         Action<int> m_OnChange;
+        RectTransform m_Prev, m_Next;
 
         public int Index => m_Index;
 
-        public void Init(string[] options, int index, TextMeshProUGUI value, Action<int> onChange)
+        public void Init(string[] options, int index, TextMeshProUGUI value, Action<int> onChange, RectTransform prev = null, RectTransform next = null)
         {
             m_Options = options;
             m_Index = Math.Max(0, Math.Min(options.Length - 1, index));
             m_Value = value;
             m_OnChange = onChange;
+            m_Prev = prev;
+            m_Next = next;
         }
 
         void Step(int delta)
@@ -41,18 +45,20 @@ namespace Skyfold
 
         public void OnSubmit(BaseEventData eventData) => Step(1);
 
+        /// <summary>True when the press lands on an arrow, with generous horizontal slack and the full row height.</summary>
+        static bool Over(RectTransform arrow, PointerEventData e, float slack)
+        {
+            if (arrow == null) return false;
+            var cam = e.pressEventCamera != null ? e.pressEventCamera : e.enterEventCamera;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(arrow, e.position, cam, out var local)) return false;
+            return Mathf.Abs(local.x - arrow.rect.center.x) <= arrow.rect.width * 0.5f + slack;
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
             if (eventData.button != PointerEventData.InputButton.Left) return;
-            // Clicking the left arrow area steps back; anywhere else steps forward.
-            var rt = (UnityEngine.RectTransform)transform;
-            bool back = false;
-            if (UnityEngine.RectTransformUtility.ScreenPointToLocalPointInRectangle(rt, eventData.position, eventData.pressEventCamera, out var local))
-            {
-                float fromRight = rt.rect.xMax - local.x;
-                back = fromRight > 330f && fromRight < 400f;
-            }
-            Step(back ? -1 : 1);
+            // The left arrow steps back; the right arrow, the value and the label step forward.
+            Step(Over(m_Prev, eventData, 22f) ? -1 : 1);
         }
     }
 }

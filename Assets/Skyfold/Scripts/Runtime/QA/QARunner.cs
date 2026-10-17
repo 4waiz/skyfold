@@ -708,6 +708,7 @@ namespace Skyfold
                 yield return new WaitForSecondsRealtime(0.4f);
                 Check(MenuController.Instance.Screen == "title", $"Esc returns from '{screen}' to the title");
             }
+            yield return SliderChecks();
             var s = SettingsStore.Current;
             float music = s.music;
             bool subs = s.subtitles;
