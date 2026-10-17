@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Comfort;
@@ -24,6 +25,18 @@ namespace Skyfold.EditorTools
             data.renderPostProcessing = true;
             data.antialiasing = AntialiasingMode.None;
             data.renderShadows = true;
+        }
+
+        /// <summary>Tracks a transform to one controller's grip pose (the pose meant for rendering a held hand).</summary>
+        static void AddGripPoseDriver(GameObject go, string hand)
+        {
+            string device = "<XRController>{" + hand + "}";
+            var tpd = go.AddComponent<UnityEngine.InputSystem.XR.TrackedPoseDriver>();
+            tpd.trackingType = UnityEngine.InputSystem.XR.TrackedPoseDriver.TrackingType.RotationAndPosition;
+            tpd.updateType = UnityEngine.InputSystem.XR.TrackedPoseDriver.UpdateType.UpdateAndBeforeRender;
+            tpd.positionInput = new InputActionProperty(new InputAction(hand + " Grip Position", InputActionType.Value, device + "/devicePosition", expectedControlType: "Vector3"));
+            tpd.rotationInput = new InputActionProperty(new InputAction(hand + " Grip Rotation", InputActionType.Value, device + "/deviceRotation", expectedControlType: "Quaternion"));
+            tpd.trackingStateInput = new InputActionProperty(new InputAction(hand + " Grip Tracking", InputActionType.Value, device + "/trackingState", expectedControlType: "Integer"));
         }
 
         static void BuildRigs(Ctx c)
@@ -91,15 +104,24 @@ namespace Skyfold.EditorTools
                 }
             }
 
-            // Courier gloves replace the generic controller meshes.
+            // Courier gloves replace the generic controller meshes. They ride their own anchors that follow
+            // each controller's GRIP pose (OpenXR /input/grip/pose = devicePosition/deviceRotation): the XRI
+            // controller transforms follow the AIM pose first (pointerPosition/Rotation), which sits ahead of
+            // the hand and pitched down, so a glove parented to them pointed the wrong way.
+            var offset = vr.origin.CameraFloorOffsetObject != null ? vr.origin.CameraFloorOffsetObject.transform : originGo.transform;
+            var anchors = new Dictionary<string, Transform>();
             foreach (var side in new[] { "Left", "Right" })
             {
                 var controller = FindDeep(originGo.transform, side + " Controller");
                 var visual = FindDeep(originGo.transform, side + " Controller Visual");
                 if (controller == null) continue;
-                // The glove root is the grip point with the handle along its +Y (thumb up). The OpenXR grip
-                // pose runs the handle along +Z (little finger to thumb), so tip the glove 90 deg about X.
-                var glove = ModelLibrary.Spawn(side == "Left" ? "glove_L" : "glove_R", controller, Vector3.zero);
+                var anchor = Child(offset, side + " Glove Anchor");
+                AddGripPoseDriver(anchor, side + "Hand");
+                anchors[side] = anchor.transform;
+                // The glove root is the grip point with the handle along its +Y (thumb up), fingers along +Z and
+                // the left palm facing +X. The OpenXR grip pose runs the handle along +Z (little finger to thumb),
+                // fingers along -Y and the left palm facing +X, so tip the glove 90 deg about X.
+                var glove = ModelLibrary.Spawn(side == "Left" ? "glove_L" : "glove_R", anchor.transform, Vector3.zero);
                 if (ModelLibrary.Has(side == "Left" ? "glove_L" : "glove_R")) glove.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
                 else glove.transform.localPosition = new Vector3(0f, -0.025f, -0.085f);
                 glove.name = "Courier Glove " + side;
@@ -113,6 +135,12 @@ namespace Skyfold.EditorTools
                 if (visual != null && ModelLibrary.Has(side == "Left" ? "glove_L" : "glove_R")) visual.gameObject.SetActive(false);
                 if (side == "Left") c.Atrium = FindDeep(glove.transform, "ANCHOR_wristui");
             }
+
+            // Button cards above each glove (what every button does right now).
+            var hints = vrRoot.AddComponent<ControllerHints>();
+            hints.rig = vr;
+            anchors.TryGetValue("Left", out hints.leftAnchor);
+            anchors.TryGetValue("Right", out hints.rightAnchor);
 
             var use = vrRoot.AddComponent<VRUseHandler>();
             use.rig = vr;

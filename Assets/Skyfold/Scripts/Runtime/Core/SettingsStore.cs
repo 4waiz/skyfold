@@ -9,6 +9,7 @@ namespace Skyfold
     public enum TurnMode { Snap = 0, Smooth = 1 }
     public enum Guidance { FullTutorial = 0, HintsOnly = 1, Off = 2 }
     public enum DriveComfort { InCar = 0, RemoteOverlook = 1 }
+    public enum ButtonHints { WhenLookingAtHands = 0, Always = 1, Off = 2 }
 
     [Serializable]
     public sealed class GameSettings
@@ -34,6 +35,7 @@ namespace Skyfold
         public bool seated;
         public float heightOffset;           // metres added to the camera offset (calibration)
         public DriveComfort driveComfort = DriveComfort.InCar;
+        public ButtonHints buttonHints = ButtonHints.WhenLookingAtHands; // VR: button cards above the gloves
         public bool comfortChosen;           // first-run comfort choice shown
 
         // Accessibility / UI
