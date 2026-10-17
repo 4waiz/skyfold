@@ -454,7 +454,8 @@ def wheel_hq(R, W, outer=1, seg=32, rim_r=0.62, lugs=14, lug_h=0.010, spokes=5, 
              spoke_d=0.075, spoke_flare=1.35, twist=0.0, disc=True, caliper=True, nuts=5,
              hub_seg=16, tyre=RUBBER, lip=PEARL, barrel=INK, spoke=PEARL, hub=PEARL, cap=BRASS,
              nut=BRASS, disc_mat=METAL, caliper_mat=CORAL, caliper_angle=60.0, grooves=0,
-             sidewall_ring=None, lug_skew=0.65, lug_len=0.50, valve=BRASS, spoke_ridge=True):
+             sidewall_ring=None, lug_skew=0.65, lug_len=0.50, valve=BRASS, spoke_ridge=True,
+             inner_simple=True, nut_segs=6):
     """Detailed wheel as a Part at the origin: axle along X, outer face toward +X (mirrored when
     outer < 0). R = tyre radius, W = tyre width. Sizes of the rim parts scale with R.
     lugs: tread blocks per side (chevron pairs; 0 = smooth tread, use grooves= for ribs)."""
@@ -463,8 +464,11 @@ def wheel_hq(R, W, outer=1, seg=32, rim_r=0.62, lugs=14, lug_h=0.010, spokes=5, 
     rr = rim_r * R
     Rt = R - (lug_h if lugs else 0.0)
     # ---- tyre (open lathe; inner side coarse because it faces the car)
-    prof = [(rr - 0.012 * R, -0.80 * w), (0.88 * R, -0.965 * w), (Rt, -0.74 * w)]
+    prof = [(rr - 0.012 * R, -0.80 * w), (0.93 * R, -0.93 * w), (Rt, -0.74 * w)]
     mats = [tyre, tyre]
+    if inner_simple:
+        prof = [(rr - 0.012 * R, -0.80 * w), (Rt, -0.80 * w)]
+        mats = [tyre]
     if grooves:
         # circumferential ribs: shallow grooves across the tread
         gpos = [-0.74 + 1.48 * (k + 1) / (grooves + 1) for k in range(grooves)]
@@ -505,7 +509,8 @@ def wheel_hq(R, W, outer=1, seg=32, rim_r=0.62, lugs=14, lug_h=0.010, spokes=5, 
                     for (hh, tt) in corners:
                         if shrink:
                             hh, tt = hc + (hh - hc) * fh, tc + (tt - tc) * ft
-                        vs.append(bm.verts.new(Vector((hh, 0, 0)) + rad * rad_r + tan * tt))
+                        a = th + tt / rad_r
+                        vs.append(bm.verts.new(Vector((hh, cos(a) * rad_r, sin(a) * rad_r))))
                 b, t_ = vs[:4], vs[4:]
                 quads = [tuple(t_)]
                 for i in range(4):
@@ -529,7 +534,7 @@ def wheel_hq(R, W, outer=1, seg=32, rim_r=0.62, lugs=14, lug_h=0.010, spokes=5, 
         dr0, dr1 = 0.22 * R, rr - 0.11 * R
         dprof = [(dr1 + 0.004 * R, -0.02 * w), (dr1, 0.07 * w), (dr0, 0.09 * w),
                  (0.17 * R, 0.30 * w), (0.0, 0.32 * w)]
-        lathe_m(p, dprof, max(16, seg * 5 // 8), [disc_mat, disc_mat, INK, INK], axis='X')
+        lathe_m(p, dprof, max(14, seg // 2), [disc_mat, disc_mat, INK, INK], axis='X')
         if caliper:
             a = radians(caliper_angle)
             rc = dr1 - 0.035 * R
@@ -543,7 +548,7 @@ def wheel_hq(R, W, outer=1, seg=32, rim_r=0.62, lugs=14, lug_h=0.010, spokes=5, 
         rad = Vector((0, cos(th), sin(th)))
         p.tube([Vector((0.70 * w, 0, 0)) + rad * (rr - 0.020 * R),
                 Vector((0.86 * w, 0, 0)) + rad * (rr - 0.034 * R)], 0.012 * R, 6, valve,
-               caps='round', cap_segs=1)
+               caps='flat')
     # ---- spokes (hub -> lip), slightly dished, flared toward the rim
     hub_r = 0.21 * R
     if spoke_ridge:
@@ -562,14 +567,15 @@ def wheel_hq(R, W, outer=1, seg=32, rim_r=0.62, lugs=14, lug_h=0.010, spokes=5, 
               twist=radians(twist))
     # ---- hub + centre cap
     hp = [(hub_r * 1.05, 0.70 * w), (hub_r * 1.05, 0.92 * w), (hub_r * 0.86, 1.02 * w),
-          (hub_r * 0.54, 1.05 * w), (hub_r * 0.48, 1.12 * w), (hub_r * 0.26, 1.165 * w),
-          (0.0, 1.18 * w)]
-    lathe_m(p, hp, hub_seg, [hub, hub, hub, cap, cap, cap], axis='X')
+          (hub_r * 0.52, 1.05 * w), (hub_r * 0.44, 1.13 * w), (0.0, 1.18 * w)]
+    lathe_m(p, hp, hub_seg, [hub, hub, hub, cap, cap], axis='X')
     # ---- lug nuts on the hub face
     for k in range(nuts):
         th = 2 * pi * k / nuts + pi / nuts + pi / 2
         c = Vector((1.02 * w, cos(th) * hub_r * 0.72, sin(th) * hub_r * 0.72))
-        bolt(p, c, (1, 0, 0), 0.034 * R, 0.07 * w, nut, segs=6, up=(0, cos(th), sin(th)))
+        M = frame(c, (1, 0, 0), (0, cos(th), sin(th)))
+        lathe_m(p, [(0.034 * R, -0.04 * w), (0.034 * R, 0.045 * w), (0.0, 0.075 * w)], nut_segs,
+                [nut, nut], M=M)
     if outer < 0:
         p.mirror_x()
     return p

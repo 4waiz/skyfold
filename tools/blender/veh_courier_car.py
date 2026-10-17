@@ -71,28 +71,28 @@ def pods(shell):
     nose = V.Pod(NOSE, n=3.4, step=NOSE_STEPS)
     nose.build(shell, 32, PEARL, ribs=[(STRIPE[0], STRIPE[1], 0.004)],
                bands=[(STRIPE[0], STRIPE[1], TEAL)], grooves=[(0.835, 0.0045, 0.003)],
-               crown=0.008, bottom_mat=INK, fill=2)
+               crown=0.008, fill=2, cap_bottom=False)
     rear = V.Pod(REAR, n=3.6, step=REAR_STEPS)
     rear.build(shell, 32, PEARL, ribs=[(STRIPE[0], STRIPE[1], 0.004)],
                bands=[(STRIPE[0], STRIPE[1], TEAL)], grooves=[(0.775, 0.0045, 0.003)],
-               crown=0.006, bottom_mat=INK, fill=2)
+               crown=0.006, fill=2, cap_bottom=False)
     return nose, rear
 
 
 def chassis(shell, sym):
     # dark tub: underbody and cabin floor (top at z 0.40)
-    slab(shell, 1.10, 2.90, 0.17, 0.12, 0.045, INK, M=T(0, 0.05, 0.315), nc=3, ne=2)
+    slab(shell, 1.10, 2.90, 0.17, 0.12, 0.045, INK, M=T(0, 0.05, 0.315), nc=2, ne=1)
     # teal sills along the open cabin (ends buried in the pods)
     sec = V.section_rrect(0.13, 0.15, 0.045, 3)
     sweep(sym, [(0.535, -0.62, 0.47), (0.535, 0.72, 0.47)], sec, TEAL, up=(0, 0, 1), caps=False)
     # rubber step pad on the left (boarding) sill
     slab(shell, 0.085, 0.44, 0.010, 0.02, 0.004, RUBBER, M=T(0.535, 0.08, 0.546), nc=2, ne=1)
-    for k in range(7):
-        tile(shell, (0.535, -0.11 + k * 0.063, 0.551), 0.07, 0.016, 0.004, RUBBER)
+    for k in range(6):
+        tile(shell, (0.535, -0.10 + k * 0.072, 0.551), 0.07, 0.016, 0.004, RUBBER)
     # ribbed rubber floor mat in the footwell
     slab(shell, 0.62, 0.40, 0.008, 0.04, 0.003, RUBBER, M=T(0, -0.285, 0.401), nc=2, ne=1)
-    for k in range(7):
-        tile(shell, (0, -0.45 + k * 0.055, 0.405), 0.55, 0.014, 0.004, RUBBER)
+    for k in range(6):
+        tile(shell, (0, -0.44 + k * 0.062, 0.405), 0.55, 0.014, 0.004, RUBBER)
 
 
 def fenders(sym):
@@ -121,7 +121,8 @@ def fenders(sym):
 
 def bumpers(shell, nose, rear):
     sec = V.section_rrect(0.075, 0.12, 0.03, 2)
-    strip = [(x - 0.040, y) for (x, y) in V.section_rrect(0.020, 0.040, 0.008, 1)]
+    strip = [(x - 0.040, y) for (x, y) in V.ccw([(0.010, -0.016), (0.010, 0.016), (0.0, 0.021),
+                                                 (-0.010, 0.016), (-0.010, -0.016), (0.0, -0.021)])]
     for (pod, base, zb, sgn) in ((nose, -pi / 2, 0.36, -1), (rear, pi / 2, 0.36, 1)):
         ts = [base - 0.75 + 1.5 * k / 8 for k in range(9)]   # path runs so 'side' faces the car
         pts = [pod.point(t, zb, 0.045) for t in ts]
@@ -145,7 +146,7 @@ def front_face(shell, nose):
         t = nose.t_of_x(sx * 0.31, z, -1)
         p = nose.point(t, z)
         n = (nose.normal(t, z) + Vector((0, -0.7, 0.0))).normalized()
-        V.lamp_round(shell, p, n, 0.098, segs=22, depth=0.04)
+        V.lamp_round(shell, p, n, 0.098, segs=20, depth=0.04)
         # indicators on the front corners
         z2 = 0.585
         t2 = nose.t_of_x(sx * 0.505, z2, -1)
@@ -232,8 +233,8 @@ def seat(shell):
     for sx in (-1, 1):
         shell.rbox(Vector((sx * 0.21, -0.04, -0.02)), (0.09, 0.09, 0.52), 0.04, 1, TEAL,
                    matrix=Mb)
-    for k in range(5):
-        shell.rbox(Vector((0, -0.058, -0.20 + k * 0.092)), (0.32, 0.03, 0.084), 0.013, 1, TEAL,
+    for k in range(4):
+        shell.rbox(Vector((0, -0.058, -0.18 + k * 0.115)), (0.32, 0.03, 0.105), 0.013, 1, TEAL,
                    matrix=Mb)
     shell.rbox(Vector((0, -0.02, 0.272)), (0.40, 0.10, 0.07), 0.032, 2, TEAL, matrix=Mb)
     # headrest on brass posts
@@ -248,17 +249,17 @@ def seat(shell):
 def gauge(part, M, R, needle_deg):
     """Round gauge in local frame M (face toward local +Z): brass bezel, dark face, segmented
     glowing arc (no text), coral needle, brass centre cap."""
-    segs = 24
-    prof = [(1.26 * R, -0.012), (1.26 * R, 0.002), (1.18 * R, 0.009), (1.07 * R, 0.010),
-            (0.99 * R, 0.003), (0.92 * R, -0.004), (0.74 * R, -0.004), (0.0, -0.004)]
-    vr, fs = lathe_m(part, prof, segs, [BRASS, BRASS, BRASS, BRASS, INK, INK, INK], M=M,
+    segs = 16
+    prof = [(1.26 * R, -0.006), (1.18 * R, 0.009), (1.07 * R, 0.010), (0.99 * R, 0.003),
+            (0.92 * R, -0.004), (0.74 * R, -0.004), (0.0, -0.004)]
+    vr, fs = lathe_m(part, prof, segs, [BRASS, BRASS, BRASS, INK, INK, INK], M=M,
                      phase=-pi / 2)
-    band = fs[5 * segs:6 * segs]
+    band = fs[4 * segs:5 * segs]
     for j, f in enumerate(band):
         ang = (-90 + 360 * (j + 0.5) / segs) % 360        # 0 = +x, 90 = up
         rel = (ang - 90) % 360                             # from 12 o'clock, ccw
         in_arc = not (135 < rel < 225)
-        if in_arc and j % 3 != 2:
+        if in_arc and j % 2 == 0:
             part.assign([f], GLOW)
     a = radians(90 + needle_deg)
     d = Vector((cos(a), sin(a), 0))
@@ -266,7 +267,7 @@ def gauge(part, M, R, needle_deg):
     Mn = M @ Matrix(((d.x, s.x, 0, d.x * 0.38 * R), (d.y, s.y, 0, d.y * 0.38 * R),
                      (0, 0, 1, -0.0025), (0, 0, 0, 1)))
     tile(part, (0, 0, 0), 0.80 * R, 0.006, 0.003, CORAL, M=Mn, ch=0.001, sunk=0.0)
-    lathe_m(part, [(0.16 * R, -0.003), (0.16 * R, 0.002), (0.0, 0.005)], 10, [BRASS, BRASS],
+    lathe_m(part, [(0.16 * R, -0.003), (0.16 * R, 0.002), (0.0, 0.005)], 8, [BRASS, BRASS],
             M=M)
 
 
@@ -292,7 +293,6 @@ def dashboard(shell, sym):
     bn.normalize()
     Mb = frame(bc, bn, (0, 0, 1))
     slab(shell, 0.255, 0.090, 0.070, 0.035, 0.022, TEAL, M=Mb, nc=3, ne=2)
-    slab(shell, 0.272, 0.030, 0.090, 0.014, 0.012, TEAL, M=Mb @ T(0, 0.042, 0.004), nc=2, ne=2)
     for sx, nd in ((1, -55), (-1, 35)):
         gauge(shell, Mb @ T(sx * 0.058, -0.006, 0.036), 0.035, nd)
     # fascia frame helper: fascia face ~ (y -0.342, z 0.84), normal toward the driver
@@ -306,18 +306,17 @@ def dashboard(shell, sym):
     slab(shell, 0.20, 0.072, 0.010, 0.014, 0.004, INK, M=Ms, nc=2, ne=1)
     for k in range(4):
         x = -0.075 + k * 0.034
-        bolt(shell, Ms @ Vector((x, -0.010, 0.004)), fn, 0.0075, 0.005, METAL, segs=8)
+        bolt(shell, Ms @ Vector((x, -0.010, 0.004)), fn, 0.0075, 0.005, METAL, segs=6)
         lv = Ms @ Vector((x, -0.010, 0.008))
         tip = Ms @ Vector((x, 0.006, 0.026))
-        shell.tube([lv, tip], 0.0028, 6, BRASS, caps='round', cap_segs=1)
+        shell.tube([lv, tip], 0.0028, 5, BRASS, caps='round', cap_segs=1)
     for k, m in enumerate((CORAL, TEAL_L)):
-        lathe_m(shell, [(0.010, -0.002), (0.010, 0.006), (0.006, 0.010), (0.0, 0.011)], 12,
-                [INK, m, m], M=Ms @ T(0.060 + k * 0.0, -0.016 + k * 0.032, 0.004))
+        lathe_m(shell, [(0.010, -0.002), (0.010, 0.006), (0.006, 0.010), (0.0, 0.011)], 10,
+                [INK, m, m], M=Ms @ T(0.062, -0.016 + k * 0.032, 0.004))
     # nav display (right of the column): dark screen, glowing route line + destination dot
     Mn = frame(fascia(-0.27, 0.845, 0.002), fn, (0, 0, 1))
-    slab(shell, 0.19, 0.082, 0.012, 0.012, 0.004, INK, M=Mn, nc=2, ne=1)
-    slab(shell, 0.17, 0.064, 0.004, 0.008, 0.0018, TEAL, M=Mn @ T(0, 0, 0.006), nc=2, ne=1,
-         cap_bottom=False)
+    g = slab(shell, 0.19, 0.082, 0.012, 0.014, 0.005, INK, M=Mn, nc=2, ne=1)
+    shell.assign(g['top'][-12:], TEAL)
     route = [(-0.070, -0.020), (-0.035, -0.020), (-0.020, 0.012), (0.025, 0.012), (0.040, -0.008),
              (0.062, -0.008)]
     for (a, b) in zip(route, route[1:]):
@@ -327,16 +326,16 @@ def dashboard(shell, sym):
         d.normalize()
         s = Vector((-d.y, d.x, 0))
         mid = (a + b) / 2
-        Mr = Mn @ Matrix(((d.x, s.x, 0, mid.x), (d.y, s.y, 0, mid.y), (0, 0, 1, 0.0080),
+        Mr = Mn @ Matrix(((d.x, s.x, 0, mid.x), (d.y, s.y, 0, mid.y), (0, 0, 1, 0.0060),
                           (0, 0, 0, 1)))
         tile(shell, (0, 0, 0), L + 0.004, 0.0045, 0.0015, GLOW, M=Mr, ch=0.0005, sunk=0.0)
-    lathe_m(shell, [(0.0065, 0.0075), (0.0065, 0.0095), (0.0, 0.011)], 10, [GLOW, GLOW],
+    lathe_m(shell, [(0.0065, 0.0055), (0.0065, 0.0075), (0.0, 0.009)], 10, [GLOW, GLOW],
             M=Mn @ T(0.062, -0.008, 0))
     # round eyeball vents at both ends
     for sx in (1, -1):
         Mv = frame(fascia(sx * 0.425, 0.845, 0.0), fn, (0, 0, 1))
         lathe_m(shell, [(0.040, -0.01), (0.040, 0.004), (0.036, 0.009), (0.030, 0.008),
-                        (0.027, -0.002), (0.0, -0.002)], 16, [PEARL, BRASS, BRASS, INK, INK],
+                        (0.027, -0.002), (0.0, -0.002)], 10, [PEARL, BRASS, BRASS, INK, INK],
                 M=Mv)
         for k in range(3):
             tile(shell, (0, -0.014 + k * 0.014, -0.002), 0.048, 0.004, 0.006, PEARL, M=Mv,
@@ -345,12 +344,12 @@ def dashboard(shell, sym):
     d = Vector((0, cos(radians(COLUMN_TILT)), sin(radians(COLUMN_TILT))))
     Mc = frame(HUB, d, (0, 0, 1))
     lathe_m(shell, [(0.036, -0.23), (0.036, -0.105), (0.032, -0.068), (0.025, -0.052),
-                    (0.0, -0.050)], 14, [INK, INK, INK, INK], M=Mc)
+                    (0.0, -0.050)], 12, [INK, INK, INK, INK], M=Mc)
     for sx in (1, -1):
         a = HUB - d * 0.082 + X * (sx * 0.028)
         b = HUB - d * 0.092 + X * (sx * 0.112) - Z * 0.018
         shell.tube([a, b], 0.0065, 6, INK, caps='flat')
-        shell.tube([b, b + (b - a).normalized() * 0.022], 0.0095, 8,
+        shell.tube([b, b + (b - a).normalized() * 0.022], 0.0095, 6,
                    BRASS if sx > 0 else PEARL, caps='round', cap_segs=1)
 
 
@@ -363,8 +362,8 @@ def pedals(shell):
         c = Vector(pad_c)
         n = Vector(pad_n).normalized()
         M = frame(c, n, (0, 0, 1))
-        slab(shell, w, h, 0.010, 0.010, 0.003, METAL, M=M, nc=2, ne=1)
-        k = 3 if h < 0.1 else 6
+        slab(shell, w, h, 0.010, 0.010, 0.003, METAL, M=M, nc=1, ne=1)
+        k = 3 if h < 0.1 else 5
         for i in range(k):
             yy = -h / 2 + 0.012 + (h - 0.024) * (i + 0.5) / k
             tile(shell, (0, yy, 0.004), w - 0.014, 0.006, 0.004, RUBBER, M=M, ch=0.001)
@@ -377,7 +376,7 @@ def pedals(shell):
                        caps='round', cap_segs=1)
     # dead pedal / footrest on the left
     M = frame(Vector((0.225, -0.435, 0.47)), Vector((0, 0.88, 0.47)), (0, 0, 1))
-    slab(shell, 0.085, 0.15, 0.010, 0.012, 0.003, RUBBER, M=M, nc=2, ne=1)
+    slab(shell, 0.085, 0.15, 0.010, 0.012, 0.003, RUBBER, M=M, nc=1, ne=1)
 
 
 def windscreen(shell, sym):
@@ -388,19 +387,18 @@ def windscreen(shell, sym):
     def deform(v):
         # v is in local (x, zr, lz) packing: x, y = zr, z = lz
         return ws(v.x, v.y, v.z)
-    outline = V.rrect_dense(0.92, 0.30, 0.05, 3, max_seg=0.08)
-    V.pane(shell, outline, 0.012, GLASS, deform=deform)
+    outline = V.rrect_dense(0.92, 0.30, 0.05, 3, max_seg=0.12)
+    V.pane(shell, outline, 0.012, GLASS, deform=deform, scales=(1.0, 0.5))
     # frame tube around the glass edge
-    frame_pts = [ws(x, y) for (x, y) in V.rrect_dense(0.928, 0.308, 0.054, 3, max_seg=0.08)]
-    sweep(shell, frame_pts, V.circle2(0.0125, 8), INK, closed=True)
+    frame_pts = [ws(x, y) for (x, y) in V.rrect_dense(0.928, 0.308, 0.054, 3, max_seg=0.12)]
+    sweep(shell, frame_pts, V.circle2(0.0125, 6), INK, closed=True)
     # mounting brackets at the bottom corners
     for sx in (-1, 1):
         p = ws(sx * 0.40, -0.152)
-        slab(shell, 0.05, 0.035, 0.025, 0.010, 0.006, INK, M=T(p.x, p.y + 0.015, p.z - 0.008),
-             nc=1, ne=1)
+        shell.box(Vector((p.x, p.y + 0.015, p.z - 0.008)), (0.05, 0.035, 0.025), INK)
     # wiper parked along the bottom edge (outside face): pivot, arm, rubber blade
     piv = ws(0.27, -0.155, 0.018)
-    lathe_m(shell, [(0.014, -0.01), (0.014, 0.008), (0.009, 0.014), (0.0, 0.016)], 10,
+    lathe_m(shell, [(0.014, -0.01), (0.014, 0.008), (0.009, 0.014), (0.0, 0.016)], 8,
             [INK, INK, INK], M=frame(piv, (0, -0.3, 1), (0, 1, 0)))
     arm = [ws(0.27, -0.140, 0.024), ws(0.05, -0.128, 0.020), ws(-0.20, -0.122, 0.017)]
     sweep(shell, spline(arm, 2), V.section_rrect(0.010, 0.007, 0.002, 1), INK, up=(0, -1, 0.3))
@@ -410,31 +408,30 @@ def windscreen(shell, sym):
     # rear-view mirror on the frame top centre
     top = ws(0.0, 0.154, -0.004)
     mp = Vector((0, top.y + 0.040, 1.198))
-    shell.tube([top + Vector((0, 0.004, -0.004)), mp + Vector((0, -0.006, 0.012))], 0.0065, 8, INK,
-               caps='round', cap_segs=1)
+    shell.tube([top + Vector((0, 0.004, -0.004)), mp + Vector((0, -0.006, 0.012))], 0.0065, 6, INK,
+               caps='flat')
     Mm = frame(mp, (0, 1, -0.18), (0, 0, 1))
-    slab(shell, 0.17, 0.048, 0.026, 0.020, 0.010, INK, M=Mm, nc=3, ne=2)
-    slab(shell, 0.152, 0.034, 0.004, 0.014, 0.0018, METAL, M=Mm @ T(0, 0, 0.0135), nc=2, ne=1,
-         cap_bottom=False)
+    g = slab(shell, 0.17, 0.048, 0.026, 0.020, 0.008, INK, M=Mm, nc=2, ne=2)
+    shell.assign(g['top'][-12:], METAL)
 
 
 def canopy(shell, sym):
     a_path = spline([(0.505, -0.56, 0.86), (0.49, -0.47, 1.25), (0.47, -0.40, 1.578)], 3)
     r_path = spline([(0.50, 0.70, 0.84), (0.485, 0.62, 1.25), (0.47, 0.56, 1.578)], 3)
-    sec = ellipse(0.042, 0.054, 12)
+    sec = ellipse(0.042, 0.054, 8)
     for path in (a_path, r_path):
         sweep(sym, path, sec, INK, up=(0, -1, 0), caps=False)
     # brass collars where the pillars leave the pods
-    for (path, zc) in ((a_path, 0.918), (r_path, 0.862)):
+    for (path, zc) in ((a_path, 0.918),):
         k = min(range(len(path) - 1), key=lambda i: abs(path[i].z - zc))
         p0, p1 = path[k], path[k + 1]
         f = (zc - p0.z) / (p1.z - p0.z)
         p = p0 + (p1 - p0) * f
-        sym.torus(0.031, 0.0065, 14, 5, BRASS, matrix=frame(p, (p1 - p0).normalized(), (0, -1, 0)))
+        sym.torus(0.029, 0.0060, 10, 4, BRASS, matrix=frame(p, (p1 - p0).normalized(), (0, -1, 0)))
     # grab handle on the left A-pillar (boarding side)
     h0 = Vector((0.452, -0.478, 1.05))
     h1 = Vector((0.441, -0.418, 1.33))
-    shell.tube(spline([h0, (h0 + h1) / 2 + Vector((-0.012, 0.004, 0)), h1], 3), 0.010, 8, BRASS,
+    shell.tube(spline([h0, (h0 + h1) / 2 + Vector((-0.012, 0.004, 0)), h1], 2), 0.010, 6, BRASS,
                caps='round', cap_segs=1)
     for (h, z) in ((h0, 1.05), (h1, 1.33)):
         pz = (z - 0.86) / (1.578 - 0.86)
@@ -444,29 +441,25 @@ def canopy(shell, sym):
     st0 = Vector((0.497, -0.515, 1.03))
     hc = Vector((0.660, -0.585, 1.045))
     sweep(sym, spline([st0, Vector((0.585, -0.56, 1.02)), hc + Vector((-0.04, 0.005, -0.006))],
-                      2), V.circle2(0.011, 8), INK, up=(0, 0, 1))
+                      2), V.circle2(0.011, 6), INK, up=(0, 0, 1))
     Mm = frame(hc, (0.12, 1, 0), (0, 0, 1))
-    slab(sym, 0.135, 0.090, 0.050, 0.038, 0.020, PEARL, M=Mm, nc=3, ne=2, bottom=TEAL)
-    slab(sym, 0.114, 0.070, 0.004, 0.028, 0.0018, METAL, M=Mm @ T(0, 0, 0.0255), nc=3, ne=1,
-         cap_bottom=False)
+    g = slab(sym, 0.135, 0.090, 0.050, 0.038, 0.020, PEARL, M=Mm, nc=2, ne=2, bottom=TEAL)
+    sym.assign(g['top'][-12:], METAL)
     # padded roll bar behind the headrest
     rb_l = Vector((0.483, 0.622, 1.25))
     shell.tube([rb_l, Vector((-0.483, 0.622, 1.25))], 0.021, 12, INK, caps='flat')
-    shell.tube([Vector((0.30, 0.622, 1.25)), Vector((-0.30, 0.622, 1.25))], 0.040, 14, RUBBER,
+    shell.tube([Vector((0.30, 0.622, 1.25)), Vector((-0.30, 0.622, 1.25))], 0.040, 12, RUBBER,
                caps='round', cap_segs=2)
     for x in (-0.20, 0.0, 0.20):
-        shell.torus(0.0412, 0.0042, 16, 4, INK, matrix=T(x, 0.622, 1.25) @ V.rot_y(90))
-    # roof rail ring under the roof edge
-    ring = [Vector((x, y + 0.08, 1.565)) for (x, y) in V.rrect_dense(0.94, 0.96, 0.16, 2, 0.16)]
-    sweep(shell, ring, V.circle2(0.020, 8), INK, closed=True)
+        shell.torus(0.0410, 0.0042, 12, 3, INK, matrix=T(x, 0.622, 1.25) @ V.rot_y(90))
     # roof: rounded slab, teal edge band and underside, solar panel inset on top
     roof = V.Pod([(1.556, -0.430, 0.590, 0.515), (1.566, -0.470, 0.630, 0.553),
                   (1.584, -0.484, 0.644, 0.566), (1.610, -0.481, 0.641, 0.563),
                   (1.628, -0.465, 0.625, 0.548), (1.640, -0.440, 0.600, 0.523)], n=3.0,
                  step=[1, 1, 1, 1, 1])
-    roof.build(shell, 40, PEARL, bands=[(1.50, 1.617, TEAL)], crown=0.008, fill=3,
+    roof.build(shell, 32, PEARL, bands=[(1.50, 1.617, TEAL)], crown=0.008, fill=2,
                bottom_mat=TEAL)
-    slab(shell, 0.80, 0.84, 0.016, 0.06, 0.004, INK, M=T(0, 0.08, 1.6495), nc=3, ne=1,
+    slab(shell, 0.80, 0.84, 0.016, 0.06, 0.004, INK, M=T(0, 0.08, 1.6495), nc=2, ne=1,
          cap_bottom=False)
     for i in range(4):
         for j in range(5):
@@ -474,8 +467,8 @@ def canopy(shell, sym):
             y = 0.08 - 0.328 + j * 0.164
             tile(shell, (x, y, 1.6575), 0.172, 0.150, 0.003, TEAL, ch=0.002, sunk=0.001)
     # interior dome light above the driver
-    slab(shell, 0.15, 0.065, 0.014, 0.022, 0.005, LIGHT, M=T(0, 0.06, 1.553), nc=2, ne=1)
-    slab(shell, 0.17, 0.085, 0.010, 0.030, 0.004, PEARL, M=T(0, 0.06, 1.557), nc=2, ne=1)
+    slab(shell, 0.15, 0.065, 0.014, 0.022, 0.005, LIGHT, M=T(0, 0.06, 1.553), nc=1, ne=1)
+    slab(shell, 0.17, 0.085, 0.010, 0.030, 0.004, PEARL, M=T(0, 0.06, 1.557), nc=1, ne=1)
 
 
 def cargo_deck(shell, sym):
@@ -483,30 +476,29 @@ def cargo_deck(shell, sym):
     for sx in (1,):
         x = sx * 0.39
         for y in (0.78, 1.06, 1.34):
-            lathe_m(sym, [(0.016, 0.855), (0.016, 0.868), (0.010, 0.874), (0.010, 0.900),
-                          (0.0, 0.900)], 10, [BRASS, BRASS, INK, INK],
-                    M=T(x, y, 0))
-        sym.tube([Vector((x, 0.76, 0.905)), Vector((x, 1.36, 0.905))], 0.011, 10, BRASS,
+            lathe_m(sym, [(0.016, 0.855), (0.016, 0.868), (0.010, 0.874), (0.010, 0.900)], 8,
+                    [BRASS, BRASS, INK], M=T(x, y, 0))
+        sym.tube([Vector((x, 0.76, 0.905)), Vector((x, 1.36, 0.905))], 0.011, 8, BRASS,
                  caps='round', cap_segs=2)
         for xs in (0.17, 0.235, 0.30):
             tile(sym, (xs, 1.06, 0.8668), 0.022, 0.56, 0.0042, RUBBER, sunk=0.003)
     # cradle for the power cell (SOCKET_cargo = bottom centre of the cell)
     c = CARGO
     lathe_m(shell, [(0.138, -0.024), (0.138, -0.010), (0.131, -0.002), (0.118, 0.0),
-                    (0.036, 0.0), (0.0, 0.0)], 24, [INK, INK, INK, INK, BRASS],
+                    (0.036, 0.0), (0.0, 0.0)], 16, [INK, INK, INK, INK, BRASS],
             M=T(c.x, c.y, c.z))
-    shell.torus(0.098, 0.0055, 28, 6, GLOW, matrix=T(c.x, c.y, c.z + 0.002))
+    shell.torus(0.098, 0.0055, 24, 4, GLOW, matrix=T(c.x, c.y, c.z + 0.002))
     for k in range(4):
         a = radians(45 + 90 * k)
         rad = Vector((cos(a), sin(a), 0))
         p0 = c + rad * 0.106 + Vector((0, 0, -0.008))
         shell.tube([p0, p0 + Vector((0, 0, 0.205))], 0.0105, 8, BRASS, caps='flat')
-        Mp = frame(c + rad * 0.090 + Vector((0, 0, 0.11)), -rad, (0, 0, 1))
-        slab(shell, 0.032, 0.060, 0.012, 0.010, 0.004, RUBBER, M=Mp, nc=1, ne=1)
+        Mp = frame(c + rad * 0.096 + Vector((0, 0, 0.11)), -rad, (0, 0, 1))
+        tile(shell, (0, 0, 0), 0.030, 0.060, 0.010, RUBBER, M=Mp, ch=0.003)
         b = radians(90 * k)
         bolt(shell, c + Vector((cos(b) * 0.113, sin(b) * 0.113, 0.0)), (0, 0, 1), 0.0068, 0.005,
              BRASS, segs=6, up=(cos(b), sin(b), 0))
-    shell.torus(0.106, 0.0115, 32, 8, BRASS, matrix=T(c.x, c.y, c.z + 0.200))
+    shell.torus(0.106, 0.0115, 24, 6, BRASS, matrix=T(c.x, c.y, c.z + 0.200))
 
 
 def build_body(root):
@@ -538,7 +530,7 @@ def build_steering(body):
     W = T(HUB) @ rot_x(COLUMN_TILT)
     bm = p.bm
     Rm, r0 = 0.165, 0.0195
-    nu, nv = 40, 10
+    nu, nv = 32, 8
     rings = []
     for i in range(nu):
         ph = 2 * pi * i / nu                       # 0 = +x (driver's right... local +x)
@@ -579,7 +571,7 @@ def build_steering(body):
     # hub pad + emblem facing the driver (local +Y)
     Mh = W @ rot_x(-90)
     lathe_m(p, [(0.0, -0.040), (0.056, -0.040), (0.056, -0.012), (0.052, 0.000), (0.042, 0.007),
-                (0.022, 0.009), (0.019, 0.011), (0.0, 0.015)], 24,
+                (0.022, 0.009), (0.019, 0.011), (0.0, 0.015)], 20,
             [INK, PEARL, PEARL, PEARL, PEARL, BRASS, BRASS], M=Mh @ T(0, 0, -0.012))
     lathe_m(p, [(0.0115, 0.0), (0.0115, 0.002), (0.0, 0.006)], 12, [TEAL, TEAL],
             M=Mh @ T(0, 0, 0.0025))
@@ -595,7 +587,7 @@ def build_wheels(root):
     out = []
     for name, sx, sy in (("Wheel_FL", 1, -1), ("Wheel_FR", -1, -1), ("Wheel_RL", 1, 1),
                          ("Wheel_RR", -1, 1)):
-        p = V.wheel_hq(WHEEL_R, 0.26, sx, seg=40, rim_r=0.62, lugs=18, lug_h=0.010)
+        p = V.wheel_hq(WHEEL_R, 0.26, sx, seg=32, rim_r=0.62, lugs=14, lug_h=0.010)
         c = Vector((sx * TRACK_X, sy * AXLE_Y, WHEEL_R))
         p.transform(p.bm.verts, Matrix.Translation(c))
         out.append(C.merge_to_object(name, [p.to_temp()], pivot=c, parent=root, sharp_deg=40))
