@@ -298,6 +298,17 @@ namespace Skyfold
 
         public void CancelVR() => ChooseDesktop();
 
+        /// <summary>
+        /// QA only: switch to the VR rig without starting OpenXR. A QA scenario feeds simulated head and controller
+        /// devices, so the headset path (gloves, hand cards, bindings, seating) can be checked without a headset.
+        /// </summary>
+        public void EnterSimulatedVRForQA()
+        {
+            if (qa == null || !qa.Running) return;
+            SwitchRig(PlayMode.VR);
+            EnterTitleState();
+        }
+
         public void ExitVR()
         {
             if (IsPlaying) missions.Abort();

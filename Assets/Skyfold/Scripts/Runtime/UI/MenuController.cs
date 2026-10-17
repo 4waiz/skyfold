@@ -436,6 +436,7 @@ namespace Skyfold
             Line(right, "Left stick  move (smooth mode)\nRight stick  turn (snap by default)\nHold A  aim teleport, release to jump\nGrip  grab    ·    Trigger  use / press UI\nX  fold (at a Fold Station)    ·    Y  wrist objectives\nB  back    ·    Left menu button  pause");
             Line(right, "Quest 3: in the car", true);
             Line(right, "Left stick  steer\nRight trigger  accelerate\nLeft trigger  brake, hold at a stop to reverse\nB  climb out when stopped    ·    A  horn\nHold X  put the car back on the road\nY  objectives    ·    Menu  pause");
+            Line(right, "In the headset, look at a hand: a card above it shows what its buttons do right now, with the one you need lit. (Comfort > Button hints.)", false);
             Line(right, "The Meta button stays reserved for the headset.", false);
             b.Space(4f);
             b.Toggle("Show input diagnostics panel", SettingsStore.Current.showDiagnostics, v => { SettingsStore.Current.showDiagnostics = v; SettingsStore.Save(); });
@@ -455,6 +456,7 @@ namespace Skyfold
             b.Toggle("Comfort vignette", s.vignette, v => { s.vignette = v; Apply(); });
             b.Slider("Vignette strength", s.vignetteStrength, v => { s.vignetteStrength = v; Apply(); });
             b.Toggle("Seated play (raises your view)", s.seated, v => { s.seated = v; Apply(); });
+            b.Choice("Button hints on your hands (VR)", new[] { "When I look at them", "Always", "Off" }, (int)s.buttonHints, i => { s.buttonHints = (ButtonHints)i; Apply(); });
             if (vr)
             {
                 b.Para(Mathf.Abs(s.heightOffset) > 0.001f

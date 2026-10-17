@@ -441,6 +441,21 @@ namespace Skyfold
             }
         }
 
+        /// <summary>The headset's full button list for the wrist panel (Y), by what you are doing.</summary>
+        static string WristKeys(InputContext ctx)
+        {
+            switch (ctx)
+            {
+                case InputContext.Driving:
+                case InputContext.RemoteDriving:
+                    return Keys("Left stick: steer", "Right trigger: go", "Left trigger: brake", "B: climb out", "Hold X: back on the road");
+                case InputContext.Architect:
+                    return Keys("Grip: grab a piece", "Twist: turn it", "X: fold down", "Hold A: teleport", "Y: hide", "Menu: pause");
+                default:
+                    return Keys("Left stick: walk", "Hold A: teleport", "Trigger: use", "Grip: grab", "X: fold (station)", "Y: hide", "Menu: pause");
+            }
+        }
+
         /// <summary>Joins key hints so a line only ever wraps between hints, never inside one.</summary>
         static string Keys(params string[] parts)
         {
@@ -554,7 +569,7 @@ namespace Skyfold
                 string text = o != null ? o.CardText(PlayMode.VR) : "";
                 if (o?.Progress != null) text += "  " + o.Progress(MissionDirector.Instance.Ctx);
                 m_WristObj.text = text;
-                m_WristKeys.text = input.Context == InputContext.Driving ? "B: climb out (stopped) · Menu: pause" : "X: fold at a station · Y: hide · Menu: pause";
+                m_WristKeys.text = WristKeys(input.Context);
             }
         }
     }

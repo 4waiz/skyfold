@@ -42,6 +42,7 @@ namespace Skyfold
             public RectTransform root;
             public CanvasGroup group;
             public readonly List<Row> rows = new List<Row>();
+            public readonly List<Entry> shown = new List<Entry>();
             public float alpha;
         }
 
@@ -53,8 +54,17 @@ namespace Skyfold
         static readonly Color ChipIdle = new Color(0.13f, 0.2f, 0.23f, 0.92f);
         static readonly Color LabelIdle = UIStyle.InkSoft;
 
-        /// <summary>Which buttons the cards currently light, for QA ("Left:X,Right:Grip").</summary>
-        public string LitSummary { get; private set; } = "";
+        /// <summary>Which buttons the visible cards light, for QA ("Left:X Right:Grip").</summary>
+        public string LitSummary()
+        {
+            var sb = new System.Text.StringBuilder();
+            foreach (var card in new[] { m_Left, m_Right })
+            {
+                if (card == null || card.alpha < 0.5f) continue;
+                foreach (var e in card.shown) if (e.lit) sb.Append(card.hand).Append(':').Append(e.key).Append(' ');
+            }
+            return sb.ToString().Trim();
+        }
         public bool LeftVisible => m_Left != null && m_Left.alpha > 0.5f;
         public bool RightVisible => m_Right != null && m_Right.alpha > 0.5f;
 
@@ -133,7 +143,9 @@ namespace Skyfold
 
         void Fill(Card card, List<Entry> entries)
         {
-            if (card == null) return;
+            if (card == null || Same(card.shown, entries)) return;
+            card.shown.Clear();
+            card.shown.AddRange(entries);
             while (card.rows.Count < entries.Count) AddRow(card);
             for (int i = 0; i < card.rows.Count; i++)
             {
@@ -147,6 +159,15 @@ namespace Skyfold
                 row.chip.color = e.lit ? UIStyle.Teal : ChipIdle;
                 row.label.color = e.lit ? UIStyle.Ink : LabelIdle;
             }
+        }
+
+        static bool Same(List<Entry> a, List<Entry> b)
+        {
+            if (a.Count != b.Count) return false;
+            for (int i = 0; i < a.Count; i++)
+                if (a[i].lit != b[i].lit || !ReferenceEquals(a[i].key, b[i].key) && a[i].key != b[i].key || !ReferenceEquals(a[i].label, b[i].label) && a[i].label != b[i].label)
+                    return false;
+            return true;
         }
 
         // ------------------------------------------------------------------ content
@@ -261,13 +282,11 @@ namespace Skyfold
                 if (vr) m_ShowUntil = Time.unscaledTime + ShowAfterChange;
             }
 
-            var lit = new System.Text.StringBuilder();
-            Tick(m_Left, vr, mode, ctx, lit);
-            Tick(m_Right, vr, mode, ctx, lit);
-            LitSummary = lit.ToString();
+            Tick(m_Left, vr, mode, ctx);
+            Tick(m_Right, vr, mode, ctx);
         }
 
-        void Tick(Card card, bool vr, ButtonHints mode, InputContext ctx, System.Text.StringBuilder lit)
+        void Tick(Card card, bool vr, ButtonHints mode, InputContext ctx)
         {
             if (card == null) return;
             var head = vr ? rig.Head : null;
@@ -284,8 +303,6 @@ namespace Skyfold
 
             Collect(card.hand, ctx, m_Entries);
             Fill(card, m_Entries);
-            foreach (var e in m_Entries)
-                if (e.lit) lit.Append(card.hand).Append(':').Append(e.key).Append(' ');
 
             // Float just above the top of the controller (the handle runs along the grip pose's +Z), nudged
             // outward so the two cards never overlap, and always turned to face your eyes, upright.
