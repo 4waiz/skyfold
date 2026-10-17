@@ -157,8 +157,11 @@ Shader "Skyfold/StylizedLit"
                 half ssaoIndirect = 1.0h, ssaoDirect = 1.0h;
                 #if defined(_SCREEN_SPACE_OCCLUSION)
                     AmbientOcclusionFactor aoFactor = GetScreenSpaceAmbientOcclusion(screenUV);
-                    ssaoIndirect = aoFactor.indirectAmbientOcclusion;
-                    ssaoDirect = aoFactor.directAmbientOcclusion;
+                    // The 1:160 miniature (rendering layer 8, set by SceneBuilder) keeps only a hint of SSAO:
+                    // a street-sized radius would otherwise smear dark halos across the whole diorama.
+                    half aoAmount = (GetMeshRenderingLayer() & (1u << 8)) != 0u ? 0.3h : 1.0h;
+                    ssaoIndirect = lerp(1.0h, aoFactor.indirectAmbientOcclusion, aoAmount);
+                    ssaoDirect = lerp(1.0h, aoFactor.directAmbientOcclusion, aoAmount);
                 #endif
 
                 float4 shadowCoord = TransformWorldToShadowCoord(i.positionWS);

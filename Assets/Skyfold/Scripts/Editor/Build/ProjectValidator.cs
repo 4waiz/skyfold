@@ -69,6 +69,9 @@ namespace Skyfold.EditorTools
                 var pieces = Object.FindObjectsByType<ModulePiece>(FindObjectsInactive.Include);
                 foreach (var id in new[] { "piece.bridge", "piece.corner", "piece.straight", "piece.link.tee", "piece.link.corner", "piece.link.straight" })
                     Ok(pieces.Any(p => p.pieceId == id), "piece exists: " + id);
+                var miniCity = Object.FindObjectsByType<MiniCity>(FindObjectsInactive.Include).FirstOrDefault();
+                int tagged = miniCity != null ? miniCity.GetComponentsInChildren<Renderer>(true).Count(r => (r.renderingLayerMask & (1u << SceneBuilder.MiniRenderingLayerBit)) != 0) : 0;
+                Ok(tagged > 100, $"miniature renderers carry the SSAO-fade rendering layer ({tagged})");
                 foreach (var m in new[] { MissionCatalog.Episode1, MissionCatalog.Episode2, MissionCatalog.Episode3, MissionCatalog.Demo })
                 {
                     var def = MissionCatalog.Get(m);

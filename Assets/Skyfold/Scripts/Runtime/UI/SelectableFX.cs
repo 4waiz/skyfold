@@ -35,7 +35,16 @@ namespace Skyfold
 
         public void OnSelect(BaseEventData e) { m_Focused = true; Apply(); AudioDirector.Instance?.PlayUI("ui_hover", 0.5f); }
         public void OnDeselect(BaseEventData e) { m_Focused = false; Apply(); }
-        public void OnPointerEnter(PointerEventData e) { m_Hovered = true; Apply(); if (m_Selectable != null && m_Selectable.IsInteractable()) AudioDirector.Instance?.PlayUI("ui_hover", 0.4f); }
+        public void OnPointerEnter(PointerEventData e)
+        {
+            m_Hovered = true;
+            Apply();
+            if (m_Selectable == null || !m_Selectable.IsInteractable()) return;
+            AudioDirector.Instance?.PlayUI("ui_hover", 0.4f);
+            // Hover moves keyboard focus here, so the mouse/ray and the keyboard never highlight two rows at once.
+            var es = EventSystem.current;
+            if (es != null && es.currentSelectedGameObject != gameObject && !es.alreadySelecting) es.SetSelectedGameObject(gameObject);
+        }
         public void OnPointerExit(PointerEventData e) { m_Hovered = false; Apply(); }
 
         void OnDisable()

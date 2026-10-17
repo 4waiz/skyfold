@@ -23,7 +23,7 @@ namespace Skyfold
         RectTransform m_ObjectiveCard, m_TimerCard, m_PromptCard, m_HintCard, m_ToastCard, m_SubCard, m_Badge, m_Arrow, m_Speed, m_CursorHint;
         TextMeshProUGUI m_ObjEpisode, m_ObjText, m_ObjKeys, m_Timer, m_TimerLabel, m_Prompt, m_Hint, m_Toast, m_SubSpeaker, m_SubText, m_SpeedText, m_CursorText;
         Image m_Crosshair, m_TimerBg, m_Portrait, m_RadioGlyph;
-        float m_ToastTime, m_HintTime;
+        float m_ToastTime, m_HintTime, m_VRToastTime;
         bool m_ObjectivesCollapsed;
 
         // VR
@@ -140,7 +140,7 @@ namespace Skyfold
             m_HintCard = Card("Hint", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 380f), 820f, new Color(0.99f, 0.95f, 0.85f, 0.95f), out m_Hint, 26f);
             m_Hint.alignment = TextAlignmentOptions.Center;
 
-            m_ToastCard = Card("Toast", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -150f), 820f, UIStyle.PanelGlass, out m_Toast, 28f);
+            m_ToastCard = Card("Toast", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -210f), 820f, UIStyle.PanelGlass, out m_Toast, 28f); // clear of the objective card
             m_Toast.alignment = TextAlignmentOptions.Center;
 
             // Subtitles with Noor's radio portrait.
@@ -270,7 +270,9 @@ namespace Skyfold
             m_Toast.text = (warning ? "<color=#F2714B><b>Not quite.</b></color>  " : "") + text;
             m_ToastTime = warning ? 4.5f : 3.2f;
             m_ToastCard.gameObject.SetActive(true);
-            if (m_VRHint != null) { m_VRHint.text = text; m_HintTime = Mathf.Max(m_HintTime, m_ToastTime); }
+            // VR has no toast card, so the toast rides on the VR hint card. The desktop hint card must not
+            // re-show here: it would repeat the toast with the stale hover hint underneath it.
+            if (m_VRHint != null) { m_VRHint.text = text; m_VRToastTime = m_ToastTime; }
         }
 
         void OnContextHint(string text)
@@ -344,8 +346,13 @@ namespace Skyfold
             m_ToastTime -= Time.unscaledDeltaTime;
             if (m_ToastTime <= 0f && m_ToastCard.gameObject.activeSelf) m_ToastCard.gameObject.SetActive(false);
             m_HintTime -= Time.unscaledDeltaTime;
+            m_VRToastTime -= Time.unscaledDeltaTime;
             bool showHint = m_HintTime > 0f || !string.IsNullOrEmpty(HUDMessages.Hint);
-            if (!string.IsNullOrEmpty(HUDMessages.Hint) && m_HintTime <= 0f) { m_Hint.text = HUDMessages.Hint; m_VRHint.text = HUDMessages.Hint; }
+            if (!string.IsNullOrEmpty(HUDMessages.Hint) && m_HintTime <= 0f)
+            {
+                m_Hint.text = HUDMessages.Hint;
+                if (m_VRToastTime <= 0f) m_VRHint.text = HUDMessages.Hint; // a VR toast keeps the card until it times out
+            }
             m_HintCard.gameObject.SetActive(playing && showHint);
 
             // Objective + timer.
@@ -486,7 +493,7 @@ namespace Skyfold
                 m_VRSubCard.gameObject.SetActive(m_VRSub.text.Length > 0 && SettingsStore.Current.subtitles);
                 m_VRPromptCard.gameObject.SetActive(playing && !string.IsNullOrEmpty(prompt));
                 m_VRPrompt.text = prompt ?? "";
-                bool hint = m_HintTime > 0f || !string.IsNullOrEmpty(HUDMessages.Hint);
+                bool hint = m_HintTime > 0f || m_VRToastTime > 0f || !string.IsNullOrEmpty(HUDMessages.Hint);
                 m_VRHintCard.gameObject.SetActive(playing && hint && m_VRHint.text.Length > 0);
             }
 

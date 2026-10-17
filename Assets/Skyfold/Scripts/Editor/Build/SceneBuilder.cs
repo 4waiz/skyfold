@@ -79,6 +79,7 @@ namespace Skyfold.EditorTools
             BuildEntities(c);
             BuildRigs(c);
             BuildSystems(c, lib);
+            TagMiniatureRenderers();
 
             Directory.CreateDirectory(Path.GetDirectoryName(ScenePath));
             EditorSceneManager.MarkSceneDirty(scene);
@@ -93,6 +94,24 @@ namespace Skyfold.EditorTools
         {
             try { Build(); EditorApplication.Exit(0); }
             catch (System.Exception e) { Debug.LogException(e); EditorApplication.Exit(1); }
+        }
+
+        /// <summary>Rendering-layer bit for 1:160 objects; Skyfold/StylizedLit softens SSAO on them.</summary>
+        public const int MiniRenderingLayerBit = 8;
+
+        /// <summary>
+        /// SSAO works in world units, so its radius that suits a street corner would smear dark halos across
+        /// the 1:160 miniature. Everything drawn at miniature scale (the city, its pieces and mirror proxies)
+        /// gets a rendering-layer bit the lit shader reads to fade the effect there.
+        /// </summary>
+        static void TagMiniatureRenderers()
+        {
+            uint bit = 1u << MiniRenderingLayerBit;
+            foreach (var r in Object.FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                var s = r.transform.lossyScale;
+                if (Mathf.Min(Mathf.Abs(s.x), Mathf.Min(Mathf.Abs(s.y), Mathf.Abs(s.z))) < 0.05f) r.renderingLayerMask |= bit;
+            }
         }
 
         // ------------------------------------------------------------------ helpers

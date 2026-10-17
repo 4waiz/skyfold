@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
@@ -79,6 +80,9 @@ namespace Skyfold
             Directory.CreateDirectory(s_Out);
             m_Log = new StreamWriter(Path.Combine(s_Out, $"cine_{(P ? "portrait" : "landscape")}.log"), false);
             Time.captureFramerate = Fps;
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = -1;
+            StartCoroutine(Pace());
             AudioListener.volume = 0f;
             Log($"cine start: shots={s_Shots} aspect={(P ? "portrait" : "landscape")} stills={s_Stills} gpu={SystemInfo.graphicsDeviceName}");
             yield return Wait(2f);
@@ -95,6 +99,25 @@ namespace Skyfold
             Log($"cine done (real t={Time.realtimeSinceStartup:0.0}s)");
             m_Log.Close();
             Application.Quit(0);
+        }
+
+        /// <summary>
+        /// Holds real time to the 30 fps game clock. Some game effects (piece snaps, switch throws, UI) run on
+        /// unscaled real time; pacing the loop keeps them at true speed in the capture.
+        /// </summary>
+        IEnumerator Pace()
+        {
+            var eof = new WaitForEndOfFrame();
+            double next = Time.realtimeSinceStartupAsDouble;
+            while (true)
+            {
+                yield return eof;
+                next += 1.0 / Fps;
+                double wait = next - Time.realtimeSinceStartupAsDouble;
+                if (wait > 0.018) Thread.Sleep((int)((wait - 0.016) * 1000.0));
+                while (Time.realtimeSinceStartupAsDouble < next) { }
+                if (Time.realtimeSinceStartupAsDouble - next > 0.25) next = Time.realtimeSinceStartupAsDouble;
+            }
         }
 
         void Log(string line)
@@ -278,6 +301,7 @@ namespace Skyfold
         static float OutCubic(float t) => 1f - Mathf.Pow(1f - t, 3f);
         static float Range01(float t, float a, float b) => Mathf.Clamp01((t - a) / Mathf.Max(0.0001f, b - a));
 
+        /// <summary>Sets the bridge into the east crossing through the normal release path, with no animation.</summary>
         IEnumerator PlaceBridgeNow()
         {
             var tt = TabletopController.Instance;
@@ -285,13 +309,61 @@ namespace Skyfold
             var socket = MiniCity.Instance.Socket("bridge_east");
             if (piece == null || socket == null) { Log("bridge piece or socket missing"); yield break; }
             if (!Root.City.GetPlacement("bridge_east").IsEmpty) yield break;
-            tt.BeginHold(piece);
+            if (!tt.BeginHold(piece)) { Log("bridge pick-up refused"); yield break; }
             piece.BeginDesktopHold();
-            for (int i = 0; i < 14; i++) { piece.DesktopFollow(socket.transform.position + Vector3.up * 0.03f); yield return null; }
-            piece.EndDesktopHold();
-            tt.Release(piece);
+            TurnTo(piece, ValidQuarter(piece));
+            piece.transform.SetPositionAndRotation(socket.transform.position + Vector3.up * 0.03f, QuarterRotation(piece.CurrentQuarter));
+            yield return null;
+            ReleaseIntoSocket(piece, socket);
             yield return null;
             Log("bridge placed: " + !Root.City.GetPlacement("bridge_east").IsEmpty);
+        }
+
+        /// <summary>Lets go of a desktop-held piece; on success it is set straight down (no snap hop).</summary>
+        void ReleaseIntoSocket(ModulePiece piece, TileSocket socket)
+        {
+            piece.EndDesktopHold();
+            TabletopController.Instance.Release(piece);
+            if (piece.SocketId == socket.socketId)
+                piece.SetImmediate(socket.transform.position, QuarterRotation(piece.CurrentQuarter), PieceState.Placed);
+        }
+
+        /// <summary>The first quarter turn (from the tray orientation) that the east crossing accepts.</summary>
+        int ValidQuarter(ModulePiece piece)
+        {
+            int q = piece.CurrentQuarter;
+            for (int i = 0; i < 4; i++, q = (q + 1) & 3)
+                if (Root.City.Check("bridge_east", piece.type, q).Ok) return q;
+            Log("no accepted quarter for the bridge");
+            return piece.CurrentQuarter;
+        }
+
+        static void TurnTo(ModulePiece piece, int quarter)
+        {
+            for (int i = 0; i < 4 && piece.CurrentQuarter != (quarter & 3); i++) piece.DesktopRotate();
+        }
+
+        static Quaternion QuarterRotation(int q) => MiniCity.Instance.CityToWorldRotation(Quaternion.Euler(0f, q * 90f, 0f));
+
+        /// <summary>Frame-rate-fixed version of the desktop hold follow (the game's own uses real time).</summary>
+        static void HoldPiece(ModulePiece piece, Vector3 target, float posRate = 14f, float rotRate = 9f)
+        {
+            Vector3 p = Vector3.Lerp(piece.transform.position, target, 1f - Mathf.Exp(-posRate / Fps));
+            Quaternion r = Quaternion.Slerp(piece.transform.rotation, QuarterRotation(piece.CurrentQuarter), 1f - Mathf.Exp(-rotRate / Fps));
+            piece.transform.SetPositionAndRotation(p, r);
+        }
+
+        static readonly int EmissionId = Shader.PropertyToID("_EmissionColor");
+        MaterialPropertyBlock m_Block;
+
+        /// <summary>Same look as BeaconSystem.SetLens, so a scripted sweep matches the game's lit beacons.</summary>
+        void SetBeaconLens(Renderer r, bool on)
+        {
+            if (r == null) return;
+            if (m_Block == null) m_Block = new MaterialPropertyBlock();
+            r.GetPropertyBlock(m_Block);
+            m_Block.SetColor(EmissionId, on ? new Color(1f, 0.82f, 0.42f) * 6f : new Color(0.05f, 0.05f, 0.05f));
+            r.SetPropertyBlock(m_Block);
         }
 
         static FullScaleSlot Slot(string id)

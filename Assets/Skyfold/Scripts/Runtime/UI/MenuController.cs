@@ -138,7 +138,7 @@ namespace Skyfold
                 panel.anchorMin = panel.anchorMax = new Vector2(0f, 1f);
                 panel.pivot = new Vector2(0f, 1f);
                 panel.anchoredPosition = new Vector2(110f, -262f);
-                panel.sizeDelta = new Vector2(700f, 0f); // wide enough for a label plus its detail on one line
+                panel.sizeDelta = new Vector2(740f, 0f); // wide enough for a label plus its detail, and the launcher question, on one line
                 var vlg = panel.GetComponent<VerticalLayoutGroup>();
                 vlg.spacing = 8f;
                 vlg.padding = new RectOffset(24, 24, 24, 24);
@@ -282,7 +282,8 @@ namespace Skyfold
 
             public void Heading(string text, Color? color = null)
             {
-                var t = UIKit.Text(m_Panel, text, UIStyle.HeadingSize, color ?? UIStyle.Ink, true);
+                // The compact title panel is narrower: a slightly smaller heading keeps questions on one line.
+                var t = UIKit.Text(m_Panel, text, m_Menu.m_Compact ? 40f : UIStyle.HeadingSize, color ?? UIStyle.Ink, true);
                 UIKit.Layout(t, -1f, 56f);
             }
 
