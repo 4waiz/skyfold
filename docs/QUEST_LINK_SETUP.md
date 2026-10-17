@@ -53,7 +53,8 @@ If Retry keeps failing after Link is running, quit SKYFOLD and start it again fr
 Each item is **NOT TESTED** until you try it.
 
 1. Launch from **SKYFOLD - Quest 3**: the headset shows the Atelier within about 10 s, and the laptop shows the spectator view.
-2. Both gloves appear on your hands and follow the controllers. Note if a glove looks rotated or offset; the grip offset is a guess without a headset.
+2. Both gloves sit in your hands like you are holding the controllers: thumbs up along the handle, knuckles forward, palms facing in. (0.9.0 attached them to the controller's pointing pose, so they pointed the wrong way; 0.9.1 uses the grip pose.) Note if a glove still looks rotated or offset.
+2b. Look at each hand: a card above it lists that controller's buttons, with the one you need lit (Grip at the plinth, X once the bridge is in). Press **Y** for the wrist panel; it should read upright just above your left wrist.
 3. Left stick moves, right stick snap-turns, and holding A shows the teleport arc. Releasing it moves you.
 4. At the plinth: grip a bridge piece, turn it in your hand, set it into a glowing socket. It snaps when correct, and flashes coral with a reason when wrong.
 5. **X** at the plinth folds you down to the street. **Y** shows the wrist objectives.

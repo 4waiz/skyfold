@@ -66,6 +66,15 @@ One game, two ways to play. Both use the same save. The in-game **Controls** scr
 
 The Meta (Oculus) button always stays with the headset.
 
+### Button cards on your hands
+
+The courier gloves cover the real controllers, so each hand carries a small card that lists what its
+buttons do right now: at the plinth, on foot, in the car and in menus. The button the current step
+needs is lit in teal (Grip to grab the bridge, X to fold, the right trigger to drive, Trigger to
+select in a menu). The cards appear when you look at a hand and for a few seconds whenever the
+controls change. **Comfort → Button hints on your hands** switches them to *Always* or *Off*.
+Pressing **Y** shows the wrist panel with the objective and the full button list.
+
 ### In the courier car
 
 | Action | Control |

@@ -1,6 +1,6 @@
 SKYFOLD: The Last Flight
 ========================
-A hobby project by Awaiz Ahmed / Team Kanban. Version 0.9.0, Windows x64.
+A hobby project by Awaiz Ahmed / Team Kanban. Version 0.9.1, Windows x64.
 Not a SHIFT Game Jam entry: it was made before any jam theme reveal.
 
 Hold a broken coastal city in your hands, repair its roads as a giant, step inside the world you
@@ -32,7 +32,10 @@ WHAT YOU NEED
   NVIDIA GeForce RTX 5080 Laptop GPU.
 - For VR: Meta Quest 3, the Meta Horizon Link app on the PC (set as the active OpenXR runtime),
   and a Link cable or Air Link. See docs\QUEST_LINK_SETUP.md.
-  VR STATUS: the VR path was built and configured but NOT TESTED with a headset yet.
+  VR STATUS: first headset test (0.9.0, Quest 3 over Link): the gloves pointed the wrong way and
+  nothing in the headset showed which button does what. 0.9.1 fixes both (gloves follow the
+  controller grip pose; a card above each hand shows its buttons). The fix is checked with a
+  simulated headset only; re-test on the Quest 3 is pending.
 
 
 CONTROLS (full list: docs\CONTROLS.md)
@@ -41,7 +44,9 @@ Laptop  walk W A S D + mouse · use / pick up E · fold at a station Q · object
         At the plinth: hold left mouse to drag a piece, R to turn it, release to set it down.
         In the car: W accelerate · S brake / reverse · A D steer · Space parking brake
                     E climb out · hold R to put the car back on the road
-Quest 3 left stick move · right stick turn · hold A to aim a teleport, release to jump
+Quest 3 look at a hand: a card above it shows what that controller's buttons do right now
+        (the one you need is lit). Comfort > Button hints: when you look / always / off.
+        left stick move · right stick turn · hold A to aim a teleport, release to jump
         grip grab · trigger use · X fold · Y wrist objectives · B back · left Menu pause
         In the car: left stick steer · right trigger throttle · left trigger brake / reverse
                     B climb out · hold X to put the car back on the road

@@ -12,7 +12,7 @@ A hobby project by **Awaiz Ahmed / Team Kanban**: a single-player, nonviolent pu
 
 ## Play
 
-Install-free: unzip `SKYFOLD_v0.9.0_win64.zip` and double-click one of the `.cmd` launchers inside, or `SKYFOLD.exe`. On the build machine, `tools\package.ps1` also creates two Desktop shortcuts.
+Install-free: unzip `SKYFOLD_v0.9.1_win64.zip` and double-click one of the `.cmd` launchers inside, or `SKYFOLD.exe`. On the build machine, `tools\package.ps1` also creates two Desktop shortcuts.
 
 - **Laptop:** `SKYFOLD.exe --mode=desktop`, or the "SKYFOLD" shortcut.
 - **Quest 3 through Link:** `SKYFOLD.exe --mode=vr`, or the "SKYFOLD - Quest 3" shortcut. See [docs/QUEST_LINK_SETUP.md](docs/QUEST_LINK_SETUP.md).

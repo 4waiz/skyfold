@@ -6,8 +6,8 @@ Every result below comes from a run on this machine. Anything that was not actua
 
 | | |
 | --- | --- |
-| Build | SKYFOLD 0.9.0 release player: Mono, D3D11, URP 17.6 Forward+, MSAA 4×, Linear colour. 178 MB, 0 build errors, 4 build warnings (all Unity / TextMesh Pro package shader deprecation notices). |
-| Package | `Release\SKYFOLD_v0.9.0_win64.zip` (about 72 MB), unpacked copy in `Release\SKYFOLD\` |
+| Build | SKYFOLD 0.9.1 release player (0.9.0 plus the VR glove and button-hint fix below): Mono, D3D11, URP 17.6 Forward+, MSAA 4×, Linear colour. 178 MB, 0 build errors, 4 build warnings (all Unity / TextMesh Pro package shader deprecation notices). |
+| Package | `Release\SKYFOLD_v0.9.1_win64.zip` (about 72 MB), unpacked copy in `Release\SKYFOLD\` |
 | Engine | Unity 6000.6.2f1; OpenXR 1.18 (XR started only on request, never at launch); XR Interaction Toolkit 3.6 |
 | Machine | NVIDIA GeForce RTX 5080 Laptop GPU (16 GB), Intel Core Ultra 9 275HX (24 threads), 32 GB RAM, Windows 11 (10.0.26200), 2560×1600 @ 240 Hz panel at 150% scaling |
 | Headset | **None connected at any point.** No Quest 3 test of any kind has been run. |
@@ -53,6 +53,39 @@ The older `campaign` scenario (Episode 1 unlocks Episode 2 and saves the route) 
 
 The other scenarios in the table ran on the build before this change and were not re-run. The change only swaps the badge sprite and the credits text.
 
+## VR fix after the first headset test (0.9.1, 2026-10-17)
+
+**What the creator saw on the Quest 3 (0.9.0):** the gloves were not oriented like hands holding the controllers, and nothing in the headset said which button to press, so the game could not be controlled.
+
+**Cause:**
+- The gloves were children of the XRI controller transforms. Those follow the controller's *aim* pose first (`pointerPosition` / `pointerRotation` in the Starter Assets actions).
+- The glove alignment (90 deg about X) was written for the *grip* pose, so each glove was pitched about 55 deg and pushed a few centimetres forward.
+- On top of that, the wrist panel took its "up" from the bracer anchor's little-finger axis, so it showed upside down.
+- The only button text was a short line on that panel.
+
+**Fix:**
+- Each glove now rides its own anchor with a Tracked Pose Driver on `devicePosition` / `deviceRotation`. That is the OpenXR grip pose, the pose meant for rendering a held hand.
+- A probe in QA measured the glove model's axes against the grip frame. Fingertips point along -Y, the little finger along -Z, and the left palm faces +X, which matches the OpenXR grip convention exactly.
+- New `ControllerHints`: a card above each glove lists what that controller's buttons do in the current context, with the button the current step needs lit. It shows when you look at a hand and for 8 s after the controls change. Comfort has a new setting for it: when looking / always / off.
+- The wrist panel is upright, sits just above the wrist, and lists every button for the context.
+
+**New scenario `vrsim`:** no headset needed.
+- Simulated HMD and Quest-style controllers (separate grip and aim poses 55 deg apart, every bound button by usage) drive the real VR rig.
+- PASSED 29/29, covering:
+  - both gloves follow the grip pose (0.0 mm, 0.0 deg) while the XRI controllers follow the aim pose
+  - cards show when you look at your hands and light Grip at the plinth, X at the fold step, the right Trigger in the car and Trigger in the pause menu
+  - X folds to the street
+  - left stick walks 2.9 m in 1.5 s
+  - right stick snap-turns 45 deg
+  - right trigger reaches 9.8 m/s, left trigger brakes to a stop
+  - B climbs out
+  - left Menu pauses and resumes
+- Screenshots: `qa\_captures\vrsim\vr_00a..c_gloves_*.png` (handshake hold from the side, top and front) and `vr_01..06_*.png` (cards at the plinth, the fold step, the street, the car and the pause menu).
+
+**Regression on the 0.9.1 build:** `smoke` 5/5, `menus` 21/21, `demo` 21/21, `walk` 9/9, `episode1` 19/19.
+
+**Still NOT TESTED:** all of this on the real headset. The simulation proves the glove follows the grip pose and the bindings fire; it cannot prove how the real runtime's grip pose sits in a real hand, or how the cards read in the lenses.
+
 ## Launch tests through the real shortcuts
 
 Run with `tools\qa\launch_test.ps1` on the packaged folder `Release\SKYFOLD\`, fullscreen at 2560×1600. Each test captures only the game window and reads the log.
@@ -91,10 +124,11 @@ Run with `tools\qa\launch_test.ps1` on the packaged folder `Release\SKYFOLD\`, f
 
 | Area | Status |
 | --- | --- |
-| VR start with a headset (OpenXR loader, display, rig switch) | **NOT TESTED** (no headset) |
+| VR start with a headset (OpenXR loader, display, rig switch) | Worked for the creator on a Quest 3 over Link (0.9.0) |
 | VR start failure without a headset | PASSED (clear message, Retry and Play on this laptop; see launch tests) |
-| Controller bindings (stick move, snap turn, A teleport, grip, trigger, X fold, Y wrist, B back, Menu pause) | **NOT TESTED** |
-| Courier glove alignment on the controllers | **NOT TESTED** (offset set from the OpenXR grip-pose convention) |
+| Controller bindings (stick move, snap turn, A teleport, grip, trigger, X fold, Y wrist, B back, Menu pause) | Simulated: X fold, stick walk, snap turn, triggers, B, Menu PASSED (`vrsim`). On the headset: **NOT TESTED** in 0.9.1 |
+| Courier glove alignment on the controllers | FAILED on the headset in 0.9.0 (gloves followed the aim pose). Fixed in 0.9.1 (grip pose), PASSED in simulation; on the headset **NOT TESTED** |
+| Button cards above the gloves, wrist panel | PASSED in simulation (`vrsim` screenshots); readability in the lenses **NOT TESTED** |
 | Driving in VR (cockpit and Remote overlook), comfort vignette | **NOT TESTED** |
 | Recenter, height calibration, seated mode, headset-off pause | **NOT TESTED** |
 | Spectator view on the laptop while in VR | **NOT TESTED** |
