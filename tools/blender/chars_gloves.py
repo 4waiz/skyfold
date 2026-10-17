@@ -50,6 +50,21 @@ CUFF_C = Vector((0.032, 0.0, 0.0))
 CUFF_SCALE = (0.80, 1.0, 1.10)
 DEVICE_Y = 0.081
 FINGER_SXY = (1.08, 0.92)
+# cuff outer profile (radius before CUFF_SCALE, y) from the wrist to the rolled lip
+CUFF_PROFILE = [(0.0290, 0.050), (0.0306, 0.058), (0.0322, 0.080), (0.0340, 0.098),
+                (0.0358, 0.1035), (0.0352, 0.1070), (0.0328, 0.1078), (0.0310, 0.1060),
+                (0.0302, 0.0960)]
+
+
+def cuff_r(y):
+    """Outer cuff radius (before CUFF_SCALE) at height y along the wrist."""
+    pts = CUFF_PROFILE[:5]
+    if y <= pts[0][1]:
+        return pts[0][0]
+    for (r0, y0), (r1, y1) in zip(pts, pts[1:]):
+        if y0 <= y <= y1:
+            return r0 + (r1 - r0) * (y - y0) / (y1 - y0)
+    return pts[-1][0]
 
 
 def smoothstep(a, b, x):
@@ -125,6 +140,20 @@ def keyed(keys, n):
 
 
 # ---------------------------------------------------------------------------- plates
+def densify(pts, max_len):
+    """Insert points along a closed outline so no edge is longer than max_len (lets a plate
+    wrap a curved surface instead of cutting chords through it)."""
+    out = []
+    n = len(pts)
+    for i in range(n):
+        a, b = Vector(pts[i]), Vector(pts[(i + 1) % n])
+        k = max(1, int(math.ceil((b - a).length / max_len)))
+        for j in range(k):
+            q = a.lerp(b, j / k)
+            out.append((q.x, q.y))
+    return out
+
+
 def inset2d(pts, d, maxm=2.4):
     """Offset a CCW 2D outline inward by d (mitred, clamped)."""
     n = len(pts)
@@ -485,9 +514,7 @@ def build_hand(name, grip, device, parent, mirror=False):
     cuff = C.Part()
     S = Matrix.Diagonal((*CUFF_SCALE, 1.0))
     Mc = Matrix.Translation(CUFF_C) @ S
-    prof = [(0.0, 0.050), (0.0290, 0.050), (0.0306, 0.058), (0.0322, 0.080), (0.0340, 0.098),
-            (0.0358, 0.1035), (0.0352, 0.1070), (0.0328, 0.1078), (0.0310, 0.1060),
-            (0.0302, 0.0960), (0.0, 0.0960)]
+    prof = [(0.0, 0.050)] + CUFF_PROFILE + [(0.0, 0.0960)]
     seg = 24
     vr, cf = cuff.lathe(prof, seg, TEAL, matrix=Mc, axis='Y')
     nb = len(prof) - 3
@@ -532,9 +559,9 @@ def bracer(pads, soft, csurf, S):
     top = fx - 0.0027                       # housing top (screen glass sits just below the face)
     hx0 = 0.0555
     # two brass straps round the cuff, under the housing ends
-    for y in (DEVICE_Y - 0.0205, DEVICE_Y + 0.0205):
+    for y in (DEVICE_Y - 0.0190, DEVICE_Y + 0.0190):
         Mb = Matrix.Translation(CUFF_C + Vector((0, y, 0))) @ S @ Matrix.Rotation(radians(90), 4, 'X')
-        soft.torus(0.0336, 0.0021, 22, 4, BRASS, matrix=Mb, scale_minor=(0.7, 1.7))
+        soft.torus(cuff_r(y) + 0.0004, 0.0021, 22, 4, BRASS, matrix=Mb, scale_minor=(0.7, 1.7))
     # housing (teal, rounded)
     pads.rbox(Vector(((hx0 + top) / 2, DEVICE_Y, 0.0)), (top - hx0, 0.050, 0.0380), 0.0036, 2, TEAL)
     # raised brass bezel round the screen opening
@@ -582,7 +609,7 @@ def bracer(pads, soft, csurf, S):
 def strap(pads, csurf, S, side=1):
     """Leather strap with a brass buckle across the back of the wrist (glove_R)."""
     F = cuff_F(csurf, S, DEVICE_Y - 0.0075, -0.95, -0.0003)
-    out = rounded_rect(0.015, 0.060, 0.0035, 2)
+    out = densify(rounded_rect(0.015, 0.060, 0.0035, 2), 0.0045)
     out = [(x + 0.0075, y + 0.030) for (x, y) in out]
     plate(pads, out, F, 0.0018, SAND, bevel=0.0005, fill=1, fill_to=0.0050)
     stitches(pads, F, inset2d(out, 0.0019), 0.0018, PEARL, dash=0.0022, gap=0.0016)

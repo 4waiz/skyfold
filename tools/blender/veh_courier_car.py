@@ -110,8 +110,7 @@ def fenders(sym):
         sc = []
         for k in range(n + 1):
             e = min(k, n - k)
-            f = 1.0 if e >= 1 else 0.82
-            sc.append((1.0, f))
+            sc.append((1.0, 1.0) if e >= 1 else (0.93, 0.55))
         sweep(sym, path, sec, PEARL, up=up, scales=sc, sec_mats=smats, cap_mat=PEARL)
         for a in (radians(48), radians(132)):
             rad = Vector((0, cos(a), sin(a)))
