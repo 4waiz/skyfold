@@ -172,7 +172,9 @@ namespace Skyfold.EditorTools
             feature.SetActive(true);
             var so = new SerializedObject(feature);
             SetInt(so, "m_Settings.AOMethod", 0);          // blue noise
-            SetBool(so, "m_Settings.Downsample", false);
+            // Half-resolution AO: the effect is soft anyway, and it quarters the cost, which matters in VR (two
+            // eyes at roughly 4x the laptop's pixel count). The bilateral blur keeps the edges clean.
+            SetBool(so, "m_Settings.Downsample", true);
             SetBool(so, "m_Settings.AfterOpaque", false);  // sampled by the lit shader, so direct light is barely touched
             SetInt(so, "m_Settings.Source", 1);            // depth + normals
             SetInt(so, "m_Settings.NormalSamples", 1);
