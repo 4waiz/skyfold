@@ -16,82 +16,31 @@
       0.0,
       0.0
      ],
-     "tris": 488,
+     "tris": 1716,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Kerb",
-      "SKY_SandstoneDeep",
       "SKY_Pearl",
       "SKY_Ink",
-      "SKY_Road",
-      "SKY_RoadLine"
+      "SKY_SandstoneDeep",
+      "SKY_Kerb",
+      "SKY_Sandstone",
+      "SKY_Metal",
+      "SKY_RoadLine",
+      "SKY_Road"
      ]
     }
    ],
-   "tris": 488,
+   "tris": 1716,
    "materials": [
     "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Road",
     "SKY_RoadLine",
-    "SKY_SandstoneDeep"
-   ],
-   "bounds_unity": {
-    "min": [
-     -8.0,
-     -0.3,
-     -8.0
-    ],
-    "max": [
-     8.0,
-     0.15,
-     8.0
-    ]
-   },
-   "size_m": [
-    16.0,
-    0.45,
-    16.0
-   ],
-   "empties": [],
-   "issues": [],
-   "notes": []
-  },
-  {
-   "file": "Assets/Skyfold/Art/Models/Roads/road_corner.fbx",
-   "name": "road_corner",
-   "category": "Roads",
-   "objects": [
-    {
-     "name": "road_corner",
-     "type": "MESH",
-     "position_unity": [
-      0.0,
-      0.0,
-      0.0
-     ],
-     "tris": 536,
-     "color_attributes": [
-      "Col"
-     ],
-     "materials": [
-      "SKY_Kerb",
-      "SKY_SandstoneDeep",
-      "SKY_Pearl",
-      "SKY_Road",
-      "SKY_RoadLine"
-     ]
-    }
-   ],
-   "tris": 536,
-   "materials": [
-    "SKY_Kerb",
-    "SKY_Pearl",
-    "SKY_Road",
-    "SKY_RoadLine",
+    "SKY_Sandstone",
     "SKY_SandstoneDeep"
    ],
    "bounds_unity": {
@@ -128,28 +77,34 @@
       0.0,
       0.0
      ],
-     "tris": 502,
+     "tris": 1788,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Road",
       "SKY_Pearl",
-      "SKY_Kerb",
-      "SKY_RoadLine",
+      "SKY_Ink",
       "SKY_SandstoneDeep",
-      "SKY_Ink"
+      "SKY_Kerb",
+      "SKY_Road",
+      "SKY_Terracotta",
+      "SKY_Sandstone",
+      "SKY_RoadLine",
+      "SKY_Metal"
      ]
     }
    ],
-   "tris": 502,
+   "tris": 1788,
    "materials": [
     "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Road",
     "SKY_RoadLine",
-    "SKY_SandstoneDeep"
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Terracotta"
    ],
    "bounds_unity": {
     "min": [
@@ -185,25 +140,94 @@
       0.0,
       0.0
      ],
-     "tris": 604,
+     "tris": 1956,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Kerb",
       "SKY_Pearl",
+      "SKY_SandstoneDeep",
+      "SKY_Kerb",
+      "SKY_Sandstone",
       "SKY_Road",
+      "SKY_Terracotta",
       "SKY_RoadLine",
-      "SKY_SandstoneDeep"
+      "SKY_Ink",
+      "SKY_Metal"
      ]
     }
    ],
-   "tris": 604,
+   "tris": 1956,
    "materials": [
+    "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Road",
     "SKY_RoadLine",
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Terracotta"
+   ],
+   "bounds_unity": {
+    "min": [
+     -8.0,
+     -0.3,
+     -8.0
+    ],
+    "max": [
+     8.0,
+     0.15,
+     8.0
+    ]
+   },
+   "size_m": [
+    16.0,
+    0.45,
+    16.0
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Roads/road_corner.fbx",
+   "name": "road_corner",
+   "category": "Roads",
+   "objects": [
+    {
+     "name": "road_corner",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 1838,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Ink",
+      "SKY_SandstoneDeep",
+      "SKY_Kerb",
+      "SKY_Road",
+      "SKY_Metal",
+      "SKY_RoadLine",
+      "SKY_Sandstone"
+     ]
+    }
+   ],
+   "tris": 1838,
+   "materials": [
+    "SKY_Ink",
+    "SKY_Kerb",
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_Road",
+    "SKY_RoadLine",
+    "SKY_Sandstone",
     "SKY_SandstoneDeep"
    ],
    "bounds_unity": {
@@ -240,27 +264,31 @@
       0.0,
       0.0
      ],
-     "tris": 604,
+     "tris": 1894,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Kerb",
-      "SKY_SandstoneDeep",
       "SKY_Pearl",
+      "SKY_Ink",
+      "SKY_Sandstone",
+      "SKY_SandstoneDeep",
+      "SKY_Kerb",
+      "SKY_Metal",
       "SKY_Road",
-      "SKY_RoadLine",
-      "SKY_Ink"
+      "SKY_RoadLine"
      ]
     }
    ],
-   "tris": 604,
+   "tris": 1894,
    "materials": [
     "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Road",
     "SKY_RoadLine",
+    "SKY_Sandstone",
     "SKY_SandstoneDeep"
    ],
    "bounds_unity": {
@@ -297,20 +325,24 @@
       0.0,
       0.0
      ],
-     "tris": 732,
+     "tris": 1956,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Sandstone",
+      "SKY_Pearl",
+      "SKY_Kerb",
       "SKY_SandstoneDeep",
       "SKY_PalmLeaf",
-      "SKY_Pearl"
+      "SKY_Sandstone",
+      "SKY_Brass"
      ]
     }
    ],
-   "tris": 732,
+   "tris": 1956,
    "materials": [
+    "SKY_Brass",
+    "SKY_Kerb",
     "SKY_PalmLeaf",
     "SKY_Pearl",
     "SKY_Sandstone",
@@ -350,18 +382,20 @@
       0.0,
       0.0
      ],
-     "tris": 460,
+     "tris": 1162,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_SandstoneDeep",
+      "SKY_Kerb",
       "SKY_Sandstone"
      ]
     }
    ],
-   "tris": 460,
+   "tris": 1162,
    "materials": [
+    "SKY_Kerb",
     "SKY_Sandstone",
     "SKY_SandstoneDeep"
    ],
@@ -399,21 +433,25 @@
       0.0,
       0.0
      ],
-     "tris": 88,
+     "tris": 1052,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Road",
+      "SKY_SandstoneDeep",
       "SKY_Kerb",
+      "SKY_Pearl",
+      "SKY_Ink",
       "SKY_RoadLine",
-      "SKY_SandstoneDeep"
+      "SKY_Road"
      ]
     }
    ],
-   "tris": 88,
+   "tris": 1052,
    "materials": [
+    "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Pearl",
     "SKY_Road",
     "SKY_RoadLine",
     "SKY_SandstoneDeep"
@@ -426,13 +464,13 @@
     ],
     "max": [
      8.0,
-     0.0,
+     0.004,
      8.0
     ]
    },
    "size_m": [
     16.0,
-    0.3,
+    0.304,
     16.0
    ],
    "empties": [],
@@ -452,23 +490,27 @@
       0.0,
       0.0
      ],
-     "tris": 168,
+     "tris": 1376,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_RoadLine",
-      "SKY_Road",
+      "SKY_SandstoneDeep",
       "SKY_Kerb",
-      "SKY_Coral",
-      "SKY_SandstoneDeep"
+      "SKY_Ink",
+      "SKY_Pearl",
+      "SKY_Road",
+      "SKY_RoadLine",
+      "SKY_Coral"
      ]
     }
    ],
-   "tris": 168,
+   "tris": 1376,
    "materials": [
     "SKY_Coral",
+    "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Pearl",
     "SKY_Road",
     "SKY_RoadLine",
     "SKY_SandstoneDeep"
@@ -481,13 +523,13 @@
     ],
     "max": [
      8.0,
-     0.0,
+     0.004,
      8.0
     ]
    },
    "size_m": [
     16.0,
-    0.3,
+    0.304,
     16.0
    ],
    "empties": [],
@@ -507,21 +549,25 @@
       0.0,
       0.0
      ],
-     "tris": 300,
+     "tris": 980,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_SandstoneDeep",
+      "SKY_Ink",
+      "SKY_Metal",
       "SKY_Kerb",
-      "SKY_Ink"
+      "SKY_Brass",
+      "SKY_SandstoneDeep"
      ]
     }
    ],
-   "tris": 300,
+   "tris": 980,
    "materials": [
+    "SKY_Brass",
     "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Metal",
     "SKY_SandstoneDeep"
    ],
    "bounds_unity": {
@@ -558,34 +604,36 @@
       0.0,
       0.0
      ],
-     "tris": 984,
+     "tris": 2184,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_SandstoneDeep",
-      "SKY_Pearl",
       "SKY_Sandstone",
+      "SKY_Pearl",
       "SKY_Kerb",
+      "SKY_Brass",
       "SKY_Ink",
-      "SKY_Wood"
+      "SKY_Rubber"
      ]
     }
    ],
-   "tris": 984,
+   "tris": 2184,
    "materials": [
+    "SKY_Brass",
     "SKY_Ink",
     "SKY_Kerb",
     "SKY_Pearl",
+    "SKY_Rubber",
     "SKY_Sandstone",
-    "SKY_SandstoneDeep",
-    "SKY_Wood"
+    "SKY_SandstoneDeep"
    ],
    "bounds_unity": {
     "min": [
      -8.0,
      -4.0,
-     -9.66
+     -9.665
     ],
     "max": [
      8.0,
@@ -596,13 +644,11 @@
    "size_m": [
     16.0,
     4.58,
-    1.66
+    1.665
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Wall occupies Blender y 8..9.5 (Unity z -8..-9.5), i.e. the 1.5 m water margin outside the cell's south edge; top flush at Z0; face drops to Z-4."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Roads/quay_corner_outer.fbx",
@@ -617,49 +663,49 @@
       0.0,
       0.0
      ],
-     "tris": 1792,
+     "tris": 3728,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_SandstoneDeep",
-      "SKY_Pearl",
       "SKY_Sandstone",
+      "SKY_Pearl",
       "SKY_Ink",
-      "SKY_Wood"
+      "SKY_Brass",
+      "SKY_Rubber"
      ]
     }
    ],
-   "tris": 1792,
+   "tris": 3728,
    "materials": [
+    "SKY_Brass",
     "SKY_Ink",
     "SKY_Pearl",
+    "SKY_Rubber",
     "SKY_Sandstone",
-    "SKY_SandstoneDeep",
-    "SKY_Wood"
+    "SKY_SandstoneDeep"
    ],
    "bounds_unity": {
     "min": [
      -8.0,
      -4.0,
-     -9.66
+     -9.665
     ],
     "max": [
-     9.66,
+     9.665,
      0.58,
      8.0
     ]
    },
    "size_m": [
-    17.66,
+    17.665,
     4.58,
-    17.66
+    17.665
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Walls lie outside the cell on the Unity S and E sides plus the rounded corner square."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Roads/quay_corner_inner.fbx",
@@ -674,34 +720,34 @@
       0.0,
       0.0
      ],
-     "tris": 764,
+     "tris": 1980,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_SandstoneDeep",
-      "SKY_Pearl",
       "SKY_Sandstone",
+      "SKY_Pearl",
       "SKY_Ink",
-      "SKY_Wood",
-      "SKY_Brass"
+      "SKY_Brass",
+      "SKY_Rubber"
      ]
     }
    ],
-   "tris": 764,
+   "tris": 1980,
    "materials": [
     "SKY_Brass",
     "SKY_Ink",
     "SKY_Pearl",
+    "SKY_Rubber",
     "SKY_Sandstone",
-    "SKY_SandstoneDeep",
-    "SKY_Wood"
+    "SKY_SandstoneDeep"
    ],
    "bounds_unity": {
     "min": [
      -8.0,
      -4.0,
-     -9.66
+     -9.665
     ],
     "max": [
      6.5,
@@ -712,13 +758,11 @@
    "size_m": [
     14.5,
     4.58,
-    1.66
+    1.665
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Use on the land cell whose wall runs into the concave corner at its local Unity-east end; the neighbouring cell keeps a quay_straight."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Roads/bridge_span.fbx",
@@ -773,33 +817,39 @@
       0.0,
       0.0
      ],
-     "tris": 2860,
+     "tris": 8716,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Road",
-      "SKY_RoadLine",
-      "SKY_Kerb",
       "SKY_Pearl",
       "SKY_SandstoneDeep",
+      "SKY_Kerb",
+      "SKY_Metal",
+      "SKY_Ink",
+      "SKY_Road",
+      "SKY_RoadLine",
       "SKY_TealGlow",
       "SKY_Brass",
       "SKY_Sandstone",
+      "SKY_Teal",
       "SKY_Light"
      ]
     }
    ],
-   "tris": 2860,
+   "tris": 8716,
    "materials": [
     "SKY_Brass",
+    "SKY_Ink",
     "SKY_Kerb",
     "SKY_Light",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Road",
     "SKY_RoadLine",
     "SKY_Sandstone",
     "SKY_SandstoneDeep",
+    "SKY_Teal",
     "SKY_TealGlow"
    ],
    "bounds_unity": {
@@ -858,9 +908,7 @@
     }
    ],
    "issues": [],
-   "notes": [
-    "Deck top Z0 (8 m asphalt + 1 m walkways at Z0.15). Abutments fill the 1.5 m channel margins at both cell edges, continuing the quay line; arch springs from piers at |y|=5.8."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Roads/bridge_stub.fbx",
@@ -875,33 +923,37 @@
       0.0,
       0.0
      ],
-     "tris": 2904,
+     "tris": 5912,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Kerb",
       "SKY_Pearl",
-      "SKY_Road",
       "SKY_SandstoneDeep",
+      "SKY_Kerb",
+      "SKY_Metal",
+      "SKY_Ink",
+      "SKY_Road",
       "SKY_TealGlow",
       "SKY_Brass",
+      "SKY_Teal",
       "SKY_Coral",
-      "SKY_Ink",
       "SKY_Sandstone"
      ]
     }
    ],
-   "tris": 2904,
+   "tris": 5912,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
     "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Road",
     "SKY_Sandstone",
     "SKY_SandstoneDeep",
+    "SKY_Teal",
     "SKY_TealGlow"
    ],
    "bounds_unity": {
@@ -912,20 +964,18 @@
     ],
     "max": [
      8.0,
-     1.47,
+     1.54,
      8.0
     ]
    },
    "size_m": [
     16.0,
-    5.47,
+    5.54,
     16.0
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Broken deck ends reach ~2.2-2.8 m from each cell edge; coral/pearl barriers at |y|=6.65."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Buildings/bldg_house_a.fbx",
@@ -940,57 +990,67 @@
       0.0,
       0.0
      ],
-     "tris": 4430,
+     "tris": 15578,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_SandstoneDeep",
-      "SKY_Pearl",
-      "SKY_Brass",
       "SKY_Sandstone",
-      "SKY_Kerb",
       "SKY_Wood",
       "SKY_Glass",
-      "SKY_Terracotta",
-      "SKY_PalmLeaf",
+      "SKY_Kerb",
+      "SKY_Pearl",
+      "SKY_Brass",
       "SKY_Ink",
+      "SKY_Light",
+      "SKY_Teal",
       "SKY_Fabric",
-      "SKY_TealGlow"
+      "SKY_SandstoneDeep",
+      "SKY_TealGlow",
+      "SKY_Metal",
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_Flower",
+      "SKY_Terracotta"
      ]
     }
    ],
-   "tris": 4430,
+   "tris": 15578,
    "materials": [
     "SKY_Brass",
     "SKY_Fabric",
+    "SKY_Flower",
     "SKY_Glass",
     "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
+    "SKY_Metal",
     "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
     "SKY_Pearl",
     "SKY_Sandstone",
     "SKY_SandstoneDeep",
+    "SKY_Teal",
     "SKY_TealGlow",
     "SKY_Terracotta",
     "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
-     -5.6,
+     -5.57,
      0.0,
-     -5.6
+     -5.585
     ],
     "max": [
-     5.6,
-     10.9,
-     6.2
+     5.57,
+     11.0,
+     6.15
     ]
    },
    "size_m": [
-    11.2,
-    10.9,
-    11.8
+    11.14,
+    11.0,
+    11.735
    ],
    "empties": [],
    "issues": [],
@@ -1009,34 +1069,46 @@
       0.0,
       0.0
      ],
-     "tris": 4922,
+     "tris": 15522,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_Sandstone",
-      "SKY_Pearl",
-      "SKY_Brass",
-      "SKY_Kerb",
       "SKY_Teal",
       "SKY_Glass",
-      "SKY_TealLight",
+      "SKY_Pearl",
+      "SKY_Kerb",
+      "SKY_Brass",
       "SKY_Ink",
+      "SKY_Light",
+      "SKY_Fabric",
+      "SKY_TealLight",
       "SKY_Terracotta",
+      "SKY_PalmTrunk",
       "SKY_PalmLeaf",
-      "SKY_TealGlow"
+      "SKY_Flower",
+      "SKY_SandstoneDeep",
+      "SKY_TealGlow",
+      "SKY_Metal"
      ]
     }
    ],
-   "tris": 4922,
+   "tris": 15522,
    "materials": [
     "SKY_Brass",
+    "SKY_Fabric",
+    "SKY_Flower",
     "SKY_Glass",
     "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
+    "SKY_Metal",
     "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
     "SKY_Pearl",
     "SKY_Sandstone",
+    "SKY_SandstoneDeep",
     "SKY_Teal",
     "SKY_TealGlow",
     "SKY_TealLight",
@@ -1044,20 +1116,20 @@
    ],
    "bounds_unity": {
     "min": [
-     -4.9,
+     -4.88,
      0.0,
-     -5.1
+     -5.085
     ],
     "max": [
-     4.9,
-     15.02,
-     6.0
+     4.88,
+     15.0,
+     5.85
     ]
    },
    "size_m": [
-    9.8,
-    15.02,
-    11.1
+    9.76,
+    15.0,
+    10.935
    ],
    "empties": [],
    "issues": [],
@@ -1076,59 +1148,71 @@
       0.0,
       0.0
      ],
-     "tris": 4928,
+     "tris": 15702,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_SandstoneDeep",
       "SKY_Sandstone",
+      "SKY_Pearl",
       "SKY_Glass",
       "SKY_Wood",
-      "SKY_Pearl",
-      "SKY_Teal",
       "SKY_Kerb",
-      "SKY_TealGlow",
-      "SKY_Coral",
+      "SKY_Teal",
+      "SKY_Ink",
       "SKY_Brass",
-      "SKY_Fabric",
       "SKY_Terracotta",
-      "SKY_PalmLeaf"
+      "SKY_TealLight",
+      "SKY_Flower",
+      "SKY_Light",
+      "SKY_Coral",
+      "SKY_TealGlow",
+      "SKY_Fabric",
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_SandstoneDeep",
+      "SKY_Metal"
      ]
     }
    ],
-   "tris": 4928,
+   "tris": 15702,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
     "SKY_Fabric",
+    "SKY_Flower",
     "SKY_Glass",
+    "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
+    "SKY_Metal",
     "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
     "SKY_Pearl",
     "SKY_Sandstone",
     "SKY_SandstoneDeep",
     "SKY_Teal",
     "SKY_TealGlow",
+    "SKY_TealLight",
     "SKY_Terracotta",
     "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
-     -6.1,
+     -6.08,
      0.0,
-     -4.6
+     -4.585
     ],
     "max": [
-     6.1,
-     10.3,
-     5.35
+     6.08,
+     10.85,
+     5.32
     ]
    },
    "size_m": [
-    12.2,
-    10.3,
-    9.95
+    12.16,
+    10.85,
+    9.905
    ],
    "empties": [],
    "issues": [],
@@ -1147,7 +1231,7 @@
       0.0,
       0.0
      ],
-     "tris": 4728,
+     "tris": 15240,
      "color_attributes": [
       "Col"
      ],
@@ -1155,26 +1239,40 @@
       "SKY_SandstoneDeep",
       "SKY_Pearl",
       "SKY_Brass",
-      "SKY_TealLight",
       "SKY_Kerb",
-      "SKY_TealGlow",
+      "SKY_TealLight",
       "SKY_Glass",
+      "SKY_Ink",
       "SKY_Wood",
-      "SKY_Fabric",
+      "SKY_Sandstone",
       "SKY_Terracotta",
-      "SKY_PalmLeaf"
+      "SKY_Teal",
+      "SKY_TealGlow",
+      "SKY_Fabric",
+      "SKY_Metal",
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_Flower",
+      "SKY_Light"
      ]
     }
    ],
-   "tris": 4728,
+   "tris": 15240,
    "materials": [
     "SKY_Brass",
     "SKY_Fabric",
+    "SKY_Flower",
     "SKY_Glass",
+    "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
+    "SKY_Metal",
     "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
     "SKY_Pearl",
+    "SKY_Sandstone",
     "SKY_SandstoneDeep",
+    "SKY_Teal",
     "SKY_TealGlow",
     "SKY_TealLight",
     "SKY_Terracotta",
@@ -1188,14 +1286,14 @@
     ],
     "max": [
      5.6,
-     20.6,
-     5.98
+     21.35,
+     5.96
     ]
    },
    "size_m": [
     11.2,
-    20.6,
-    11.28
+    21.35,
+    11.26
    ],
    "empties": [],
    "issues": [],
@@ -1214,49 +1312,59 @@
       0.0,
       0.0
      ],
-     "tris": 4298,
+     "tris": 15568,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Sandstone",
-      "SKY_Brass",
       "SKY_Pearl",
-      "SKY_Kerb",
       "SKY_Wood",
       "SKY_Glass",
+      "SKY_Kerb",
+      "SKY_Sandstone",
+      "SKY_Brass",
+      "SKY_Ink",
+      "SKY_Light",
       "SKY_TealGlow",
-      "SKY_TealLight"
+      "SKY_Terracotta",
+      "SKY_PalmLeaf",
+      "SKY_Flower",
+      "SKY_Teal"
      ]
     }
    ],
-   "tris": 4298,
+   "tris": 15568,
    "materials": [
     "SKY_Brass",
+    "SKY_Flower",
     "SKY_Glass",
+    "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
+    "SKY_PalmLeaf",
     "SKY_Pearl",
     "SKY_Sandstone",
+    "SKY_Teal",
     "SKY_TealGlow",
-    "SKY_TealLight",
+    "SKY_Terracotta",
     "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
-     -4.7,
+     -4.67,
      0.0,
-     -5.7
+     -5.67
     ],
     "max": [
-     4.7,
-     12.0925,
-     6.1
+     4.67,
+     12.9935,
+     6.05
     ]
    },
    "size_m": [
-    9.4,
-    12.092,
-    11.8
+    9.34,
+    12.993,
+    11.72
    ],
    "empties": [],
    "issues": [],
@@ -1275,57 +1383,69 @@
       0.0,
       0.0
      ],
-     "tris": 5736,
+     "tris": 15104,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_SandstoneDeep",
       "SKY_Sandstone",
-      "SKY_Kerb",
+      "SKY_Wood",
       "SKY_Glass",
+      "SKY_Kerb",
       "SKY_Pearl",
       "SKY_Brass",
-      "SKY_Wood",
-      "SKY_TealLight",
+      "SKY_Ink",
+      "SKY_Light",
+      "SKY_Teal",
+      "SKY_SandstoneDeep",
+      "SKY_TealGlow",
+      "SKY_Metal",
       "SKY_PalmTrunk",
       "SKY_PalmLeaf",
-      "SKY_Fabric",
-      "SKY_Terracotta"
+      "SKY_Flower",
+      "SKY_Terracotta",
+      "SKY_TealLight",
+      "SKY_Fabric"
      ]
     }
    ],
-   "tris": 5736,
+   "tris": 15104,
    "materials": [
     "SKY_Brass",
     "SKY_Fabric",
+    "SKY_Flower",
     "SKY_Glass",
+    "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
+    "SKY_Metal",
     "SKY_PalmLeaf",
     "SKY_PalmTrunk",
     "SKY_Pearl",
     "SKY_Sandstone",
     "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealGlow",
     "SKY_TealLight",
     "SKY_Terracotta",
     "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
-     -6.1,
+     -6.07,
      0.0,
-     -6.1
+     -6.085
     ],
     "max": [
-     6.1,
-     8.32,
-     6.1
+     6.07,
+     8.54,
+     5.98
     ]
    },
    "size_m": [
-    12.2,
-    8.32,
-    12.2
+    12.14,
+    8.54,
+    12.065
    ],
    "empties": [],
    "issues": [],
@@ -1354,49 +1474,69 @@
       0.0,
       0.0
      ],
-     "tris": 2736,
+     "tris": 9384,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_SandstoneDeep",
       "SKY_Sandstone",
-      "SKY_Kerb",
-      "SKY_Glass",
       "SKY_Pearl",
+      "SKY_Glass",
       "SKY_Teal",
+      "SKY_Ink",
+      "SKY_Kerb",
+      "SKY_Brass",
+      "SKY_Rubber",
+      "SKY_Metal",
+      "SKY_Coral",
       "SKY_TealGlow",
-      "SKY_Ink"
+      "SKY_TealLight",
+      "SKY_RoadLine",
+      "SKY_Wood",
+      "SKY_Light",
+      "SKY_PalmTrunk",
+      "SKY_SandstoneDeep",
+      "SKY_Fabric"
      ]
     }
    ],
-   "tris": 2736,
+   "tris": 9384,
    "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Fabric",
     "SKY_Glass",
     "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
+    "SKY_Metal",
+    "SKY_PalmTrunk",
     "SKY_Pearl",
+    "SKY_RoadLine",
+    "SKY_Rubber",
     "SKY_Sandstone",
     "SKY_SandstoneDeep",
     "SKY_Teal",
-    "SKY_TealGlow"
+    "SKY_TealGlow",
+    "SKY_TealLight",
+    "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
-     -6.1,
+     -6.03,
      0.0,
-     -6.1
+     -6.085
     ],
     "max": [
-     6.1,
-     7.92,
-     5.98
+     6.045,
+     8.65,
+     5.9
     ]
    },
    "size_m": [
-    12.2,
-    7.92,
-    12.08
+    12.075,
+    8.65,
+    11.985
    ],
    "empties": [
     {
@@ -1410,9 +1550,7 @@
     }
    ],
    "issues": [],
-   "notes": [
-    "ANCHOR_cell_dock under the solar canopy at the front-right (viewer facing the door; Unity -X side)."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Buildings/bldg_substation.fbx",
@@ -1427,7 +1565,7 @@
       0.0,
       0.0
      ],
-     "tris": 60,
+     "tris": 96,
      "color_attributes": [
       "Col"
      ],
@@ -1453,29 +1591,31 @@
       0.0,
       0.0
      ],
-     "tris": 3204,
+     "tris": 7628,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_SandstoneDeep",
       "SKY_Pearl",
-      "SKY_Kerb",
       "SKY_Metal",
       "SKY_Ink",
       "SKY_Teal",
-      "SKY_Coral",
+      "SKY_Kerb",
       "SKY_Brass",
-      "SKY_Sandstone"
+      "SKY_Coral",
+      "SKY_SandstoneDeep",
+      "SKY_Sandstone",
+      "SKY_Light"
      ]
     }
    ],
-   "tris": 3264,
+   "tris": 7724,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
     "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
     "SKY_Metal",
     "SKY_Pearl",
     "SKY_Sandstone",
@@ -1485,20 +1625,20 @@
    ],
    "bounds_unity": {
     "min": [
-     -5.93,
+     -5.9,
      0.0,
-     -2.68
+     -2.675
     ],
     "max": [
-     5.93,
-     4.62,
+     5.9,
+     4.98,
      1.77
     ]
    },
    "size_m": [
-    11.86,
-    4.62,
-    4.45
+    11.8,
+    4.98,
+    4.445
    ],
    "empties": [
     {
@@ -1512,9 +1652,7 @@
     }
    ],
    "issues": [],
-   "notes": [
-    "SOCKET_cell sits inside the recessed housing on the north face (~1.1 m). PowerLights is a separate object (light bar + roof beacon, SKY_TealGlow)."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Buildings/bldg_terminal.fbx",
@@ -1539,51 +1677,69 @@
       0.0,
       0.0
      ],
-     "tris": 3380,
+     "tris": 12786,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_SandstoneDeep",
       "SKY_Sandstone",
       "SKY_Kerb",
       "SKY_Pearl",
       "SKY_Glass",
       "SKY_Teal",
+      "SKY_Ink",
       "SKY_Brass",
+      "SKY_Rubber",
       "SKY_TealGlow",
+      "SKY_Wood",
+      "SKY_Metal",
+      "SKY_Terracotta",
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_Flower",
+      "SKY_Light",
+      "SKY_SandstoneDeep",
       "SKY_TealLight"
      ]
     }
    ],
-   "tris": 3380,
+   "tris": 12786,
    "materials": [
     "SKY_Brass",
+    "SKY_Flower",
     "SKY_Glass",
+    "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
+    "SKY_Metal",
+    "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
     "SKY_Pearl",
+    "SKY_Rubber",
     "SKY_Sandstone",
     "SKY_SandstoneDeep",
     "SKY_Teal",
     "SKY_TealGlow",
-    "SKY_TealLight"
+    "SKY_TealLight",
+    "SKY_Terracotta",
+    "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
-     -7.1,
+     -7.05,
      0.0,
-     -5.08
+     -5.05
     ],
     "max": [
-     7.1,
-     7.25,
+     7.05,
+     7.68,
      6.55
     ]
    },
    "size_m": [
-    14.2,
-    7.25,
-    11.63
+    14.1,
+    7.68,
+    11.6
    ],
    "empties": [
     {
@@ -1597,9 +1753,7 @@
     }
    ],
    "issues": [],
-   "notes": [
-    "ANCHOR_convoy_stop on the road side of the north drop-off kerb (Unity z +7.0)."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Buildings/bldg_tower_control.fbx",
@@ -1624,30 +1778,36 @@
       0.0,
       0.0
      ],
-     "tris": 1696,
+     "tris": 7878,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_SandstoneDeep",
-      "SKY_Brass",
       "SKY_Pearl",
-      "SKY_Kerb",
       "SKY_Teal",
       "SKY_Glass",
+      "SKY_Kerb",
       "SKY_Sandstone",
-      "SKY_TealLight",
+      "SKY_Brass",
+      "SKY_Ink",
       "SKY_TealGlow",
+      "SKY_Light",
+      "SKY_SandstoneDeep",
+      "SKY_Metal",
+      "SKY_TealLight",
       "SKY_Coral"
      ]
     }
    ],
-   "tris": 1696,
+   "tris": 7878,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
     "SKY_Glass",
+    "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
+    "SKY_Metal",
     "SKY_Pearl",
     "SKY_Sandstone",
     "SKY_SandstoneDeep",
@@ -1657,20 +1817,20 @@
    ],
    "bounds_unity": {
     "min": [
-     -3.3,
+     -3.27,
      0.0,
-     -3.1
+     -3.07
     ],
     "max": [
-     3.3,
-     16.58,
-     3.9
+     3.27,
+     17.95,
+     3.86
     ]
    },
    "size_m": [
-    6.6,
-    16.58,
-    7.0
+    6.54,
+    17.95,
+    6.93
    ],
    "empties": [
     {
@@ -1684,9 +1844,7 @@
     }
    ],
    "issues": [],
-   "notes": [
-    "ANCHOR_lever at ground level just right of the door (viewer facing the door)."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Buildings/bldg_hangar.fbx",
@@ -1701,55 +1859,65 @@
       0.0,
       0.0
      ],
-     "tris": 2288,
+     "tris": 12068,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_Metal",
       "SKY_Glass",
-      "SKY_Sandstone",
       "SKY_Pearl",
-      "SKY_TealGlow",
+      "SKY_Sandstone",
       "SKY_Teal",
       "SKY_Kerb",
-      "SKY_RoadLine"
+      "SKY_Brass",
+      "SKY_TealGlow",
+      "SKY_Light",
+      "SKY_Rubber",
+      "SKY_Coral",
+      "SKY_Ink",
+      "SKY_RoadLine",
+      "SKY_Wood"
      ]
     }
    ],
-   "tris": 2288,
+   "tris": 12068,
    "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
     "SKY_Glass",
+    "SKY_Ink",
     "SKY_Kerb",
+    "SKY_Light",
     "SKY_Metal",
     "SKY_Pearl",
     "SKY_RoadLine",
+    "SKY_Rubber",
     "SKY_Sandstone",
     "SKY_Teal",
-    "SKY_TealGlow"
+    "SKY_TealGlow",
+    "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
      -11.45,
      0.0,
-     -8.0
+     -7.98
     ],
     "max": [
      11.45,
-     9.25,
-     8.125
+     10.1191,
+     8.08
     ]
    },
    "size_m": [
     22.9,
-    9.25,
-    16.125
+    10.119,
+    16.06
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Footprint 22.5 x 16 m (spans more than one cell in X); pivot at its own ground centre."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Atelier/foldstation_kiosk.fbx",
@@ -1774,7 +1942,7 @@
       1.72,
       0.39
      ],
-     "tris": 512,
+     "tris": 720,
      "color_attributes": [
       "Col"
      ],
@@ -1790,7 +1958,7 @@
       0.0,
       0.0
      ],
-     "tris": 1464,
+     "tris": 5670,
      "color_attributes": [
       "Col"
      ],
@@ -1799,19 +1967,25 @@
       "SKY_Sandstone",
       "SKY_Pearl",
       "SKY_Brass",
+      "SKY_Ivory",
+      "SKY_TealLight",
+      "SKY_Ink",
       "SKY_Teal",
       "SKY_TealGlow"
      ]
     }
    ],
-   "tris": 1976,
+   "tris": 6390,
    "materials": [
     "SKY_Brass",
+    "SKY_Ink",
+    "SKY_Ivory",
     "SKY_Pearl",
     "SKY_Sandstone",
     "SKY_SandstoneDeep",
     "SKY_Teal",
-    "SKY_TealGlow"
+    "SKY_TealGlow",
+    "SKY_TealLight"
    ],
    "bounds_unity": {
     "min": [
@@ -1842,9 +2016,7 @@
     }
    ],
    "issues": [],
-   "notes": [
-    "LensRing pivot at the ring centre (Blender (0,-0.39,1.72)). ANCHOR_player is yawed 180 deg so its forward faces the kiosk."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Atelier/atelier_platform.fbx",
@@ -1859,49 +2031,55 @@
       0.0,
       0.0
      ],
-     "tris": 4244,
+     "tris": 10752,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Pearl",
-      "SKY_Sandstone",
-      "SKY_Ivory",
       "SKY_Brass",
-      "SKY_SandstoneDeep"
+      "SKY_Sandstone",
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_Ivory",
+      "SKY_SandstoneDeep",
+      "SKY_Terracotta",
+      "SKY_PalmLeaf",
+      "SKY_Flower"
      ]
     }
    ],
-   "tris": 4244,
+   "tris": 10752,
    "materials": [
     "SKY_Brass",
+    "SKY_Flower",
     "SKY_Ivory",
+    "SKY_PalmLeaf",
     "SKY_Pearl",
     "SKY_Sandstone",
-    "SKY_SandstoneDeep"
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_Terracotta"
    ],
    "bounds_unity": {
     "min": [
-     -8.405,
-     -3.5461,
-     -8.3493
+     -8.0187,
+     -3.543,
+     -8.1903
     ],
     "max": [
-     8.3719,
-     1.75,
+     8.0857,
+     1.81,
      9.6
     ]
    },
    "size_m": [
-    16.777,
-    5.296,
-    17.949
+    16.104,
+    5.353,
+    17.79
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Top of deck at Z0, radius 7 m; balustrade gap + 4 steps on the Unity-north edge."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Atelier/atelier_pergola.fbx",
@@ -1916,51 +2094,55 @@
       0.0,
       0.0
      ],
-     "tris": 2474,
+     "tris": 9920,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_Pearl",
+      "SKY_Sandstone",
       "SKY_Brass",
       "SKY_Wood",
       "SKY_Fabric",
-      "SKY_Terracotta",
-      "SKY_PalmLeaf"
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_Flower",
+      "SKY_Terracotta"
      ]
     }
    ],
-   "tris": 2474,
+   "tris": 9920,
    "materials": [
     "SKY_Brass",
     "SKY_Fabric",
+    "SKY_Flower",
     "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
     "SKY_Pearl",
+    "SKY_Sandstone",
     "SKY_Terracotta",
     "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
-     -5.984,
+     -6.3294,
      0.0,
-     -6.8425
+     -7.05
     ],
     "max": [
-     5.984,
-     3.47,
-     -1.8494
+     6.3294,
+     3.61,
+     -1.633
     ]
    },
    "size_m": [
-    11.968,
-    3.47,
-    4.993
+    12.659,
+    3.61,
+    5.417
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Shares the terrace origin with atelier_platform (centre, Z0)."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Atelier/plinth.fbx",
@@ -1995,7 +2177,7 @@
       0.0,
       0.0
      ],
-     "tris": 60,
+     "tris": 76,
      "color_attributes": [
       "Col"
      ],
@@ -2011,7 +2193,7 @@
       0.0,
       0.0
      ],
-     "tris": 808,
+     "tris": 2044,
      "color_attributes": [
       "Col"
      ],
@@ -2024,7 +2206,7 @@
      ]
     }
    ],
-   "tris": 868,
+   "tris": 2120,
    "materials": [
     "SKY_Brass",
     "SKY_Ivory",
@@ -2070,9 +2252,7 @@
     }
    ],
    "issues": [],
-   "notes": [
-    "Top surface Z0.9, 1.6 x 1.2 m. ANCHOR_player 0.55 m south of the south edge, facing north."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Atelier/plinth_tray.fbx",
@@ -2147,19 +2327,19 @@
       0.0,
       0.0
      ],
-     "tris": 476,
+     "tris": 924,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_Pearl",
-      "SKY_Ink",
       "SKY_Brass",
+      "SKY_Ink",
       "SKY_TealGlow"
      ]
     }
    ],
-   "tris": 476,
+   "tris": 924,
    "materials": [
     "SKY_Brass",
     "SKY_Ink",
@@ -2169,8 +2349,8 @@
    "bounds_unity": {
     "min": [
      -0.565,
-     0.72,
-     -0.82
+     0.7028,
+     -0.85
     ],
     "max": [
      0.565,
@@ -2180,8 +2360,8 @@
    },
    "size_m": [
     1.13,
-    0.18,
-    0.225
+    0.197,
+    0.255
    ],
    "empties": [
     {
@@ -2240,9 +2420,262 @@
     }
    ],
    "issues": [],
-   "notes": [
-    "Shares the plinth origin. SOCKET_slot_1..6 at each slot floor, west->east in Blender +X order."
-   ]
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/palm_date_a.fbx",
+   "name": "palm_date_a",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "palm_date_a",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 4150,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_SandstoneDeep",
+      "SKY_Terracotta"
+     ]
+    }
+   ],
+   "tris": 4150,
+   "materials": [
+    "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
+    "SKY_SandstoneDeep",
+    "SKY_Terracotta"
+   ],
+   "bounds_unity": {
+    "min": [
+     -3.7473,
+     -0.03,
+     -2.8697
+    ],
+    "max": [
+     3.011,
+     8.4019,
+     3.429
+    ]
+   },
+   "size_m": [
+    6.758,
+    8.432,
+    6.299
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/palm_date_b.fbx",
+   "name": "palm_date_b",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "palm_date_b",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 3806,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_SandstoneDeep",
+      "SKY_Terracotta"
+     ]
+    }
+   ],
+   "tris": 3806,
+   "materials": [
+    "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
+    "SKY_SandstoneDeep",
+    "SKY_Terracotta"
+   ],
+   "bounds_unity": {
+    "min": [
+     -3.8538,
+     -0.03,
+     -3.3107
+    ],
+    "max": [
+     1.4483,
+     6.1572,
+     2.265
+    ]
+   },
+   "size_m": [
+    5.302,
+    6.187,
+    5.576
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/palm_small.fbx",
+   "name": "palm_small",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "palm_small",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 2194,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_SandstoneDeep"
+     ]
+    }
+   ],
+   "tris": 2194,
+   "materials": [
+    "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
+    "SKY_SandstoneDeep"
+   ],
+   "bounds_unity": {
+    "min": [
+     -1.7305,
+     -0.03,
+     -1.5679
+    ],
+    "max": [
+     1.3083,
+     2.9367,
+     1.2531
+    ]
+   },
+   "size_m": [
+    3.039,
+    2.967,
+    2.821
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/shrub_round.fbx",
+   "name": "shrub_round",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "shrub_round",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 2320,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_PalmLeaf"
+     ]
+    }
+   ],
+   "tris": 2320,
+   "materials": [
+    "SKY_PalmLeaf"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.7796,
+     -0.0016,
+     -0.7819
+    ],
+    "max": [
+     0.7978,
+     1.0969,
+     0.7426
+    ]
+   },
+   "size_m": [
+    1.577,
+    1.098,
+    1.524
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Nature/bougainvillea_clump.fbx",
+   "name": "bougainvillea_clump",
+   "category": "Nature",
+   "objects": [
+    {
+     "name": "bougainvillea_clump",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 2358,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_Flower"
+     ]
+    }
+   ],
+   "tris": 2358,
+   "materials": [
+    "SKY_Flower",
+    "SKY_PalmLeaf",
+    "SKY_PalmTrunk"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.9774,
+     -0.0516,
+     -0.884
+    ],
+    "max": [
+     0.7822,
+     1.2607,
+     0.8858
+    ]
+   },
+   "size_m": [
+    1.76,
+    1.312,
+    1.77
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Props/street_lamp.fbx",
@@ -2267,39 +2700,45 @@
       0.0,
       0.0
      ],
-     "tris": 386,
+     "tris": 1764,
      "color_attributes": [
       "Col"
      ],
      "materials": [
+      "SKY_SandstoneDeep",
       "SKY_Pearl",
       "SKY_Brass",
+      "SKY_Teal",
+      "SKY_Glass",
       "SKY_Light"
      ]
     }
    ],
-   "tris": 386,
+   "tris": 1764,
    "materials": [
     "SKY_Brass",
+    "SKY_Glass",
     "SKY_Light",
-    "SKY_Pearl"
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_Teal"
    ],
    "bounds_unity": {
     "min": [
-     -0.2217,
+     -0.2347,
      0.0,
-     -0.2217
+     -0.2328
     ],
     "max": [
-     0.2217,
-     5.0199,
-     1.1105
+     0.2347,
+     5.0112,
+     1.1547
     ]
    },
    "size_m": [
-    0.443,
-    5.02,
-    1.332
+    0.469,
+    5.011,
+    1.387
    ],
    "empties": [
     {
@@ -2328,41 +2767,37 @@
       0.0,
       0.0
      ],
-     "tris": 376,
+     "tris": 1088,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Pearl",
-      "SKY_SandstoneDeep",
-      "SKY_Wood",
-      "SKY_Brass"
+      "SKY_Teal",
+      "SKY_Wood"
      ]
     }
    ],
-   "tris": 376,
+   "tris": 1088,
    "materials": [
-    "SKY_Brass",
-    "SKY_Pearl",
-    "SKY_SandstoneDeep",
+    "SKY_Teal",
     "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
-     -1.0,
+     -0.985,
      0.0,
-     -0.265
+     -0.2877
     ],
     "max": [
-     1.0,
-     0.45,
-     0.265
+     0.985,
+     0.8588,
+     0.2656
     ]
    },
    "size_m": [
-    2.0,
-    0.45,
-    0.53
+    1.97,
+    0.859,
+    0.553
    ],
    "empties": [],
    "issues": [],
@@ -2381,37 +2816,41 @@
       0.0,
       0.0
      ],
-     "tris": 192,
+     "tris": 832,
      "color_attributes": [
       "Col"
      ],
      "materials": [
+      "SKY_SandstoneDeep",
       "SKY_Pearl",
-      "SKY_Brass"
+      "SKY_Brass",
+      "SKY_TealGlow"
      ]
     }
    ],
-   "tris": 192,
+   "tris": 832,
    "materials": [
     "SKY_Brass",
-    "SKY_Pearl"
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_TealGlow"
    ],
    "bounds_unity": {
     "min": [
-     -0.1571,
+     -0.1618,
      0.0,
-     -0.1571
+     -0.1618
     ],
     "max": [
-     0.1571,
-     0.93,
-     0.1571
+     0.1618,
+     0.952,
+     0.1618
     ]
    },
    "size_m": [
-    0.314,
-    0.93,
-    0.314
+    0.324,
+    0.952,
+    0.324
    ],
    "empties": [],
    "issues": [],
@@ -2430,41 +2869,43 @@
       0.0,
       0.0
      ],
-     "tris": 296,
+     "tris": 1384,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Coral",
       "SKY_Pearl",
-      "SKY_Ink",
-      "SKY_Light"
+      "SKY_Coral",
+      "SKY_Brass",
+      "SKY_Light",
+      "SKY_Rubber"
      ]
     }
    ],
-   "tris": 296,
+   "tris": 1384,
    "materials": [
+    "SKY_Brass",
     "SKY_Coral",
-    "SKY_Ink",
     "SKY_Light",
-    "SKY_Pearl"
+    "SKY_Pearl",
+    "SKY_Rubber"
    ],
    "bounds_unity": {
     "min": [
      -1.0,
      0.0,
-     -0.4
+     -0.42
     ],
     "max": [
      1.0,
-     1.12,
-     0.4
+     1.158,
+     0.42
     ]
    },
    "size_m": [
     2.0,
-    1.12,
-    0.8
+    1.158,
+    0.84
    ],
    "empties": [],
    "issues": [],
@@ -2483,22 +2924,22 @@
       0.0,
       0.0
      ],
-     "tris": 164,
+     "tris": 572,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Ink",
+      "SKY_Rubber",
       "SKY_Coral",
       "SKY_Pearl"
      ]
     }
    ],
-   "tris": 164,
+   "tris": 572,
    "materials": [
     "SKY_Coral",
-    "SKY_Ink",
-    "SKY_Pearl"
+    "SKY_Pearl",
+    "SKY_Rubber"
    ],
    "bounds_unity": {
     "min": [
@@ -2544,7 +2985,7 @@
       0.4,
       0.0
      ],
-     "tris": 60,
+     "tris": 224,
      "color_attributes": [
       "Col"
      ],
@@ -2560,7 +3001,7 @@
       0.0,
       0.0
      ],
-     "tris": 164,
+     "tris": 1104,
      "color_attributes": [
       "Col"
      ],
@@ -2572,7 +3013,7 @@
      ]
     }
    ],
-   "tris": 224,
+   "tris": 1328,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
@@ -2584,18 +3025,18 @@
     "min": [
      -0.2,
      0.0,
-     -0.1902
+     -0.2
     ],
     "max": [
      0.2,
-     0.47,
-     0.1902
+     0.497,
+     0.2
     ]
    },
    "size_m": [
     0.4,
-    0.47,
-    0.38
+    0.497,
+    0.4
    ],
    "empties": [
     {
@@ -2624,12 +3065,13 @@
       0.72,
       0.235
      ],
-     "tris": 88,
+     "tris": 232,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_Brass",
+      "SKY_Rubber",
       "SKY_Coral"
      ]
     },
@@ -2641,7 +3083,7 @@
       0.0,
       0.0
      ],
-     "tris": 288,
+     "tris": 1160,
      "color_attributes": [
       "Col"
      ],
@@ -2649,41 +3091,46 @@
       "SKY_SandstoneDeep",
       "SKY_Pearl",
       "SKY_Brass",
+      "SKY_Coral",
       "SKY_Teal",
-      "SKY_Coral"
+      "SKY_TealGlow",
+      "SKY_Light",
+      "SKY_Ink"
      ]
     }
    ],
-   "tris": 376,
+   "tris": 1392,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
+    "SKY_Ink",
+    "SKY_Light",
     "SKY_Pearl",
+    "SKY_Rubber",
     "SKY_SandstoneDeep",
-    "SKY_Teal"
+    "SKY_Teal",
+    "SKY_TealGlow"
    ],
    "bounds_unity": {
     "min": [
      -0.28,
      0.0,
-     -0.22
+     -0.2331
     ],
     "max": [
      0.28,
-     1.125,
-     0.28
+     1.092,
+     0.275
     ]
    },
    "size_m": [
     0.56,
-    1.125,
-    0.5
+    1.092,
+    0.508
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Lever pivot = hinge (Blender (0,-0.235,0.72)); modelled up = OFF."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Props/cell_dock.fbx",
@@ -2708,41 +3155,45 @@
       0.0,
       0.0
      ],
-     "tris": 336,
+     "tris": 1180,
      "color_attributes": [
       "Col"
      ],
      "materials": [
+      "SKY_SandstoneDeep",
       "SKY_Pearl",
+      "SKY_TealGlow",
       "SKY_Brass",
       "SKY_Teal",
-      "SKY_TealGlow"
+      "SKY_Rubber"
      ]
     }
    ],
-   "tris": 336,
+   "tris": 1180,
    "materials": [
     "SKY_Brass",
     "SKY_Pearl",
+    "SKY_Rubber",
+    "SKY_SandstoneDeep",
     "SKY_Teal",
     "SKY_TealGlow"
    ],
    "bounds_unity": {
     "min": [
      -0.3,
-     0.0,
-     -0.2853
+     -0.0158,
+     -0.307
     ],
     "max": [
      0.3,
-     0.6,
-     0.2853
+     0.632,
+     0.3
     ]
    },
    "size_m": [
     0.6,
-    0.6,
-    0.571
+    0.648,
+    0.607
    ],
    "empties": [
     {
@@ -2771,7 +3222,7 @@
       0.0,
       0.0
      ],
-     "tris": 204,
+     "tris": 1152,
      "color_attributes": [
       "Col"
      ],
@@ -2782,7 +3233,7 @@
      ]
     }
    ],
-   "tris": 204,
+   "tris": 1152,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
@@ -2791,19 +3242,19 @@
    "bounds_unity": {
     "min": [
      -1.24,
-     -0.78,
-     -0.0005
+     -0.764,
+     -0.0069
     ],
     "max": [
      1.24,
-     0.06,
-     1.1
+     0.035,
+     1.058
     ]
    },
    "size_m": [
     2.48,
-    0.84,
-    1.1
+    0.799,
+    1.065
    ],
    "empties": [],
    "issues": [],
@@ -2822,39 +3273,45 @@
       0.0,
       0.0
      ],
-     "tris": 320,
+     "tris": 1412,
      "color_attributes": [
       "Col"
      ],
      "materials": [
+      "SKY_Teal",
       "SKY_Brass",
       "SKY_Pearl",
-      "SKY_Fabric"
+      "SKY_TealLight",
+      "SKY_Fabric",
+      "SKY_Metal"
      ]
     }
    ],
-   "tris": 320,
+   "tris": 1412,
    "materials": [
     "SKY_Brass",
     "SKY_Fabric",
-    "SKY_Pearl"
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_Teal",
+    "SKY_TealLight"
    ],
    "bounds_unity": {
     "min": [
-     -2.638,
+     -2.734,
      0.0,
-     -2.956
+     -3.058
     ],
     "max": [
-     2.638,
-     3.77,
-     1.578
+     2.734,
+     3.81,
+     1.654
     ]
    },
    "size_m": [
-    5.276,
-    3.77,
-    4.534
+    5.468,
+    3.81,
+    4.712
    ],
    "empties": [],
    "issues": [],
@@ -2873,288 +3330,45 @@
       0.0,
       0.0
      ],
-     "tris": 324,
+     "tris": 1432,
      "color_attributes": [
       "Col"
      ],
      "materials": [
+      "SKY_SandstoneDeep",
       "SKY_Sandstone",
       "SKY_Pearl",
-      "SKY_SandstoneDeep",
-      "SKY_PalmLeaf"
+      "SKY_PalmTrunk",
+      "SKY_PalmLeaf",
+      "SKY_Flower"
      ]
     }
    ],
-   "tris": 324,
+   "tris": 1432,
    "materials": [
+    "SKY_Flower",
     "SKY_PalmLeaf",
+    "SKY_PalmTrunk",
     "SKY_Pearl",
     "SKY_Sandstone",
     "SKY_SandstoneDeep"
    ],
    "bounds_unity": {
     "min": [
-     -0.64,
+     -0.65,
      0.0,
-     -0.3424
+     -0.35
     ],
     "max": [
-     0.64,
-     1.004,
-     0.3424
+     0.65,
+     1.0294,
+     0.35
     ]
    },
    "size_m": [
-    1.28,
-    1.004,
-    0.685
-   ],
-   "empties": [],
-   "issues": [],
-   "notes": []
-  },
-  {
-   "file": "Assets/Skyfold/Art/Models/Nature/palm_date_a.fbx",
-   "name": "palm_date_a",
-   "category": "Nature",
-   "objects": [
-    {
-     "name": "palm_date_a",
-     "type": "MESH",
-     "position_unity": [
-      0.0,
-      0.0,
-      0.0
-     ],
-     "tris": 1520,
-     "color_attributes": [
-      "Col"
-     ],
-     "materials": [
-      "SKY_PalmTrunk",
-      "SKY_PalmLeaf",
-      "SKY_Terracotta"
-     ]
-    }
-   ],
-   "tris": 1520,
-   "materials": [
-    "SKY_PalmLeaf",
-    "SKY_PalmTrunk",
-    "SKY_Terracotta"
-   ],
-   "bounds_unity": {
-    "min": [
-     -3.5848,
-     -0.0104,
-     -2.681
-    ],
-    "max": [
-     2.7863,
-     7.7335,
-     3.4275
-    ]
-   },
-   "size_m": [
-    6.371,
-    7.744,
-    6.108
-   ],
-   "empties": [],
-   "issues": [],
-   "notes": []
-  },
-  {
-   "file": "Assets/Skyfold/Art/Models/Nature/palm_date_b.fbx",
-   "name": "palm_date_b",
-   "category": "Nature",
-   "objects": [
-    {
-     "name": "palm_date_b",
-     "type": "MESH",
-     "position_unity": [
-      0.0,
-      0.0,
-      0.0
-     ],
-     "tris": 1416,
-     "color_attributes": [
-      "Col"
-     ],
-     "materials": [
-      "SKY_PalmTrunk",
-      "SKY_PalmLeaf",
-      "SKY_Terracotta"
-     ]
-    }
-   ],
-   "tris": 1416,
-   "materials": [
-    "SKY_PalmLeaf",
-    "SKY_PalmTrunk",
-    "SKY_Terracotta"
-   ],
-   "bounds_unity": {
-    "min": [
-     -3.6444,
-     -0.0367,
-     -2.9569
-    ],
-    "max": [
-     1.2926,
-     5.7802,
-     2.2692
-    ]
-   },
-   "size_m": [
-    4.937,
-    5.817,
-    5.226
-   ],
-   "empties": [],
-   "issues": [],
-   "notes": []
-  },
-  {
-   "file": "Assets/Skyfold/Art/Models/Nature/palm_small.fbx",
-   "name": "palm_small",
-   "category": "Nature",
-   "objects": [
-    {
-     "name": "palm_small",
-     "type": "MESH",
-     "position_unity": [
-      0.0,
-      0.0,
-      0.0
-     ],
-     "tris": 1084,
-     "color_attributes": [
-      "Col"
-     ],
-     "materials": [
-      "SKY_PalmTrunk",
-      "SKY_PalmLeaf"
-     ]
-    }
-   ],
-   "tris": 1084,
-   "materials": [
-    "SKY_PalmLeaf",
-    "SKY_PalmTrunk"
-   ],
-   "bounds_unity": {
-    "min": [
-     -1.4717,
-     -0.0086,
-     -1.3274
-    ],
-    "max": [
-     1.348,
-     2.8256,
-     1.3538
-    ]
-   },
-   "size_m": [
-    2.82,
-    2.834,
-    2.681
-   ],
-   "empties": [],
-   "issues": [],
-   "notes": []
-  },
-  {
-   "file": "Assets/Skyfold/Art/Models/Nature/shrub_round.fbx",
-   "name": "shrub_round",
-   "category": "Nature",
-   "objects": [
-    {
-     "name": "shrub_round",
-     "type": "MESH",
-     "position_unity": [
-      0.0,
-      0.0,
-      0.0
-     ],
-     "tris": 450,
-     "color_attributes": [
-      "Col"
-     ],
-     "materials": [
-      "SKY_PalmLeaf"
-     ]
-    }
-   ],
-   "tris": 450,
-   "materials": [
-    "SKY_PalmLeaf"
-   ],
-   "bounds_unity": {
-    "min": [
-     -0.8,
-     0.023,
-     -0.7042
-    ],
-    "max": [
-     0.7335,
-     1.077,
-     0.7242
-    ]
-   },
-   "size_m": [
-    1.533,
-    1.054,
-    1.428
-   ],
-   "empties": [],
-   "issues": [],
-   "notes": []
-  },
-  {
-   "file": "Assets/Skyfold/Art/Models/Nature/bougainvillea_clump.fbx",
-   "name": "bougainvillea_clump",
-   "category": "Nature",
-   "objects": [
-    {
-     "name": "bougainvillea_clump",
-     "type": "MESH",
-     "position_unity": [
-      0.0,
-      0.0,
-      0.0
-     ],
-     "tris": 834,
-     "color_attributes": [
-      "Col"
-     ],
-     "materials": [
-      "SKY_PalmLeaf",
-      "SKY_Flower"
-     ]
-    }
-   ],
-   "tris": 834,
-   "materials": [
-    "SKY_Flower",
-    "SKY_PalmLeaf"
-   ],
-   "bounds_unity": {
-    "min": [
-     -0.95,
-     0.015,
-     -0.8636
-    ],
-    "max": [
-     0.9011,
-     1.2343,
-     0.8439
-    ]
-   },
-   "size_m": [
-    1.851,
-    1.219,
-    1.708
+    1.3,
+    1.029,
+    0.7
    ],
    "empties": [],
    "issues": [],
@@ -3173,7 +3387,7 @@
       0.0,
       0.0
      ],
-     "tris": 600,
+     "tris": 2300,
      "color_attributes": [
       "Col"
      ],
@@ -3182,26 +3396,26 @@
      ]
     }
    ],
-   "tris": 600,
+   "tris": 2300,
    "materials": [
     "SKY_Pearl"
    ],
    "bounds_unity": {
     "min": [
-     -14.7,
-     -0.165,
-     -7.5749
+     -13.2819,
+     0.1957,
+     -7.3612
     ],
     "max": [
-     12.0,
-     10.1,
-     7.3749
+     13.1868,
+     10.1977,
+     7.3816
     ]
    },
    "size_m": [
-    26.7,
-    10.265,
-    14.95
+    26.469,
+    10.002,
+    14.743
    ],
    "empties": [],
    "issues": [],
@@ -3220,7 +3434,7 @@
       0.0,
       0.0
      ],
-     "tris": 600,
+     "tris": 2198,
      "color_attributes": [
       "Col"
      ],
@@ -3229,26 +3443,26 @@
      ]
     }
    ],
-   "tris": 600,
+   "tris": 2198,
    "materials": [
     "SKY_Pearl"
    ],
    "bounds_unity": {
     "min": [
-     -17.3,
-     -0.135,
-     -6.5063
+     -15.5833,
+     0.2011,
+     -6.5
     ],
     "max": [
-     14.6,
-     8.1,
-     6.4238
+     15.3745,
+     8.1025,
+     6.3952
     ]
    },
    "size_m": [
-    31.9,
-    8.235,
-    12.93
+    30.958,
+    7.901,
+    12.895
    ],
    "empties": [],
    "issues": [],
@@ -3267,7 +3481,7 @@
       0.0,
       0.0
      ],
-     "tris": 400,
+     "tris": 1800,
      "color_attributes": [
       "Col"
      ],
@@ -3276,26 +3490,26 @@
      ]
     }
    ],
-   "tris": 400,
+   "tris": 1800,
    "materials": [
     "SKY_Pearl"
    ],
    "bounds_unity": {
     "min": [
-     -7.2,
-     -0.111,
-     -4.8727
+     -6.7684,
+     0.2355,
+     -4.4828
     ],
     "max": [
-     6.9,
-     6.74,
-     4.1846
+     6.6978,
+     6.9851,
+     4.3905
     ]
    },
    "size_m": [
-    14.1,
-    6.851,
-    9.057
+    13.466,
+    6.75,
+    8.873
    ],
    "empties": [],
    "issues": [],
@@ -3314,7 +3528,7 @@
       0.0,
       0.0
      ],
-     "tris": 1388,
+     "tris": 4696,
      "color_attributes": [
       "Col"
      ],
@@ -3323,26 +3537,26 @@
      ]
     }
    ],
-   "tris": 1388,
+   "tris": 4696,
    "materials": [
     "SKY_Ink"
    ],
    "bounds_unity": {
     "min": [
-     -27.5,
-     -0.3075,
-     -16.9084
+     -30.071,
+     0.1784,
+     -13.6529
     ],
     "max": [
-     27.2367,
-     34.36,
-     16.9084
+     26.4488,
+     36.273,
+     18.3783
     ]
    },
    "size_m": [
-    54.737,
-    34.667,
-    33.817
+    56.52,
+    36.095,
+    32.031
    ],
    "empties": [],
    "issues": [],
@@ -3361,43 +3575,51 @@
       0.0,
       0.0
      ],
-     "tris": 192,
+     "tris": 1824,
      "color_attributes": [
       "Col"
      ],
      "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
       "SKY_Sandstone",
-      "SKY_Pearl"
+      "SKY_Teal",
+      "SKY_Brass",
+      "SKY_Ivory",
+      "SKY_TealLight"
      ]
     }
    ],
-   "tris": 192,
+   "tris": 1824,
    "materials": [
+    "SKY_Brass",
+    "SKY_Ivory",
     "SKY_Pearl",
-    "SKY_Sandstone"
+    "SKY_Sandstone",
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealLight"
    ],
    "bounds_unity": {
     "min": [
-     -82.5456,
+     -87.222,
      0.0,
-     298.3279
+     295.5733
     ],
     "max": [
-     83.0295,
-     69.8104,
-     338.4926
+     87.222,
+     67.974,
+     337.0
     ]
    },
    "size_m": [
-    165.575,
-    69.81,
-    40.165
+    174.444,
+    67.974,
+    41.427
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Pivot at the ring centre; geometry spans a 30 deg arc at r~320 m centred on Unity north."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Nature/rock_sea_a.fbx",
@@ -3412,37 +3634,39 @@
       0.0,
       0.0
      ],
-     "tris": 138,
+     "tris": 1178,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_SandstoneDeep",
-      "SKY_Sandstone"
+      "SKY_Sandstone",
+      "SKY_PalmLeaf"
      ]
     }
    ],
-   "tris": 138,
+   "tris": 1178,
    "materials": [
+    "SKY_PalmLeaf",
     "SKY_Sandstone",
     "SKY_SandstoneDeep"
    ],
    "bounds_unity": {
     "min": [
-     -4.6907,
-     -0.3337,
-     -3.6281
+     -4.1242,
+     0.0,
+     -3.8488
     ],
     "max": [
-     3.3335,
-     5.5573,
-     3.6123
+     3.3499,
+     5.8586,
+     3.4816
     ]
    },
    "size_m": [
-    8.024,
-    5.891,
-    7.24
+    7.474,
+    5.859,
+    7.33
    ],
    "empties": [],
    "issues": [],
@@ -3461,37 +3685,39 @@
       0.0,
       0.0
      ],
-     "tris": 172,
+     "tris": 1188,
      "color_attributes": [
       "Col"
      ],
      "materials": [
       "SKY_SandstoneDeep",
-      "SKY_Sandstone"
+      "SKY_Sandstone",
+      "SKY_PalmLeaf"
      ]
     }
    ],
-   "tris": 172,
+   "tris": 1188,
    "materials": [
+    "SKY_PalmLeaf",
     "SKY_Sandstone",
     "SKY_SandstoneDeep"
    ],
    "bounds_unity": {
     "min": [
-     -3.7533,
-     -0.3805,
-     -3.6384
+     -3.803,
+     0.0,
+     -3.6272
     ],
     "max": [
-     4.829,
-     4.6634,
-     3.8011
+     4.4133,
+     4.8817,
+     3.2089
     ]
    },
    "size_m": [
-    8.582,
-    5.044,
-    7.439
+    8.216,
+    4.882,
+    6.836
    ],
    "empties": [],
    "issues": [],
@@ -3510,18 +3736,18 @@
       0.0,
       0.0
      ],
-     "tris": 748,
+     "tris": 5560,
      "color_attributes": [
       "Col"
      ],
      "materials": [
-      "SKY_Sandstone",
       "SKY_SandstoneDeep",
+      "SKY_Sandstone",
       "SKY_PalmLeaf"
      ]
     }
    ],
-   "tris": 748,
+   "tris": 5560,
    "materials": [
     "SKY_PalmLeaf",
     "SKY_Sandstone",
@@ -3529,26 +3755,24 @@
    ],
    "bounds_unity": {
     "min": [
-     -19.1525,
-     -26.5477,
-     -19.0125
+     -19.1715,
+     -27.4968,
+     -18.6262
     ],
     "max": [
-     18.9576,
-     -2.36,
-     23.5598
+     20.5788,
+     -2.1502,
+     21.7366
     ]
    },
    "size_m": [
-    38.11,
-    24.188,
-    42.572
+    39.75,
+    25.347,
+    40.363
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Plateau at Z-2.8 around the pivot; cliff foot at about Z-26."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Props/dhow_small.fbx",
@@ -3563,49 +3787,51 @@
       0.0,
       0.0
      ],
-     "tris": 454,
+     "tris": 2548,
      "color_attributes": [
       "Col"
      ],
      "materials": [
+      "SKY_Teal",
       "SKY_Wood",
-      "SKY_Kerb",
       "SKY_Pearl",
+      "SKY_Brass",
       "SKY_Fabric",
-      "SKY_Brass"
+      "SKY_Kerb",
+      "SKY_Coral"
      ]
     }
    ],
-   "tris": 454,
+   "tris": 2548,
    "materials": [
     "SKY_Brass",
+    "SKY_Coral",
     "SKY_Fabric",
     "SKY_Kerb",
     "SKY_Pearl",
+    "SKY_Teal",
     "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
-     -1.2198,
-     -0.75,
-     -4.0
+     -1.2176,
+     -0.7492,
+     -4.16
     ],
     "max": [
-     1.2198,
-     7.239,
-     4.0
+     1.2176,
+     7.3321,
+     4.1925
     ]
    },
    "size_m": [
-    2.44,
-    7.989,
-    8.0
+    2.435,
+    8.081,
+    8.352
    ],
    "empties": [],
    "issues": [],
-   "notes": [
-    "Pivot on the waterline (Z0) at mid-length; hull draft ~0.75 m."
-   ]
+   "notes": []
   },
   {
    "file": "Assets/Skyfold/Art/Models/Props/buoy.fbx",
@@ -3630,7 +3856,7 @@
       0.0,
       0.0
      ],
-     "tris": 232,
+     "tris": 1188,
      "color_attributes": [
       "Col"
      ],
@@ -3638,35 +3864,39 @@
       "SKY_Ink",
       "SKY_Coral",
       "SKY_Pearl",
-      "SKY_Light",
-      "SKY_Brass"
+      "SKY_Rubber",
+      "SKY_Metal",
+      "SKY_Brass",
+      "SKY_Light"
      ]
     }
    ],
-   "tris": 232,
+   "tris": 1188,
    "materials": [
     "SKY_Brass",
     "SKY_Coral",
     "SKY_Ink",
     "SKY_Light",
-    "SKY_Pearl"
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_Rubber"
    ],
    "bounds_unity": {
     "min": [
-     -0.62,
-     -0.6,
-     -0.62
+     -0.65,
+     -0.696,
+     -0.65
     ],
     "max": [
-     0.62,
-     1.66,
-     0.62
+     0.65,
+     1.76,
+     0.65
     ]
    },
    "size_m": [
-    1.24,
-    2.26,
-    1.24
+    1.3,
+    2.456,
+    1.3
    ],
    "empties": [
     {
@@ -3695,39 +3925,43 @@
       0.0,
       0.0
      ],
-     "tris": 444,
+     "tris": 2020,
      "color_attributes": [
       "Col"
      ],
      "materials": [
+      "SKY_SandstoneDeep",
       "SKY_Pearl",
+      "SKY_Brass",
       "SKY_TealLight",
-      "SKY_Brass"
+      "SKY_Glass"
      ]
     }
    ],
-   "tris": 444,
+   "tris": 2020,
    "materials": [
     "SKY_Brass",
+    "SKY_Glass",
     "SKY_Pearl",
+    "SKY_SandstoneDeep",
     "SKY_TealLight"
    ],
    "bounds_unity": {
     "min": [
-     -0.8777,
+     -0.8684,
      0.0,
-     -0.8777
+     -0.8684
     ],
     "max": [
-     0.8777,
-     1.38,
-     0.8777
+     0.8684,
+     1.49,
+     0.8684
     ]
    },
    "size_m": [
-    1.755,
-    1.38,
-    1.755
+    1.737,
+    1.49,
+    1.737
    ],
    "empties": [],
    "issues": [],
@@ -3746,37 +3980,41 @@
       0.0,
       0.0
      ],
-     "tris": 204,
+     "tris": 1406,
      "color_attributes": [
       "Col"
      ],
      "materials": [
+      "SKY_PalmTrunk",
       "SKY_Wood",
-      "SKY_Brass"
+      "SKY_Brass",
+      "SKY_Sandstone"
      ]
     }
    ],
-   "tris": 204,
+   "tris": 1406,
    "materials": [
     "SKY_Brass",
+    "SKY_PalmTrunk",
+    "SKY_Sandstone",
     "SKY_Wood"
    ],
    "bounds_unity": {
     "min": [
-     -0.8706,
-     0.0,
-     -0.5006
+     -0.8728,
+     -0.002,
+     -0.5028
     ],
     "max": [
-     0.83,
-     1.6,
-     0.4431
+     0.832,
+     1.55,
+     0.412
     ]
    },
    "size_m": [
-    1.701,
-    1.6,
-    0.944
+    1.705,
+    1.552,
+    0.915
    ],
    "empties": [],
    "issues": [],
