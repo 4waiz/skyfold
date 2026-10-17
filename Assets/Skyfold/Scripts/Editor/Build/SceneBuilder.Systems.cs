@@ -18,7 +18,9 @@ namespace Skyfold.EditorTools
             var theme = Sys<UITheme>(c, "UI Theme");
             theme.heading = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontSetup.HeadingAsset);
             theme.body = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontSetup.BodyAsset);
-            var portrait = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Skyfold/Art/UI/noor_portrait.png");
+            // Noor's radio badge: ChatGPT portrait cropped into a circle by tools/images/make_image_derivatives.py.
+            var portrait = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Skyfold/Art/Images/noor_badge.png");
+            if (portrait == null) Debug.LogWarning("[SKYFOLD] Noor badge sprite missing; the HUD falls back to the radio glyph.");
             theme.noorPortrait = portrait;
 
             Sys<XRInteractionManager>(c, "XR Interaction Manager");

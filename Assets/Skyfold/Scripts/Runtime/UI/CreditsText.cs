@@ -8,7 +8,7 @@ namespace Skyfold
             "Awaiz Ahmed / Team Kanban, built with AI-assisted development (Claude Code). All 3D models are original procedural Blender work for this game.\n\n" +
             "<b>AI-generated content (disclosed)</b>\n" +
             "Noor's voice: Kokoro-82M text-to-speech, run locally (Apache-2.0 model). No voice cloning.\n" +
-            "Noor's portrait and the art-direction references: generated with ChatGPT image generation where present (see the asset manifest).\n\n" +
+            "Noor's radio portrait: generated with ChatGPT image generation. Noor is a fictional character, not a real person (see the asset manifest).\n\n" +
             "<b>Sound effects</b>\n" +
             "Some effects are processed from Kenney.nl sound packs (CC0 1.0). Everything else is original synthesis.\n\n" +
             "<b>Fonts</b>\n" +

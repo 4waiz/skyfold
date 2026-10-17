@@ -85,15 +85,16 @@ Not installed on purpose: com.unity.xr.meta-openxr (AR Foundation features for Q
 | `tools\package.ps1` | Stages `Release\SKYFOLD\` (game, README, licences, docs, icons, launchers), writes `Release\SKYFOLD_v<version>_win64.zip`, creates the two Desktop shortcuts |
 | `tools\autosync.ps1` | Commits and pushes to `origin` every 3 minutes (your request) |
 | `tools\icons\make_icons.py` | Draws the app and shortcut icons |
+| `tools\images\make_image_derivatives.py` | Crops the ChatGPT portrait into Noor's 256 px subtitle badge and resizes the key art for the README |
 | `tools\blender\*.py`, `tools\audio\*.py` | Rebuild every model and sound from scripts |
 
 ## Agent tools and skills
 
 | Tool / skill | Status |
 | --- | --- |
-| Claude in Chrome (your real Chrome) | **Not connected** (re-checked 2026-10-17 03:30: no connected browsers). This blocks ChatGPT image generation until it is connected. |
+| Claude in Chrome (your real Chrome) | **Not connected.** Still no connected browsers on 2026-10-17, even with the extension installed and signed in to the Awaiz profile; most likely it uses a different Claude account from this app's. |
 | Built-in browser pane | Available, isolated; it has no ChatGPT sign-in, so I'm not relying on it for your ChatGPT session |
-| chrome-devtools MCP | Headless, unauthenticated |
+| chrome-devtools MCP | Opens its own Chrome window with a separate profile. Used, with your go-ahead, for the ChatGPT images on 2026-10-17; you signed in to ChatGPT there yourself (see `docs/ASSET_MANIFEST.md`) |
 | Unity MCP | None found. Automation uses Unity batch mode plus C# editor scripts (`Assets/Skyfold/Editor`) |
 | Blender MCP | Available; asset generation uses reproducible Blender CLI scripts in `tools/blender` |
 | `kanban-motion` skill | Reused for audio: `scripts/voiceover.py` (Kokoro-82M local TTS; model already cached at `~/.cache/kanban-motion/kokoro`), `scripts/bed.py` (original music beds), `assets/sfx` (CC0 Kenney library), `scripts/mix.py` |

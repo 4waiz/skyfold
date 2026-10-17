@@ -58,6 +58,8 @@ namespace Skyfold.EditorTools
                         Ok(ok, "GameRoot." + f.Name + " assigned");
                     }
                 }
+                var hud = Object.FindObjectsByType<HUDController>(FindObjectsInactive.Include).FirstOrDefault();
+                Ok(hud != null && hud.noorPortrait != null, "HUD has Noor's radio badge sprite (Art/Images/noor_badge.png)");
                 var listeners = Object.FindObjectsByType<AudioListener>(FindObjectsInactive.Include);
                 Ok(listeners.Length == 2, $"two audio listeners exist (desktop + VR rig, only one active at a time): {listeners.Length}");
                 var slots = Object.FindObjectsByType<FullScaleSlot>(FindObjectsInactive.Include);

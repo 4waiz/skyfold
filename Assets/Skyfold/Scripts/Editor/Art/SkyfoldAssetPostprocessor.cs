@@ -3,9 +3,23 @@ using UnityEngine;
 
 namespace Skyfold.EditorTools
 {
-    /// <summary>Consistent import settings for SKYFOLD models and audio.</summary>
+    /// <summary>Consistent import settings for SKYFOLD models, audio and images.</summary>
     public sealed class SkyfoldAssetPostprocessor : AssetPostprocessor
     {
+        void OnPreprocessTexture()
+        {
+            // ChatGPT images and their derivatives. Only noor_badge.png is referenced by the scene (the HUD
+            // subtitle badge); the rest are references that never reach the build.
+            if (!assetPath.StartsWith("Assets/Skyfold/Art/Images/")) return;
+            var ti = (TextureImporter)assetImporter;
+            ti.textureType = TextureImporterType.Sprite;
+            ti.spriteImportMode = SpriteImportMode.Single;
+            ti.alphaIsTransparency = true;
+            ti.mipmapEnabled = true; // the 256 px badge is drawn at about 96-140 px
+            ti.filterMode = FilterMode.Trilinear;
+            ti.textureCompression = TextureImporterCompression.CompressedHQ;
+        }
+
         void OnPreprocessModel()
         {
             if (!assetPath.StartsWith("Assets/Skyfold/Art/Models")) return;
