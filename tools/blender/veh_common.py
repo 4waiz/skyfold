@@ -623,7 +623,7 @@ def mapper(shell, kind, side=1, off=0.0):
     return lambda u, v: shell.face(u, v, f, off)
 
 
-def window(cut, glass, shell, kind, outline, side=1, inset=0.016, depth=0.014):
+def window(cut, glass, shell, kind, outline, side=1, inset=0.016, depth=0.014, pane_mat=GLASS):
     """Recess cutter (ink walls) + glass pane set 5 mm below the body surface."""
     loop = poly_loop(outline, 0.05, 2)
     loop = densify2(loop, 0.16, closed=True)
@@ -642,7 +642,7 @@ def window(cut, glass, shell, kind, outline, side=1, inset=0.016, depth=0.014):
     def deform(v, m=m):
         p, n = m(v.x, v.y)
         return p + n * (-0.004 if v.z > 0 else -0.008)
-    pane(glass, small, 2.0, GLASS, deform=deform, scales=(1.0, 0.5))
+    pane(glass, small, 2.0, pane_mat, deform=deform, scales=(1.0, 0.5))
 
 
 def arches(cut, axle, track, r_arch, z_hub, x_in=0.47):
