@@ -106,12 +106,21 @@ def pchip_curve(keys, steps):
 
 
 def densify(keys, step=0.03):
-    """Smooth monotone resampling of loft keys: interval i gets ceil(change / step) samples."""
+    """Smooth monotone resampling of loft keys. step: float (interval i gets
+    ceil(change / step) samples) or a list with the sample count of every interval."""
+    if isinstance(step, (list, tuple)):
+        return pchip_curve(keys, [max(1, int(s)) for s in step])
     steps = []
     for a, b in zip(keys, keys[1:]):
         ch = sum(abs(x - y) for x, y in zip(a, b))
         steps.append(max(1, int(math.ceil(ch / step))))
     return pchip_curve(keys, steps)
+
+
+def ccw(pts):
+    """Return the 2D polygon counter-clockwise (shoelace)."""
+    a = sum(p[0] * q[1] - q[0] * p[1] for p, q in zip(pts, pts[1:] + pts[:1]))
+    return list(pts) if a > 0 else list(pts)[::-1]
 
 
 # ============================================================================ part utilities
@@ -132,6 +141,38 @@ def part_add(dst, src, M=None):
         f.material_index = dst.mi(src.mats[f.material_index]) if src.mats else 0
     bpy.data.meshes.remove(me)
     return dst
+
+
+def add_mirror_x(part):
+    """Append a copy of everything in `part` mirrored across X = 0 (winding fixed)."""
+    bm2 = part.bm.copy()
+    bmesh.ops.transform(bm2, matrix=Matrix.Diagonal((-1, 1, 1, 1)), verts=bm2.verts)
+    bmesh.ops.reverse_faces(bm2, faces=bm2.faces)
+    me = bpy.data.meshes.new("tmp_mirror")
+    bm2.to_mesh(me)
+    bm2.free()
+    part.bm.from_mesh(me)
+    bpy.data.meshes.remove(me)
+    return part
+
+
+def tile(part, center, w, d, h, mat, M=None, ch=0.0015, sunk=0.002):
+    """Cheap raised tile (10 tris): chamfered top quad + 4 sloped sides, open bottom.
+    Local plan w x d, rises h along local +Z from `center` (bottom sunk by `sunk`)."""
+    M = (M or Matrix.Identity(4)) @ Matrix.Translation(center)
+    bm = part.bm
+    b = [bm.verts.new(M @ Vector((x, y, -sunk))) for (x, y) in
+         ((-w / 2, -d / 2), (w / 2, -d / 2), (w / 2, d / 2), (-w / 2, d / 2))]
+    c = min(ch, w / 3, d / 3)
+    t = [bm.verts.new(M @ Vector((x, y, h))) for (x, y) in
+         ((-w / 2 + c, -d / 2 + c), (w / 2 - c, -d / 2 + c), (w / 2 - c, d / 2 - c),
+          (-w / 2 + c, d / 2 - c))]
+    fs = [bm.faces.new(t)]
+    for i in range(4):
+        j = (i + 1) % 4
+        fs.append(bm.faces.new((b[i], b[j], t[j], t[i])))
+    part.assign(fs, mat)
+    return fs
 
 
 def lathe_m(part, prof, segs, mats, M=None, axis='Z', phase=0.0):
@@ -223,9 +264,25 @@ def section_rrect(w, h, r, n=2):
     return rounded_rect(w, h, min(r, w / 2 - 1e-4, h / 2 - 1e-4), n)
 
 
-def sweep(part, path, section, mat, up=None, closed=False, caps=True, scales=None, twist=0.0):
+def sweep(part, path, section, mat, up=None, closed=False, caps=True, scales=None, twist=0.0,
+          sec_mats=None, cap_mat=None):
     """Sweep a closed 2D section [(side, up), ...] (CCW for outward normals) along a polyline
-    with parallel-transported frames. scales: per-point (sx, sy). Returns (rings, faces)."""
+    with parallel-transported frames. scales: per-point (sx, sy). sec_mats: material per section
+    edge (face column). Returns (rings, faces)."""
+    vr, fs = _sweep(part, path, section, mat, up, closed, caps, scales, twist)
+    ns = len(section)
+    nb = (len(path) if closed else len(path) - 1) * ns
+    if sec_mats:
+        for i in range(nb):
+            m = sec_mats[i % ns]
+            if m:
+                part.assign([fs[i]], m)
+    if cap_mat and caps and not closed:
+        part.assign(fs[nb:], cap_mat)
+    return vr, fs
+
+
+def _sweep(part, path, section, mat, up=None, closed=False, caps=True, scales=None, twist=0.0):
     P = [Vector(p) for p in path]
     n = len(P)
     Tn = []
@@ -540,12 +597,17 @@ class Pod:
 
     # -- mesh ------------------------------------------------------------------------
     def build(self, part, nu, mat, grooves=(), bands=(), groove_mat=INK, crown=0.006,
-              fill=3, cap_bottom=True, phase=0.0):
-        """grooves: [(z, depth, half_width)]; bands: [(z0, z1, mat)] by band mid height."""
+              fill=3, cap_bottom=True, phase=0.0, ribs=()):
+        """grooves: [(z, depth, half_width)] V-grooves; ribs: [(z0, z1, height)] raised bands
+        with steep edges; bands: [(z0, z1, mat)] material by band mid height."""
         zs = [(sl[0], 0.0) for sl in self.s]
         for (zg, dep, hw) in grooves:
             zs = [(z, i) for (z, i) in zs if abs(z - zg) > hw * 1.6]
             zs += [(zg - hw, 0.0), (zg, dep), (zg + hw, 0.0)]
+        for (z0, z1, hh) in ribs:
+            e = 0.0016
+            zs = [(z, i) for (z, i) in zs if not (z0 - 2 * e < z < z1 + 2 * e)]
+            zs += [(z0, 0.0), (z0 + e, -hh), (z1 - e, -hh), (z1, 0.0)]
         zs.sort()
         rings = []
         for (z, ins) in zs:

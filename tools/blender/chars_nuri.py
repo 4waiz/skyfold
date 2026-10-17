@@ -382,29 +382,32 @@ def body_center(th, ph):
 
 
 def chest_scales(p, surf):
-    """Overlapping sandstone breast plates, laid out in the front view (x, z) and projected
-    onto the body; upper rows sit on top of the lower ones like shingles."""
-    rows = [(-0.0035, [-0.0105, 0.0105], 0.0021),
-            (-0.0140, [-0.0205, 0.0, 0.0205], 0.0015),
-            (-0.0245, [-0.0300, -0.0102, 0.0102, 0.0300], 0.0009),
-            (-0.0345, [-0.0205, 0.0, 0.0205], 0.0003)]
-    for r, (cz, xs, base) in enumerate(rows):
-        L = 0.0175 - 0.0012 * r
-        w = 0.0205 - 0.0008 * r
-        out = feather_outline(L, w, base_w=w * 0.94, tip_len=w * 0.62, ns=1, nt=5, point=0.55)
-        for cx in xs:
-            def to3d(x, y, cx=cx, cz=cz, L=L):
-                # local x runs down the chest (tip at the bottom), local y across
-                return Vector((cx - y, -0.2, cz + L * 0.42 - x))
-            F = conform(surf, to3d, base, axis=(0, 1, 0))
-            plate(p, out, F, 0.0015, CHEST, bevel=0.0005)
+    """Overlapping sandstone breast plates laid out in the body's own (th, ph) parameters:
+    brick-bonded rows wrapping the breast, tips pointing back along the belly; the front rows
+    sit on top of the ones behind like shingles."""
+    rows = [(0.150 * pi, 3, 0.088 * pi, 0.0022), (0.215 * pi, 4, 0.088 * pi, 0.0016),
+            (0.280 * pi, 3, 0.092 * pi, 0.0010), (0.345 * pi, 2, 0.100 * pi, 0.0004)]
+    for r, (th, n, dph, base) in enumerate(rows):
+        L = 0.0190 - 0.0006 * r
+        w = 0.0215 - 0.0004 * r
+        out = feather_outline(L, w, base_w=w * 0.96, tip_len=w * 0.55, ns=1, nt=4, point=0.30)
+        for k in range(n):
+            ph = pi + (k - (n - 1) / 2) * dph
+            c = body_pt(th, ph)
+            e = 1e-4
+            t_th = (body_pt(th + e, ph) - body_pt(th - e, ph)).normalized()   # toward the tail
+            t_ph = (body_pt(th, ph + e) - body_pt(th, ph - e)).normalized()   # around the body
+
+            def to3d(x, y, c=c, t_th=t_th, t_ph=t_ph, L=L):
+                return c + t_th * (x - L * 0.40) + t_ph * y
+            plate(p, out, conform(surf, to3d, base), 0.0015, CHEST, bevel=0.0005)
 
 
 def build_body(parent):
     p = C.Part()
     seams = [(0.0, 0.030, 0.30, 0.86), (0.62 * pi, 0.030, 0.22, 0.88),
              (1.38 * pi, 0.030, 0.22, 0.88)]
-    shell(p, body_pt, body_center, 18, 30, lambda s, ph: s * pi, [], seams, 0.0012,
+    shell(p, body_pt, body_center, 17, 28, lambda s, ph: s * pi, [], seams, 0.0012,
           lambda s, ph, g: INK if g > 0.3 else IVORY)
     ref = C.Part()
     shell(ref, body_pt, body_center, 24, 36, lambda s, ph: s * pi, [], [], 0.0,
@@ -415,9 +418,9 @@ def build_body(parent):
     # neck collar (brass) + dark neck core with two ribs so the head can turn without gaps
     ax = (HEAD_C - NECK).normalized()
     M = Matrix.Translation(NECK) @ ax.to_track_quat('Z', 'Y').to_matrix().to_4x4()
-    p.torus(0.0228, 0.0044, 24, 6, BRASS, matrix=M @ Matrix.Translation((0, 0, -0.002)))
+    p.torus(0.0228, 0.0044, 22, 5, BRASS, matrix=M @ Matrix.Translation((0, 0, -0.002)))
     p.lathe([(0.0, -0.016), (0.0200, -0.016), (0.0208, 0.002), (0.0196, 0.004), (0.0204, 0.008),
-             (0.0192, 0.012), (0.0, 0.012)], 20, INK, matrix=M)
+             (0.0192, 0.012), (0.0, 0.012)], 18, INK, matrix=M)
     # shoulder sockets (ink cup + brass ring), both sides
     for sx in (1, -1):
         s = Vector((SHOULDER.x * sx, SHOULDER.y, SHOULDER.z))
@@ -444,19 +447,20 @@ def build_body(parent):
         for k in range(3):
             c = Vector((sx * 0.0214, THR_C.y, THR_C.z + 0.0048 - 0.0022 * k))
             p.box(c, (0.0018, 0.0070, 0.0010), BRASS)
-    # tucked talons: ink tarsus, brass ankle, three curled toes ending in brass claws
+    # tucked talons: ink tarsus folded back along the belly, brass ankle, three curled toes
+    # ending in brass claws (a loose fist under the tail coverts)
     for sx in (1, -1):
-        hip = Vector((sx * 0.0165, 0.030, -0.034))
-        ank = Vector((sx * 0.0185, 0.047, -0.0485))
-        p.tube([hip, (hip + ank) / 2 + Vector((0, 0, 0.0008)), ank], [0.0040, 0.0034, 0.0029],
-               7, INK, caps='round', cap_segs=2)
-        p.superellipsoid(ank, (0.0037, 0.0037, 0.0037), 1.0, 1.0, 10, 6, BRASS)
-        for spread in (-24.0, 0.0, 24.0):
+        hip = Vector((sx * 0.0160, 0.026, -0.033))
+        ank = Vector((sx * 0.0175, 0.050, -0.0430))
+        p.tube([hip, (hip + ank) / 2 + Vector((0, 0, -0.0012)), ank], [0.0038, 0.0032, 0.0027],
+               6, INK, caps='round', cap_segs=1)
+        p.superellipsoid(ank, (0.0034, 0.0034, 0.0034), 1.0, 1.0, 8, 5, BRASS)
+        for spread in (-22.0, 0.0, 22.0):
             R = Matrix.Rotation(radians(spread * sx), 3, 'Z')
-            pts = [ank, ank + R @ Vector((0, 0.0058, -0.0020)), ank + R @ Vector((0, 0.0088, -0.0062)),
-                   ank + R @ Vector((0, 0.0074, -0.0100)), ank + R @ Vector((0, 0.0046, -0.0118))]
-            segs = 6
-            vr, fs = p.tube(pts, [0.0022, 0.0020, 0.0017, 0.0010, 0.0003], segs, INK, caps='round',
+            pts = [ank, ank + R @ Vector((0, 0.0060, -0.0016)), ank + R @ Vector((0, 0.0090, -0.0052)),
+                   ank + R @ Vector((0, 0.0078, -0.0088)), ank + R @ Vector((0, 0.0050, -0.0104))]
+            segs = 5
+            vr, fs = p.tube(pts, [0.0020, 0.0018, 0.0015, 0.0009, 0.0003], segs, INK, caps='round',
                             cap_segs=1)
             n = len(pts)
             p.assign(fs[(n - 1) * segs:(n + 1) * segs], BRASS)          # claw
@@ -466,7 +470,7 @@ def build_body(parent):
               (0.046, 0.030, -0.012), (-0.046, 0.030, -0.012), (0.040, -0.045, -0.018),
               (-0.040, -0.045, -0.018), (0.018, 0.072, 0.022), (-0.018, 0.072, 0.022)]:
         loc, n = surf.near(Vector(q))
-        dome(p, loc + n * 0.0001, n, 0.0021, 0.0012, 8, BRASS)
+        dome(p, loc + n * 0.0001, n, 0.0021, 0.0012, 7, BRASS)
     tmp = p.to_temp()
     return C.merge_to_object("Body", [tmp], pivot=(0, 0, 0), parent=parent, sharp_deg=48)
 
@@ -479,7 +483,7 @@ S_HOOD = 0.42
 def theta_hood(ph):
     a = abs(((ph + pi) % (2 * pi)) - pi)          # 0 top .. pi bottom
     t = 0.24 * pi + 0.22 * pi * (1 - cos(a)) / 2 + 0.34 * pi * smoothstep(0.55 * pi, 0.95 * pi, a)
-    t -= 0.19 * pi * math.exp(-((a - 0.68 * pi) / (0.115 * pi)) ** 2)   # malar wedge
+    t -= 0.17 * pi * math.exp(-((a - 0.74 * pi) / (0.095 * pi)) ** 2)   # malar wedge
     return t
 
 
@@ -508,7 +512,7 @@ def head_pt(th, ph):
     # lens socket: the face is pushed back behind the protruding lens housing
     rel = p - LENS_C
     lat = sqrt(rel.x * rel.x + rel.z * rel.z)
-    k = 1.0 - smoothstep(0.0180, 0.0228, lat)
+    k = 1.0 - smoothstep(0.0165, 0.0203, lat)       # stays inside the housing wall (r 0.0212)
     if k > 0.0:
         ty = LENS_C.y + 0.0070
         if p.y < ty:
@@ -535,7 +539,7 @@ def build_head(parent):
             # spine groove on the dark hood becomes a slim brass inlay
             return BRASS if (s > S_HOOD + 0.03 and cdist(ph, 0.0) < 0.06) else INK
         return HOOD if s > S_HOOD else IVORY
-    shell(p, head_pt, lambda th, ph: HEAD_C, 22, 36, head_theta, [(S_HOOD, 0.016)],
+    shell(p, head_pt, lambda th, ph: HEAD_C, 20, 32, head_theta, [(S_HOOD, 0.016)],
           [(0.0, 0.040, S_HOOD + 0.02, 0.86)], 0.0011, mat)
     ref = C.Part()
     shell(ref, head_pt, lambda th, ph: HEAD_C, 24, 40, head_theta, [], [], 0.0,
@@ -544,7 +548,7 @@ def build_head(parent):
     ref.bm.free()
     # lens housing (ink) with a raised brass ring, inner lip, dark socket and the pupil dome
     Mf = Matrix.Translation(LENS_C) @ Matrix.Rotation(radians(90), 4, 'X')  # local +Z -> -Y
-    seg = 28
+    seg = 24
     vr, fs = p.lathe(HOUSING, seg, INK, matrix=Mf)
     for b in HOUSING_BRASS:
         p.assign(fs[b * seg:(b + 1) * seg], BRASS)
@@ -562,10 +566,10 @@ def build_head(parent):
         M = Matrix.Translation(loc) @ frame(n)
         prof = [(0.0, 0.0034), (0.0024, 0.0031), (0.0036, 0.0022), (0.0040, 0.0016),
                 (0.0054, 0.0014), (0.0060, 0.0006), (0.0060, -0.0012), (0.0, -0.0012)]
-        vr, fs = p.lathe(prof, 16, BRASS, matrix=M)
+        vr, fs = p.lathe(prof, 14, BRASS, matrix=M)
         nb = len(prof) - 3                       # bands; the top fan follows them
-        p.assign(fs[0:2 * 16], CORAL)
-        p.assign(fs[nb * 16:(nb + 1) * 16], CORAL)
+        p.assign(fs[0:2 * 14], CORAL)
+        p.assign(fs[nb * 14:(nb + 1) * 14], CORAL)
     tmp = p.to_temp()
     return C.merge_to_object("Head", [tmp], pivot=NECK, parent=parent, sharp_deg=48)
 
@@ -575,13 +579,14 @@ def build_lens(parent):
     the dark gap between the rings belong to the Head."""
     p = C.Part()
     Mf = Matrix.Translation(LENS_C) @ Matrix.Rotation(radians(90), 4, 'X')
-    inner = [(0.0058, -0.0030), (0.0058, 0.0009), (0.0063, 0.0018), (0.0075, 0.0023),
-             (0.0091, 0.0021), (0.0100, 0.0015), (0.0103, 0.0006), (0.0103, -0.0030)]
-    outer = [(0.0117, -0.0040), (0.0117, 0.0005), (0.0122, 0.0014), (0.0134, 0.0019),
-             (0.0148, 0.0017), (0.0157, 0.0010), (0.0161, 0.0002), (0.0161, -0.0040)]
-    lathe_ring(p, inner, 24, GLOW, Mf)
-    fs = lathe_ring(p, outer, 24, GLOW, Mf)
-    p.assign(fs[0:24], TEAL)          # inner wall of the outer ring (seen through the gap)
+    inner = [(0.0058, -0.0030), (0.0058, 0.0010), (0.0066, 0.0021), (0.0086, 0.0023),
+             (0.0100, 0.0014), (0.0103, -0.0030)]
+    outer = [(0.0117, -0.0040), (0.0117, 0.0006), (0.0126, 0.0018), (0.0146, 0.0018),
+             (0.0158, 0.0008), (0.0161, -0.0040)]
+    seg = 22
+    lathe_ring(p, inner, seg, GLOW, Mf)
+    fs = lathe_ring(p, outer, seg, GLOW, Mf)
+    p.assign(fs[0:seg], TEAL)         # inner wall of the outer ring (seen through the gap)
     tmp = p.to_temp()
     return C.merge_to_object("Lens", [tmp], pivot=LENS_C, parent=parent, sharp_deg=60)
 
