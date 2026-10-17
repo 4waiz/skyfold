@@ -157,7 +157,7 @@ html, body { margin: 0; background: #0b1114; }
 .radio { display: flex; align-items: center; gap: 20px; background: rgba(34, 51, 59, 0.84); border-radius: 60px; padding: 12px 36px 12px 12px;
   box-shadow: 0 18px 50px rgba(8, 18, 22, 0.35); }
 .badge { position: relative; width: 84px; height: 84px; flex: 0 0 84px; }
-.badge img { width: 84px; height: 84px; border-radius: 50%; display: block; }
+.badge .face { width: 84px; height: 84px; border-radius: 50%; background: url('assets/img/noor_badge.png') center / cover no-repeat; }
 .badge .ico { width: 84px; height: 84px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; }
 .badge .ico svg { width: 46px; height: 46px; }
 .badge .ring { position: absolute; left: -7px; top: -7px; width: 98px; height: 98px; border-radius: 50%; border: 3px solid var(--tealL); opacity: 0; box-sizing: border-box; }
@@ -174,10 +174,11 @@ html, body { margin: 0; background: #0b1114; }
 .chip.ok b { color: var(--tealL); margin-right: 10px; }
 
 /* opening location card (bottom left) */
-.loc-wrap { display: flex; align-items: flex-end; justify-content: flex-start; padding: 0 0 92px 96px; }
+.loc-wrap { display: flex; align-items: flex-end; justify-content: flex-start; padding: 0 0 80px 80px; }
+.loc { padding: 26px 64px 24px 30px; border-radius: 20px; background: linear-gradient(90deg, rgba(11, 17, 20, 0.62) 0%, rgba(11, 17, 20, 0.38) 70%, rgba(11, 17, 20, 0) 100%); }
 .loc .place { font-family: 'Unbounded'; font-weight: 600; font-size: 46px; letter-spacing: 0.34em; }
 .loc .line { width: 440px; height: 3px; background: var(--gold); margin: 16px 0 14px; transform-origin: 0% 50%; }
-.loc .warn { font-family: 'Atkinson'; font-weight: 700; font-size: 24px; letter-spacing: 0.3em; color: var(--coral); display: flex; align-items: center; }
+.loc .warn { font-family: 'Atkinson'; font-weight: 700; font-size: 24px; letter-spacing: 0.3em; color: #FF8A63; display: flex; align-items: center; }
 .loc .warn .dot { width: 13px; height: 13px; border-radius: 50%; background: var(--coral); margin-right: 14px; }
 
 /* paper-fold transition */
@@ -222,7 +223,7 @@ html, body { margin: 0; background: #0b1114; }
 .fmt-v .radio-wrap { align-items: flex-end; padding: 0 0 430px 60px; }
 .fmt-v .chip-wrap { padding: 0 60px 560px 60px; }
 .fmt-v .chip { font-size: 32px; max-width: 860px; }
-.fmt-v .loc-wrap { padding: 0 0 430px 72px; }
+.fmt-v .loc-wrap { padding: 0 0 420px 56px; }
 .fmt-v .word { font-size: 132px; letter-spacing: 0.06em; padding-left: 0.06em; }
 .fmt-v .rule { width: 460px; }
 .fmt-v .sub { font-size: 40px; letter-spacing: 0.32em; padding-left: 0.32em; }
@@ -273,7 +274,7 @@ def build_html(cfg, audio_data):
     # Radio callers.
     for i, (line, a, b) in enumerate(g["radio"]):
         el.append(f'<div id="rn{i}" class="clip ov radio-wrap" data-start="{a}" data-duration="{b - a}" data-track-index="5"><div class="radio">'
-                  f'<div class="badge"><img src="assets/img/noor_badge.png" alt=""><div class="ring"></div></div>'
+                  f'<div class="badge"><div class="face"></div><div class="ring"></div></div>'
                   f'<div class="who"><div class="name">NOOR</div><div class="role">{esc(edits.NOOR_ROLE)}</div></div></div></div>')
     a, b = g["tower"]
     el.append(f'<div id="rtower" class="clip ov radio-wrap" data-start="{a}" data-duration="{b - a}" data-track-index="5"><div class="radio">'

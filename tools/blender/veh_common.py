@@ -801,7 +801,7 @@ def wheel_hq(R, W, outer=1, seg=32, rim_r=0.62, lugs=14, lug_h=0.010, spokes=5, 
              hub_seg=16, tyre=RUBBER, lip=PEARL, barrel=INK, spoke=PEARL, hub=PEARL, cap=BRASS,
              nut=BRASS, disc_mat=METAL, caliper_mat=CORAL, caliper_angle=60.0, grooves=0,
              sidewall_ring=None, lug_skew=0.65, lug_len=0.50, valve=BRASS, spoke_ridge=True,
-             inner_simple=True, nut_segs=6):
+             inner_simple=True, nut_segs=6, dish=None):
     """Detailed wheel as a Part at the origin: axle along X, outer face toward +X (mirrored when
     outer < 0). R = tyre radius, W = tyre width. Sizes of the rim parts scale with R.
     lugs: tread blocks per side (chevron pairs; 0 = smooth tread, use grooves= for ribs)."""
@@ -895,8 +895,13 @@ def wheel_hq(R, W, outer=1, seg=32, rim_r=0.62, lugs=14, lug_h=0.010, spokes=5, 
         p.tube([Vector((0.70 * w, 0, 0)) + rad * (rr - 0.020 * R),
                 Vector((0.86 * w, 0, 0)) + rad * (rr - 0.034 * R)], 0.012 * R, 6, valve,
                caps='flat')
-    # ---- spokes (hub -> lip), slightly dished, flared toward the rim
+    # ---- solid dished wheel face (aircraft style) instead of spokes
     hub_r = 0.21 * R
+    if dish:
+        dp = [(rr - 0.040 * R, 0.86 * w), (rr - 0.070 * R, 0.80 * w), (hub_r * 1.6, 0.74 * w),
+              (hub_r * 1.08, 0.80 * w)]
+        lathe_m(p, dp, seg, [dish, dish, INK], axis='X')
+    # ---- spokes (hub -> lip), slightly dished, flared toward the rim
     if spoke_ridge:
         sw, sd = spoke_w * R / 2, spoke_d * R / 2
         sec = [(sw, -sd), (sw, sd * 0.35), (0.0, sd), (-sw, sd * 0.35), (-sw, -sd), (0.0, -sd * 1.1)]

@@ -523,7 +523,7 @@ def build_hair(f, surf):
             front = math.exp(-((t - 0.15) / 0.62) ** 2)
             lift = 0.010 * front * smoothstep(0.55, 1.0, a / max(edge(t), 1e-3))
             return q + Vector((0, 0, lift))
-        cap_shell(p, surf, hc, edge, thick, v['hair'], nth=26, ns=6, nudge=nudge)
+        cap_shell(p, surf, hc, edge, thick, v['hair'], nth=28, ns=7, nudge=nudge)
     elif st == 'bun':
         # side parting on the figure's right, the larger side sweeps across the forehead
         edge = table([(0, 54), (-25, 66), (-60, 84), (35, 60), (60, 80), (90, 98), (130, 112),
@@ -533,7 +533,7 @@ def build_hair(f, surf):
             part = math.exp(-((t - radians(-20)) / 0.18) ** 2) * smoothstep(0.1, 0.5, a)
             sweep = 0.005 * math.exp(-((t - radians(20)) / 0.7) ** 2) * smoothstep(0.3, 0.9, s)
             return 0.0085 + sweep - 0.004 * part
-        cap_shell(p, surf, hc, edge, thick, v['hair'], nth=26, ns=6)
+        cap_shell(p, surf, hc, edge, thick, v['hair'], nth=28, ns=7)
         bc = hc + Vector((0.0, 0.080, 0.064))
         p.superellipsoid(bc, (0.046, 0.042, 0.044), 0.9, 0.9, 10, 7, v['hair'])
         Mt = Matrix.Translation(hc + Vector((0, 0.060, 0.056))) @ Matrix.Rotation(radians(62), 4, 'X')
@@ -605,8 +605,11 @@ def shirt_details(f, tsurf):
     p = f.p
     for sx in (1, -1):
         out = ccw([(0.0, 0.0), (sx * 0.060, 0.010), (sx * 0.074, -0.030), (sx * 0.010, -0.058)])
-        F = conform(tsurf, lambda x, y: Vector((x, -0.5, 1.448 + y)), 0.001, (0, 1, 0.55))
+        F = conform(tsurf, lambda x, y: Vector((x, -0.085, 1.448 + y)), 0.001, (0, 1, 0.55))
         plate(p, out, F, 0.006, v['trim'], bevel=0.0022)
+    # band collar round the neck
+    p.torus(0.0565, 0.0085, 18, 4, v['trim'], matrix=Matrix.Translation((0.0, 0.010, 1.452)),
+            scale_minor=(0.55, 1.5))
     pl = densify(rounded_rect(0.028, 0.30, 0.006, 1), 0.06)
     plate(p, pl, conform(tsurf, lambda x, y: Vector((x, -0.5, 1.250 + y)), -0.001, (0, 1, 0)),
           0.004, v['top'], bevel=0.0018, fill=1, fill_to=0.008)
@@ -649,7 +652,7 @@ def coat_details(f, tsurf):
     for sx in (1, -1):
         out = densify(ccw([(0.0, 0.0), (sx * 0.070, -0.010), (sx * 0.090, -0.060),
                            (sx * 0.030, -0.200)]), 0.03)
-        F = conform(tsurf, lambda x, y: Vector((x, -0.5, 1.430 + y)), 0.0005, (0, 1, 0.25))
+        F = conform(tsurf, lambda x, y: Vector((x, -0.105, 1.430 + y)), 0.0005, (0, 1, 0.25))
         plate(p, out, F, 0.006, v['top'], bevel=0.0018)
         for z in (1.170, 1.075, 0.740):
             loc, n = tsurf.ray(Vector((sx * 0.050, -0.5, z)), Vector((0, 1, 0)))
@@ -739,7 +742,7 @@ def scarf(f):
     m = v['acc_mat']
     Mt = Matrix.Translation((0.0, 0.002, 1.445)) @ Matrix.Rotation(radians(-8), 4, 'X')
     p.torus(0.070, 0.026, 16, 6, m, matrix=Mt, scale_minor=(1.0, 1.15))
-    p.torus(0.060, 0.020, 16, 5, m, matrix=Matrix.Translation((0.0, -0.002, 1.478)) @
+    p.torus(0.060, 0.020, 14, 4, m, matrix=Matrix.Translation((0.0, -0.002, 1.478)) @
             Matrix.Rotation(radians(-14), 4, 'X'))
     for (x0, L) in ((0.030, 0.230), (0.058, 0.180)):
         pts = [Vector((x0, -0.070, 1.430)), Vector((x0 + 0.006, -0.112, 1.350)),
@@ -775,18 +778,18 @@ def shoulder_bag(f, tsurf):
     p = f.p
     m = 'SKY_Coral'
     M = Matrix.Translation((0.205, -0.020, 0.900)) @ Matrix.Rotation(radians(-8), 4, 'Y')
-    p.rbox(Vector((0, 0, 0)), (0.070, 0.240, 0.180), 0.040, 2, m, matrix=M)
-    p.rbox(Vector((0.020, 0.0, 0.040)), (0.040, 0.244, 0.110), 0.030, 2, m, matrix=M)    # flap
+    p.rbox(Vector((0, 0, 0)), (0.070, 0.240, 0.180), 0.034, 2, m, matrix=M)
+    p.rbox(Vector((0.020, 0.0, 0.040)), (0.040, 0.244, 0.110), 0.019, 1, m, matrix=M)    # flap
     p.rbox(Vector((0.041, 0.0, -0.004)), (0.006, 0.040, 0.026), 0.0018, 1, BRASS, matrix=M)
 
     def on(x, z, front, off=0.012):
         loc, n = tsurf.ray(Vector((x, -0.5 if front else 0.5, z)), Vector((0, 1 if front else -1, 0)))
         return loc + n * off
-    pts = [M @ Vector((-0.004, -0.112, 0.080)), M @ Vector((-0.010, -0.118, 0.150)),
-           on(0.130, 1.090, True), on(0.030, 1.250, True), on(-0.090, 1.385, True, 0.013),
-           Vector((-0.126, 0.006, 1.436)), on(-0.070, 1.330, False), on(0.120, 1.070, False),
-           M @ Vector((-0.010, 0.118, 0.150)), M @ Vector((-0.004, 0.112, 0.080))]
-    p.tube(C.spline3(pts, 1), 0.010, 5, m, caps='round', cap_segs=1, scale_xy=(1.9, 0.55),
+    pts = [M @ Vector((-0.020, -0.100, 0.085)), on(0.165, 1.000, True), on(0.120, 1.110, True, 0.016),
+           on(0.030, 1.250, True, 0.019), on(-0.070, 1.360, True, 0.017), Vector((-0.124, 0.004, 1.438)),
+           on(-0.080, 1.340, False), on(0.010, 1.230, False), on(0.120, 1.100, False),
+           on(0.165, 1.000, False), M @ Vector((-0.020, 0.100, 0.085))]
+    p.tube(C.spline3(pts, 2), 0.010, 4, m, caps='round', cap_segs=1, scale_xy=(1.9, 0.55),
            up=(0, -1, 0))
 
 
