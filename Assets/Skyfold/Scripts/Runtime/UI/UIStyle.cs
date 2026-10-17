@@ -20,6 +20,8 @@ namespace Skyfold
         public static readonly Color Rail = Hex("#D3C8B4");
         /// <summary>Slider and switch knobs: warm white so they stand off both pearl and teal rows.</summary>
         public static readonly Color Knob = Hex("#FFFCF6");
+        /// <summary>Primary buttons at rest: a soft teal tint, so solid teal always means "focused".</summary>
+        public static readonly Color PrimarySoft = Hex("#A8DCD5");
         public static readonly Color Shadow = new Color(0.05f, 0.1f, 0.12f, 0.28f);
         public static readonly Color PanelGlass = new Color(0.96f, 0.94f, 0.9f, 0.96f);
         public static readonly Color Scrim = new Color(0.07f, 0.12f, 0.14f, 0.45f);

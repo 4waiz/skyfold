@@ -59,6 +59,17 @@ namespace Skyfold.EditorTools
             // release folder another process (a capture, a QA run) is still playing from.
             string dir = Environment.GetEnvironmentVariable("SKYFOLD_BUILD_DIR");
             if (string.IsNullOrEmpty(dir)) dir = development ? DevDir : ReleaseDir;
+            // Never half-delete a build that is running: Directory.Delete stops at the first locked file and
+            // leaves a folder that can no longer start. A running SKYFOLD.exe cannot be opened for writing.
+            string exe = Path.Combine(dir, "SKYFOLD.exe");
+            if (File.Exists(exe))
+            {
+                try { using (File.Open(exe, FileMode.Open, FileAccess.ReadWrite, FileShare.None)) { } }
+                catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
+                {
+                    throw new Exception($"{exe} is running (a QA run or a capture). Close it before rebuilding into {dir}, or set SKYFOLD_BUILD_DIR to build elsewhere.");
+                }
+            }
             if (Directory.Exists(dir)) Directory.Delete(dir, true);
             Directory.CreateDirectory(dir);
             var options = new BuildPlayerOptions

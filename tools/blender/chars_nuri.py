@@ -421,7 +421,7 @@ def build_body(parent):
     M = Matrix.Translation(NECK) @ ax.to_track_quat('Z', 'Y').to_matrix().to_4x4()
     p.torus(0.0228, 0.0044, 22, 5, BRASS, matrix=M @ Matrix.Translation((0, 0, -0.002)))
     p.lathe([(0.0, -0.016), (0.0200, -0.016), (0.0208, 0.002), (0.0196, 0.004), (0.0204, 0.008),
-             (0.0192, 0.012), (0.0, 0.012)], 18, INK, matrix=M)
+             (0.0192, 0.012), (0.0, 0.012)], 16, INK, matrix=M)
     # shoulder sockets (ink cup + brass ring), both sides
     for sx in (1, -1):
         s = Vector((SHOULDER.x * sx, SHOULDER.y, SHOULDER.z))
@@ -432,7 +432,7 @@ def build_body(parent):
         p.assign(fs[1 * 16:3 * 16], BRASS)
     # thruster housing: brass lip, ink nacelle, six vanes and a brass hub over the glow disc
     Mt = Matrix.Translation(THR_C)
-    seg = 24
+    seg = 20
     vr, fs = p.lathe([(0.0, 0.0110), (0.0196, 0.0110), (0.0214, 0.0062), (0.0213, 0.0002),
                       (0.0204, -0.0034), (0.0192, -0.0050), (0.0170, -0.0047), (0.0160, -0.0030),
                       (0.0156, -0.0002), (0.0, -0.0002)], seg, INK, matrix=Mt)
@@ -451,17 +451,17 @@ def build_body(parent):
     # tucked talons: ink tarsus folded back along the belly, brass ankle, three curled toes
     # ending in brass claws (a loose fist under the tail coverts)
     for sx in (1, -1):
-        hip = Vector((sx * 0.0160, 0.026, -0.033))
-        ank = Vector((sx * 0.0175, 0.050, -0.0430))
+        hip = Vector((sx * 0.0160, 0.028, -0.031))
+        ank = Vector((sx * 0.0165, 0.056, -0.0385))
         p.tube([hip, (hip + ank) / 2 + Vector((0, 0, -0.0012)), ank], [0.0038, 0.0032, 0.0027],
                6, INK, caps='round', cap_segs=1)
         p.superellipsoid(ank, (0.0034, 0.0034, 0.0034), 1.0, 1.0, 8, 5, BRASS)
         for spread in (-22.0, 0.0, 22.0):
             R = Matrix.Rotation(radians(spread * sx), 3, 'Z')
-            pts = [ank, ank + R @ Vector((0, 0.0060, -0.0016)), ank + R @ Vector((0, 0.0090, -0.0052)),
-                   ank + R @ Vector((0, 0.0078, -0.0088)), ank + R @ Vector((0, 0.0050, -0.0104))]
+            pts = [ank, ank + R @ Vector((0, 0.0068, -0.0026)), ank + R @ Vector((0, 0.0080, -0.0076)),
+                   ank + R @ Vector((0, 0.0052, -0.0098))]
             segs = 5
-            vr, fs = p.tube(pts, [0.0020, 0.0018, 0.0015, 0.0009, 0.0003], segs, INK, caps='round',
+            vr, fs = p.tube(pts, [0.0020, 0.0016, 0.0010, 0.0003], segs, INK, caps='round',
                             cap_segs=1)
             n = len(pts)
             p.assign(fs[(n - 1) * segs:(n + 1) * segs], BRASS)          # claw
@@ -553,13 +553,12 @@ def head_pt(th, ph):
 
 # lens housing profile (lens-local: z forward), back pole -> outer wall -> brass ring ->
 # lip -> socket -> pupil pole
-HOUSING = [(0.0, -0.0130), (0.0196, -0.0130), (0.0212, -0.0070), (0.0213, 0.0016),
-           (0.0207, 0.0036), (0.0197, 0.0047), (0.0190, 0.0050), (0.0187, 0.0056),
-           (0.0180, 0.0060), (0.0168, 0.0059), (0.0162, 0.0054), (0.0158, 0.0048),
-           (0.0151, 0.0040), (0.0150, 0.0027), (0.0162, 0.0021), (0.0170, -0.0045),
-           (0.0158, -0.0060), (0.0062, -0.0062), (0.0053, -0.0052), (0.0042, -0.0034),
-           (0.0024, -0.0024), (0.0, -0.0021)]
-HOUSING_BRASS = (5, 6, 7, 8, 9)       # band indices (between popped profile points i, i+1)
+HOUSING = [(0.0, -0.0130), (0.0198, -0.0130), (0.0213, -0.0060), (0.0213, 0.0018),
+           (0.0204, 0.0042), (0.0191, 0.0049), (0.0187, 0.0057), (0.0175, 0.0061),
+           (0.0163, 0.0055), (0.0157, 0.0048), (0.0150, 0.0036), (0.0151, 0.0025),
+           (0.0170, 0.0016), (0.0170, -0.0048), (0.0062, -0.0062), (0.0050, -0.0046),
+           (0.0028, -0.0026), (0.0, -0.0021)]
+HOUSING_BRASS = (4, 5, 6, 7)          # band indices (between popped profile points i, i+1)
 
 
 def build_head(parent):
@@ -570,11 +569,11 @@ def build_head(parent):
             # spine groove on the dark hood becomes a slim brass inlay
             return BRASS if (s > S_HOOD + 0.03 and cdist(ph, 0.0) < 0.06) else INK
         return HOOD if s > S_HOOD else IVORY
-    shell(p, head_pt, lambda th, ph: HEAD_C, 20, 32, head_theta, [(S_HOOD, 0.016)],
-          [(0.0, 0.040, S_HOOD + 0.02, 0.86)], 0.0011, mat)
+    shell(p, head_pt, lambda th, ph: HEAD_C, 18, 32, head_theta, [(S_HOOD, 0.016)],
+          [(0.0, 0.040, S_HOOD + 0.02, 0.86)], 0.0011, mat, extra=[S_LENS])
     ref = C.Part()
     shell(ref, head_pt, lambda th, ph: HEAD_C, 24, 40, head_theta, [], [], 0.0,
-          lambda s, ph, g: IVORY)
+          lambda s, ph, g: IVORY, extra=[S_LENS])
     surf = Surf(ref)
     ref.bm.free()
     # lens housing (ink) with a raised brass ring, inner lip, dark socket and the pupil dome
@@ -583,15 +582,20 @@ def build_head(parent):
     vr, fs = p.lathe(HOUSING, seg, INK, matrix=Mf)
     for b in HOUSING_BRASS:
         p.assign(fs[b * seg:(b + 1) * seg], BRASS)
-    # cheek panels: raised ivory plates on the face sides, a brass screw at the back corner
     for sx in (1, -1):
-        out = rounded_rect(0.021, 0.015, 0.0060, 3)
+        # jaw plates: raised ivory cheek guards framing the beak, a brass screw at the tip
+        out = feather_outline(0.0175, 0.0125, base_w=0.0118, tip_len=0.0068, ns=1, nt=4, point=0.3)
+        d = Vector((0.62, -0.785)).normalized()
+        q = Vector((-d.y, d.x))
 
-        def to3d(x, y, sx=sx):
-            return Vector((sx * 0.06, -0.1040 + x, 0.0330 + y + 0.15 * x))
-        plate(p, out, conform(surf, to3d, -0.0002, axis=(-sx, 0, 0)), 0.0014, IVORY, bevel=0.0005)
-        loc, n = surf.ray(Vector((sx * 0.08, -0.0960, 0.0345)), Vector((-sx, 0, 0)))
-        dome(p, loc + n * 0.0011, n, 0.0016, 0.0010, 8, BRASS)
+        def to3d(x, y, sx=sx, d=d, q=q):
+            u = 0.0142 + d.x * x + q.x * y
+            v = 0.0262 + d.y * x + q.y * y
+            return Vector((sx * u, -0.30, v))
+        plate(p, out, conform(surf, to3d, -0.0002, axis=(0, 1, 0)), 0.0013, IVORY, bevel=0.0005)
+        tip = Vector((0.0142, 0.0262)) + d * 0.0128
+        loc, n = surf.ray(Vector((sx * tip.x, -0.30, tip.y)), Vector((0, 1, 0)))
+        dome(p, loc + n * 0.0010, n, 0.0015, 0.0009, 7, BRASS)
         # sensor light behind the face: brass socket + coral lens
         loc, n = surf.ray(Vector((sx * 0.08, -0.0755, 0.0470)), Vector((-sx, 0, 0)))
         M = Matrix.Translation(loc) @ frame(n)
@@ -660,9 +664,9 @@ def build_beak(parent):
         n = Vector((sx * 0.85, -0.35, 0.40)).normalized()
         M = Matrix.Translation(c) @ frame(n)
         vr, fs2 = p.lathe([(0.0, -0.0003), (0.0007, -0.0002), (0.0011, 0.0006), (0.0017, 0.0007),
-                           (0.0021, 0.0001), (0.0021, -0.0014), (0.0, -0.0014)], 10, BRASS, matrix=M)
-        p.assign(fs2[0:10], INK)
-        p.assign(fs2[4 * 10:5 * 10], INK)
+                           (0.0021, 0.0001), (0.0021, -0.0014), (0.0, -0.0014)], 8, BRASS, matrix=M)
+        p.assign(fs2[0:8], INK)
+        p.assign(fs2[4 * 8:5 * 8], INK)
     # lower mandible (ink)
     lo = [(-0.0040, -0.0074), (0.0060, -0.0086), (0.0120, -0.0100), (0.0162, -0.0118)]
     ls = [(0.0074, 0.0028, 0.0032), (0.0064, 0.0024, 0.0028), (0.0046, 0.0018, 0.0020),
@@ -731,7 +735,7 @@ def build_wing(name, sx, parent):
         t = j / 7
         x = lerp(-0.004, 0.104, t)
         Lf = lerp(0.074, 0.090, t)
-        out = feather_outline(Lf, 0.0250, base_w=0.0170, tip_len=0.0150, point=0.25)
+        out = feather_outline(Lf, 0.0250, base_w=0.0170, tip_len=0.0150, nt=4, point=0.25)
         plate(P, out, place((x, spar_y(x) + 0.014), lerp(97, 86, t), lerp(-0.0064, -0.0008, t), 3.0),
               0.0030, IVORY if j < 2 else FLIGHT, bevel=0.0007, rim=BRASS, rim_w=0.0012)
     # primaries: a fan from the hand, outermost on top
@@ -740,14 +744,14 @@ def build_wing(name, sx, parent):
         base = (lerp(0.112, P_OUT['base'][0], t), lerp(-0.024, P_OUT['base'][1], t))
         Lf = lerp(0.085, P_OUT['L'], t)
         w = lerp(0.0245, P_OUT['w'], t)
-        out = feather_outline(Lf, w, base_w=w * 0.70, tip_len=w * 0.95, point=0.50, shift=0.18)
+        out = feather_outline(Lf, w, base_w=w * 0.70, tip_len=w * 0.95, nt=4, point=0.50, shift=0.18)
         plate(P, out, place(base, lerp(86, P_OUT['ang'], t), lerp(-0.0068, -0.0012, t), 3.0), 0.0030,
               FLIGHT, bevel=0.0007, rim=BRASS, rim_w=0.0012)
     # greater coverts (ivory, brass rims) following the spar curve
     for k in range(6):
         t = k / 5
         x = lerp(0.002, 0.110, t)
-        out = feather_outline(0.032, 0.0250, base_w=0.0230, tip_len=0.0120, ns=1, nt=5)
+        out = feather_outline(0.032, 0.0250, base_w=0.0230, tip_len=0.0120, ns=1, nt=4)
         plate(P, out, place((x, spar_y(x) + 0.016), lerp(93, 88, t), lerp(0.0004, 0.0024, t), 2.5),
               0.0032, IVORY, bevel=0.0007, rim=BRASS, rim_w=0.0011)
     # primary coverts over the hand, angled with the primaries
@@ -755,21 +759,21 @@ def build_wing(name, sx, parent):
         t = k / 3
         x = lerp(0.122, 0.190, t)
         out = feather_outline(lerp(0.031, 0.026, t), 0.0215, base_w=0.0195, tip_len=0.0110,
-                              ns=1, nt=5)
+                              ns=1, nt=4)
         plate(P, out, place((x, spar_y(x) + 0.006), lerp(80, 52, t), lerp(0.0006, 0.0018, t), 2.5),
               0.0032, IVORY, bevel=0.0007, rim=BRASS, rim_w=0.0011)
     # lesser coverts (ivory scales) tucked under the spar
     for k in range(5):
         t = k / 4
         x = lerp(0.010, 0.106, t)
-        out = feather_outline(0.026, 0.0265, base_w=0.0250, tip_len=0.0125, ns=1, nt=5)
+        out = feather_outline(0.026, 0.0265, base_w=0.0250, tip_len=0.0125, ns=1, nt=4)
         plate(P, out, place((x, spar_y(x) + 0.002), lerp(92, 88, t), lerp(0.0030, 0.0046, t), 2.0),
               0.0034, IVORY, bevel=0.0007, rim=BRASS, rim_w=0.0011)
     # leading-edge armour (ivory spar) and the continuous brass wing edge in front of it
     sp_pts = C.spline3([q[:3] for q in SPAR], 2)
     rad = C.resample([q[3] for q in SPAR], len(sp_pts))
     P.tube([wl(v) for v in sp_pts], [r * WING_SCALE for r in rad], 10, IVORY, caps='round',
-           cap_segs=2, scale_xy=(1.0, 0.58), up=up)
+           cap_segs=1, scale_xy=(1.0, 0.58), up=up)
     b = Vector(P_OUT['base'])
     d = Vector((cos(radians(P_OUT['ang'])), sin(radians(P_OUT['ang']))))
     o = Vector((d.y, -d.x))                       # outward (leading) side of the outer primary
@@ -783,7 +787,7 @@ def build_wing(name, sx, parent):
     erad = C.resample([0.0030, 0.0029, 0.0028, 0.0026, 0.0023, 0.0020, 0.0017, 0.0015, 0.0013,
                        0.0010], len(e_pts))
     P.tube([wl(v) for v in e_pts], [r * WING_SCALE for r in erad], 7, BRASS, caps='round',
-           cap_segs=2, scale_xy=(1.0, 0.85), up=up)
+           cap_segs=1, scale_xy=(1.0, 0.85), up=up)
     # wrist knuckle: brass rivet hub on top of the bend
     Mw = W @ Matrix.Translation((0.117, -0.040, 0.0))
     P.lathe([(0.0, 0.0120), (0.0026, 0.0116), (0.0040, 0.0102), (0.0044, 0.0082),
@@ -793,7 +797,7 @@ def build_wing(name, sx, parent):
     prof = [(0.0, 0.0080), (0.0026, 0.0079), (0.0034, 0.0075), (0.0040, 0.0071), (0.0048, 0.0075),
             (0.0056, 0.0071), (0.0095, 0.0062), (0.0132, 0.0045), (0.0158, 0.0022), (0.0168, 0.0004),
             (0.0168, -0.0040), (0.0, -0.0040)]
-    ps = 18
+    ps = 16
     vr, fs = P.lathe(prof, ps, IVORY, matrix=Mp)
     nb = len(prof) - 3
     P.assign(fs[nb * ps:(nb + 1) * ps], CORAL)      # light lens (top fan)
@@ -823,7 +827,7 @@ def build_tail(parent):
     # nine-feather fan, centre feather on top
     for i in range(-4, 5):
         L = 0.153 - 0.0042 * abs(i) ** 1.25
-        out = feather_outline(L, 0.0300, base_w=0.0170, tip_len=0.0150, ns=2, nt=6, point=0.1)
+        out = feather_outline(L, 0.0300, base_w=0.0170, tip_len=0.0150, ns=2, nt=5, point=0.1)
         M = place(i * 8.6, -0.010, 0.0016 - 0.0010 * abs(i), 3.0 * (1 if i > 0 else -1 if i < 0 else 0))
         plate(P, out, lambda x, y, h, M=M: M @ Vector((x, y, h)), 0.0032, FLIGHT, bevel=0.0007,
               rim=BRASS, rim_w=0.0013)
@@ -845,7 +849,7 @@ def build_thruster(parent):
     p = C.Part()
     M = Matrix.Translation(THR_C)
     p.lathe([(0.0, -0.0016), (0.0050, -0.0018), (0.0100, -0.0016), (0.0140, -0.0010),
-             (0.0152, -0.0002), (0.0152, 0.0010), (0.0, 0.0010)], 24, GLOW, matrix=M)
+             (0.0152, -0.0002), (0.0152, 0.0010), (0.0, 0.0010)], 20, GLOW, matrix=M)
     tmp = p.to_temp()
     return C.merge_to_object("Thruster", [tmp], pivot=THR_C, parent=parent, sharp_deg=60)
 

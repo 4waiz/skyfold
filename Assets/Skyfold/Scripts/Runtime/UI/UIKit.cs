@@ -105,7 +105,7 @@ namespace Skyfold
                 {
                     float d = Vector2.Distance(new Vector2(x + 0.5f, y + 0.5f), new Vector2(size * 0.5f, size * 0.5f)) / (size * 0.5f);
                     float t = Mathf.Clamp01(d);
-                    float a = Mathf.Exp(-t * t * 4.5f) * (1f - t * t);
+                    float a = (1f - t * t) * (1f - t * t); // wide, soft falloff that reaches zero at the edge
                     px[y * size + x] = new Color32(255, 255, 255, (byte)(Mathf.Clamp01(a) * 255));
                 }
             tex.SetPixels32(px);
@@ -311,7 +311,7 @@ namespace Skyfold
             var bg = rt.gameObject.AddComponent<Image>();
             bg.sprite = Rounded;
             bg.type = UnityEngine.UI.Image.Type.Sliced;
-            bg.color = primary ? UIStyle.Teal : UIStyle.PearlDeep;
+            bg.color = primary ? UIStyle.PrimarySoft : UIStyle.PearlDeep;
             var b = rt.gameObject.AddComponent<Button>();
             b.transition = Selectable.Transition.None;
             b.targetGraphic = bg;
@@ -322,12 +322,12 @@ namespace Skyfold
             h.childControlWidth = true;
             h.childControlHeight = true;
             h.childForceExpandWidth = true;
-            var t = Text(rt, label, UIStyle.BodySize, primary ? UIStyle.Pearl : UIStyle.Ink, false, TextAlignmentOptions.Left, "Label");
+            var t = Text(rt, label, UIStyle.BodySize, primary ? UIStyle.Teal : UIStyle.Ink, false, TextAlignmentOptions.Left, "Label");
             t.fontStyle = FontStyles.Bold;
             TextMeshProUGUI d = null;
             if (!string.IsNullOrEmpty(detail))
             {
-                d = Text(rt, detail, UIStyle.SmallSize, primary ? UIStyle.Pearl : UIStyle.InkSoft, false, TextAlignmentOptions.Right, "Detail");
+                d = Text(rt, detail, UIStyle.SmallSize, primary ? UIStyle.Teal : UIStyle.InkSoft, false, TextAlignmentOptions.Right, "Detail");
                 Layout(d, -1f, -1f, 0f, 260f);
             }
             Layout(b, height, height);

@@ -72,11 +72,13 @@ namespace Skyfold
             // what it points at, but a mouse resting on one row can no longer leave it lit while the keyboard
             // moves focus elsewhere.
             bool active = m_Focused && Interactable;
-            Color bg = m_Primary ? UIStyle.Teal : UIStyle.PearlDeep;
-            Color fg = m_Primary ? UIStyle.Pearl : UIStyle.Ink;
+            // Focus is always solid teal with pearl text; a primary button at rest is a soft teal tint with
+            // teal text, so the focused row and the recommended action can never be confused.
+            Color bg = m_Primary ? UIStyle.PrimarySoft : UIStyle.PearlDeep;
+            Color fg = m_Primary ? UIStyle.Teal : UIStyle.Ink;
             if (active)
             {
-                bg = m_Primary ? UIStyle.TealLight : UIStyle.Teal;
+                bg = UIStyle.Teal;
                 fg = UIStyle.Pearl;
             }
             if (!Interactable)
@@ -88,7 +90,7 @@ namespace Skyfold
             if (m_Label != null) m_Label.color = fg;
             if (m_Detail != null)
             {
-                Color d = active || m_Primary ? UIStyle.Pearl : (m_DetailNormal ?? UIStyle.InkSoft);
+                Color d = active ? UIStyle.Pearl : m_Primary ? UIStyle.Teal : (m_DetailNormal ?? UIStyle.InkSoft);
                 if (!Interactable) d.a = 0.45f;
                 m_Detail.color = d;
             }
