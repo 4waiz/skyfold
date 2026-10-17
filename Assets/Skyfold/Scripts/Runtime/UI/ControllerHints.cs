@@ -16,7 +16,7 @@ namespace Skyfold
         public VRRigController rig;
         public Transform leftAnchor, rightAnchor;
 
-        const float Scale = 0.00021f;      // canvas units to metres: a 560-unit card is about 12 cm wide
+        const float Scale = 0.00024f;      // canvas units to metres: a 560-unit card is about 13 cm wide
         const float LookAngle = 34f;       // a hand inside this cone around your gaze counts as looked at
         const float LookDistance = 0.95f;
         const float ShowAfterChange = 8f;  // seconds the cards stay up after the controls change
@@ -131,10 +131,10 @@ namespace Skyfold
             ch.childControlWidth = ch.childControlHeight = true;
             ch.childForceExpandWidth = true;
             UIKit.Layout(chipRt, minHeight: 44f, preferredWidth: 128f);
-            var key = UIKit.Text(chipRt, "", 26f, UIStyle.Pearl, true, TextAlignmentOptions.Center);
+            var key = UIKit.Text(chipRt, "", 28f, UIStyle.Pearl, true, TextAlignmentOptions.Center);
             key.textWrappingMode = TextWrappingModes.NoWrap;
 
-            var label = UIKit.Text(rt, "", 28f, LabelIdle);
+            var label = UIKit.Text(rt, "", 31f, LabelIdle);
             UIKit.Layout(label, flexibleWidth: 1f);
             var row = new Row { go = rt.gameObject, chip = chip, key = key, label = label };
             card.rows.Add(row);

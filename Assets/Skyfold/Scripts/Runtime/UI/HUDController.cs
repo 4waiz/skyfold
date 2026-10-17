@@ -562,8 +562,10 @@ namespace Skyfold
             {
                 var anchor = wristAnchorOverride != null ? wristAnchorOverride : rigs.vr.LeftHand;
                 var t = m_Wrist.transform;
-                t.position = anchor.position + anchor.up * 0.06f + anchor.right * 0.02f - anchor.forward * 0.06f;
-                t.rotation = Quaternion.LookRotation(t.position - rigs.Head.position, anchor.up);
+                // The bracer anchor's +Y points to the little finger and -Z out of the bracer face: float the panel
+                // just above the wrist on the thumb side, out of the face, upright and turned to your eyes.
+                t.position = anchor.position - anchor.up * 0.05f - anchor.forward * 0.05f + Vector3.up * 0.02f;
+                t.rotation = Quaternion.LookRotation(t.position - rigs.Head.position, Vector3.up);
                 int mm = Mathf.FloorToInt(left / 60f), ss = Mathf.FloorToInt(left % 60f);
                 m_WristTimer.text = held ? $"{mm}:{ss:00} <size=60%>storm waits</size>" : $"<color={(left < 60f ? "#F2714B" : "#22333B")}>{mm}:{ss:00}</color>";
                 string text = o != null ? o.CardText(PlayMode.VR) : "";
