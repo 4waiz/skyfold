@@ -79,11 +79,7 @@ namespace Skyfold
             rt.anchorMin = rt.anchorMax = anchor;
             rt.pivot = pivot;
             rt.anchoredPosition = pos;
-            var bg = rt.gameObject.AddComponent<Image>();
-            bg.sprite = UIKit.Rounded;
-            bg.type = Image.Type.Sliced;
-            bg.color = color;
-            bg.raycastTarget = false;
+            CardFace(rt, color);
             var v = rt.gameObject.AddComponent<VerticalLayoutGroup>();
             v.padding = new RectOffset(26, 26, 16, 18);
             v.spacing = 4;
@@ -94,6 +90,24 @@ namespace Skyfold
             rt.sizeDelta = new Vector2(width, 0f);
             text = UIKit.Text(rt, "", size, UIStyle.Ink);
             return rt;
+        }
+
+        /// <summary>
+        /// A card's soft shadow and face as layout-ignored children (shadow first), so the shadow sits under
+        /// the card instead of tinting it. Returns the face image for colour changes.
+        /// </summary>
+        static Image CardFace(RectTransform card, Color color)
+        {
+            var sh = UIKit.Image(card, "Shadow", new Color(0.03f, 0.07f, 0.09f, 0.24f), UIKit.SoftShadow);
+            sh.rectTransform.anchorMin = Vector2.zero;
+            sh.rectTransform.anchorMax = Vector2.one;
+            sh.rectTransform.offsetMin = new Vector2(-UIKit.ShadowSpread, -UIKit.ShadowSpread - 6f);
+            sh.rectTransform.offsetMax = new Vector2(UIKit.ShadowSpread, UIKit.ShadowSpread - 6f);
+            sh.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            var face = UIKit.Image(card, "Background", color, UIKit.Rounded);
+            UIKit.Stretch(face.rectTransform);
+            face.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            return face;
         }
 
         void BuildDesktop()
@@ -113,7 +127,7 @@ namespace Skyfold
             m_ObjKeys = UIKit.Text(m_ObjectiveCard, "", 20f, UIStyle.InkSoft);
 
             m_TimerCard = Card("Timer", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-40f, -40f), 240f, UIStyle.PanelGlass, out m_TimerLabel, 18f);
-            m_TimerBg = m_TimerCard.GetComponent<Image>();
+            m_TimerBg = m_TimerCard.Find("Background").GetComponent<Image>();
             m_TimerLabel.text = "STORM ARRIVES IN";
             m_TimerLabel.color = UIStyle.InkSoft;
             m_TimerLabel.characterSpacing = 2f;
@@ -134,10 +148,7 @@ namespace Skyfold
             m_SubCard.anchorMin = m_SubCard.anchorMax = new Vector2(0.5f, 0f);
             m_SubCard.pivot = new Vector2(0.5f, 0f);
             m_SubCard.anchoredPosition = new Vector2(0f, 48f);
-            var subBg = m_SubCard.gameObject.AddComponent<Image>();
-            subBg.sprite = UIKit.Rounded;
-            subBg.type = Image.Type.Sliced;
-            subBg.color = new Color(0.1f, 0.16f, 0.19f, 0.88f);
+            CardFace(m_SubCard, new Color(0.1f, 0.16f, 0.19f, 0.88f));
             var h = m_SubCard.gameObject.AddComponent<HorizontalLayoutGroup>();
             h.padding = new RectOffset(18, 30, 16, 16);
             h.spacing = 20;

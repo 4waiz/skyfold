@@ -726,6 +726,72 @@ namespace Skyfold
             Check(MenuController.Instance.Screen == "launcher", "launcher (laptop or VR choice) shows");
         }
 
+        /// <summary>
+        /// Slider regression checks on the audio screen: every knob is a true circle on screen, a press on a
+        /// row's label never changes the value, a press on the rail jumps there, and the mouse wheel nudges it.
+        /// </summary>
+        IEnumerator SliderChecks()
+        {
+            MenuController.Instance.Show("audio");
+            yield return new WaitForSecondsRealtime(0.6f);
+            var sliders = MenuController.Instance.GetComponentsInChildren<UnityEngine.UI.Slider>(false);
+            Check(sliders.Length >= 5, $"audio screen shows {sliders.Length} sliders");
+            bool round = sliders.Length > 0;
+            var corners = new Vector3[4];
+            foreach (var sl in sliders)
+            {
+                var knob = sl.handleRect != null ? sl.handleRect.Find("Knob") as RectTransform : null;
+                if (knob == null) { round = false; continue; }
+                knob.GetWorldCorners(corners);
+                float kw = Vector3.Distance(corners[0], corners[3]), kh = Vector3.Distance(corners[0], corners[1]);
+                if (kw <= 0f || Mathf.Abs(kw - kh) > 0.02f * Mathf.Max(kw, kh)) { round = false; Log($"knob of {sl.name} is {kw:0.0} x {kh:0.0}"); }
+            }
+            Check(round, "every slider knob is a true circle (width equals height on screen)");
+
+            var es = UnityEngine.EventSystems.EventSystem.current;
+            var master = sliders.Length > 0 ? sliders[0] : null;
+            if (master != null && es != null)
+            {
+                es.SetSelectedGameObject(master.gameObject);
+                yield return new WaitForSecondsRealtime(0.35f);
+                yield return Shot("menu_audio_focus");
+
+                UnityEngine.EventSystems.PointerEventData At(Vector2 screen)
+                {
+                    var pe = new UnityEngine.EventSystems.PointerEventData(es) { button = UnityEngine.EventSystems.PointerEventData.InputButton.Left, position = screen, pressPosition = screen };
+                    pe.pointerPressRaycast = new UnityEngine.EventSystems.RaycastResult { screenPosition = screen };
+                    return pe;
+                }
+                Vector2 ScreenOf(RectTransform rt, float u) =>
+                    RectTransformUtility.WorldToScreenPoint(null, rt.TransformPoint(new Vector3(Mathf.Lerp(rt.rect.xMin, rt.rect.xMax, u), rt.rect.center.y, 0f)));
+
+                float before = master.value;
+                var label = master.transform.Find("Label") as RectTransform;
+                var track = master.transform.Find("Track") as RectTransform;
+                if (label != null && track != null)
+                {
+                    var pressLabel = At(ScreenOf(label, 0.3f));
+                    master.OnPointerDown(pressLabel);
+                    master.OnPointerUp(pressLabel);
+                    Check(Mathf.Abs(master.value - before) < 0.001f, $"a press on the slider label keeps the value ({before:0.00} -> {master.value:0.00})");
+
+                    var pressRail = At(ScreenOf(track, 0.25f));
+                    master.OnPointerDown(pressRail);
+                    master.OnPointerUp(pressRail);
+                    Check(Mathf.Abs(master.value - 0.25f) < 0.04f, $"a press on the rail at 25% sets the value ({master.value:0.00})");
+
+                    float v0 = master.value;
+                    ((UnityEngine.EventSystems.IScrollHandler)master).OnScroll(new UnityEngine.EventSystems.PointerEventData(es) { scrollDelta = new Vector2(0f, 1f) });
+                    Check(master.value > v0 + 0.03f, $"the mouse wheel nudges the slider up ({v0:0.00} -> {master.value:0.00})");
+                }
+                else Check(false, "slider row has Label and Track children");
+                master.value = before;
+            }
+            yield return Press(Key.Escape);
+            yield return new WaitForSecondsRealtime(0.4f);
+            Check(MenuController.Instance.Screen == "title", "Esc returns from the slider checks to the title");
+        }
+
         /// <summary>Desktop on-foot controls with real input: W walks, Shift slows, the mouse turns, E picks up.</summary>
         IEnumerator Walk()
         {
