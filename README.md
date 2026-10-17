@@ -12,7 +12,7 @@ Install-free: unzip `SKYFOLD_v0.9.0_win64.zip` and double-click one of the `.cmd
 
 - **Laptop:** `SKYFOLD.exe --mode=desktop`, or the "SKYFOLD" shortcut.
 - **Quest 3 through Link:** `SKYFOLD.exe --mode=vr`, or the "SKYFOLD - Quest 3" shortcut. See [docs/QUEST_LINK_SETUP.md](docs/QUEST_LINK_SETUP.md).
-- **Three-minute demo:** `SKYFOLD.exe --demo`.
+- **Three-minute demo:** `SKYFOLD.exe --demo` (asks laptop or VR first), or `--mode=desktop --demo` / `--mode=vr --demo` to go straight in.
 
 Controls: [docs/CONTROLS.md](docs/CONTROLS.md).
 

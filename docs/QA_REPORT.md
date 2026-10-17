@@ -33,25 +33,30 @@ What they cannot do: judge fun, feel or readability, listen to the audio, or tes
 | `menus` | Episodes, controls, comfort, audio, display and credits screens open, and Esc backs out; settings survive save + reload; launcher shows | PASSED 14/14 |
 | `walk` | W walks 5.4 m in 1.5 s, Shift walks 2.6 m, mouse turns the view 26°, E picks up the cell, F5 restarts the demo in the Atelier | PASSED 9/9 |
 | `demo` | The 3-minute demo end to end: bridge, fold, cell into the cradle, drive, E climbs out, deliver, beacons, lever, taxi, takeoff, results; the demo never writes campaign progress | PASSED 20/20 |
-| `episode1` | West route: one bridge, the long drive over the west causeway, success, Silver medal | PASSED 19/19 |
+| `episode1` | West route: one bridge, the long drive over the west causeway, success, Silver medal (344 s left, 1 hint) | PASSED 19/19 |
 | `episode1east` | Wrong rotation rejected and piece returned; straight piece into the water rejected; harbour corner + bridge make the east shortcut; Q folds down; enter the car; hold R puts the car back on the road; drive; success, results screen, Gold medal, shortcut recorded | PASSED 26/26 |
 | `fullcampaign` | Episodes 1 → 2 → 3 back to back with real saved progress. Episode 2: carry, drive, deliver, convoy departs. Episode 3: fold at the airfield kiosk, tee rejected at the terminal link, straight accepted, fold back, three beacon switches, convoy arrives over the player's roads, boarding, lever, takeoff | PASSED 65/65; Gold in all three (350 s / 284 s / 254 s storm time left) |
 | `fail` | Storm runs out → failure screen → Retry from checkpoint restores play with at least 75 s | PASSED 5/5 |
 | `restarts` | 10 start / restart / quit-to-menu cycles: city listeners stable, one GameRoot, exactly one audio listener | PASSED 30/30 |
 | `perf` | Frame timing across a whole demo (table below) | PASSED 12/12 |
 | `tour` | Screenshot tour of the city for the docs | PASSED 1/1 |
+| `lookdev` | Re-creates the Episode 1 street frame and checks what is drawn in the sky (used to find the floating overlook disc) | PASSED 5/5 |
 | `soak` | 15 minutes of back-to-back demos | see "Soak" below |
 
-Earlier runs on the same code also passed `campaign` (Episode 1 unlocks Episode 2 and saves the route; 27/27).
+The older `campaign` scenario (Episode 1 unlocks Episode 2 and saves the route) passed 27/27 on an earlier build. `fullcampaign` now covers the same checks.
 
 ## Launch tests through the real shortcuts
 
+Run with `tools\qa\launch_test.ps1` on the packaged folder `Release\SKYFOLD\`, fullscreen at 2560×1600. Each test captures only the game window and reads the log.
+
 | Test | Result |
 | --- | --- |
-| Desktop shortcut **SKYFOLD** (`--mode=desktop`): game starts on the RTX GPU, desktop rig, title menu | see "Launch" below |
-| Desktop shortcut **SKYFOLD - Quest 3** (`--mode=vr`) with no headset: clear message plus Retry / Play on this laptop, no black screen | see "Launch" below |
-| `Play Demo (3 min).cmd` (`--demo`): demo starts straight away | see "Launch" below |
+| Desktop shortcut **SKYFOLD** (`--mode=desktop`): starts on the RTX GPU in desktop mode and shows the title menu | PASSED (`qa\_captures\launch\shortcut_desktop.png`) |
+| Desktop shortcut **SKYFOLD - Quest 3** (`--mode=vr`) with no headset: tries OpenXR, then shows "VR did not start", the reason, a checklist, the log path, **Retry** and **Play on this laptop**. No black screen | PASSED (`shortcut_vr_no_headset.png`) |
+| `Play Demo (3 min).cmd` (`--demo`): asks laptop or VR, then starts the demo | PASSED: the launcher appears with the demo queued (`launcher_demo.png`); the demo start itself is shown in the next row |
+| `SKYFOLD.exe --mode=desktop --demo`: goes straight into the demo | PASSED ("Mission begin: demo" in the log) |
 | Shortcut properties (target, arguments, laptop / headset icons, working folder) | PASSED (read back from both .lnk files) |
+| F5 operator reset sent from outside the game | Not usable: Unity reads raw keyboard input, so a posted key message is ignored. F5 is covered by the `walk` scenario instead (real Input System key, PASSED). |
 
 ## Feature checklist
 
@@ -79,7 +84,7 @@ Earlier runs on the same code also passed `campaign` (Episode 1 unlocks Episode 
 | Area | Status |
 | --- | --- |
 | VR start with a headset (OpenXR loader, display, rig switch) | **NOT TESTED** (no headset) |
-| VR start failure without a headset | see "Launch" below |
+| VR start failure without a headset | PASSED (clear message, Retry and Play on this laptop; see launch tests) |
 | Controller bindings (stick move, snap turn, A teleport, grip, trigger, X fold, Y wrist, B back, Menu pause) | **NOT TESTED** |
 | Courier glove alignment on the controllers | **NOT TESTED** (offset set from the OpenXR grip-pose convention) |
 | Driving in VR (cockpit and Remote overlook), comfort vignette | **NOT TESTED** |
@@ -93,13 +98,13 @@ Earlier runs on the same code also passed `campaign` (Episode 1 unlocks Episode 
 
 | Moment | Average | 1% low | Worst frame |
 | --- | --- | --- | --- |
-| Title screen | 787 fps (1.27 ms) | 451 fps (2.22 ms) | 5.3 ms |
-| Atelier with the miniature city | 618 fps (1.62 ms) | 337 fps (2.97 ms) | 6.5 ms |
-| Street: avenue | 782 fps (1.28 ms) | 380 fps (2.63 ms) | 4.8 ms |
-| Street: airfield | 910 fps (1.10 ms) | 488 fps (2.05 ms) | 4.4 ms |
-| Driving across the bridge | 869 fps (1.15 ms) | 419 fps (2.39 ms) | 6.4 ms |
-| Takeoff roll and climb | 835 fps (1.20 ms) | 445 fps (2.25 ms) | 5.3 ms |
-| Results screen | 839 fps (1.19 ms) | 491 fps (2.03 ms) | 6.9 ms |
+| Title screen | 904 fps (1.11 ms) | 487 fps (2.06 ms) | 3.8 ms |
+| Atelier with the miniature city | 765 fps (1.31 ms) | 396 fps (2.53 ms) | 4.6 ms |
+| Street: avenue | 885 fps (1.13 ms) | 469 fps (2.13 ms) | 3.9 ms |
+| Street: airfield | 945 fps (1.06 ms) | 554 fps (1.81 ms) | 3.5 ms |
+| Driving across the bridge | 928 fps (1.08 ms) | 487 fps (2.05 ms) | 8.1 ms |
+| Takeoff roll and climb | 892 fps (1.12 ms) | 516 fps (1.94 ms) | 5.3 ms |
+| Results screen | 901 fps (1.11 ms) | 567 fps (1.76 ms) | 5.8 ms |
 
 Managed heap after a full demo: 6 MB. In normal play vsync is on, so the laptop runs at the display refresh rate.
 
@@ -108,10 +113,6 @@ VR through Link renders two eyes at a much higher resolution (Quest 3 default is
 ## Soak
 
 _Pending: filled in after the 15-minute run._
-
-## Launch
-
-_Pending: filled in after the shortcut launch tests._
 
 ## Bugs found and fixed in this QA pass
 

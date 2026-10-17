@@ -14,8 +14,8 @@ HOW TO START (no installation)
 - In this folder:
     Play on this laptop.cmd
     Play in VR (Quest 3 Link).cmd
-    Play Demo (3 min).cmd ............... the three-minute demo (its progress is kept apart
-                                          from the campaign)
+    Play Demo (3 min).cmd ............... asks laptop or VR, then starts the three-minute demo
+                                          (its progress is kept apart from the campaign)
 - Or run SKYFOLD.exe directly. It asks whether to play on the laptop or in VR.
 
 Command-line options for SKYFOLD.exe:
