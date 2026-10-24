@@ -71,3 +71,12 @@ desktop.ini
 /brag-output/**/render.log
 /brag-output/**/.brag.hf-transaction-*/
 /brag-output/**/.*.hf-transaction-*/
+
+# Environment files and secrets: never commit real keys
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.pem
+*.key
