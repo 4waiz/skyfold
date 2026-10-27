@@ -1,10 +1,15 @@
-SKYFOLD: The Last Flight
-========================
-A hobby project by Awaiz Ahmed / Team Kanban. Version 0.9.1, Windows x64.
-Not a SHIFT Game Jam entry: it was made before any jam theme reveal.
+SKYFOLD: Clean Energy Challenge
+===============================
+A project by Awaiz Ahmed. Showcase build for ADIPEC 2026. Windows x64.
+An independent project inspired by ADNOC's public sustainability goals; not an official ADNOC product.
 
-Hold a broken coastal city in your hands, repair its roads as a giant, step inside the world you
-changed, and get the last flight away before the storm.
+Stand at a lab table above a coastal city and take the island to net zero in three quick
+sustainability puzzles. About three minutes from start to finish, for high-school students
+and recent graduates:
+  1  Power the city 24/7 ... drop energy blocks into the grid: enough by day and by night, zero CO2
+  2  Capture the carbon .... turn the pipes so the CO2 flows into the underground storage well
+  3  Blue carbon coast ..... plant mangroves on the glowing mudflats before they fade (25 s)
+Every puzzle helps you out if you get stuck, so everyone finishes. Each scores up to 1000.
 
 
 HOW TO START (no installation)
@@ -14,14 +19,14 @@ HOW TO START (no installation)
 - In this folder:
     Play on this laptop.cmd
     Play in VR (Quest 3 Link).cmd
-    Play Demo (3 min).cmd ............... asks laptop or VR, then starts the three-minute demo
-                                          (its progress is kept apart from the campaign)
+    Play Clean Energy Challenge (3 min).cmd ... asks laptop or VR, then starts the challenge
 - Or run SKYFOLD.exe directly. It asks whether to play on the laptop or in VR.
+- Exhibition operator: F5 (or Pause > Operator: next player) restarts the challenge for the next
+  visitor. A finished results screen returns to the title by itself after 90 seconds.
 
 Command-line options for SKYFOLD.exe:
   --mode=desktop | --mode=vr   start straight in that mode
-  --demo                       open the three-minute demo
-  --episode=1|2|3              jump to an episode you have already unlocked
+  --demo                       open the Clean Energy Challenge straight away
   --windowed                   start in a window
   --diagnostics                show the input diagnostics panel (also F1)
 
@@ -32,39 +37,34 @@ WHAT YOU NEED
   NVIDIA GeForce RTX 5080 Laptop GPU.
 - For VR: Meta Quest 3, the Meta Horizon Link app on the PC (set as the active OpenXR runtime),
   and a Link cable or Air Link. See docs\QUEST_LINK_SETUP.md.
-  VR STATUS: first headset test (0.9.0, Quest 3 over Link): the gloves pointed the wrong way and
-  nothing in the headset showed which button does what. 0.9.1 fixes both (gloves follow the
-  controller grip pose; a card above each hand shows its buttons). The fix is checked with a
-  simulated headset only; re-test on the Quest 3 is pending.
+  VR STATUS: the Clean Energy Challenge is checked with a simulated headset (QA scenario
+  "energyvr"); test it on the Quest 3 before the event (docs\CLEAN_ENERGY.md has a checklist).
 
 
 CONTROLS (full list: docs\CONTROLS.md)
 --------------------------------------
-Laptop  walk W A S D + mouse · use / pick up E · fold at a station Q · objectives Tab · pause Esc
-        At the plinth: hold left mouse to drag a piece, R to turn it, release to set it down.
-        In the car: W accelerate · S brake / reverse · A D steer · Space parking brake
-                    E climb out · hold R to put the car back on the road
-Quest 3 look at a hand: a card above it shows what that controller's buttons do right now
-        (the one you need is lit). Comfort > Button hints: when you look / always / off.
-        left stick move · right stick turn · hold A to aim a teleport, release to jump
-        grip grab · trigger use · X fold · Y wrist objectives · B back · left Menu pause
-        In the car: left stick steer · right trigger throttle · left trigger brake / reverse
-                    B climb out · hold X to put the car back on the road
+Laptop  hold left mouse on an energy block to drag it, release over a grid slot
+        click a pipe to turn it · click a glowing mudflat to plant a mangrove
+        right-drag or W A S D look around the table · wheel zoom · Tab objectives · Esc pause
+Quest 3 stand at the table: everything is within reach, no walking needed.
+        grip grab an energy block · point the ray + trigger turn a pipe / plant a mangrove
+        right stick turn · Y wrist objectives · left Menu pause · trigger presses menu buttons
+        Look at a hand: a card above it shows what its buttons do right now (the one you need is lit).
 
 
 SAVES, SETTINGS AND LOGS
 ------------------------
 %USERPROFILE%\AppData\LocalLow\Team Kanban\SKYFOLD\
   settings.json      comfort, audio, display and subtitle settings
-  campaign.json      episode progress and the roads you built
-  demo.json          demo progress (separate, never touches the campaign)
+  demo.json          Clean Energy Challenge best score
+  campaign.json      progress in the original Last Flight episodes
   Player.log         the log to send with any bug report
   Screenshots\       F12 screenshots
 
 
 CREDITS AND LICENCES
 --------------------
-Design, code and direction: Awaiz Ahmed / Team Kanban.
+Design, code and direction: Awaiz Ahmed.
 All 3D models, music, ambience and most sound effects are original, made by scripts for this game.
 Noor's voice lines are AI-generated with the open Kokoro TTS model (stock voice, no voice cloning).
 Noor's radio portrait (the subtitle badge) is AI-generated with ChatGPT image generation.

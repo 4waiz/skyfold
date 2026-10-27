@@ -192,6 +192,22 @@ namespace Skyfold
                     else list.Add(new Entry("B", "back"));
                     break;
 
+                case InputContext.Architect when EnergyLab.Instance != null && EnergyLab.Instance.LabMode:
+                {
+                    // The Clean Energy Lab: grip grabs energy blocks, the trigger turns pipes and plants mangroves.
+                    bool blocks = obj == "lab.mix";
+                    bool point = obj == "lab.ccs" || obj == "lab.mangrove";
+                    list.Add(new Entry("Grip", blocks ? "grab an energy block · let go over a slot" : "grab", blocks));
+                    list.Add(new Entry("Trigger", obj == "lab.mangrove" ? "plant where it glows (point the ray)" : "turn a pipe (point the ray)", point));
+                    if (left)
+                    {
+                        list.Add(new Entry("Y", "objectives"));
+                        list.Add(new Entry("Menu", "pause"));
+                    }
+                    else list.Add(new Entry("Stick", "turn"));
+                    break;
+                }
+
                 case InputContext.Architect:
                 {
                     bool foldNext = obj == "t.fold" || obj.EndsWith(".fold");

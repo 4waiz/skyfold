@@ -25,6 +25,8 @@ namespace Skyfold
         bool m_Compact;
         float m_OpenedAt;
 
+        const float ResultsIdleSeconds = 90f;
+
         public bool IsOpen => m_Screen != null;
         public string Screen => m_Screen;
 
@@ -94,6 +96,13 @@ namespace Skyfold
         void Update()
         {
             if (m_Screen == null) return;
+            // Exhibition: a finished challenge left on its results returns to the title for the next visitor.
+            if (m_Screen == "results" && MissionDirector.Instance != null && MissionDirector.Instance.Current != null &&
+                MissionDirector.Instance.Current.UsesEnergyLab && Time.unscaledTime - m_OpenedAt > ResultsIdleSeconds)
+            {
+                GameRoot.Instance?.QuitToMenu();
+                return;
+            }
             if (m_PanelRoot != null && (m_PanelRoot.rect.size - m_FittedFor).sqrMagnitude > 1f) FitPanel(); // window resized
             // A VR panel is placed in front of the head once; if the head has since moved well away (a car still
             // rolling to a stop, a fade-teleport, walking in the room), bring the panel back in front of it.
@@ -350,17 +359,9 @@ namespace Skyfold
                 b.Heading(SkyfoldInfo.Title, UIStyle.Teal);
                 b.Para(SkyfoldInfo.Subtitle, UIStyle.BodySize, UIStyle.Gold);
             }
-            var campaign = ProgressStore.Campaign;
-            int next = NextEpisode(campaign);
-            bool started = campaign.episodes.Any(e => e.completed);
-            if (started)
-            {
-                var def = MissionCatalog.Get(MissionCatalog.ForEpisode(next));
-                b.Button("Continue", () => Root.StartMission(def.Id), true, $"Episode {def.Episode}");
-            }
-            b.Button(started ? "Choose episode" : "Play campaign", () => Show("episodes"), !started, started ? null : "Episode 1");
-            b.Button("Three-minute demo", () => Root.StartMission(MissionCatalog.Demo), false, "3 min");
-            b.Button("Tutorial", () => Root.StartTutorial(), false, "Replay with guidance");
+            b.Button("Start the Clean Energy Challenge", () => Root.StartMission(MissionCatalog.CleanEnergy), true, "about 3 min");
+            int best = BestLabScore();
+            b.Para(best > 0 ? $"Three sustainability puzzles. Best score on this machine: <b>{best}</b> / {EnergyLab.MaxScore}" : "Three sustainability puzzles: power, carbon, mangroves.", UIStyle.SmallSize);
             if (vr) b.Button("Play on the laptop instead", () => Root.ExitVR());
             else b.Button("Enter VR", () => Root.EnterVR(), false, "Quest 3 via Link");
             b.Button("Controls", () => Show("controls"));
@@ -369,6 +370,12 @@ namespace Skyfold
             if (!vr) b.Button("Display & mouse", () => Show("display"));
             b.Button("Credits", () => Show("credits"));
             b.Button("Quit", () => Show("quit"));
+        }
+
+        static int BestLabScore()
+        {
+            foreach (var e in ProgressStore.Demo.episodes) if (e.id == MissionCatalog.CleanEnergy) return e.bestScore;
+            return 0;
         }
 
         static int NextEpisode(CampaignProgress p)
@@ -426,17 +433,13 @@ namespace Skyfold
                 var t = UIKit.Text(col, text, head ? UIStyle.BodySize : UIStyle.SmallSize, head ? UIStyle.Teal : UIStyle.Ink, head);
                 if (head) t.fontStyle = FontStyles.Bold;
             }
-            Line(left, "Laptop: on foot", true);
-            Line(left, "W A S D  move    ·    Mouse  look\nE  use / pick up    ·    Q  fold (at a Fold Station)\nTab  objectives    ·    Esc  pause    ·    Shift  walk slowly");
-            Line(left, "Laptop: at the plinth", true);
-            Line(left, "Hold left mouse  pick up and drag a piece\nR  turn the held piece    ·    release  set it down\nRight-drag or W A S D  orbit    ·    Wheel  zoom\nQ  fold down into the street");
-            Line(left, "Laptop: in the car", true);
-            Line(left, "W  accelerate    ·    S  brake, hold to reverse\nA / D  steer    ·    Space  parking brake\nE  climb out when stopped    ·    H  horn    ·    C  camera\nHold R  put the car back on the road");
-            Line(right, "Quest 3: on foot and at the plinth", true);
-            Line(right, "Left stick  move (smooth mode)\nRight stick  turn (snap by default)\nHold A  aim teleport, release to jump\nGrip  grab    ·    Trigger  use / press UI\nX  fold (at a Fold Station)    ·    Y  wrist objectives\nB  back    ·    Left menu button  pause");
-            Line(right, "Quest 3: in the car", true);
-            Line(right, "Left stick  steer\nRight trigger  accelerate\nLeft trigger  brake, hold at a stop to reverse\nB  climb out when stopped    ·    A  horn\nHold X  put the car back on the road\nY  objectives    ·    Menu  pause");
-            Line(right, "In the headset, look at a hand: a card above it shows what its buttons do right now, with the one you need lit. (Comfort > Button hints.)", false);
+            Line(left, "Laptop: at the lab table", true);
+            Line(left, "Hold left mouse  pick up and drag an energy block\nrelease  drop it into a grid slot\nClick  turn a pipe    ·    Click  plant a mangrove\nRight-drag or W A S D  look around the table    ·    Wheel  zoom\nTab  objectives    ·    Esc  pause");
+            Line(left, "The challenge", true);
+            Line(left, "1  Power the city 24/7: day, night, zero emissions\n2  Capture the carbon: route the CO<sub>2</sub> pipeline\n3  Blue carbon coast: plant mangroves before the spots fade");
+            Line(right, "Quest 3: at the lab table", true);
+            Line(right, "Grip  grab an energy block, let go over a slot\nPoint the ray + Trigger  turn a pipe / plant a mangrove\nRight stick  turn (snap by default)\nY  wrist objectives    ·    Left menu button  pause\nTrigger  press menu buttons    ·    B  back");
+            Line(right, "Stand at the table: everything is within reach, no walking needed. Look at a hand: a card above it shows what its buttons do right now, with the one you need lit. (Comfort > Button hints.)", false);
             Line(right, "The Meta button stays reserved for the headset.", false);
             b.Space(4f);
             b.Toggle("Show input diagnostics panel", SettingsStore.Current.showDiagnostics, v => { SettingsStore.Current.showDiagnostics = v; SettingsStore.Save(); });
@@ -517,7 +520,8 @@ namespace Skyfold
         void BuildCredits(Builder b)
         {
             b.Heading("Credits");
-            b.Para("<b>SKYFOLD: The Last Flight</b>\nCreated by " + SkyfoldInfo.Credit + ". " + SkyfoldInfo.ProjectLabel, UIStyle.BodySize, UIStyle.Ink);
+            b.Para($"<b>{SkyfoldInfo.Title}: {SkyfoldInfo.Subtitle}</b>\nA project by {SkyfoldInfo.Credit}. {SkyfoldInfo.ProjectLabel}", UIStyle.BodySize, UIStyle.Ink);
+            b.Para(SkyfoldInfo.Disclaimer, UIStyle.SmallSize);
             b.Para(CreditsText.Body, UIStyle.SmallSize);
             b.Button("Back", Back);
         }
@@ -537,20 +541,22 @@ namespace Skyfold
             if (md != null && md.Current != null)
             {
                 var o = md.CurrentObjective;
-                b.Para((md.Current.IsDemo ? "Demo" : "Episode " + md.Current.Episode) + " · " + md.Current.Title + (o != null ? "\nNow: " + o.CardText(PlayerRigs.Instance.Mode) : ""), UIStyle.SmallSize + 2f);
+                string what = md.Current.UsesEnergyLab ? md.Current.Title : (md.Current.IsDemo ? "Demo" : "Episode " + md.Current.Episode) + " · " + md.Current.Title;
+                b.Para(what + (o != null ? "\nNow: " + o.CardText(PlayerRigs.Instance.Mode) : ""), UIStyle.SmallSize + 2f);
             }
             b.Button("Resume", () => Root.Resume(), true);
             if (md?.CurrentObjective?.Hints != null && md.CurrentObjective.Hints.Length > 0)
                 b.Button("Show me a hint", () => { md.RequestHint(); Root.Resume(); });
-            b.Button("Retry from checkpoint", () => { Root.Resume(); md.Retry(); });
-            b.Button("Restart this " + (md != null && md.Current != null && md.Current.IsDemo ? "demo" : "episode"), () => { Root.Resume(); md.Restart(); });
+            bool lab = md != null && md.Current != null && md.Current.UsesEnergyLab;
+            if (!lab) b.Button("Retry from checkpoint", () => { Root.Resume(); md.Retry(); });
+            b.Button(lab ? "Restart the challenge" : "Restart this " + (md != null && md.Current != null && md.Current.IsDemo ? "demo" : "episode"), () => { Root.Resume(); md.Restart(); });
             bool tutorialOn = SettingsStore.Current.guidance == Guidance.FullTutorial;
-            b.Button(tutorialOn ? "Skip tutorial lines" : "Turn tutorial back on", () => { SettingsStore.Current.guidance = tutorialOn ? Guidance.HintsOnly : Guidance.FullTutorial; SettingsStore.Save(); Refresh(); });
+            if (!lab) b.Button(tutorialOn ? "Skip tutorial lines" : "Turn tutorial back on", () => { SettingsStore.Current.guidance = tutorialOn ? Guidance.HintsOnly : Guidance.FullTutorial; SettingsStore.Save(); Refresh(); });
             if (vr) b.Button("Recenter view", () => { Root.Recenter(); RecenterVR(); });
             b.Button("Comfort", () => Show("comfort"));
             b.Button("Audio & subtitles", () => Show("audio"));
             b.Button("Controls", () => Show("controls"));
-            if (md != null && md.Current != null && md.Current.IsDemo) b.Button("Operator: reset demo (keeps campaign)", () => Root.OperatorResetDemo());
+            if (md != null && md.Current != null && md.Current.IsDemo) b.Button(lab ? "Operator: next player (F5)" : "Operator: reset demo (keeps campaign)", () => Root.OperatorResetDemo());
             b.Button("Main menu", () => Root.QuitToMenu());
         }
 
@@ -569,25 +575,11 @@ namespace Skyfold
             var r = md != null ? md.LastResult : null;
             var def = md != null ? md.Current : null;
             if (r == null || def == null) { b.Button("Main menu", () => Root.QuitToMenu(), true); return; }
+            if (def.UsesEnergyLab) { BuildLabResults(b, def, r); return; }
             b.Heading(def.IsDemo ? "Demo complete" : (def.Episode == 3 ? "The last flight is away" : "Episode complete"), UIStyle.Teal);
             b.Para(def.IsDemo ? "Nacre Bay held. Thank you for playing the demo." : def.Title + (def.Episode == 3 ? ". The city is safe, and it is the one you built." : "."), UIStyle.BodySize, UIStyle.Ink);
 
-            if (!def.IsDemo && !string.IsNullOrEmpty(r.Medal))
-            {
-                var medalRow = UIKit.Row(b.Panel, "Medal", 18f);
-                medalRow.GetComponent<HorizontalLayoutGroup>().childForceExpandWidth = false;
-                var disc = UIKit.Image(medalRow, "Disc", UIStyle.Hex(UIStyle.MedalColor(r.Medal)), UIKit.Circle, false);
-                disc.preserveAspect = true;
-                UIKit.Layout(disc, 84f, 84f, 0f, 84f);
-                // A pearl ring inside the disc so it reads as a medal, not a dot.
-                var ring = UIKit.Image(disc.rectTransform, "Ring", new Color(1f, 1f, 1f, 0.55f), UIKit.Ring, false);
-                ring.preserveAspect = true;
-                ring.rectTransform.anchorMin = new Vector2(0.18f, 0.18f);
-                ring.rectTransform.anchorMax = new Vector2(0.82f, 0.82f);
-                ring.rectTransform.offsetMin = ring.rectTransform.offsetMax = Vector2.zero;
-                var mt = UIKit.Text(medalRow, r.Medal + " medal", UIStyle.HeadingSize, UIStyle.Ink, true);
-                UIKit.Layout(mt, 84f, -1f, 1f);
-            }
+            if (!def.IsDemo && !string.IsNullOrEmpty(r.Medal)) MedalRow(b, r.Medal, r.Medal + " medal");
             int mm = Mathf.FloorToInt(r.TimeLeft / 60f), ss = Mathf.FloorToInt(r.TimeLeft % 60f);
             b.Para($"Storm time left: <b>{mm}:{ss:00}</b> of {Mathf.RoundToInt(r.StormSeconds / 60f)} min\n" +
                    $"Pieces placed: {r.PlacementAttempts - r.Rejected}   ·   rejected tries: {r.Rejected}\n" +
@@ -605,6 +597,45 @@ namespace Skyfold
             b.Button(def.IsDemo ? "Play the demo again" : "Replay this episode", () => Root.StartMission(def.Id), def.IsDemo || def.Episode == 3);
             if (def.Episode == 3) b.Button("Credits", () => { Root.QuitToMenu(); Show("credits"); });
             b.Button("Main menu", () => Root.QuitToMenu());
+        }
+
+        static void MedalRow(Builder b, string medal, string label)
+        {
+            var medalRow = UIKit.Row(b.Panel, "Medal", 18f);
+            medalRow.GetComponent<HorizontalLayoutGroup>().childForceExpandWidth = false;
+            var disc = UIKit.Image(medalRow, "Disc", UIStyle.Hex(UIStyle.MedalColor(medal)), UIKit.Circle, false);
+            disc.preserveAspect = true;
+            UIKit.Layout(disc, 84f, 84f, 0f, 84f);
+            // A pearl ring inside the disc so it reads as a medal, not a dot.
+            var ring = UIKit.Image(disc.rectTransform, "Ring", new Color(1f, 1f, 1f, 0.55f), UIKit.Ring, false);
+            ring.preserveAspect = true;
+            ring.rectTransform.anchorMin = new Vector2(0.18f, 0.18f);
+            ring.rectTransform.anchorMax = new Vector2(0.82f, 0.82f);
+            ring.rectTransform.offsetMin = ring.rectTransform.offsetMax = Vector2.zero;
+            var mt = UIKit.Text(medalRow, label, UIStyle.HeadingSize, UIStyle.Ink, true);
+            UIKit.Layout(mt, 84f, -1f, 1f);
+        }
+
+        /// <summary>The Clean Energy Challenge results: rank, score per puzzle, the real-world facts, play again.</summary>
+        void BuildLabResults(Builder b, MissionDefinition def, MissionResult r)
+        {
+            var lab = EnergyLab.Instance;
+            var (rank, medal) = EnergyLab.Rank(r.Score);
+            b.Heading("Net zero island!", UIStyle.Teal);
+            MedalRow(b, medal, rank);
+            int mm = Mathf.FloorToInt(r.ElapsedPlay / 60f), ss = Mathf.FloorToInt(r.ElapsedPlay % 60f);
+            string lines = lab != null
+                ? $"{lab.Mix.ResultLine}  ·  <b>{lab.Mix.Score}</b>\n{lab.Capture.ResultLine}  ·  <b>{lab.Capture.Score}</b>\n{lab.Mangroves.ResultLine}  ·  <b>{lab.Mangroves.Score}</b>\n"
+                : "";
+            int best = BestLabScore();
+            b.Para(lines + $"Total: <b>{r.Score}</b> / {EnergyLab.MaxScore}   ·   time {mm}:{ss:00}" +
+                   (best > 0 ? (r.Score >= best ? "\n<color=#0F6F73><b>Top score on this machine!</b></color>" : $"\nBest on this machine: {best}") : ""),
+                   UIStyle.SmallSize + 2f, UIStyle.Ink);
+            b.Para("<b>Real world:</b> ADNOC can source up to 100% of its grid power from nuclear and solar · Al Reyadah can capture 800,000 t of CO<sub>2</sub> a year · 10 million mangroves by 2030 · net zero operations by 2045.",
+                   UIStyle.SmallSize - 1f);
+            b.Button("Play again", () => Root.StartMission(def.Id), true);
+            b.Button("Main menu", () => Root.QuitToMenu());
+            b.Para(SkyfoldInfo.Disclaimer, UIStyle.SmallSize - 4f);
         }
 
         void BuildVRStart(Builder b)

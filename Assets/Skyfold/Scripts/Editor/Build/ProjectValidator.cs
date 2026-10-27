@@ -72,6 +72,9 @@ namespace Skyfold.EditorTools
                 var miniCity = Object.FindObjectsByType<MiniCity>(FindObjectsInactive.Include).FirstOrDefault();
                 int tagged = miniCity != null ? miniCity.GetComponentsInChildren<Renderer>(true).Count(r => (r.renderingLayerMask & (1u << SceneBuilder.MiniRenderingLayerBit)) != 0) : 0;
                 Ok(tagged > 100, $"miniature renderers carry the SSAO-fade rendering layer ({tagged})");
+                var labs = Object.FindObjectsByType<EnergyLab>(FindObjectsInactive.Include);
+                Ok(labs.Length == 1 && labs[0].playerSpot != null && labs[0].pearl != null && labs[0].leaf != null && labs[0].solar != null,
+                   "Clean Energy Lab on the plinth with its palette materials and player spot");
                 foreach (var m in new[] { MissionCatalog.Episode1, MissionCatalog.Episode2, MissionCatalog.Episode3, MissionCatalog.Demo })
                 {
                     var def = MissionCatalog.Get(m);

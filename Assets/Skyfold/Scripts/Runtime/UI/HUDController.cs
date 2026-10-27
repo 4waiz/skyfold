@@ -360,7 +360,8 @@ namespace Skyfold
             var o = md.CurrentObjective;
             if (md.Current != null)
             {
-                m_ObjEpisode.text = (md.Current.IsDemo ? "DEMO" : "EPISODE " + md.Current.Episode) + "  ·  " + md.Current.Title.ToUpperInvariant();
+                m_ObjEpisode.text = !string.IsNullOrEmpty(md.Current.HudLabel) ? md.Current.HudLabel
+                    : (md.Current.IsDemo ? "DEMO" : "EPISODE " + md.Current.Episode) + "  ·  " + md.Current.Title.ToUpperInvariant();
                 string text = o != null ? o.CardText(rigs.Mode) : (md.State == MissionState.Success ? "Complete!" : "");
                 if (o?.Progress != null) text += "  <color=#0F6F73>" + o.Progress(md.Ctx) + "</color>";
                 m_ObjText.text = text;
@@ -369,14 +370,17 @@ namespace Skyfold
                 m_ObjKeys.gameObject.SetActive(!m_ObjectivesCollapsed && !vr);
             }
             m_ObjectiveCard.gameObject.SetActive(playing);
-            float left = md.StormLeft;
+            // Without a storm (the Clean Energy Challenge) the card counts time played up instead of down.
+            bool noStorm = md.Current != null && md.Current.NoStorm;
+            float left = noStorm ? md.PlayTime : md.StormLeft;
             int mm = Mathf.FloorToInt(left / 60f), ss = Mathf.FloorToInt(left % 60f);
             m_Timer.text = $"{mm}:{ss:00}";
-            bool held = md.StormHeld && md.State == MissionState.Active;
-            m_TimerLabel.text = held ? "STORM WAITS WHILE YOU LEARN" : "STORM ARRIVES IN";
-            Color tc = left < 30f ? UIStyle.Coral : (left < 60f ? new Color(0.85f, 0.45f, 0.3f) : UIStyle.Ink);
+            bool held = !noStorm && md.StormHeld && md.State == MissionState.Active;
+            m_TimerLabel.text = noStorm ? "TIME" : held ? "STORM WAITS WHILE YOU LEARN" : "STORM ARRIVES IN";
+            bool urgent = !noStorm && left < 30f;
+            Color tc = noStorm ? UIStyle.Ink : urgent ? UIStyle.Coral : (left < 60f ? new Color(0.85f, 0.45f, 0.3f) : UIStyle.Ink);
             m_Timer.color = tc;
-            m_TimerBg.color = left < 30f ? new Color(1f, 0.9f, 0.86f, 0.96f) : UIStyle.PanelGlass;
+            m_TimerBg.color = urgent ? new Color(1f, 0.9f, 0.86f, 0.96f) : UIStyle.PanelGlass;
             m_TimerCard.gameObject.SetActive(playing);
 
             // Prompt line.
@@ -435,7 +439,10 @@ namespace Skyfold
         {
             switch (input.Context)
             {
-                case InputContext.Architect: return Keys("Hold left mouse: move a piece", "R: turn", "Q: fold down", "Tab: hide");
+                case InputContext.Architect:
+                    if (EnergyLab.Instance != null && EnergyLab.Instance.LabMode)
+                        return Keys("Hold left mouse: drag a block", "Click: turn a pipe / plant", "Right-drag: look around", "Wheel: zoom", "Tab: hide");
+                    return Keys("Hold left mouse: move a piece", "R: turn", "Q: fold down", "Tab: hide");
                 case InputContext.Driving: return Keys("W/S: drive & brake", "A/D: steer", "E: climb out", "Hold R: back on the road", "Tab: hide");
                 default: return Keys("WASD: walk", "E: use", "Q: fold at a station", "Tab: hide");
             }
@@ -450,6 +457,8 @@ namespace Skyfold
                 case InputContext.RemoteDriving:
                     return Keys("Left stick: steer", "Right trigger: go", "Left trigger: brake", "B: climb out", "Hold X: back on the road");
                 case InputContext.Architect:
+                    if (EnergyLab.Instance != null && EnergyLab.Instance.LabMode)
+                        return Keys("Grip: grab a block", "Trigger: turn a pipe / plant", "Y: hide", "Menu: pause");
                     return Keys("Grip: grab a piece", "Twist: turn it", "X: fold down", "Hold A: teleport", "Y: hide", "Menu: pause");
                 default:
                     return Keys("Left stick: walk", "Hold A: teleport", "Trigger: use", "Grip: grab", "X: fold (station)", "Y: hide", "Menu: pause");
@@ -486,7 +495,7 @@ namespace Skyfold
                 var use = FindVRUse();
                 var cur = use != null ? (use.RightTarget ?? use.LeftTarget) : null;
                 if (cur != null) return cur.CanInteract(InteractorKind.VRRight) ? $"Trigger:  {cur.Prompt}" : cur.BlockedReason;
-                if (fold != null && fold.InAtelier) return $"[X]  Fold down into the street";
+                if (fold != null && fold.InAtelier && fold.Allowed) return $"[X]  Fold down into the street";
             }
             return null;
         }
@@ -566,8 +575,12 @@ namespace Skyfold
                 // just above the wrist on the thumb side, out of the face, upright and turned to your eyes.
                 t.position = anchor.position - anchor.up * 0.05f - anchor.forward * 0.05f + Vector3.up * 0.02f;
                 t.rotation = Quaternion.LookRotation(t.position - rigs.Head.position, Vector3.up);
+                // Without a storm, left is the time played (see Update).
+                var cur = MissionDirector.Instance != null ? MissionDirector.Instance.Current : null;
+                bool noStorm = cur != null && cur.NoStorm;
                 int mm = Mathf.FloorToInt(left / 60f), ss = Mathf.FloorToInt(left % 60f);
-                m_WristTimer.text = held ? $"{mm}:{ss:00} <size=60%>storm waits</size>" : $"<color={(left < 60f ? "#F2714B" : "#22333B")}>{mm}:{ss:00}</color>";
+                m_WristTimer.text = noStorm ? $"{mm}:{ss:00} <size=60%>played</size>"
+                    : held ? $"{mm}:{ss:00} <size=60%>storm waits</size>" : $"<color={(left < 60f ? "#F2714B" : "#22333B")}>{mm}:{ss:00}</color>";
                 string text = o != null ? o.CardText(PlayMode.VR) : "";
                 if (o?.Progress != null) text += "  " + o.Progress(MissionDirector.Instance.Ctx);
                 m_WristObj.text = text;

@@ -55,6 +55,14 @@ namespace Skyfold.EditorTools
             new Entry("SKY_Metal", "#AEB6BA", 0.6f, metallic: 0.75f),
             new Entry("SKY_Rubber", "#2B2F33", 0.15f),
             new Entry("SKY_Light", "#FFD9A0", 0.3f, 1.8f),
+            // Clean Energy Lab.
+            new Entry("SKY_Solar", "#F5C242", 0.5f, 0.25f),
+            new Entry("SKY_Nuclear", "#8E7CF0", 0.5f),
+            new Entry("SKY_Battery", "#3BB273", 0.5f),
+            new Entry("SKY_Gas", "#8D9296", 0.3f, detail: 0.05f),
+            new Entry("SKY_Mud", "#6B4F3A", 0.15f, detail: 0.12f, detailScale: 3f),
+            new Entry("SKY_Leaf", "#3E9A4F", 0.3f, detail: 0.06f, detailScale: 4f),
+            new Entry("SKY_EnergyBlue", "#1F5FAE", 0.75f, metallic: 0.3f),
         };
 
         public static IEnumerable<string> PaletteNames

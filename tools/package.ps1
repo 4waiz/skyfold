@@ -1,5 +1,5 @@
 # Packages the release build for players.
-#   Stages  Release\SKYFOLD\  (game + README + licenses + docs + icons + demo launcher)
+#   Stages  Release\SKYFOLD\  (game + README + licenses + docs + icons + challenge launcher)
 #   Writes  Release\SKYFOLD_v<version>_win64.zip
 #   Creates the two Desktop shortcuts (laptop and Quest 3) pointing at the staged folder.
 # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File tools\package.ps1 [-NoShortcuts]
@@ -25,13 +25,13 @@ New-Item -ItemType Directory -Force -Path $stage | Out-Null
 Get-ChildItem $build | Where-Object { $_.Name -notlike "*DoNotShip*" -and $_.Name -notlike "*ButDontShipItWithYourGame*" } |
     ForEach-Object { Copy-Item $_.FullName -Destination $stage -Recurse -Force }
 
-# 2) Icons and the portable demo launcher.
+# 2) Icons and the portable launchers (--demo goes straight into the Clean Energy Challenge).
 $icons = Join-Path $stage "icons"
 New-Item -ItemType Directory -Force -Path $icons | Out-Null
 foreach ($n in "skyfold_desktop", "skyfold_vr", "skyfold_demo", "skyfold_icon") {
     Copy-Item (Join-Path $root "Assets\Skyfold\Art\Icons\$n.ico") $icons -Force
 }
-[System.IO.File]::WriteAllText((Join-Path $stage "Play Demo (3 min).cmd"), "@echo off`r`nstart `"`" `"%~dp0SKYFOLD.exe`" --demo`r`n", $utf8)
+[System.IO.File]::WriteAllText((Join-Path $stage "Play Clean Energy Challenge (3 min).cmd"), "@echo off`r`nstart `"`" `"%~dp0SKYFOLD.exe`" --demo`r`n", $utf8)
 [System.IO.File]::WriteAllText((Join-Path $stage "Play in VR (Quest 3 Link).cmd"), "@echo off`r`nstart `"`" `"%~dp0SKYFOLD.exe`" --mode=vr`r`n", $utf8)
 [System.IO.File]::WriteAllText((Join-Path $stage "Play on this laptop.cmd"), "@echo off`r`nstart `"`" `"%~dp0SKYFOLD.exe`" --mode=desktop`r`n", $utf8)
 
@@ -82,24 +82,7 @@ $stageMb = [math]::Round(((Get-ChildItem $stage -Recurse -File | Measure-Object 
 Write-Output "Staged: $stage ($stageMb MB)"
 Write-Output "ZIP:    $zip ($zipMb MB)"
 
-# 7) Desktop shortcuts (one game, two ways to play).
+# 7) Desktop shortcuts (one game, two ways to play), pointing at the staged folder.
 if (-not $NoShortcuts) {
-    $desktop = [Environment]::GetFolderPath("Desktop")
-    $shell = New-Object -ComObject WScript.Shell
-    $exe = Join-Path $stage "SKYFOLD.exe"
-    $defs = @(
-        @{ Name = "SKYFOLD"; Args = "--mode=desktop"; Icon = "skyfold_desktop.ico"; Desc = "SKYFOLD: The Last Flight - play on this laptop (keyboard and mouse)" },
-        @{ Name = "SKYFOLD - Quest 3"; Args = "--mode=vr"; Icon = "skyfold_vr.ico"; Desc = "SKYFOLD: The Last Flight - play in VR on Meta Quest 3 through Link" }
-    )
-    foreach ($d in $defs) {
-        $lnk = Join-Path $desktop ($d.Name + ".lnk")
-        $s = $shell.CreateShortcut($lnk)
-        $s.TargetPath = $exe
-        $s.Arguments = $d.Args
-        $s.WorkingDirectory = $stage
-        $s.IconLocation = (Join-Path $icons $d.Icon) + ",0"
-        $s.Description = $d.Desc
-        $s.Save()
-        Write-Output "Shortcut: $lnk -> $exe $($d.Args)"
-    }
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "make_shortcuts.ps1") -Exe (Join-Path $stage "SKYFOLD.exe")
 }

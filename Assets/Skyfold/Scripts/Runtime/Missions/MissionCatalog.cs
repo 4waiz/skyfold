@@ -3,9 +3,13 @@ using UnityEngine;
 
 namespace Skyfold
 {
-    /// <summary>The three campaign episodes and the three-minute demo, all on the same world and systems.</summary>
+    /// <summary>
+    /// The Clean Energy Challenge (the game's main experience, about three minutes on the lab table), plus the
+    /// original Last Flight episodes and demo, kept for the QA scenarios and the --episode switch.
+    /// </summary>
     public static class MissionCatalog
     {
+        public const string CleanEnergy = "cleanenergy";
         public const string Episode1 = "ep1_causeway";
         public const string Episode2 = "ep2_courier";
         public const string Episode3 = "ep3_lastflight";
@@ -19,6 +23,7 @@ namespace Skyfold
                 case Episode2: return BuildEpisode2();
                 case Episode3: return BuildEpisode3();
                 case Demo: return BuildDemo();
+                case CleanEnergy: return BuildCleanEnergy();
                 default: return BuildEpisode1();
             }
         }
@@ -349,6 +354,102 @@ namespace Skyfold
                 GuideTarget = "aircraft",
                 IsComplete = c => c.Aircraft.State == AircraftState.Departed,
                 OnComplete = c => { c.Dialogue.Play("e3.end"); c.Nuri.Celebrate(); }
+            });
+            return m;
+        }
+
+        // ---------------------------------------------------------------- Clean Energy Challenge (about 3 minutes)
+        static bool LabDone(MissionContext c, int game)
+        {
+            var lab = EnergyLab.Instance;
+            // Without a lab in the scene (an old scene build) nothing could ever finish: skip rather than hang.
+            return lab == null || lab.GameFinished(game);
+        }
+
+        /// <summary>
+        /// Three mini-games on the lab table (energy mix, carbon capture, mangroves), then a finale. No storm and no
+        /// way to fail: each puzzle helps out after its time budget, so a visitor always finishes in about three
+        /// minutes. Objectives only read the lab's state.
+        /// </summary>
+        static MissionDefinition BuildCleanEnergy()
+        {
+            var m = new MissionDefinition
+            {
+                Id = CleanEnergy,
+                Episode = 0,
+                IsDemo = true,
+                UsesEnergyLab = true,
+                NoStorm = true,
+                Title = "Clean Energy Challenge",
+                Subtitle = "Three puzzles · about 3 minutes",
+                HudLabel = "CLEAN ENERGY CHALLENGE",
+                Briefing = "Take the island to net zero: balance the grid, capture the carbon, plant mangroves.",
+                StormSeconds = 180f,
+                Start = StartLocation.Atelier,
+                ReturnKiosk = "kiosk.A",
+                IntroVoice = new[] { "lab.welcome" },
+                MedalRulesText = "Each puzzle scores up to 1000: faster and with fewer wrong tries scores more. Net Zero Hero from 2300, Clean Energy Innovator from 1500."
+            };
+            m.ScoreFor = r => EnergyLab.Instance != null ? EnergyLab.Instance.TotalScore : 0;
+            m.MedalFor = r => EnergyLab.Rank(r.Score).medal;
+
+            m.Objectives.Add(new ObjectiveDef
+            {
+                Id = "lab.mix",
+                Text = "Power the city day and night with zero emissions",
+                TextVR = "Grab energy blocks (grip) and drop them into the 4 grid slots",
+                TextDesktop = "Drag energy blocks into the 4 grid slots: power by day and night, zero emissions",
+                Voice = "lab.mix",
+                GuideTarget = "lab.board",
+                HintDelay = 16f,
+                Hints = new[]
+                {
+                    "Solar gives 2 by day and nothing at night. Nuclear gives 1, day and night.",
+                    "A battery stores 2 units of daytime solar and releases them at night.",
+                    "Try two solar, one nuclear and one battery."
+                },
+                Progress = c => EnergyLab.Instance != null ? EnergyLab.Instance.Mix.Progress : "",
+                OnBegin = c => EnergyLab.Instance?.StartGame(0),
+                IsComplete = c => LabDone(c, 0)
+            });
+            m.Objectives.Add(new ObjectiveDef
+            {
+                Id = "lab.ccs",
+                Text = "Turn the pipes to carry the CO<sub>2</sub> to underground storage",
+                TextVR = "Point at a pipe and pull the trigger to turn it",
+                TextDesktop = "Click a pipe to turn it: connect the CO<sub>2</sub> source to the storage well",
+                Voice = "lab.ccs",
+                GuideTarget = "lab.board",
+                HintDelay = 15f,
+                Hints = new[]
+                {
+                    "Start at the capture unit on the left and follow the glowing pipes.",
+                    "Turn the first tile that does not glow until it lights up, then move on."
+                },
+                Progress = c => EnergyLab.Instance != null ? EnergyLab.Instance.Capture.Progress : "",
+                OnBegin = c => EnergyLab.Instance?.StartGame(1),
+                IsComplete = c => LabDone(c, 1)
+            });
+            m.Objectives.Add(new ObjectiveDef
+            {
+                Id = "lab.mangrove",
+                Text = "Plant mangroves on the glowing mudflats",
+                TextVR = "Point at a glowing mudflat and pull the trigger",
+                TextDesktop = "Click the glowing mudflats to plant mangroves",
+                Voice = "lab.mangrove",
+                GuideTarget = "lab.board",
+                Progress = c => EnergyLab.Instance != null ? EnergyLab.Instance.Mangroves.Progress : "",
+                OnBegin = c => EnergyLab.Instance?.StartGame(2),
+                IsComplete = c => LabDone(c, 2)
+            });
+            m.Objectives.Add(new ObjectiveDef
+            {
+                Id = "lab.finale",
+                Text = "Net zero island: see your score",
+                Voice = "lab.finale",
+                GuideTarget = "lab",
+                OnBegin = c => { EnergyLab.Instance?.ShowFinale(); c.Nuri.Celebrate(); },
+                IsComplete = c => c.ObjectiveTime > 7f
             });
             return m;
         }

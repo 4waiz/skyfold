@@ -61,6 +61,8 @@ namespace Skyfold
                 case "menus": body = Menus(); break;
                 case "walk": body = Walk(); break;
                 case "vrsim": body = VRSim(); break;
+                case "energy": body = EnergyChallenge(false); break;
+                case "energyvr": body = EnergyChallenge(true); break;
                 default: Check(false, "unknown scenario " + scenario); body = null; break;
             }
             if (body != null) yield return StartCoroutine(Guard(body));

@@ -5,7 +5,7 @@ namespace Skyfold
     {
         public const string Body =
             "<b>Design, code, levels, 3D models, music and sound</b>\n" +
-            "Awaiz Ahmed / Team Kanban, built with AI-assisted development (Claude Code). All 3D models are original procedural Blender work for this game.\n\n" +
+            "Awaiz Ahmed, built with AI-assisted development (Claude Code). All 3D models are original procedural Blender work for this game; the Clean Energy Lab is built from simple shapes in code.\n\n" +
             "<b>AI-generated content (disclosed)</b>\n" +
             "Noor's voice: Kokoro-82M text-to-speech, run locally (Apache-2.0 model). No voice cloning.\n" +
             "Noor's radio portrait: generated with ChatGPT image generation. Noor is a fictional character, not a real person (see the asset manifest).\n\n" +
@@ -15,7 +15,9 @@ namespace Skyfold
             "See the asset manifest for the font families and their SIL Open Font Licence.\n\n" +
             "<b>Engine and packages</b>\n" +
             "Unity 6.6 (6000.6.2f1), Universal Render Pipeline, Input System, XR Interaction Toolkit 3.6 (Starter Assets), OpenXR 1.18, XR Plug-in Management 4.7.\n\n" +
-            "<b>Setting</b>\n" +
-            "Nacre Bay is an original fictional city. It is not a model of any real place, and nothing here is endorsed by any government or event.";
+            "<b>Setting and facts</b>\n" +
+            "Nacre Bay is an original fictional city. The real-world facts in the Clean Energy Challenge come from ADNOC's public announcements (2021-2026): " +
+            "clean grid power from nuclear and solar, the Al Reyadah carbon capture plant, the 10 million mangroves programme and the 2045 net zero goal for its operations. " +
+            "This is an independent project, not an official ADNOC product, and nothing here is endorsed by ADNOC, any government or ADIPEC.";
     }
 }

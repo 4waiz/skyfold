@@ -141,7 +141,7 @@ namespace Skyfold
             if (xr.State == XRState.Running || xr.State == XRState.Starting) xr.StopXR();
             SwitchRig(PlayMode.Desktop);
             EnterTitleState();
-            if (m_PendingDemo) { m_PendingDemo = false; StartMission(MissionCatalog.Demo); return; }
+            if (m_PendingDemo) { m_PendingDemo = false; StartMission(MissionCatalog.CleanEnergy); return; }
             if (TryStartPendingEpisode()) return;
             menu.Show("title", false);
         }
@@ -181,7 +181,7 @@ namespace Skyfold
         {
             SettingsStore.Current.guidance = Guidance.FullTutorial;
             SettingsStore.Save();
-            StartMission(MissionCatalog.Episode1);
+            StartMission(MissionCatalog.CleanEnergy);
         }
 
         bool TransitionBusy => (fold != null && fold.Busy) || (car != null && car.Busy);
@@ -236,11 +236,12 @@ namespace Skyfold
             menu.Show("title", false);
         }
 
+        /// <summary>Exhibition operator (F5 or Pause): restart the Clean Energy Challenge for the next visitor.
+        /// The day's best score is kept.</summary>
         public void OperatorResetDemo()
         {
-            ProgressStore.ResetDemo();
-            Debug.Log("[SKYFOLD] Operator reset: demo restarted, campaign progress untouched.");
-            StartMission(MissionCatalog.Demo);
+            Debug.Log("[SKYFOLD] Operator reset: Clean Energy Challenge restarted for the next player.");
+            StartMission(MissionCatalog.CleanEnergy);
         }
 
         public void Quit()
@@ -276,7 +277,7 @@ namespace Skyfold
             SwitchRig(PlayMode.VR);
             EnterTitleState();
             yield return null;
-            if (m_PendingDemo) { m_PendingDemo = false; StartMission(MissionCatalog.Demo); yield break; }
+            if (m_PendingDemo) { m_PendingDemo = false; StartMission(MissionCatalog.CleanEnergy); yield break; }
             if (SettingsStore.Current.comfortChosen && TryStartPendingEpisode()) yield break;
             menu.Show(SettingsStore.Current.comfortChosen ? "title" : "firstcomfort", false);
         }

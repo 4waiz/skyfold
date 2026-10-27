@@ -122,6 +122,14 @@ namespace Skyfold
             LastResult = null;
 
             PlacePlayer(def);
+            // The Clean Energy Lab takes the plinth; folding down to the street is off while it is out.
+            var lab = EnergyLab.Instance;
+            if (lab != null)
+            {
+                lab.SetLabMode(def.UsesEnergyLab);
+                if (def.UsesEnergyLab) { lab.ResetAll(); lab.PlacePlayer(); }
+            }
+            Ctx.Fold.Allowed = !def.UsesEnergyLab;
             SetState(MissionState.Active);
 
             m_IntroPending = def.IntroVoice != null && def.IntroVoice.Length > 0;
@@ -129,7 +137,7 @@ namespace Skyfold
 
             Advance();
             CaptureCheckpoint("start");
-            Debug.Log($"[SKYFOLD] Mission begin: {def.Id} ({def.Title}), storm {def.StormSeconds:0}s, guidance {SettingsStore.Current.guidance}");
+            Debug.Log($"[SKYFOLD] Mission begin: {def.Id} ({def.Title}), {(def.NoStorm ? "no storm" : $"storm {def.StormSeconds:0}s")}, guidance {SettingsStore.Current.guidance}");
         }
 
         void AddCampaignRoute(MissionDefinition def, Dictionary<string, Placement> presets)
@@ -282,7 +290,7 @@ namespace Skyfold
             PlayTime += dt;
             ObjectiveElapsed += dt;
 
-            if (!StormHeld)
+            if (!StormHeld && !Current.NoStorm)
             {
                 StormLeft -= dt;
                 StormDirector.Instance?.SetProgress(1f - StormLeft / Mathf.Max(1f, StormTotal));
@@ -406,7 +414,8 @@ namespace Skyfold
 
         public void Retry()
         {
-            if (Current == null || m_Checkpoint == null) { Restart(); return; }
+            // The lab's puzzles have no checkpoints: a retry is a fresh start.
+            if (Current == null || m_Checkpoint == null || Current.UsesEnergyLab) { Restart(); return; }
             StartCoroutine(RetryRoutine());
         }
 
@@ -482,6 +491,9 @@ namespace Skyfold
             Ctx.City.Configure(def.ActiveSockets, def.Presets, def.Inventory);
             FullScaleSlot.SuppressAnimation = false;
             ResetWorld(def);
+            // The title screen shows the Clean Energy Lab's welcome board on the plinth.
+            EnergyLab.Instance?.ShowAttract();
+            Ctx.Fold.Allowed = true;
             SetState(MissionState.Idle);
         }
 
@@ -494,7 +506,9 @@ namespace Skyfold
                 Ctx.Tabletop.ForceDrop();
                 if (Ctx.Car.HasDriver) Ctx.Car.EndDriving(Ctx.Car.Position, 0f);
                 Ctx.Guide.Hide();
+                if (Ctx.Fold != null) Ctx.Fold.Allowed = true;
             }
+            EnergyLab.Instance?.StopGames();
             Current = null;
             m_Checkpoint = null;
             SetState(MissionState.Idle);
@@ -518,14 +532,16 @@ namespace Skyfold
             var route = Ctx.City.FindRoute("depot", "substation");
             r.RouteLength = route != null ? route.Count : 0;
             r.UsedShortcut = Ctx.City.RouteUsesSocket(route, "bridge_east");
+            r.Score = Current.ScoreFor != null ? Current.ScoreFor(r)
+                : Mathf.Max(0, Mathf.RoundToInt(r.TimeLeft * 10f) + (r.UsedShortcut && Current.Episode == 1 ? 500 : 0) - r.Rejected * 40 - r.HintsShown * 25 - r.Retries * 150);
             r.Medal = Current.MedalFor != null ? Current.MedalFor(r) : "";
-            r.Score = Mathf.Max(0, Mathf.RoundToInt(r.TimeLeft * 10f) + (r.UsedShortcut && Current.Episode == 1 ? 500 : 0) - r.Rejected * 40 - r.HintsShown * 25 - r.Retries * 150);
-            if (Current.IsDemo) r.Notes.Add("Demo progress is stored separately from your campaign.");
+            if (Current.IsDemo && !Current.UsesEnergyLab) r.Notes.Add("Demo progress is stored separately from your campaign.");
             LastResult = r;
             SaveProgress(r);
             m_SuccessDelay = 3f;
             SetState(MissionState.Success);
             AudioDirector.Instance?.PlayStinger(Current.Episode == 3 || Current.IsDemo ? "stinger_episode" : "stinger_success");
+            if (Current.UsesEnergyLab) AudioDirector.Instance?.SetMusic("music_finale", 1.5f);
             Debug.Log($"[SKYFOLD] Mission success: {Current.Id} medal={r.Medal} timeLeft={r.TimeLeft:0} rejected={r.Rejected} hints={r.HintsShown} retries={r.Retries} shortcut={r.UsedShortcut}");
         }
 

@@ -1,6 +1,22 @@
-# SKYFOLD: The Last Flight — Controls
+# SKYFOLD: Clean Energy Challenge: Controls
 
-One game, two ways to play. Both use the same save. The in-game **Controls** screen (main menu or pause) shows the same list.
+One game, two ways to play. The in-game **Controls** screen (main menu or pause) shows the same list.
+
+## Clean Energy Challenge (the main experience)
+
+You stand at the lab table on the Atelier terrace. Everything is within reach, so in VR there is no need to walk or teleport.
+
+| Action | Laptop | Quest 3 |
+| --- | --- | --- |
+| Pick up an energy block, drop it in a grid slot | Hold the left mouse button, release over a slot | Grip, let go over a slot |
+| Turn a pipe (Capture the carbon) | Click it | Point the ray at it, pull the trigger (grip also works) |
+| Plant a mangrove (Blue carbon coast) | Click a glowing mudflat | Point at a glowing mudflat, pull the trigger |
+| Look around the table | Right-drag, or W A S D; wheel zooms | Just look; right stick turns |
+| Objectives | Tab | **Y** (wrist panel) |
+| Pause | Esc | Left **Menu** button |
+| Operator: next player | F5 | Pause, then *Operator: next player* |
+
+Folding down into the street is switched off during the challenge. The rest of this page covers the original *Last Flight* episodes, which are still in the build for QA (`--episode=N`).
 
 ## Laptop (keyboard and mouse)
 

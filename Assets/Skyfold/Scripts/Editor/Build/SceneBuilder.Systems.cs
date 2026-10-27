@@ -57,6 +57,7 @@ namespace Skyfold.EditorTools
             var mirror = Sys<MiniatureMirror>(c, "Miniature Mirror");
             mirror.mini = c.Mini;
             mirror.pairs = c.MirrorPairs;
+            BuildEnergyLab(c, mirror);
 
             var beacons = Sys<BeaconSystem>(c, "Beacon System");
             beacons.groups = c.BeaconGroups;

@@ -59,6 +59,14 @@ namespace Skyfold
         public List<ObjectiveDef> Objectives = new List<ObjectiveDef>();
         public Func<MissionResult, string> MedalFor;
         public string MedalRulesText;
+        /// <summary>Played on the Clean Energy Lab instead of the miniature city (the lab replaces it on the plinth).</summary>
+        public bool UsesEnergyLab;
+        /// <summary>No storm: no countdown, no failure; the HUD shows time played instead.</summary>
+        public bool NoStorm;
+        /// <summary>Header on the objective card; defaults to "EPISODE n" / "DEMO".</summary>
+        public string HudLabel;
+        /// <summary>Optional score rule; defaults to the storm-time formula.</summary>
+        public Func<MissionResult, int> ScoreFor;
 
         public bool IsCampaign => !IsDemo;
     }

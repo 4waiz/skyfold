@@ -57,6 +57,20 @@
     { "id": "g.cell_respawn", "speaker": "noor", "mode": "any", "text": "No harm done. A fresh cell is waiting at the dock." },
     { "id": "g.car_respawn", "speaker": "noor", "mode": "any", "text": "Let's put you back on the road." },
     { "id": "g.remote_drive", "speaker": "noor", "mode": "any", "text": "Remote drive is on. You'll steer the car from right here." },
-    { "id": "g.checkpoint", "speaker": "noor", "mode": "any", "text": "Checkpoint.", "spoken": "Check point." }
-  ]
+    { "id": "g.checkpoint", "speaker": "noor", "mode": "any", "text": "Checkpoint.", "spoken": "Check point." },
+    {"id": "lab.welcome", "speaker": "noor", "mode": "any", "text": "Welcome to the Clean Energy Lab! I'm Noor. Three quick puzzles stand between this island and net zero. Let's go.", "spoken": "Welcome to the Clean Energy Lab! I'm Nuur. Three quick puzzles stand between this island and net zero. Let's go."},
+    {"id": "lab.mix.vr", "speaker": "noor", "mode": "vr", "text": "Grab the energy blocks with your grip and drop them into the four grid slots. Keep the lights on day and night, with zero emissions."},
+    {"id": "lab.mix.desktop", "speaker": "noor", "mode": "desktop", "text": "Drag the energy blocks into the four grid slots. Keep the lights on day and night, with zero emissions."},
+    {"id": "lab.mix.night", "speaker": "noor", "mode": "any", "text": "Careful: solar sleeps at night. A battery can save daytime sunshine for later."},
+    {"id": "lab.mix.gas", "speaker": "noor", "mode": "any", "text": "Gas keeps the lights on, but it puts CO2 into the air. Is there a zero-carbon swap?", "spoken": "Gas keeps the lights on, but it puts C O two into the air. Is there a zero-carbon swap?"},
+    {"id": "lab.fact.mix", "speaker": "noor", "mode": "any", "text": "Brilliant! Nuclear plus solar and storage keeps a grid clean around the clock. ADNOC can source up to 100% of its grid power from nuclear and solar.", "spoken": "Brilliant! Nuclear plus solar and storage keeps a grid clean around the clock. ADNOC can source up to one hundred percent of its grid power from nuclear and solar."},
+    {"id": "lab.ccs.vr", "speaker": "noor", "mode": "vr", "text": "Now trap the carbon. Point at a pipe and pull the trigger to turn it, until the CO2 flows into the storage well.", "spoken": "Now trap the carbon. Point at a pipe and pull the trigger to turn it, until the C O two flows into the storage well."},
+    {"id": "lab.ccs.desktop", "speaker": "noor", "mode": "desktop", "text": "Now trap the carbon. Click a pipe to turn it, until the CO2 flows into the storage well.", "spoken": "Now trap the carbon. Click a pipe to turn it, until the C O two flows into the storage well."},
+    {"id": "lab.fact.ccs", "speaker": "noor", "mode": "any", "text": "Locked away! Al Reyadah in Abu Dhabi can capture eight hundred thousand tonnes of CO2 a year.", "spoken": "Locked away! Al Ree-yaa-da in Abu Dhabi can capture eight hundred thousand tonnes of C O two a year."},
+    {"id": "lab.mangrove.vr", "speaker": "noor", "mode": "vr", "text": "Last one: blue carbon. Point at each glowing mudflat and pull the trigger to plant a mangrove. Be quick!"},
+    {"id": "lab.mangrove.desktop", "speaker": "noor", "mode": "desktop", "text": "Last one: blue carbon. Click each glowing mudflat to plant a mangrove. Be quick!"},
+    {"id": "lab.fact.mangrove", "speaker": "noor", "mode": "any", "text": "Mangroves lock carbon in their roots and mud. ADNOC is planting ten million of them by 2030, with drones."},
+    {"id": "lab.finale", "speaker": "noor", "mode": "any", "text": "Net zero island! The energy transition needs curious minds like yours. Thanks for playing."},
+    { "id": "lab.assist", "speaker": "noor", "mode": "any", "text": "Let me show you one way to solve it." }
+]
 }

@@ -21,6 +21,8 @@ namespace Skyfold
         public MiniCity mini;
         public List<Pair> pairs = new List<Pair>();
         public float maxAltitudeCity = 60f;
+        /// <summary>Set while the Clean Energy Lab covers the plinth: every proxy stays hidden.</summary>
+        public bool hidden;
 
         void LateUpdate()
         {
@@ -28,7 +30,7 @@ namespace Skyfold
             foreach (var p in pairs)
             {
                 if (p.source == null || p.proxy == null) continue;
-                bool visible = p.source.gameObject.activeInHierarchy && p.source.position.y < maxAltitudeCity;
+                bool visible = !hidden && p.source.gameObject.activeInHierarchy && p.source.position.y < maxAltitudeCity;
                 if (p.proxy.gameObject.activeSelf != visible) p.proxy.gameObject.SetActive(visible);
                 if (!visible) continue;
                 p.proxy.position = mini.CityToWorld(p.source.position);

@@ -72,6 +72,7 @@ namespace Skyfold.EditorTools
             var tdi = desk.AddComponent<TabletopDesktopInput>();
             tdi.player = dp;
             tdi.pieceMask = LayerMask.GetMask("Interactable");
+            desk.AddComponent<LabDesktopInput>();
             c.Desktop = dp;
 
             // ---------------- VR (XRI Starter Assets rig)
