@@ -302,7 +302,10 @@ namespace Skyfold
                     "The terminal road runs straight north from the island road.",
                     "Only one of the three pieces fits without pointing into a building."
                 },
-                IsComplete = c => c.RouteToTerminal
+                IsComplete = c => c.RouteToTerminal,
+                OnComplete = c => HUDMessages.Toast(PlayerRigs.Instance != null && PlayerRigs.Instance.Mode == PlayMode.VR
+                    ? "<b>Road fixed! Task complete.</b>  Press X to fold back down and keep playing."
+                    : "<b>Road fixed! Task complete.</b>  Press Q to fold back down and keep playing.")
             });
             m.Objectives.Add(new ObjectiveDef
             {
