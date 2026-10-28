@@ -1,6 +1,15 @@
-# SKYFOLD: The Last Flight — Plan
+# SKYFOLD: The Clean Flight — Plan
 
-**Mode: HOBBY.** Creator credit: Awaiz Ahmed / Team Kanban. Single-player, nonviolent puzzle-adventure for Windows x64, playable on the laptop (desktop mode) and in PC VR on Meta Quest 3 through Link. One executable, two Desktop shortcuts.
+**Mode: HOBBY, ADIPEC 2026 edition.** Creator credit: Awaiz Ahmed and Huda Mueen / Team Kanban. Single-player, nonviolent puzzle-adventure for Windows x64, playable on the laptop (desktop mode) and in PC VR on Meta Quest 3 through Link. One executable, two Desktop shortcuts.
+
+## 0. ADIPEC 2026 edition
+
+- **Showcase, not a jam entry.** Shown at ADIPEC 2026 under the theme *accelerating decarbonisation, energy security, resilience and industrial innovation across the global energy value chain*. The SHIFT boundary below still stands: this edition is a showcase build, not a jam submission.
+- **Audience:** high school students and recent graduates. Text is short and plain; each results screen adds one simple, real energy fact.
+- **Story reframe (same systems, same world):** the storm has cut Nacre Bay's clean power link. The causeway carries the island's power cable (*The Green Corridor*), the courier delivers a green-hydrogen fuel cell to restart the airfield microgrid (*The Hydrogen Run*), and the last flight becomes the city's first zero-emission, hydrogen-electric flight (*The Clean Flight*).
+- **Clean-grid meter:** `GridImpact` works out the renewable share (30% base, +30 corridor, +20 microgrid, +10 solar runway, +10 clean flight) from `CityState` facts only, never timers. Shown on the laptop HUD, the VR wrist panel and the results screen; a toast (also on the VR hint card) marks each new source. The percentages are game values, not real measurements.
+- **Energy set** (`tools/blender/env_energy.py`, group `energy`): onshore and offshore wind turbines (separate `Rotor`, spun by `WindTurbine`), solar farm, solar carport, grid-battery yard, green-hydrogen works, direct-air carbon-capture unit, EV charger. Street lamps gain a solar head; the aircraft becomes hydrogen-electric (no exhausts); the power cell becomes a hydrogen fuel cell.
+- **Both play modes:** every new element works in desktop and VR. Menus and results use the shared panel builder; the HUD meter has a desktop card and a wrist-panel line.
 
 ## 1. Event boundary (SHIFT Game Jam)
 
@@ -11,7 +20,7 @@
 
 ## 2. The game in one line
 
-Hold a broken city in your hands, repair its roads as a giant, step inside the world you changed, and get the last flight into the sky before the storm.
+Hold a broken city in your hands, rebuild the green corridor that carries its clean power, step inside the world you changed, and send the city's first zero-emission flight into the sky before the storm.
 
 ## 3. World: Nacre Bay (fictional)
 
@@ -32,9 +41,9 @@ Hold a broken city in your hands, repair its roads as a giant, step inside the w
 
 | Episode | Goal | Key mechanics |
 | --- | --- | --- |
-| 1 · The Broken Causeway | Connect the Depot to the island | Tutorial grab/rotate/snap, route choice, fold, unlock the courier car |
-| 2 · The Courier Run | Carry a power cell into the car and deliver it to the airfield substation | Physical carry, arcade car, checkpoints, comfort *Remote Drive* from a fixed overlook; afterwards a convoy follows the repaired route |
-| 3 · The Last Flight | Repair the terminal access link, restore three runway beacons, let the convoy arrive, clear departure | Fold from the Airfield station, switches, aircraft state machine and takeoff payoff |
+| 1 · The Green Corridor | Rebuild the causeway (road plus the island's power cable) to connect the Depot to the island | Tutorial grab/rotate/snap, route choice, fold, unlock the courier car |
+| 2 · The Hydrogen Run | Carry a green-hydrogen fuel cell into the car and deliver it to the airfield microgrid | Physical carry, arcade car, checkpoints, comfort *Remote Drive* from a fixed overlook; afterwards a convoy follows the repaired route |
+| 3 · The Clean Flight | Repair the terminal access link, switch on three solar runway beacons, let the electric shuttles arrive, clear the hydrogen-electric plane for take-off | Fold from the Airfield station, switches, aircraft state machine and takeoff payoff |
 | Demo (3 min) | Bridge → fold → cell + car → beacons → takeoff | Shorter route, generous hints, real input, no auto-win, separate progress |
 
 Target is 10–15 min for a first full playthrough. The storm timer is the failure state. It starts only after the tutorial steps complete, and it pauses in menus, settings, tutorials, on tracking loss and on headset removal.

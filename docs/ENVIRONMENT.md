@@ -92,7 +92,6 @@ Not installed on purpose: com.unity.xr.meta-openxr (AR Foundation features for Q
 
 | Tool / skill | Status |
 | --- | --- |
-| Claude in Chrome (your real Chrome) | **Not connected.** Still no connected browsers on 2026-10-17, even with the extension installed and signed in to the Awaiz profile; most likely it uses a different Claude account from this app's. |
 | Built-in browser pane | Available, isolated; it has no ChatGPT sign-in, so I'm not relying on it for your ChatGPT session |
 | chrome-devtools MCP | Opens its own Chrome window with a separate profile. Used, with your go-ahead, for the ChatGPT images on 2026-10-17; you signed in to ChatGPT there yourself (see `docs/ASSET_MANIFEST.md`) |
 | Unity MCP | None found. Automation uses Unity batch mode plus C# editor scripts (`Assets/Skyfold/Editor`) |

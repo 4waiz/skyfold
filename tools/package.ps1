@@ -88,8 +88,8 @@ if (-not $NoShortcuts) {
     $shell = New-Object -ComObject WScript.Shell
     $exe = Join-Path $stage "SKYFOLD.exe"
     $defs = @(
-        @{ Name = "SKYFOLD"; Args = "--mode=desktop"; Icon = "skyfold_desktop.ico"; Desc = "SKYFOLD: The Last Flight - play on this laptop (keyboard and mouse)" },
-        @{ Name = "SKYFOLD - Quest 3"; Args = "--mode=vr"; Icon = "skyfold_vr.ico"; Desc = "SKYFOLD: The Last Flight - play in VR on Meta Quest 3 through Link" }
+        @{ Name = "SKYFOLD"; Args = "--mode=desktop"; Icon = "skyfold_desktop.ico"; Desc = "SKYFOLD: The Clean Flight - play on this laptop (keyboard and mouse)" },
+        @{ Name = "SKYFOLD - Quest 3"; Args = "--mode=vr"; Icon = "skyfold_vr.ico"; Desc = "SKYFOLD: The Clean Flight - play in VR on Meta Quest 3 through Link" }
     )
     foreach ($d in $defs) {
         $lnk = Join-Path $desktop ($d.Name + ".lnk")

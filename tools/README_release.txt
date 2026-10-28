@@ -1,10 +1,10 @@
-SKYFOLD: The Last Flight
-========================
-A hobby project by Awaiz Ahmed / Team Kanban. Version 0.9.1, Windows x64.
-Not a SHIFT Game Jam entry: it was made before any jam theme reveal.
+SKYFOLD: The Clean Flight
+=========================
+By Awaiz Ahmed and Huda Mueen / Team Kanban. Version 0.10.0 (ADIPEC 2026 edition), Windows x64.
 
-Hold a broken coastal city in your hands, repair its roads as a giant, step inside the world you
-changed, and get the last flight away before the storm.
+A storm has cut Nacre Bay's clean power link. Hold the city in your hands, rebuild the green
+corridor that carries wind and solar power to the island, deliver a green-hydrogen fuel cell to
+restart its microgrid, and send the first zero-emission flight up before the storm arrives.
 
 
 HOW TO START (no installation)
@@ -64,7 +64,7 @@ SAVES, SETTINGS AND LOGS
 
 CREDITS AND LICENCES
 --------------------
-Design, code and direction: Awaiz Ahmed / Team Kanban.
+Design, code and direction: Awaiz Ahmed and Huda Mueen / Team Kanban.
 All 3D models, music, ambience and most sound effects are original, made by scripts for this game.
 Noor's voice lines are AI-generated with the open Kokoro TTS model (stock voice, no voice cloning).
 Noor's radio portrait (the subtitle badge) is AI-generated with ChatGPT image generation.

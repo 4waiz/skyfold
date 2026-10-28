@@ -1,9 +1,9 @@
-# SKYFOLD: The Last Flight — Asset manifest
+# SKYFOLD: The Clean Flight — Asset manifest
 
-Hobby project by **Awaiz Ahmed / Team Kanban**. Everything shipped in the build is listed here with its source, licence and AI status. Per-file tables (every model, every sound) live in the detailed manifests:
+By **Awaiz Ahmed and Huda Mueen / Team Kanban** (ADIPEC 2026 edition). Everything shipped in the build is listed here with its source, licence and AI status. Per-file tables (every model, every sound) live in the detailed manifests:
 
-- `docs/manifest/art_env.md`: 59 environment models (city kit, roads, bridges, Atelier, props, nature, sky).
-- `docs/manifest/art_chars.md`: 12 character and vehicle models (NURI, gloves, cars, aircraft, power cell, passengers).
+- `docs/manifest/art_env.md`: 67 environment models (city kit, roads, bridges, Atelier, props, nature, sky, and the energy set: wind turbines, solar farm and carport, grid batteries, green-hydrogen works, carbon-capture unit, EV charger).
+- `docs/manifest/art_chars.md`: 12 character and vehicle models (NURI, gloves, cars, hydrogen-electric aircraft, hydrogen fuel cell, passengers).
 - `docs/manifest/audio.md`: 125 audio files (Noor voice lines, SFX, music, ambience), with licence verification notes.
 
 Verification status wording: **Verified** means the licence text was read from the source files on this machine. **Stated by source** means the source documents the licence but no licence file came with the local copy.
@@ -12,9 +12,9 @@ Verification status wording: **Verified** means the licence text was read from t
 
 | Category | What | Source / provider | Licence | Verification | AI status |
 | --- | --- | --- | --- | --- | --- |
-| 3D models (71 files) | City kit, roads, bridge, Atelier, props, palms, sky, NURI, gloves, courier car, convoy shuttle, city cars, aircraft, power cell, passengers | Original procedural Blender 5.2 Python scripts in `tools/blender/` (written in an AI-assisted coding session) | Original work for SKYFOLD | Verified (built from repo scripts) | Not AI-generated: geometry comes only from the scripts. No external models, scans or generative 3D. |
+| 3D models (79 files) | City kit, roads, bridge, Atelier, props, palms, sky, energy set (wind turbines, solar, grid batteries, green hydrogen, carbon capture, EV charger), NURI, gloves, courier car, convoy shuttle, city cars, hydrogen-electric aircraft, hydrogen fuel cell, passengers | Original procedural Blender 5.2 Python scripts in `tools/blender/` (written in an AI-assisted coding session) | Original work for SKYFOLD | Verified (built from repo scripts) | Not AI-generated: geometry comes only from the scripts. No external models, scans or generative 3D. |
 | Materials and shaders | `SKY_*` palette materials; Skyfold Stylized Lit, Water, Sky, Unlit and Fade shaders | Written for this project (`Assets/Skyfold/Shaders`, `Scripts/Editor/Art/MaterialLibrary.cs`) | Original work | Verified | Not AI-generated output. Code was written in an AI-assisted session. |
-| Voice (52 lines, Noor) | Narration and tutorial lines | Kokoro-82M TTS (hexgrad), stock voice `af_heart`, run locally through the kanban-motion skill | Model: Apache-2.0; output owned by the project | Verified (package metadata) | **AI-generated speech** (local TTS). Stock voice, no voice cloning, no imitation of a real person. |
+| Voice (52 lines, Noor) | Narration and tutorial lines | Kokoro-82M TTS (hexgrad), stock voice `af_heart`, run locally (the ADIPEC lines through `tools/audio/voiceover_local.py`) | Model: Apache-2.0; output owned by the project | Verified (package metadata) | **AI-generated speech** (local TTS). Stock voice, no voice cloning, no imitation of a real person. |
 | Sound effects | UI, car, cell, switches, aircraft, storm, NURI chirps | Original DSP synthesis (`tools/audio/*.py`) layered with processed Kenney.nl recordings (impact, interface and casino packs) | Original + **CC0 1.0** (Kenney) | Synthesis: verified. Kenney: **stated by source** (the kanban-motion skill documents them as public-domain Kenney.nl sounds, and Kenney publishes its packs under CC0; no licence file was bundled with the local copy) | Not AI-generated |
 | Music and ambience | Menu, architect, street, drive, storm and finale music plus three stingers; coast, city, Atelier and storm ambience loops | Original composition and synthesis (`tools/audio/make_music.py`, `tools/audio/make_ambience.py`) | Original work | Verified | Not AI-generated (deterministic DSP) |
 | Fonts | Unbounded (headings, SemiBold instance), Atkinson Hyperlegible Regular and Bold (body) | google/fonts GitHub repository (`ofl/unbounded`, `ofl/atkinsonhyperlegible`) | SIL Open Font License 1.1 | Verified (OFL.txt downloaded with each font; copies in `Assets/Skyfold/Fonts` and the release `licenses` folder) | Not AI-generated. The Unbounded SemiBold static instance was cut locally from the variable font with fontTools (allowed by the OFL; no Reserved Font Name). |
@@ -30,7 +30,7 @@ Verification status wording: **Verified** means the licence text was read from t
 
 - **Date:** all made on 2026-10-17, in one ChatGPT chat ("Create Key Art").
 - **Account:** the team's ChatGPT workspace account, signed in by Awaiz Ahmed. The address is left out because this repository is public.
-- **How:** Claude in Chrome would not connect to your Chrome, so with your go-ahead the chat ran in a separate Chrome window opened by the chrome-devtools tool. You signed in there yourself.
+- **How:** the chat ran in a separate Chrome window opened by the chrome-devtools tool, and Awaiz signed in there directly.
 - **Files:** each PNG is byte-for-byte what ChatGPT returned and still carries OpenAI's C2PA content-credentials chunk.
 - **Prompt rules:** every prompt forbade text, real people's likenesses and imitation of named artists.
 - **AI status of every file in this section:** AI-generated (ChatGPT image generation).

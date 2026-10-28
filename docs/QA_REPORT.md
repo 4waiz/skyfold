@@ -1,6 +1,25 @@
-# SKYFOLD: The Last Flight — QA and performance report
+# SKYFOLD: The Clean Flight — QA and performance report
 
 Every result below comes from a run on this machine. Anything that was not actually exercised is marked **NOT TESTED**.
+
+## ADIPEC 2026 edition (0.10.0), 2026-10-28
+
+Release build of 0.10.0 (energy-transition rework): 256 MB player, 0 build errors, 4 build warnings, scene validation 0 problems. Built and tested on a second machine: AMD Ryzen 7 7730U with Radeon integrated graphics (D3D11, 7 GB shared), 14 GB RAM, Windows 11 (10.0.26200), 1920×1200 panel. No headset connected.
+
+| Scenario | Result |
+| --- | --- |
+| smoke | 5/5 passed |
+| menus | 21/21 passed |
+| episode1east | 26/26 passed |
+| demo | 21/21 passed (clean-grid toast at 80% on the microgrid, 100% on the results screen) |
+| fullcampaign | 67/67 passed (all three episodes, results screens show the clean-grid share and an energy fact) |
+| fail | 5/5 passed |
+| vrsim (simulated headset) | 29/29 passed; the wrist panel shows the clean-grid line |
+| tour, lookdev | passed; screenshots `docs/screenshots/12_energy_city.jpg` and `13_clean_grid_results.jpg` |
+
+New in this edition and checked in those runs: wind-turbine rotors spin on the full-scale city and the miniature, the EV chargers and solar carport have colliders and do not block the courier car's bay, the offshore turbines sit clear of the take-off climb-out, and Noor's 22 re-recorded lines play with matching subtitles. **NOT TESTED:** a real Quest 3 session with this edition, and frame rate on the original RTX 5080 laptop.
+
+The sections below are the original 0.9.1 report and still describe the shared systems.
 
 ## Build and machine
 

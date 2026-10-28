@@ -1,4 +1,4 @@
-SKYFOLD: The Last Flight - third-party notices
+SKYFOLD: The Clean Flight - third-party notices
 =============================================
 
 Fonts (SIL Open Font License 1.1; full licence texts in this folder)

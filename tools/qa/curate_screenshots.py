@@ -23,6 +23,8 @@ PICKS = [
     ("episode1east/e1_07_results.png", "09_results.jpg"),
     ("menus/menu_controls.png", "10_controls.jpg"),
     ("menus/menu_audio_focus.png", "11_audio_settings.jpg"),
+    ("tour/tour_11_overlook.png", "12_energy_city.jpg"),
+    ("demo/d_06_results.png", "13_clean_grid_results.jpg"),
 ]
 
 

@@ -1,4 +1,4 @@
-# SKYFOLD: The Last Flight — Controls
+# SKYFOLD: The Clean Flight — Controls
 
 One game, two ways to play. Both use the same save. The in-game **Controls** screen (main menu or pause) shows the same list.
 
@@ -57,7 +57,7 @@ One game, two ways to play. Both use the same save. The in-game **Controls** scr
 | Move (Smooth movement mode) | Left stick |
 | Turn (snap by default; smooth is an option) | Right stick left / right |
 | Teleport | Hold **A** to aim, release to jump (cancel by pointing at nothing valid) |
-| Grab a piece, the power cell or a lever | Grip |
+| Grab a piece, the hydrogen cell or a lever | Grip |
 | Use, press buttons, menu pointer | Trigger |
 | Fold (at a Fold Station kiosk or the plinth) | **X** |
 | Wrist objectives | **Y** |
