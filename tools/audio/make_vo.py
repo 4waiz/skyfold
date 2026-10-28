@@ -42,7 +42,7 @@ import skyaudio as sa  # noqa: E402
 LINES_JSON = sa.ROOT / "Assets" / "Skyfold" / "Resources" / "Dialogue" / "vo_lines.json"
 VO_DIR = sa.AUDIO / "VO"
 REPORTS = sa.TOOLS / "reports"
-VOICEOVER = sa.SKILL / "scripts" / "voiceover.py"
+VOICEOVER = Path(os.environ.get("SKYFOLD_VOICEOVER", Path(__file__).resolve().parent / "voiceover_local.py"))
 TARGET_LUFS, TP_CEIL = -16.0, -1.5
 LEAD, TAIL, FADE = 0.040, 0.150, 0.005
 AUDITION_VOICES = ["af_heart", "bf_emma", "af_bella", "af_heart:0.6,bf_emma:0.4"]
@@ -314,8 +314,8 @@ def cmd_build(a):
     keep = [r for r in old["lines"] if r["id"] not in {x["id"] for x in rows}]
     order = {L["id"]: k for k, L in enumerate(load_lines())}
     allrows = sorted(keep + rows, key=lambda r: order.get(r["id"], 999))
-    rep_path.write_text(json.dumps({"voice": a.voice, "speed": a.speed, "engine": "Kokoro-82M via kanban-motion "
-                                    "voiceover.py (kokoro-onnx 0.6.1, fp32)", "lines": allrows}, indent=1),
+    rep_path.write_text(json.dumps({"voice": a.voice, "speed": a.speed, "engine": "Kokoro-82M via "
+                                    "voiceover_local.py (kokoro-onnx 0.6.1, fp32)", "lines": allrows}, indent=1),
                         encoding="utf-8")
     print(f"wrote {len(rows)} lines to {VO_DIR}", file=sys.stderr)
 

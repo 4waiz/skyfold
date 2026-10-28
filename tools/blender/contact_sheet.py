@@ -6,7 +6,7 @@
 import os, sys, json
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = r"C:\UnityProjects\SKYFOLD"
+ROOT = os.environ.get("SKYFOLD_ROOT", os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")))
 RENDERS = os.path.join(ROOT, "source-art", "renders")
 
 ENV_ORDER = [

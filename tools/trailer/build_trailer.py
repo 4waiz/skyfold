@@ -7,6 +7,7 @@
 Usage: python build_trailer.py <ffmpeg.exe> [landscape|vertical|all]
 """
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -23,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "brag-output"
 CLIPS = OUT / "footage" / "clips"
 GAME_AUDIO = ROOT / "Assets" / "Skyfold" / "Audio"
-SKILL_SFX = Path.home() / ".claude" / "skills" / "brag" / "assets" / "sfx"
+SKILL_SFX = Path(os.environ.get("SKYFOLD_TRAILER_SFX", Path.home() / ".brag" / "assets" / "sfx"))
 VO_DIR = OUT / "vo"
 FFMPEG = sys.argv[1]
 WHICH = sys.argv[2] if len(sys.argv) > 2 else "all"

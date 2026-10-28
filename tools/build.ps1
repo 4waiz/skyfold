@@ -17,7 +17,7 @@ $log = Join-Path $root ("Logs\build_{0:yyyyMMdd_HHmmss}.log" -f (Get-Date))
 New-Item -ItemType Directory -Force -Path (Join-Path $root "Logs") | Out-Null
 
 Write-Output "Building with $method (log: $log)"
-$p = Start-Process $unity -ArgumentList "-batchmode", "-projectPath", $root, "-executeMethod", $method, "-logFile", $log -PassThru -Wait
+$p = Start-Process $unity -ArgumentList "-batchmode", "-projectPath", "`"$root`"", "-executeMethod", $method, "-logFile", "`"$log`"" -PassThru -Wait
 Select-String -Path $log -Pattern "error CS|Shader error|\[SKYFOLD\] (Scene built|Validation|Build )" | ForEach-Object { $_.Line }
 if ($p.ExitCode -ne 0) { throw "Unity build failed with exit code $($p.ExitCode). See $log" }
 

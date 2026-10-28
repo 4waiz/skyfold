@@ -16,7 +16,7 @@ foreach ($s in $Scenarios) {
     if (Test-Path $out) { Get-ChildItem $out -File | Remove-Item -Force }
     New-Item -ItemType Directory -Force -Path $out | Out-Null
     $start = Get-Date
-    $p = Start-Process $exe -ArgumentList "--qa=$s", "--qa-out=$out", "-screen-width", "1920", "-screen-height", "1080", "-screen-fullscreen", "0" -PassThru -Wait
+    $p = Start-Process $exe -ArgumentList "--qa=$s", "--qa-out=`"$out`"", "-screen-width", "1920", "-screen-height", "1080", "-screen-fullscreen", "0" -PassThru -Wait
     $secs = [int]((Get-Date) - $start).TotalSeconds
     if (Test-Path $playerLog) { Copy-Item $playerLog (Join-Path $out "Player.log") -Force }
     $report = Join-Path $out "qa_report.txt"

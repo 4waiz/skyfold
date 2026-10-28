@@ -9,10 +9,11 @@ reproduces the same files (SFX were checked bit-identical between `python` and `
 - uv (`%USERPROFILE%\.local\bin\uv.exe`); each script carries PEP 723 metadata (numpy, scipy;
   `make_vo.py` also faster-whisper). Plain Python 3.12 with numpy + scipy + faster-whisper works too.
 - FFmpeg on PATH (decodes the Kenney `.ogg` files).
-- The `kanban-motion` skill at `%USERPROFILE%\.claude\skills\kanban-motion` (its `scripts/voiceover.py`
-  and the Kenney CC0 library in `assets/sfx/`).
-- Kokoro-82M model files cached at `%USERPROFILE%\.cache\kanban-motion\kokoro`
-  (`kokoro-v1.0.onnx`, `voices-v1.0.bin`).
+- The `kanban-motion` audio kit (the Kenney CC0 library in `assets/sfx/` and the music-bed scripts) at
+  `%USERPROFILE%\.kanban-motion`, or wherever `SKYFOLD_AUDIO_KIT` points.
+- Narration uses `tools/audio/voiceover_local.py` (override with `SKYFOLD_VOICEOVER`). Its Kokoro-82M
+  model files live in `%USERPROFILE%\.cache\kokoro-onnx`, or wherever `KOKORO_DIR` points
+  (`kokoro-v1.0.onnx`, `voices-v1.0.bin` from the kokoro-onnx releases).
 - faster-whisper `small.en` in the Hugging Face cache (VO QA only; run with `HF_HUB_OFFLINE=1` implied).
 
 ## Regenerate everything (run from `C:\UnityProjects\SKYFOLD`)

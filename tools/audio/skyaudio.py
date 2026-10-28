@@ -15,6 +15,7 @@ Conventions
 
 from __future__ import annotations
 
+import os
 import subprocess
 import wave
 from pathlib import Path
@@ -27,7 +28,7 @@ SR = 48000
 TOOLS = Path(__file__).resolve().parent                     # tools/audio
 ROOT = TOOLS.parents[1]                                     # project root
 AUDIO = ROOT / "Assets" / "Skyfold" / "Audio"
-SKILL = Path.home() / ".claude" / "skills" / "kanban-motion"
+SKILL = Path(os.environ.get("SKYFOLD_AUDIO_KIT", Path.home() / ".kanban-motion"))   # SFX library + music-bed kit
 SFX_LIB = SKILL / "assets" / "sfx"
 
 
