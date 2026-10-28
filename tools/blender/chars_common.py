@@ -15,7 +15,7 @@ from math import radians, degrees, sin, cos, pi, sqrt, atan2
 from mathutils import Vector, Matrix, Euler, Quaternion
 from mathutils.bvhtree import BVHTree
 
-PROJECT = r"C:\UnityProjects\SKYFOLD"
+PROJECT = os.environ.get("SKYFOLD_ROOT", os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")))
 MODELS = os.path.join(PROJECT, "Assets", "Skyfold", "Art", "Models")
 RENDERS = os.path.join(PROJECT, "source-art", "renders")
 TOOLS = os.path.join(PROJECT, "tools", "blender")
@@ -29,6 +29,7 @@ PALETTE = {
     "SKY_Kerb": "#CDBFA9", "SKY_Wood": "#9A6B45", "SKY_PalmTrunk": "#8B6B4A",
     "SKY_PalmLeaf": "#5E8C4A", "SKY_Flower": "#E0557A", "SKY_Fabric": "#F7F1E6",
     "SKY_Metal": "#AEB6BA", "SKY_Rubber": "#2B2F33", "SKY_Light": "#FFD9A0",
+    "SKY_Solar": "#1E3F66", "SKY_Leaf": "#6FBF5A",
 }
 # Preview-only shading hints. Unity remaps every material by name.
 SHADING = {
@@ -47,6 +48,8 @@ SHADING = {
     "SKY_Light": dict(rough=0.2, emit=8.0),
     "SKY_Fabric": dict(rough=0.85),
     "SKY_Wood": dict(rough=0.6),
+    "SKY_Solar": dict(rough=0.12, metal=0.2, coat=0.6),
+    "SKY_Leaf": dict(rough=0.4),
 }
 
 AXES_NOTE = "unity = (-x_b, z_b, -y_b)"

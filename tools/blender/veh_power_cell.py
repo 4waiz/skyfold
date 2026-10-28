@@ -1,4 +1,4 @@
-"""Power cell - grabbable courier cargo for SKYFOLD: The Last Flight.
+"""Hydrogen fuel cell - grabbable courier cargo for SKYFOLD: The Clean Flight.
 
 Original procedural model (Awaiz Ahmed / Team Kanban), not AI-generated.
     blender -b --factory-startup -P tools/blender/veh_power_cell.py [-- --no-render]
@@ -11,7 +11,7 @@ Hierarchy (pivots, Blender metres, Z up):
 Total height 0.35 m (handle included), body diameter 0.14 m. Budget < 2.5k tris.
 Detail pass (it is held in the hand in VR, ~30 cm from the eye): diamond-knurled brass base
 with a recessed contact disc, ink seal grooves, pearl shell with teal lips, glass window with
-four brass guard bars, three indicator lights, coral warning ring, fluted brass top cap with a
+four brass guard bars, three indicator lights, leaf-green hydrogen band, fluted brass top cap with a
 grooved top face and two connector pins, brass handle on mounts with a rubber grip and ink
 wraps; the core is a slim glowing column (diameter ~42% of the glass, chamfered ends, three
 rings 1.2 mm proud) seated in two brass collars, so its in-game emissive silhouette is clean.
@@ -29,7 +29,7 @@ RENDER = '--no-render' not in ARGS
 OUT = os.path.join(C.MODELS, 'Props', 'power_cell.fbx')
 
 PEARL, BRASS, TEAL, GLOW, GLASS, INK, CORAL, RUBBER, LIGHT = (
-    'SKY_Pearl', 'SKY_Brass', 'SKY_Teal', 'SKY_TealGlow', 'SKY_Glass', 'SKY_Ink', 'SKY_Coral',
+    'SKY_Pearl', 'SKY_Brass', 'SKY_Teal', 'SKY_TealGlow', 'SKY_Glass', 'SKY_Ink', 'SKY_Leaf',
     'SKY_Rubber', 'SKY_Light')
 SEG = 32
 WIN0, WIN1 = 0.092, 0.218   # window band (core centre at 0.155)

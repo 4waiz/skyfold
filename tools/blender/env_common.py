@@ -15,7 +15,7 @@ from mathutils import Vector, Matrix, Euler, Quaternion
 from mathutils.bvhtree import BVHTree
 from mathutils.geometry import delaunay_2d_cdt
 
-ROOT = r"C:\UnityProjects\SKYFOLD"
+ROOT = os.environ.get("SKYFOLD_ROOT", os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")))
 MODEL_DIR = os.path.join(ROOT, "Assets", "Skyfold", "Art", "Models")
 RENDER_DIR = os.path.join(ROOT, "source-art", "renders")
 
@@ -28,6 +28,7 @@ PALETTE = {
     "SKY_Kerb": "CDBFA9", "SKY_Wood": "9A6B45", "SKY_PalmTrunk": "8B6B4A",
     "SKY_PalmLeaf": "5E8C4A", "SKY_Flower": "E0557A", "SKY_Fabric": "F7F1E6",
     "SKY_Metal": "AEB6BA", "SKY_Rubber": "2B2F33", "SKY_Light": "FFD9A0",
+    "SKY_Solar": "1E3F66", "SKY_Leaf": "6FBF5A",
 }
 # preview-only surface response: (roughness, metallic, emission strength)
 SURF = {
@@ -36,6 +37,7 @@ SURF = {
     "SKY_Road": (0.85, 0.0, 0.0), "SKY_Rubber": (0.8, 0.0, 0.0), "SKY_Teal": (0.35, 0.05, 0.0),
     "SKY_TealLight": (0.18, 0.05, 0.0), "SKY_Ink": (0.45, 0.05, 0.0), "SKY_Fabric": (0.75, 0.0, 0.0),
     "SKY_PalmLeaf": (0.6, 0.0, 0.0), "SKY_Wood": (0.62, 0.0, 0.0), "SKY_Coral": (0.5, 0.0, 0.0),
+    "SKY_Solar": (0.12, 0.2, 0.0), "SKY_Leaf": (0.4, 0.0, 0.0),
 }
 
 N, S, E, W = 'N', 'S', 'E', 'W'

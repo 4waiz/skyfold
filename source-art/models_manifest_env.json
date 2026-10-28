@@ -2700,7 +2700,7 @@
       0.0,
       0.0
      ],
-     "tris": 1764,
+     "tris": 1832,
      "color_attributes": [
       "Col"
      ],
@@ -2710,35 +2710,39 @@
       "SKY_Brass",
       "SKY_Teal",
       "SKY_Glass",
-      "SKY_Light"
+      "SKY_Light",
+      "SKY_Solar",
+      "SKY_TealGlow"
      ]
     }
    ],
-   "tris": 1764,
+   "tris": 1832,
    "materials": [
     "SKY_Brass",
     "SKY_Glass",
     "SKY_Light",
     "SKY_Pearl",
     "SKY_SandstoneDeep",
-    "SKY_Teal"
+    "SKY_Solar",
+    "SKY_Teal",
+    "SKY_TealGlow"
    ],
    "bounds_unity": {
     "min": [
-     -0.2347,
+     -0.3,
      0.0,
-     -0.2328
+     -0.2769
     ],
     "max": [
-     0.2347,
-     5.0112,
+     0.3,
+     5.0133,
      1.1547
     ]
    },
    "size_m": [
-    0.469,
-    5.011,
-    1.387
+    0.6,
+    5.013,
+    1.432
    ],
    "empties": [
     {
@@ -4015,6 +4019,540 @@
     1.705,
     1.552,
     0.915
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Energy/wind_turbine.fbx",
+   "name": "wind_turbine",
+   "category": "Energy",
+   "objects": [
+    {
+     "name": "Rotor",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      30.12,
+      2.6
+     ],
+     "tris": 792,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_Coral",
+      "SKY_Metal"
+     ]
+    },
+    {
+     "name": "wind_turbine",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 1692,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_Leaf",
+      "SKY_Ink",
+      "SKY_Brass",
+      "SKY_SandstoneDeep",
+      "SKY_Metal",
+      "SKY_Coral"
+     ]
+    }
+   ],
+   "tris": 2484,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Ink",
+    "SKY_Leaf",
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_Teal"
+   ],
+   "bounds_unity": {
+    "min": [
+     -6.8789,
+     0.0,
+     -3.3
+    ],
+    "max": [
+     13.5,
+     41.8857,
+     4.18
+    ]
+   },
+   "size_m": [
+    20.379,
+    41.886,
+    7.48
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Energy/wind_turbine_offshore.fbx",
+   "name": "wind_turbine_offshore",
+   "category": "Energy",
+   "objects": [
+    {
+     "name": "Rotor",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      34.12,
+      2.6
+     ],
+     "tris": 792,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_Coral",
+      "SKY_Metal"
+     ]
+    },
+    {
+     "name": "wind_turbine_offshore",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 2528,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Ink",
+      "SKY_Gold",
+      "SKY_Metal",
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_Leaf",
+      "SKY_Brass",
+      "SKY_SandstoneDeep",
+      "SKY_Coral"
+     ]
+    }
+   ],
+   "tris": 3320,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Coral",
+    "SKY_Gold",
+    "SKY_Ink",
+    "SKY_Leaf",
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_Teal"
+   ],
+   "bounds_unity": {
+    "min": [
+     -7.3789,
+     -5.0,
+     -3.3
+    ],
+    "max": [
+     14.5,
+     46.7518,
+     4.18
+    ]
+   },
+   "size_m": [
+    21.879,
+    51.752,
+    7.48
+   ],
+   "empties": [],
+   "issues": [
+    "geometry below ground: min z -5.000"
+   ],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Energy/solar_array.fbx",
+   "name": "solar_array",
+   "category": "Energy",
+   "objects": [
+    {
+     "name": "solar_array",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 1876,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Solar",
+      "SKY_Metal",
+      "SKY_SandstoneDeep",
+      "SKY_TealGlow",
+      "SKY_Teal",
+      "SKY_Rubber"
+     ]
+    }
+   ],
+   "tris": 1876,
+   "materials": [
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_Rubber",
+    "SKY_SandstoneDeep",
+    "SKY_Solar",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -5.75,
+     0.0,
+     -5.9
+    ],
+    "max": [
+     5.4,
+     1.6765,
+     5.2663
+    ]
+   },
+   "size_m": [
+    11.15,
+    1.676,
+    11.166
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Energy/solar_canopy.fbx",
+   "name": "solar_canopy",
+   "category": "Energy",
+   "objects": [
+    {
+     "name": "solar_canopy",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 1356,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Solar",
+      "SKY_SandstoneDeep",
+      "SKY_Teal",
+      "SKY_Metal",
+      "SKY_Leaf"
+     ]
+    }
+   ],
+   "tris": 1356,
+   "materials": [
+    "SKY_Leaf",
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_Solar",
+    "SKY_Teal"
+   ],
+   "bounds_unity": {
+    "min": [
+     -5.7,
+     0.0,
+     -3.0796
+    ],
+    "max": [
+     5.7,
+     4.2885,
+     3.0698
+    ]
+   },
+   "size_m": [
+    11.4,
+    4.289,
+    6.149
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Energy/battery_storage.fbx",
+   "name": "battery_storage",
+   "category": "Energy",
+   "objects": [
+    {
+     "name": "battery_storage",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 7368,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Ivory",
+      "SKY_Teal",
+      "SKY_Leaf",
+      "SKY_TealGlow",
+      "SKY_Ink",
+      "SKY_Metal",
+      "SKY_Brass"
+     ]
+    }
+   ],
+   "tris": 7368,
+   "materials": [
+    "SKY_Brass",
+    "SKY_Ink",
+    "SKY_Ivory",
+    "SKY_Leaf",
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -5.6,
+     0.0,
+     -4.6
+    ],
+    "max": [
+     5.6,
+     2.85,
+     5.4
+    ]
+   },
+   "size_m": [
+    11.2,
+    2.85,
+    10.0
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Energy/hydrogen_plant.fbx",
+   "name": "hydrogen_plant",
+   "category": "Energy",
+   "objects": [
+    {
+     "name": "hydrogen_plant",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 3620,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_Pearl",
+      "SKY_Ivory",
+      "SKY_Leaf",
+      "SKY_Glass",
+      "SKY_Teal",
+      "SKY_TealGlow",
+      "SKY_Solar",
+      "SKY_SandstoneDeep",
+      "SKY_Metal",
+      "SKY_Gold",
+      "SKY_Ink",
+      "SKY_TealLight",
+      "SKY_Coral"
+     ]
+    }
+   ],
+   "tris": 3620,
+   "materials": [
+    "SKY_Coral",
+    "SKY_Glass",
+    "SKY_Gold",
+    "SKY_Ink",
+    "SKY_Ivory",
+    "SKY_Leaf",
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_Solar",
+    "SKY_Teal",
+    "SKY_TealGlow",
+    "SKY_TealLight"
+   ],
+   "bounds_unity": {
+    "min": [
+     -5.65,
+     0.0,
+     -4.95
+    ],
+    "max": [
+     5.66,
+     8.1,
+     5.68
+    ]
+   },
+   "size_m": [
+    11.31,
+    8.1,
+    10.63
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Energy/ev_charger.fbx",
+   "name": "ev_charger",
+   "category": "Energy",
+   "objects": [
+    {
+     "name": "ev_charger",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 1012,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Teal",
+      "SKY_TealGlow",
+      "SKY_Leaf",
+      "SKY_Ink",
+      "SKY_Rubber"
+     ]
+    }
+   ],
+   "tris": 1012,
+   "materials": [
+    "SKY_Ink",
+    "SKY_Leaf",
+    "SKY_Pearl",
+    "SKY_Rubber",
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -0.5719,
+     0.0,
+     -0.24
+    ],
+    "max": [
+     0.32,
+     1.62,
+     0.24
+    ]
+   },
+   "size_m": [
+    0.892,
+    1.62,
+    0.48
+   ],
+   "empties": [],
+   "issues": [],
+   "notes": []
+  },
+  {
+   "file": "Assets/Skyfold/Art/Models/Energy/dac_unit.fbx",
+   "name": "dac_unit",
+   "category": "Energy",
+   "objects": [
+    {
+     "name": "dac_unit",
+     "type": "MESH",
+     "position_unity": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tris": 3412,
+     "color_attributes": [
+      "Col"
+     ],
+     "materials": [
+      "SKY_SandstoneDeep",
+      "SKY_Pearl",
+      "SKY_Ivory",
+      "SKY_Leaf",
+      "SKY_Teal",
+      "SKY_Ink",
+      "SKY_Metal",
+      "SKY_TealGlow"
+     ]
+    }
+   ],
+   "tris": 3412,
+   "materials": [
+    "SKY_Ink",
+    "SKY_Ivory",
+    "SKY_Leaf",
+    "SKY_Metal",
+    "SKY_Pearl",
+    "SKY_SandstoneDeep",
+    "SKY_Teal",
+    "SKY_TealGlow"
+   ],
+   "bounds_unity": {
+    "min": [
+     -5.5,
+     0.0,
+     -5.2
+    ],
+    "max": [
+     5.5,
+     4.55,
+     3.4
+    ]
+   },
+   "size_m": [
+    11.0,
+    4.55,
+    8.6
    ],
    "empties": [],
    "issues": [],

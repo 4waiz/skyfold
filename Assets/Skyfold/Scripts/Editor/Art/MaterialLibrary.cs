@@ -55,6 +55,8 @@ namespace Skyfold.EditorTools
             new Entry("SKY_Metal", "#AEB6BA", 0.6f, metallic: 0.75f),
             new Entry("SKY_Rubber", "#2B2F33", 0.15f),
             new Entry("SKY_Light", "#FFD9A0", 0.3f, 1.8f),
+            new Entry("SKY_Solar", "#1E3F66", 0.85f, metallic: 0.25f, env: 1.8f),
+            new Entry("SKY_Leaf", "#6FBF5A", 0.4f),
         };
 
         public static IEnumerable<string> PaletteNames

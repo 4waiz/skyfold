@@ -152,7 +152,7 @@ def stud(mb, x, y, z, r, h, mat, seg=8, axis='Z', dome=True, mats=None):
 
 @asset("street_lamp", "Props", "props", ao=PROP_AO, render=dict(PROP_RENDER, el=12.0))
 def street_lamp(a):
-    """5 m street lantern: octagonal pearl pedestal on a deep-sandstone step, fluted teal post with brass
+    """5 m solar street lantern: octagonal pearl pedestal on a deep-sandstone step, fluted teal post with brass
     collars, teal swan-neck arm on a brass scroll bracket, octagonal brass lantern (glass panes, warm lamp
     core, crown and drip finials) hanging toward Unity north. LIGHT_lamp at the lantern centre."""
     LX, LY = 0.0, -0.92
@@ -229,6 +229,15 @@ def street_lamp(a):
     mb.lathe([(0, 4.1), (0.052, 4.118), (0.088, 4.19), (0.094, 4.27), (0.077, 4.36), (0.042, 4.42), (0, 4.44)], 8,
              'SKY_Light', cx=LX, cy=LY)
     a.part(mb, name="lamp")
+    # solar head: a small south-facing PV panel on a brass stem above the finial, battery pod below it
+    mb = MB()
+    rod(mb, [(0, 0, 4.62), (0, 0.06, 4.86)], 0.016, 6, 'SKY_Brass')
+    fs = mb.box(-0.3, 0.3, -0.2, 0.2, 0.0, 0.035, 'SKY_Pearl', fm={'top': 'SKY_Solar'})
+    fs += mb.box(-0.012, 0.012, -0.18, 0.18, 0.035, 0.042, 'SKY_Pearl')
+    mb.transform(M_tr(0, 0.08, 4.9) @ M_rot(-24, 'X'), fs)
+    mb.box(-0.05, 0.05, 0.01, 0.09, 3.28, 3.5, 'SKY_Teal')
+    mb.box(-0.052, 0.052, 0.0, 0.092, 3.44, 3.46, 'SKY_TealGlow')
+    a.part(mb, name="solar")
     a.empty("LIGHT_lamp", (LX, LY, 4.31))
 
 

@@ -1,10 +1,11 @@
-"""'The last flight' - original small twin-turboprop commuter plane for SKYFOLD.
+"""'The clean flight' - original small hydrogen-electric commuter plane for SKYFOLD.
 
 Original procedural model (Awaiz Ahmed / Team Kanban), not AI-generated, no real type copied.
     blender -b --factory-startup -P tools/blender/veh_aircraft.py [-- --no-render]
 
 ~13 m long, 16 m span, high wing, T-tail, tricycle gear, pearl livery with a deep teal
-cheatline / fin and restrained gold pinstripes (no text). Faces Blender -Y (Unity +Z),
+cheatline / fin and leaf-green clean-energy pinstripes (no text). Twin electric motors fed by
+hydrogen fuel cells: no exhaust stacks, flush heat-exchanger grilles and cooling louvres instead. Faces Blender -Y (Unity +Z),
 aircraft left = Blender +X.
 Hierarchy (pivots):
     aircraft (empty)        ground level under the main-gear centre
@@ -22,7 +23,7 @@ cockpit glazing with an anti-glare panel, recessed cabin windows (glass glows wh
 emergency-exit and cargo-door outlines, flush rounded airstair door in a dark door frame with
 handle, window, treads and handrails; wing with real flap / aileron gaps, flap-track fairings,
 wingtip light housings and strobes; T-tail with rudder / elevator gaps, dorsal fillet and
-static wicks; nacelles with inlet lips, chin intakes, exhaust stacks and louvres; twisted
+static wicks; motor nacelles with inlet lips, chin intakes, heat-exchanger grilles and louvres; twisted
 4-blade propellers with root cuffs and coral tips; tricycle gear with oleo struts, torque
 links, gear doors and dished wheels; beacons, landing light, blade antennas, pitot tubes.
 """
@@ -40,7 +41,7 @@ RENDER = '--no-render' not in ARGS
 OUT = os.path.join(C.MODELS, 'Vehicles', 'aircraft.fbx')
 
 PEARL, TEAL, GOLD, INK, GLASS, LIGHT, CORAL, GLOW, RUBBER, BRASS, METAL = (
-    'SKY_Pearl', 'SKY_Teal', 'SKY_Gold', 'SKY_Ink', 'SKY_Glass', 'SKY_Light', 'SKY_Coral',
+    'SKY_Pearl', 'SKY_Teal', 'SKY_Leaf', 'SKY_Ink', 'SKY_Glass', 'SKY_Light', 'SKY_Coral',
     'SKY_TealGlow', 'SKY_Rubber', 'SKY_Brass', 'SKY_Metal')
 
 # gameplay points (unchanged from the previous model, Blender coordinates)
@@ -605,14 +606,13 @@ def nacelle(part, sx):
     slab(part, 0.26, 0.42, 0.13, 0.08, 0.05, PEARL, M=Mi, nc=2, ne=2)
     Mm = frame(Vector((x, -2.915, NAC_Z - 0.372)), (0, -1, 0), (0, 0, 1))
     slab(part, 0.19, 0.075, 0.03, 0.03, 0.008, INK, M=Mm, nc=2, ne=1)
-    # exhaust stacks either side, pointing aft and down
+    # electric motor: flush fuel-cell heat-exchanger grilles either side (no exhaust)
     for side in (1, -1):
-        base = Vector((x + side * 0.34, -2.12, NAC_Z - 0.10))
-        d = Vector((side * 0.55, 1.0, -0.30)).normalized()
-        Me = frame(base, d, (0, 0, 1))
-        lathe_m(part, [(0.078, -0.14), (0.078, 0.17), (0.068, 0.188), (0.056, 0.184),
-                       (0.056, 0.02), (0.0, 0.02)], 14, [METAL, METAL, METAL, INK, INK], M=Me)
-        part.torus(0.080, 0.010, 14, 4, BRASS, matrix=Me @ T(0, 0, 0.05))
+        q = Vector((x + side * 0.405, -1.95, NAC_Z - 0.06))
+        Mg = frame(q, (side, 0, 0), (0, 1, 0))
+        tile(part, (0, 0, -0.004), 0.16, 0.42, 0.008, METAL, M=Mg, ch=0.012, sunk=0.0)
+        for k in range(4):
+            tile(part, (0, -0.15 + k * 0.1, 0.002), 0.13, 0.022, 0.006, INK, M=Mg, ch=0.004, sunk=0.0)
         # cooling louvres behind the teal cowl band
         for k in range(3):
             y = -2.45 + k * 0.11

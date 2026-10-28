@@ -2,7 +2,7 @@
 
 Usage (PowerShell):
   & "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe" -b --factory-startup `
-      -P C:\\UnityProjects\\SKYFOLD\\tools\\blender\\build_env.py -- <command> [args]
+      -P tools/blender/build_env.py -- <command> [args]
 
 Commands:
   list                         list registered assets and groups
@@ -19,7 +19,7 @@ if HERE not in sys.path:
 
 import env_common as C
 
-MODULES = ["env_tiles", "env_buildings", "env_atelier", "env_props", "env_nature", "env_sky"]
+MODULES = ["env_tiles", "env_buildings", "env_atelier", "env_props", "env_nature", "env_sky", "env_energy"]
 for m in MODULES:
     if os.path.exists(os.path.join(HERE, m + ".py")):
         importlib.import_module(m)
