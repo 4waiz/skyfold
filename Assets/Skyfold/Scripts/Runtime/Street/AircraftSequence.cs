@@ -156,7 +156,7 @@ namespace Skyfold
                 AudioDirector.Instance?.PlayAt("plane_takeoff", transform.position, 1f, 1f, 25f);
                 BeginDesktopCinematic();
             }
-            if (s == AircraftState.Departed) { Debug.Log("[SKYFOLD] The last flight has departed."); EndDesktopCinematic(); }
+            if (s == AircraftState.Departed) { Debug.Log("[SKYFOLD] The clean flight has departed."); EndDesktopCinematic(); }
         }
 
         void Update()

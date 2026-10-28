@@ -19,7 +19,7 @@ namespace Skyfold
 
         public override bool CanInteract(InteractorKind who) => base.CanInteract(who) && !IsOn && Powered;
         public override string Prompt => "Switch on the runway beacons";
-        public override string BlockedReason => IsOn ? "These beacons are already on." : (!Powered ? "No power yet. The substation needs a cell." : null);
+        public override string BlockedReason => IsOn ? "These beacons are already on." : (!Powered ? "No power yet. The microgrid needs a hydrogen cell." : null);
 
         public override void Interact(InteractorKind who)
         {

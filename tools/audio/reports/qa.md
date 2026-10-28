@@ -1,43 +1,43 @@
 | Category | Files | Pass | Format | Duration s | LUFS | Max dBTP | Peak dBFS | Max DC | Loop seams |
 |---|---|---|---|---|---|---|---|---|---|
-| VO | 52 | 52 | 48 kHz / 16-bit / mono | 1.16-9.79 | -16.0 .. -16.0 | -1.55 | -1.56 .. -1.56 | 1.1e-05 | - |
+| VO | 52 | 52 | 48 kHz / 16-bit / mono | 1.16-12.43 | -16.1 .. -16.0 | -1.55 | -1.58 .. -1.56 | 1.1e-05 | - |
 | SFX | 60 | 60 | 48 kHz / 16-bit / mono | 0.03-7.41 | -24.8 .. -6.3 | -2.93 | -3.00 .. -3.00 | 5.1e-07 | 3/3 |
 | Music | 9 | 9 | 48 kHz / 16-bit / stereo | 3.57-80.00 | -20.0 .. -19.9 | -2.95 | -8.32 .. -2.96 | 8.8e-07 | 5/5 |
 | Ambience | 4 | 4 | 48 kHz / 16-bit / stereo | 48.00-60.00 | -24.0 .. -24.0 | -9.2 | -11.06 .. -9.20 | 2.3e-08 | 4/4 |
 
 | File | Dur s | LUFS | dBTP | Peak dBFS | DC | Seam (step / p99.9, jump50 dB / limit) | Result |
 |---|---|---|---|---|---|---|---|
-| VO/d.beacons.desktop.wav | 5.315 | -16.01 | -1.55 | -1.56 | 5.4e-06 | - | PASS |
-| VO/d.beacons.vr.wav | 4.621 | -16.04 | -1.55 | -1.56 | 3.9e-06 | - | PASS |
+| VO/d.beacons.desktop.wav | 5.271 | -16.02 | -1.55 | -1.56 | 2.7e-06 | - | PASS |
+| VO/d.beacons.vr.wav | 4.607 | -16.02 | -1.55 | -1.56 | 3.3e-06 | - | PASS |
 | VO/d.clear.desktop.wav | 3.986 | -16.02 | -1.55 | -1.56 | 2.1e-06 | - | PASS |
 | VO/d.clear.vr.wav | 3.399 | -16.01 | -1.55 | -1.56 | 7.4e-07 | - | PASS |
-| VO/d.welcome.wav | 6.452 | -16.03 | -1.55 | -1.56 | 7.8e-08 | - | PASS |
-| VO/e1.choice.wav | 9.79 | -16.01 | -1.55 | -1.56 | 1.2e-06 | - | PASS |
+| VO/d.welcome.wav | 7.021 | -16.0 | -1.55 | -1.56 | 2.6e-07 | - | PASS |
+| VO/e1.choice.wav | 12.427 | -16.0 | -1.55 | -1.56 | 1.4e-06 | - | PASS |
 | VO/e1.crossed.wav | 6.211 | -16.0 | -1.55 | -1.56 | 2.2e-06 | - | PASS |
 | VO/e1.east_needs_corner.wav | 6.595 | -16.01 | -1.55 | -1.56 | 1.5e-06 | - | PASS |
 | VO/e1.plinth.wav | 5.776 | -16.01 | -1.55 | -1.56 | 1.0e-08 | - | PASS |
-| VO/e1.route_east.wav | 4.82 | -16.0 | -1.55 | -1.56 | 5.5e-07 | - | PASS |
-| VO/e1.route_west.wav | 4.448 | -16.0 | -1.55 | -1.56 | 5.1e-07 | - | PASS |
-| VO/e1.welcome.wav | 7.809 | -16.0 | -1.55 | -1.56 | 3.9e-07 | - | PASS |
-| VO/e2.brief.wav | 8.385 | -16.02 | -1.55 | -1.56 | 5.6e-07 | - | PASS |
-| VO/e2.convoy.wav | 3.671 | -16.0 | -1.55 | -1.56 | 3.7e-06 | - | PASS |
-| VO/e2.deliver.desktop.wav | 5.812 | -16.01 | -1.55 | -1.56 | 1.9e-06 | - | PASS |
-| VO/e2.deliver.vr.wav | 4.619 | -16.01 | -1.55 | -1.56 | 1.1e-06 | - | PASS |
-| VO/e2.drive.wav | 6.346 | -16.01 | -1.55 | -1.56 | 7.7e-07 | - | PASS |
-| VO/e2.powered.wav | 3.567 | -16.03 | -1.55 | -1.56 | 1.5e-06 | - | PASS |
-| VO/e3.beacons.desktop.wav | 4.288 | -16.02 | -1.55 | -1.56 | 1.1e-05 | - | PASS |
-| VO/e3.beacons.vr.wav | 5.269 | -16.0 | -1.55 | -1.56 | 1.8e-06 | - | PASS |
-| VO/e3.brief.wav | 9.403 | -16.04 | -1.55 | -1.56 | 2.2e-07 | - | PASS |
+| VO/e1.route_east.wav | 4.513 | -16.03 | -1.55 | -1.58 | 1.6e-06 | - | PASS |
+| VO/e1.route_west.wav | 4.889 | -16.0 | -1.55 | -1.57 | 3.8e-06 | - | PASS |
+| VO/e1.welcome.wav | 9.201 | -16.0 | -1.55 | -1.56 | 4.6e-07 | - | PASS |
+| VO/e2.brief.wav | 10.269 | -16.05 | -1.55 | -1.56 | 9.5e-07 | - | PASS |
+| VO/e2.convoy.wav | 3.526 | -16.01 | -1.55 | -1.56 | 2.6e-07 | - | PASS |
+| VO/e2.deliver.desktop.wav | 5.766 | -16.01 | -1.55 | -1.56 | 2.7e-06 | - | PASS |
+| VO/e2.deliver.vr.wav | 4.672 | -16.01 | -1.55 | -1.56 | 1.7e-06 | - | PASS |
+| VO/e2.drive.wav | 6.06 | -16.01 | -1.55 | -1.56 | 2.2e-07 | - | PASS |
+| VO/e2.powered.wav | 5.657 | -16.0 | -1.55 | -1.56 | 1.7e-06 | - | PASS |
+| VO/e3.beacons.desktop.wav | 4.894 | -16.03 | -1.55 | -1.56 | 1.1e-05 | - | PASS |
+| VO/e3.beacons.vr.wav | 5.781 | -16.01 | -1.55 | -1.56 | 1.8e-06 | - | PASS |
+| VO/e3.brief.wav | 11.785 | -16.01 | -1.55 | -1.56 | 3.6e-07 | - | PASS |
 | VO/e3.clear.desktop.wav | 4.769 | -16.0 | -1.55 | -1.56 | 9.8e-08 | - | PASS |
 | VO/e3.clear.vr.wav | 4.091 | -16.01 | -1.55 | -1.56 | 2.9e-06 | - | PASS |
-| VO/e3.convoy_arrived.wav | 4.104 | -16.0 | -1.55 | -1.56 | 1.5e-06 | - | PASS |
-| VO/e3.end.wav | 3.168 | -16.01 | -1.55 | -1.56 | 2.8e-06 | - | PASS |
+| VO/e3.convoy_arrived.wav | 3.946 | -16.0 | -1.55 | -1.56 | 1.6e-07 | - | PASS |
+| VO/e3.end.wav | 5.542 | -16.0 | -1.55 | -1.56 | 1.7e-06 | - | PASS |
 | VO/e3.fold.desktop.wav | 3.43 | -16.01 | -1.55 | -1.56 | 7.1e-06 | - | PASS |
 | VO/e3.fold.vr.wav | 3.555 | -16.04 | -1.55 | -1.56 | 6.1e-06 | - | PASS |
 | VO/e3.link.wav | 4.728 | -16.0 | -1.55 | -1.56 | 1.4e-06 | - | PASS |
-| VO/e3.takeoff.wav | 5.483 | -16.02 | -1.55 | -1.56 | 5.5e-07 | - | PASS |
+| VO/e3.takeoff.wav | 7.101 | -16.01 | -1.55 | -1.56 | 3.6e-07 | - | PASS |
 | VO/g.car_respawn.wav | 1.913 | -16.03 | -1.55 | -1.56 | 4.0e-06 | - | PASS |
-| VO/g.cell_respawn.wav | 3.885 | -16.04 | -1.55 | -1.56 | 4.8e-07 | - | PASS |
+| VO/g.cell_respawn.wav | 4.955 | -16.0 | -1.55 | -1.56 | 1.8e-06 | - | PASS |
 | VO/g.checkpoint.wav | 1.156 | -16.04 | -1.55 | -1.56 | 5.1e-06 | - | PASS |
 | VO/g.fail.wav | 5.551 | -16.04 | -1.55 | -1.56 | 2.9e-07 | - | PASS |
 | VO/g.hint_socket.wav | 3.059 | -16.02 | -1.55 | -1.56 | 1.3e-06 | - | PASS |
@@ -45,8 +45,8 @@
 | VO/g.retry.wav | 2.758 | -16.04 | -1.55 | -1.56 | 2.9e-06 | - | PASS |
 | VO/g.storm_final.wav | 1.359 | -16.01 | -1.55 | -1.56 | 7.6e-06 | - | PASS |
 | VO/g.storm_warning.wav | 2.775 | -16.02 | -1.55 | -1.56 | 1.5e-06 | - | PASS |
-| VO/t.cell.desktop.wav | 4.983 | -16.01 | -1.55 | -1.56 | 1.7e-06 | - | PASS |
-| VO/t.cell.vr.wav | 4.663 | -16.04 | -1.55 | -1.56 | 5.7e-07 | - | PASS |
+| VO/t.cell.desktop.wav | 5.376 | -16.01 | -1.55 | -1.56 | 2.2e-07 | - | PASS |
+| VO/t.cell.vr.wav | 5.012 | -16.0 | -1.55 | -1.56 | 8.1e-07 | - | PASS |
 | VO/t.drive.desktop.wav | 4.859 | -16.03 | -1.55 | -1.56 | 4.7e-07 | - | PASS |
 | VO/t.drive.vr.wav | 5.613 | -16.03 | -1.55 | -1.56 | 1.5e-07 | - | PASS |
 | VO/t.enter.desktop.wav | 2.81 | -16.0 | -1.55 | -1.56 | 1.5e-06 | - | PASS |

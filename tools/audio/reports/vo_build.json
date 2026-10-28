@@ -1,19 +1,19 @@
 {
  "voice": "af_heart",
  "speed": 0.8,
- "engine": "Kokoro-82M via kanban-motion voiceover.py (kokoro-onnx 0.6.1, fp32)",
+ "engine": "Kokoro-82M via voiceover_local.py (kokoro-onnx 0.6.1, fp32)",
  "lines": [
   {
    "id": "e1.welcome",
    "file": "VO/e1.welcome.wav",
-   "duration_s": 7.809,
-   "speech_s": 7.619,
-   "wps": 2.49,
+   "duration_s": 9.201,
+   "speech_s": 9.011,
+   "wps": 2.44,
    "lufs": -16.0,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "Welcome to Nay-ker Bay. I'm Nuur, the city engineer. A storm is coming, and it has broken our roads."
+   "tts": "Welcome to Nay-ker Bay. I'm Nuur, the city's energy engineer. A storm is coming, and it has cut our clean power link."
   },
   {
    "id": "e1.plinth",
@@ -78,14 +78,14 @@
   {
    "id": "e1.choice",
    "file": "VO/e1.choice.wav",
-   "duration_s": 9.79,
-   "speech_s": 9.6,
-   "wps": 2.6,
-   "lufs": -16.01,
+   "duration_s": 12.427,
+   "speech_s": 12.237,
+   "wps": 2.53,
+   "lufs": -16.0,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "We only have one spare bridge. The west crossing is a long drive. The east one is shorter, but its harbour corner is broken too."
+   "tts": "We have one spare bridge, and the power cable runs inside it. The west crossing is a long drive. The east one is shorter, but its harbour corner is broken too."
   },
   {
    "id": "e1.east_needs_corner",
@@ -102,26 +102,26 @@
   {
    "id": "e1.route_west",
    "file": "VO/e1.route_west.wav",
-   "duration_s": 4.448,
-   "speech_s": 4.258,
-   "wps": 2.82,
+   "duration_s": 4.889,
+   "speech_s": 4.699,
+   "wps": 2.98,
    "lufs": -16.0,
    "tp_dbtp": -1.55,
-   "peak_dbfs": -1.56,
+   "peak_dbfs": -1.57,
    "flat_tops_raw": 0,
-   "tts": "The road is through. That bridge is real at both scales now."
+   "tts": "The road is through, and wind and solar power are flowing to the island!"
   },
   {
    "id": "e1.route_east",
    "file": "VO/e1.route_east.wav",
-   "duration_s": 4.82,
-   "speech_s": 4.63,
-   "wps": 2.59,
-   "lufs": -16.0,
+   "duration_s": 4.513,
+   "speech_s": 4.323,
+   "wps": 2.78,
+   "lufs": -16.03,
    "tp_dbtp": -1.55,
-   "peak_dbfs": -1.56,
+   "peak_dbfs": -1.58,
    "flat_tops_raw": 0,
-   "tts": "The shortcut is open! That bridge is real at both scales now."
+   "tts": "The shortcut is open, and clean power is flowing to the island!"
   },
   {
    "id": "t.fold.vr",
@@ -234,110 +234,110 @@
   {
    "id": "e2.brief",
    "file": "VO/e2.brief.wav",
-   "duration_s": 8.385,
-   "speech_s": 8.195,
-   "wps": 2.44,
-   "lufs": -16.02,
+   "duration_s": 10.269,
+   "speech_s": 10.079,
+   "wps": 2.08,
+   "lufs": -16.05,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "The airfield substation is dark. Carry a power cell across your causeway and wake it up. The storm won't wait."
+   "tts": "The airfield microgrid is dark. Carry a green hydrogen fuel cell across your causeway and restart it. The storm won't wait."
   },
   {
    "id": "t.cell.vr",
    "file": "VO/t.cell.vr.wav",
-   "duration_s": 4.663,
-   "speech_s": 4.473,
-   "wps": 3.13,
-   "lufs": -16.04,
-   "tp_dbtp": -1.55,
-   "peak_dbfs": -1.56,
-   "flat_tops_raw": 0,
-   "tts": "Grab the power cell from the dock and set it in the car's cradle."
-  },
-  {
-   "id": "t.cell.desktop",
-   "file": "VO/t.cell.desktop.wav",
-   "duration_s": 4.983,
-   "speech_s": 4.793,
-   "wps": 3.55,
-   "lufs": -16.01,
-   "tp_dbtp": -1.55,
-   "peak_dbfs": -1.56,
-   "flat_tops_raw": 0,
-   "tts": "Press ee to pick up the power cell, then press ee at the car to load it."
-  },
-  {
-   "id": "e2.drive",
-   "file": "VO/e2.drive.wav",
-   "duration_s": 6.346,
-   "speech_s": 6.156,
-   "wps": 2.6,
-   "lufs": -16.01,
-   "tp_dbtp": -1.55,
-   "peak_dbfs": -1.56,
-   "flat_tops_raw": 0,
-   "tts": "Follow the guide lights to the substation. Checkpoints will catch you if you leave the road."
-  },
-  {
-   "id": "e2.deliver.vr",
-   "file": "VO/e2.deliver.vr.wav",
-   "duration_s": 4.619,
-   "speech_s": 4.429,
-   "wps": 2.94,
-   "lufs": -16.01,
-   "tp_dbtp": -1.55,
-   "peak_dbfs": -1.56,
-   "flat_tops_raw": 0,
-   "tts": "Take the cell from the cradle and set it into the substation socket."
-  },
-  {
-   "id": "e2.deliver.desktop",
-   "file": "VO/e2.deliver.desktop.wav",
-   "duration_s": 5.812,
-   "speech_s": 5.622,
-   "wps": 2.85,
-   "lufs": -16.01,
-   "tp_dbtp": -1.55,
-   "peak_dbfs": -1.56,
-   "flat_tops_raw": 0,
-   "tts": "Take the cell from the cradle with ee, and press ee again at the substation socket."
-  },
-  {
-   "id": "e2.powered",
-   "file": "VO/e2.powered.wav",
-   "duration_s": 3.567,
-   "speech_s": 3.377,
-   "wps": 2.96,
-   "lufs": -16.03,
-   "tp_dbtp": -1.55,
-   "peak_dbfs": -1.56,
-   "flat_tops_raw": 0,
-   "tts": "Power is back on the island. Look at those lights!"
-  },
-  {
-   "id": "e2.convoy",
-   "file": "VO/e2.convoy.wav",
-   "duration_s": 3.671,
-   "speech_s": 3.481,
-   "wps": 2.59,
+   "duration_s": 5.012,
+   "speech_s": 4.822,
+   "wps": 2.9,
    "lufs": -16.0,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "The passenger convoy is rolling out along your route."
+   "tts": "Grab the hydrogen cell from the dock and set it in the car's cradle."
+  },
+  {
+   "id": "t.cell.desktop",
+   "file": "VO/t.cell.desktop.wav",
+   "duration_s": 5.376,
+   "speech_s": 5.186,
+   "wps": 3.28,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "peak_dbfs": -1.56,
+   "flat_tops_raw": 0,
+   "tts": "Press ee to pick up the hydrogen cell, then press ee at the car to load it."
+  },
+  {
+   "id": "e2.drive",
+   "file": "VO/e2.drive.wav",
+   "duration_s": 6.06,
+   "speech_s": 5.87,
+   "wps": 2.73,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "peak_dbfs": -1.56,
+   "flat_tops_raw": 0,
+   "tts": "Follow the guide lights to the microgrid. Checkpoints will catch you if you leave the road."
+  },
+  {
+   "id": "e2.deliver.vr",
+   "file": "VO/e2.deliver.vr.wav",
+   "duration_s": 4.672,
+   "speech_s": 4.482,
+   "wps": 2.9,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "peak_dbfs": -1.56,
+   "flat_tops_raw": 0,
+   "tts": "Take the cell from the cradle and plug it into the microgrid socket."
+  },
+  {
+   "id": "e2.deliver.desktop",
+   "file": "VO/e2.deliver.desktop.wav",
+   "duration_s": 5.766,
+   "speech_s": 5.576,
+   "wps": 2.87,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "peak_dbfs": -1.56,
+   "flat_tops_raw": 0,
+   "tts": "Take the cell from the cradle with ee, and press ee again at the microgrid socket."
+  },
+  {
+   "id": "e2.powered",
+   "file": "VO/e2.powered.wav",
+   "duration_s": 5.657,
+   "speech_s": 5.467,
+   "wps": 2.56,
+   "lufs": -16.0,
+   "tp_dbtp": -1.55,
+   "peak_dbfs": -1.56,
+   "flat_tops_raw": 0,
+   "tts": "The microgrid is back! The batteries are charging, and the island's lights are on."
+  },
+  {
+   "id": "e2.convoy",
+   "file": "VO/e2.convoy.wav",
+   "duration_s": 3.526,
+   "speech_s": 3.336,
+   "wps": 2.7,
+   "lufs": -16.01,
+   "tp_dbtp": -1.55,
+   "peak_dbfs": -1.56,
+   "flat_tops_raw": 0,
+   "tts": "The electric shuttles are rolling out along your route."
   },
   {
    "id": "e3.brief",
    "file": "VO/e3.brief.wav",
-   "duration_s": 9.403,
-   "speech_s": 9.213,
-   "wps": 2.39,
-   "lufs": -16.04,
+   "duration_s": 11.785,
+   "speech_s": 11.595,
+   "wps": 2.33,
+   "lufs": -16.01,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "One flight left before the storm closes the sky. The terminal road is still broken, so the convoy can't reach the plane."
+   "tts": "One flight left before the storm closes the sky, and it's our first zero-emission plane. The terminal road is still broken, so the shuttles can't reach it."
   },
   {
    "id": "e3.fold.vr",
@@ -378,38 +378,38 @@
   {
    "id": "e3.beacons.vr",
    "file": "VO/e3.beacons.vr.wav",
-   "duration_s": 5.269,
-   "speech_s": 5.079,
-   "wps": 2.56,
-   "lufs": -16.0,
+   "duration_s": 5.781,
+   "speech_s": 5.591,
+   "wps": 2.68,
+   "lufs": -16.01,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "Now restore the runway beacons. Point at each switch and pull the trigger."
+   "tts": "Now switch on the solar runway beacons. Point at each switch and pull the trigger."
   },
   {
    "id": "e3.beacons.desktop",
    "file": "VO/e3.beacons.desktop.wav",
-   "duration_s": 4.288,
-   "speech_s": 4.098,
-   "wps": 2.44,
-   "lufs": -16.02,
+   "duration_s": 4.894,
+   "speech_s": 4.704,
+   "wps": 2.55,
+   "lufs": -16.03,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "Now restore the runway beacons. Press ee at each switch."
+   "tts": "Now switch on the solar runway beacons. Press ee at each switch."
   },
   {
    "id": "e3.convoy_arrived",
    "file": "VO/e3.convoy_arrived.wav",
-   "duration_s": 4.104,
-   "speech_s": 3.914,
-   "wps": 2.3,
+   "duration_s": 3.946,
+   "speech_s": 3.756,
+   "wps": 2.4,
    "lufs": -16.0,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "The convoy is at the terminal. Passengers are boarding."
+   "tts": "The shuttles are at the terminal. Passengers are boarding."
   },
   {
    "id": "e3.clear.vr",
@@ -438,62 +438,62 @@
   {
    "id": "e3.takeoff",
    "file": "VO/e3.takeoff.wav",
-   "duration_s": 5.483,
-   "speech_s": 5.293,
-   "wps": 2.65,
-   "lufs": -16.02,
+   "duration_s": 7.101,
+   "speech_s": 6.911,
+   "wps": 2.32,
+   "lufs": -16.01,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "Nay-ker tower. Last flight, you are clear. Thank you, courier. Look at her go!"
+   "tts": "Nay-ker tower. Clean flight, you are clear. Hydrogen in, only water out. Look at her go!"
   },
   {
    "id": "e3.end",
    "file": "VO/e3.end.wav",
-   "duration_s": 3.168,
-   "speech_s": 2.978,
-   "wps": 3.69,
-   "lufs": -16.01,
+   "duration_s": 5.542,
+   "speech_s": 5.352,
+   "wps": 3.18,
+   "lufs": -16.0,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "The city is safe. And it's still the one you built."
+   "tts": "The city is safe, and it runs on clean power. And it's still the one you built."
   },
   {
    "id": "d.welcome",
    "file": "VO/d.welcome.wav",
-   "duration_s": 6.452,
-   "speech_s": 6.262,
-   "wps": 2.24,
-   "lufs": -16.03,
+   "duration_s": 7.021,
+   "speech_s": 6.831,
+   "wps": 2.05,
+   "lufs": -16.0,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "Welcome to Nay-ker Bay. One bridge, one power cell, one last flight. Let's go."
+   "tts": "Welcome to Nay-ker Bay. One bridge, one hydrogen cell, one clean flight. Let's go."
   },
   {
    "id": "d.beacons.vr",
    "file": "VO/d.beacons.vr.wav",
-   "duration_s": 4.621,
-   "speech_s": 4.431,
-   "wps": 2.48,
-   "lufs": -16.04,
+   "duration_s": 4.607,
+   "speech_s": 4.417,
+   "wps": 2.49,
+   "lufs": -16.02,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "Pull the beacon switch beside the substation to light the runway."
+   "tts": "Pull the beacon switch beside the microgrid to light the runway."
   },
   {
    "id": "d.beacons.desktop",
    "file": "VO/d.beacons.desktop.wav",
-   "duration_s": 5.315,
-   "speech_s": 5.125,
-   "wps": 2.54,
-   "lufs": -16.01,
+   "duration_s": 5.271,
+   "speech_s": 5.081,
+   "wps": 2.56,
+   "lufs": -16.02,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "Press ee on the beacon switch beside the substation to light the runway."
+   "tts": "Press ee on the beacon switch beside the microgrid to light the runway."
   },
   {
    "id": "d.clear.vr",
@@ -582,14 +582,14 @@
   {
    "id": "g.cell_respawn",
    "file": "VO/g.cell_respawn.wav",
-   "duration_s": 3.885,
-   "speech_s": 3.695,
-   "wps": 2.98,
-   "lufs": -16.04,
+   "duration_s": 4.955,
+   "speech_s": 4.765,
+   "wps": 2.52,
+   "lufs": -16.0,
    "tp_dbtp": -1.55,
    "peak_dbfs": -1.56,
    "flat_tops_raw": 0,
-   "tts": "No harm done. A fresh cell is waiting at the dock."
+   "tts": "No harm done. A fresh hydrogen cell is waiting at the dock."
   },
   {
    "id": "g.car_respawn",

@@ -162,7 +162,7 @@ namespace Skyfold
             // Points of interest (graph endpoints).
             L.AddPoi("depot", 8, 1, DirMask.N, "Courier depot");
             L.AddPoi("bus_terminal", 4, 1, DirMask.N, "Bus terminal");
-            L.AddPoi("substation", 10, 6, DirMask.S, "Airfield substation");
+            L.AddPoi("substation", 10, 6, DirMask.S, "Airfield microgrid");
             L.AddPoi("terminal", 6, 7, DirMask.S, "Passenger terminal");
 
             // Plazas, airfield.
@@ -275,22 +275,22 @@ namespace Skyfold
             Lot(3, 1, "bldg_tower", 0);
             Lot(5, 1, "bldg_shoprow", 0);
             Lot(7, 1, "bldg_house_b", 0);
-            Lot(9, 1, "bldg_tower", 0);
+            Lot(9, 1, "hydrogen_plant", 0);      // green-hydrogen works beside the depot
             Lot(10, 1, "bldg_house_a", 0);
             Lot(11, 1, "bldg_courtyard", 3);
             // Row 2/3 north of the avenue (face south, rotation 2).
-            Lot(0, 2, "bldg_house_a", 1);
+            Lot(0, 2, "solar_array", 0);         // west solar farm
             Lot(1, 2, "bldg_shoprow", 1);
             Lot(9, 2, "bldg_shoprow", 2);
             Lot(10, 2, "bldg_tower", 2);
             Lot(11, 2, "bldg_house_b", 3);
-            Lot(0, 3, "bldg_house_b", 2);
+            Lot(0, 3, "solar_array", 0);
             Lot(1, 3, "bldg_courtyard", 1);
             Lot(4, 3, "bldg_house_a", 2);
             Lot(5, 3, "bldg_dome", 2);
             Lot(6, 3, "bldg_tower", 2);
             Lot(7, 3, "bldg_shoprow", 2);
-            Lot(10, 3, "bldg_house_a", 2);
+            Lot(10, 3, "dac_unit", 2);           // direct-air carbon capture on the harbour
             Lot(11, 3, "bldg_house_b", 2);
             // Island.
             Lot(1, 5, "bldg_house_a", 0);
@@ -300,11 +300,14 @@ namespace Skyfold
             Lot(4, 6, "bldg_shoprow", 2);
             Lot(5, 6, "bldg_house_a", 2);
             Lot(7, 6, "bldg_house_b", 2);
-            Lot(8, 6, "bldg_shoprow", 2);
+            Lot(8, 6, "solar_canopy", 2);        // solar carport with EV chargers
             Lot(9, 6, "bldg_house_a", 2);
-            Lot(11, 6, "bldg_house_b", 3);
+            Lot(11, 6, "battery_storage", 3);    // grid batteries for the airfield microgrid
             Lot(1, 7, "bldg_hangar", 0);
             Lot(9, 7, "bldg_tower_control", 2);
+            // Island shore wind turbines (rotors face north; tower-only colliders).
+            Lot(0, 6, "wind_turbine", 0);
+            Lot(11, 7, "wind_turbine", 0);
         }
     }
 }

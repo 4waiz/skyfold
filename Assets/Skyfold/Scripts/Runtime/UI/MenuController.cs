@@ -394,7 +394,7 @@ namespace Skyfold
                 string id = def.Id;
                 b.Button($"{e}. {def.Title}", () => Root.StartMission(id), false, detail, unlocked);
             }
-            b.Para("Each episode builds on the roads you repaired before. Medals come from storm time left, careful placements, hints and retries.", UIStyle.SmallSize);
+            b.Para("Each episode builds on the roads and power links you repaired before. Medals come from storm time left, careful placements, hints and retries.", UIStyle.SmallSize);
             b.Button("Back", Back);
         }
 
@@ -517,7 +517,7 @@ namespace Skyfold
         void BuildCredits(Builder b)
         {
             b.Heading("Credits");
-            b.Para("<b>SKYFOLD: The Last Flight</b>\nCreated by " + SkyfoldInfo.Credit + ". " + SkyfoldInfo.ProjectLabel, UIStyle.BodySize, UIStyle.Ink);
+            b.Para("<b>" + SkyfoldInfo.Title + ": " + SkyfoldInfo.Subtitle + "</b>\nCreated by " + SkyfoldInfo.Credit + ". " + SkyfoldInfo.ProjectLabel, UIStyle.BodySize, UIStyle.Ink);
             b.Para(CreditsText.Body, UIStyle.SmallSize);
             b.Button("Back", Back);
         }
@@ -557,7 +557,7 @@ namespace Skyfold
         void BuildFailed(Builder b)
         {
             b.Heading("The storm reached Nacre Bay", UIStyle.Coral);
-            b.Para("That happens to every courier. Your repairs are still standing, and the last checkpoint is waiting.");
+            b.Para("That happens to every engineer. Your repairs are still standing, and the last checkpoint is waiting.");
             b.Button("Try again from the checkpoint", () => MissionDirector.Instance.Retry(), true);
             b.Button("Restart from the beginning", () => MissionDirector.Instance.Restart());
             b.Button("Main menu", () => Root.QuitToMenu());
@@ -569,8 +569,10 @@ namespace Skyfold
             var r = md != null ? md.LastResult : null;
             var def = md != null ? md.Current : null;
             if (r == null || def == null) { b.Button("Main menu", () => Root.QuitToMenu(), true); return; }
-            b.Heading(def.IsDemo ? "Demo complete" : (def.Episode == 3 ? "The last flight is away" : "Episode complete"), UIStyle.Teal);
-            b.Para(def.IsDemo ? "Nacre Bay held. Thank you for playing the demo." : def.Title + (def.Episode == 3 ? ". The city is safe, and it is the one you built." : "."), UIStyle.BodySize, UIStyle.Ink);
+            b.Heading(def.IsDemo ? "Demo complete" : (def.Episode == 3 ? "The clean flight is away" : "Episode complete"), UIStyle.Teal);
+            b.Para(def.IsDemo ? "Nacre Bay held, and its first zero-emission flight is in the air. Thanks for playing!" : def.Title + (def.Episode == 3 ? ". The city runs on clean power, and you built it." : "."), UIStyle.BodySize, UIStyle.Ink);
+            b.Para($"<b>Clean grid: {GridImpact.Share(md.Ctx)}% renewable</b>  (it started at {GridImpact.BaseShare}%)", UIStyle.BodySize, UIStyle.Teal);
+            b.Para("<b>Did you know?</b>  " + GridImpact.FactFor(def.IsDemo ? 0 : def.Episode), UIStyle.SmallSize + 2f, UIStyle.Ink);
 
             if (!def.IsDemo && !string.IsNullOrEmpty(r.Medal))
             {

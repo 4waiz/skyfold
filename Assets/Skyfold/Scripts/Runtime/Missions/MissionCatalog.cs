@@ -76,8 +76,8 @@ namespace Skyfold
         static ObjectiveDef StepEnterCar() => new ObjectiveDef
         {
             Id = "t.enter",
-            TextVR = "Climb into the courier car (point at the door, trigger)",
-            TextDesktop = "Climb into the courier car (E at the door)",
+            TextVR = "Climb into the electric courier car (point at the door, trigger)",
+            TextDesktop = "Climb into the electric courier car (E at the door)",
             Voice = "t.enter",
             PausesStorm = true,
             GuideTarget = "car.door",
@@ -88,15 +88,15 @@ namespace Skyfold
         static ObjectiveDef StepLoadCell() => new ObjectiveDef
         {
             Id = "t.cell",
-            TextVR = "Put the power cell into the car's cradle",
-            TextDesktop = "Load the power cell into the car (E)",
+            TextVR = "Put the hydrogen cell into the car's cradle",
+            TextDesktop = "Load the hydrogen cell into the car (E)",
             Voice = "t.cell",
             PausesStorm = true,
             Checkpoint = true,
             GuideTarget = "cell",
             Hints = new[]
             {
-                "The power cell glows teal on its dock beside the depot door.",
+                "The hydrogen cell glows teal on its dock beside the depot door, fresh from the green-hydrogen works next door.",
                 "The cradle is the open rack at the back of the car."
             },
             IsComplete = c => c.Cell.Location == CellLocation.CarCradle
@@ -105,12 +105,12 @@ namespace Skyfold
         static ObjectiveDef StepDeliver() => new ObjectiveDef
         {
             Id = "e2.deliver",
-            TextVR = "Put the cell into the substation socket",
-            TextDesktop = "Carry the cell to the substation socket (E)",
+            TextVR = "Plug the cell into the microgrid socket",
+            TextDesktop = "Carry the cell to the microgrid socket (E)",
             Voice = "e2.deliver",
             Checkpoint = true,
             GuideTarget = "substation.socket",
-            Hints = new[] { "Climb out first (B or E), take the cell from the cradle, then set it into the glowing socket." },
+            Hints = new[] { "Climb out first (B or E), take the cell from the cradle, then plug it into the glowing socket." },
             IsComplete = c => c.Cell.Location == CellLocation.Substation,
             OnComplete = c => c.Dialogue.Play("e2.powered")
         };
@@ -134,9 +134,9 @@ namespace Skyfold
             {
                 Id = Episode1,
                 Episode = 1,
-                Title = "The Broken Causeway",
+                Title = "The Green Corridor",
                 Subtitle = "Episode 1",
-                Briefing = "Rebuild a crossing to the island, then drive across it.",
+                Briefing = "Rebuild the causeway so wind and solar power can reach the island, then drive across it.",
                 StormSeconds = 360f,
                 Start = StartLocation.Atelier,
                 ReturnKiosk = "kiosk.A",
@@ -162,7 +162,7 @@ namespace Skyfold
                 GuideTarget = "socket.nearest",
                 Hints = new[]
                 {
-                    "West: one bridge, long drive. East: the bridge plus the harbour corner, short drive.",
+                    "West: one bridge, long drive. East: the bridge plus the harbour corner, short drive. Either way, the power cable rides inside the bridge.",
                     "The harbour corner has to turn from the avenue towards the east crossing.",
                     "Pick a placed piece back up to move it. Nothing is ever used up."
                 },
@@ -210,9 +210,9 @@ namespace Skyfold
             {
                 Id = Episode2,
                 Episode = 2,
-                Title = "The Courier Run",
+                Title = "The Hydrogen Run",
                 Subtitle = "Episode 2",
-                Briefing = "Carry a power cell across the causeway and wake the airfield.",
+                Briefing = "Drive a green-hydrogen fuel cell across your causeway and restart the airfield microgrid.",
                 StormSeconds = 300f,
                 Start = StartLocation.StreetDepot,
                 ReturnKiosk = "kiosk.A",
@@ -234,7 +234,7 @@ namespace Skyfold
             m.Objectives.Add(new ObjectiveDef
             {
                 Id = "e2.drive",
-                Text = "Drive the cell to the airfield substation",
+                Text = "Drive the hydrogen cell to the airfield microgrid",
                 Voice = "e2.drive",
                 Checkpoint = true,
                 GuideTarget = "substation.park",
@@ -246,7 +246,7 @@ namespace Skyfold
             m.Objectives.Add(new ObjectiveDef
             {
                 Id = "e2.convoy",
-                Text = "Watch the convoy set off",
+                Text = "Watch the electric shuttles set off",
                 Voice = "e2.convoy",
                 OnBegin = c => { c.Guide.Hide(); c.Convoy.Depart(); c.Nuri.Celebrate(); },
                 IsComplete = c => c.ObjectiveTime > 7f
@@ -261,9 +261,9 @@ namespace Skyfold
             {
                 Id = Episode3,
                 Episode = 3,
-                Title = "The Last Flight",
+                Title = "The Clean Flight",
                 Subtitle = "Episode 3",
-                Briefing = "Open the terminal road, light the runway and send the last flight.",
+                Briefing = "Open the terminal road, switch on the solar runway lights and send the first zero-emission flight.",
                 StormSeconds = 330f,
                 Start = StartLocation.StreetAirfield,
                 ReturnKiosk = "kiosk.B",
@@ -317,7 +317,7 @@ namespace Skyfold
             m.Objectives.Add(new ObjectiveDef
             {
                 Id = "e3.beacons",
-                Text = "Restore the runway beacons",
+                Text = "Switch on the solar runway beacons",
                 Voice = "e3.beacons",
                 Checkpoint = true,
                 GuideTarget = "beacon.next",
@@ -328,7 +328,7 @@ namespace Skyfold
             m.Objectives.Add(new ObjectiveDef
             {
                 Id = "e3.convoy",
-                Text = "Wait for the convoy to reach the terminal",
+                Text = "Wait for the shuttles to reach the terminal",
                 GuideTarget = "terminal.stop",
                 IsComplete = c => c.Convoy.Arrived,
                 OnComplete = c => c.Dialogue.Play("e3.convoy_arrived")
@@ -344,7 +344,7 @@ namespace Skyfold
             m.Objectives.Add(new ObjectiveDef
             {
                 Id = "e3.takeoff",
-                Text = "Watch the last flight depart",
+                Text = "Watch the clean flight take off",
                 Voice = "e3.takeoff",
                 GuideTarget = "aircraft",
                 IsComplete = c => c.Aircraft.State == AircraftState.Departed,
@@ -361,9 +361,9 @@ namespace Skyfold
                 Id = Demo,
                 Episode = 0,
                 IsDemo = true,
-                Title = "The Last Flight",
+                Title = "The Clean Flight",
                 Subtitle = "Three-minute demo",
-                Briefing = "One bridge, one power cell, one last flight.",
+                Briefing = "One bridge, one hydrogen cell, one clean flight.",
                 StormSeconds = 360f,
                 Start = StartLocation.Atelier,
                 ReturnKiosk = "kiosk.A",
@@ -397,7 +397,7 @@ namespace Skyfold
             m.Objectives.Add(new ObjectiveDef
             {
                 Id = "t.drive",
-                Text = "Drive the cell to the substation",
+                Text = "Drive the hydrogen cell to the microgrid",
                 Voice = "t.drive",
                 Checkpoint = true,
                 GuideTarget = "substation.park",
@@ -408,7 +408,7 @@ namespace Skyfold
             m.Objectives.Add(new ObjectiveDef
             {
                 Id = "d.beacons",
-                Text = "Flip the beacon switch beside the substation",
+                Text = "Flip the solar beacon switch beside the microgrid",
                 Voice = "d.beacons",
                 GuideTarget = "switch.demo",
                 OnBegin = c => c.Guide.Hide(),
@@ -425,7 +425,7 @@ namespace Skyfold
             m.Objectives.Add(new ObjectiveDef
             {
                 Id = "e3.takeoff",
-                Text = "Watch the last flight depart",
+                Text = "Watch the clean flight take off",
                 Voice = "e3.takeoff",
                 GuideTarget = "aircraft",
                 IsComplete = c => c.Aircraft.State == AircraftState.Departed,

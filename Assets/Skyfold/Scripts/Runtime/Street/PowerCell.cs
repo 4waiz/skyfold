@@ -63,7 +63,7 @@ namespace Skyfold
             base.CanInteract(who) && who == InteractorKind.Desktop && m_DesktopHold == null &&
             (m_Socket == null || m_Socket.allowRemove);
 
-        public override string Prompt => "Pick up the power cell";
+        public override string Prompt => "Pick up the hydrogen cell";
 
         public override void Interact(InteractorKind who)
         {

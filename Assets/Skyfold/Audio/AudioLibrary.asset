@@ -530,14 +530,14 @@ MonoBehaviour:
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Press E on the beacon switch beside the substation to light the runway.
+    caption: Press E on the beacon switch beside the microgrid to light the runway.
   - id: d.beacons.vr
     clip: {fileID: 8300000, guid: a2276f190512834448a2940bd1db7124, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Pull the beacon switch beside the substation to light the runway.
+    caption: Pull the beacon switch beside the microgrid to light the runway.
   - id: d.clear.desktop
     clip: {fileID: 8300000, guid: cf8324053d64a6f42a159bf6c4637d18, type: 3}
     category: 2
@@ -558,14 +558,14 @@ MonoBehaviour:
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Welcome to Nacre Bay. One bridge, one power cell, one last flight. Let's go.
+    caption: Welcome to Nacre Bay. One bridge, one hydrogen cell, one clean flight. Let's go.
   - id: e1.choice
     clip: {fileID: 8300000, guid: 3628c2f09fc4b964098ba541d9b00028, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: We only have one spare bridge. The west crossing is a long drive. The east one is shorter, but its harbour corner is broken too.
+    caption: We have one spare bridge, and the power cable runs inside it. The west crossing is a long drive. The east one is shorter, but its harbour corner is broken too.
   - id: e1.crossed
     clip: {fileID: 8300000, guid: c2082146e1733f7459bfb8a7961ed720, type: 3}
     category: 2
@@ -593,84 +593,84 @@ MonoBehaviour:
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: The shortcut is open! That bridge is real at both scales now.
+    caption: The shortcut is open, and clean power is flowing to the island!
   - id: e1.route_west
     clip: {fileID: 8300000, guid: 90d85a95afadb6f47a939d2da86438d9, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: The road is through. That bridge is real at both scales now.
+    caption: The road is through, and wind and solar power are flowing to the island!
   - id: e1.welcome
     clip: {fileID: 8300000, guid: cc7053bd4bc3baf4e9f60d999e8286ca, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Welcome to Nacre Bay. I'm Noor, the city engineer. A storm is coming, and it has broken our roads.
+    caption: Welcome to Nacre Bay. I'm Noor, the city's energy engineer. A storm is coming, and it has cut our clean power link.
   - id: e2.brief
     clip: {fileID: 8300000, guid: b9987c5be86a02644ab111116b54479e, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: The airfield substation is dark. Carry a power cell across your causeway and wake it up. The storm won't wait.
+    caption: The airfield microgrid is dark. Carry a green hydrogen fuel cell across your causeway and restart it. The storm won't wait.
   - id: e2.convoy
     clip: {fileID: 8300000, guid: 0a3fb637c4c22874dbddb7f996012c27, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: The passenger convoy is rolling out along your route.
+    caption: The electric shuttles are rolling out along your route.
   - id: e2.deliver.desktop
     clip: {fileID: 8300000, guid: 21ac071218f087e4fae1edac84bad974, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Take the cell from the cradle with E, and press E again at the substation socket.
+    caption: Take the cell from the cradle with E, and press E again at the microgrid socket.
   - id: e2.deliver.vr
     clip: {fileID: 8300000, guid: d493b0762301ae4439c8f63f1e210441, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Take the cell from the cradle and set it into the substation socket.
+    caption: Take the cell from the cradle and plug it into the microgrid socket.
   - id: e2.drive
     clip: {fileID: 8300000, guid: f52afbcdbe5b8884f93e7d3eeae9f85c, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Follow the guide lights to the substation. Checkpoints will catch you if you leave the road.
+    caption: Follow the guide lights to the microgrid. Checkpoints will catch you if you leave the road.
   - id: e2.powered
     clip: {fileID: 8300000, guid: 4fdb32d3bbd63614f901f8cb5d3f33e2, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Power is back on the island. Look at those lights!
+    caption: The microgrid is back! The batteries are charging, and the island's lights are on.
   - id: e3.beacons.desktop
     clip: {fileID: 8300000, guid: f74c78b656a550c46b75a8cfb13904e6, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Now restore the runway beacons. Press E at each switch.
+    caption: Now switch on the solar runway beacons. Press E at each switch.
   - id: e3.beacons.vr
     clip: {fileID: 8300000, guid: 7431617a85ba1004dbc11d817c35f221, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Now restore the runway beacons. Point at each switch and pull the trigger.
+    caption: Now switch on the solar runway beacons. Point at each switch and pull the trigger.
   - id: e3.brief
     clip: {fileID: 8300000, guid: 3b02cb90bbdf7b045ac0767f0e6e1bf5, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: One flight left before the storm closes the sky. The terminal road is still broken, so the convoy can't reach the plane.
+    caption: One flight left before the storm closes the sky, and it's our first zero-emission plane. The terminal road is still broken, so the shuttles can't reach it.
   - id: e3.clear.desktop
     clip: {fileID: 8300000, guid: e79c6fc497f75704483f4da67dcd3444, type: 3}
     category: 2
@@ -691,14 +691,14 @@ MonoBehaviour:
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: The convoy is at the terminal. Passengers are boarding.
+    caption: The shuttles are at the terminal. Passengers are boarding.
   - id: e3.end
     clip: {fileID: 8300000, guid: 9cd7a11b24a205448bd1c216250e511e, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: The city is safe. And it's still the one you built.
+    caption: The city is safe, and it runs on clean power. And it's still the one you built.
   - id: e3.fold.desktop
     clip: {fileID: 8300000, guid: 3903bf13197f6e9469936b9bfc765b77, type: 3}
     category: 2
@@ -726,7 +726,7 @@ MonoBehaviour:
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: 'Nacre tower: last flight, you are clear. Thank you, courier. Look at her go!'
+    caption: 'Nacre tower: clean flight, you are clear. Hydrogen in, only water out. Look at her go!'
   - id: g.car_respawn
     clip: {fileID: 8300000, guid: f2dd28387d4faa84abc91b872cf68048, type: 3}
     category: 2
@@ -740,7 +740,7 @@ MonoBehaviour:
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: No harm done. A fresh cell is waiting at the dock.
+    caption: No harm done. A fresh hydrogen cell is waiting at the dock.
   - id: g.checkpoint
     clip: {fileID: 8300000, guid: 50397445102442d428575822711b1574, type: 3}
     category: 2
@@ -796,14 +796,14 @@ MonoBehaviour:
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Press E to pick up the power cell, then press E at the car to load it.
+    caption: Press E to pick up the hydrogen cell, then press E at the car to load it.
   - id: t.cell.vr
     clip: {fileID: 8300000, guid: e7348741a19bb664e88836f90b4e6e86, type: 3}
     category: 2
     loop: 0
     spatial: 0
     volumeDb: 0
-    caption: Grab the power cell from the dock and set it in the car's cradle.
+    caption: Grab the hydrogen cell from the dock and set it in the car's cradle.
   - id: t.drive.desktop
     clip: {fileID: 8300000, guid: 5f81afa06b5ce2a438840ad8dd3257ce, type: 3}
     category: 2

@@ -15,7 +15,7 @@ namespace Skyfold
         bool Cleared => City != null && City.GetFlag(Flags.DepartureCleared);
 
         public override bool CanInteract(InteractorKind who) => base.CanInteract(who) && !Cleared && aircraft != null && aircraft.ConditionsMet;
-        public override string Prompt => "Clear the last flight for departure";
+        public override string Prompt => "Clear the clean flight for take-off";
 
         public override string BlockedReason
         {

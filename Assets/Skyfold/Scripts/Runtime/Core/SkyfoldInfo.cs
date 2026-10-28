@@ -4,8 +4,8 @@ namespace Skyfold
     public static class SkyfoldInfo
     {
         public const string Title = "SKYFOLD";
-        public const string Subtitle = "The Last Flight";
-        public const string Credit = "Awaiz Ahmed / Team Kanban";
-        public const string ProjectLabel = "Hobby project. Not a SHIFT Game Jam entry.";
+        public const string Subtitle = "The Clean Flight";
+        public const string Credit = "Awaiz Ahmed and Huda Mueen / Team Kanban";
+        public const string ProjectLabel = "Energy-transition edition for ADIPEC 2026.";
     }
 }

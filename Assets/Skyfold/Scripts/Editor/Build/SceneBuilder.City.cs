@@ -35,6 +35,9 @@ namespace Skyfold.EditorTools
                             BuildSocketCell(c, cellRoot.transform, L.SocketAt(cell), mini);
                             break;
                         case CellKind.Water:
+                            // Offshore wind in the two open bay corners beside the Atelier headland.
+                            if (z == 0 && (x == 0 || x == L.Width - 1) && ModelLibrary.Has("wind_turbine_offshore"))
+                                Turbine(ModelLibrary.Spawn("wind_turbine_offshore", cellRoot.transform, new Vector3(x == 0 ? 2.5f : -2.5f, CityLayout.WaterLevel, 3f)), mini, rng);
                             break;
                         case CellKind.Lot:
                         case CellKind.Shore:
@@ -46,8 +49,14 @@ namespace Skyfold.EditorTools
                                 if (model != null)
                                 {
                                     var b = ModelLibrary.Spawn(model, cellRoot.transform, new Vector3(0f, 0.15f, 0f), rot * 90f);
-                                    if (!mini) { BoundsCollider(b); WindowsForIsland(c, b, z >= 5); }
-                                    SetStatic(b);
+                                    if (model.StartsWith("wind_turbine")) Turbine(b, mini, rng);
+                                    else
+                                    {
+                                        if (!mini) { BoundsCollider(b); WindowsForIsland(c, b, z >= 5); }
+                                        SetStatic(b);
+                                        if (model == "solar_canopy" && !mini)
+                                            foreach (float cx in new[] { -2.3f, 2.3f }) Charger(b.transform, new Vector3(cx, 0f, 1.3f), 180f);
+                                    }
                                     Dress(c, cellRoot.transform, rng, mini, 1, 2);
                                 }
                                 else Dress(c, cellRoot.transform, rng, mini, kind == CellKind.Shore ? 3 : 2, 4);
@@ -89,7 +98,51 @@ namespace Skyfold.EditorTools
                 }
             }
             BuildQuays(c, root, mini);
-            if (!mini) BuildRunwayExtras(c, root);
+            if (!mini) { BuildRunwayExtras(c, root); BuildOffshoreWind(root, rng); }
+        }
+
+        /// <summary>
+        /// Wind turbines keep their tower static but spin the 'Rotor' about the turbine's forward axis. Full
+        /// scale gets a slim tower collider (a bounds box would wall off the rotor's sweep).
+        /// </summary>
+        static void Turbine(GameObject t, bool mini, System.Random rng)
+        {
+            SetStatic(t);
+            var rotor = FindDeep(t.transform, "Rotor");
+            if (rotor != null)
+            {
+                UnityEditor.GameObjectUtility.SetStaticEditorFlags(rotor.gameObject, 0);
+                var wt = t.AddComponent<WindTurbine>();
+                wt.rotor = rotor;
+                wt.axis = rotor.parent.InverseTransformDirection(t.transform.forward).normalized;
+                wt.rpm = 10f + (float)rng.NextDouble() * 4f;
+                rotor.localRotation = Quaternion.AngleAxis((float)rng.NextDouble() * 120f, wt.axis) * rotor.localRotation;
+            }
+            if (mini) { SetLayer(t, "MiniCity"); return; }
+            var col = t.AddComponent<CapsuleCollider>();
+            col.center = new Vector3(0f, 15f, 0f);
+            col.height = 30f;
+            col.radius = 1.35f;
+        }
+
+        static void Charger(Transform parent, Vector3 localPos, float yaw)
+        {
+            if (!ModelLibrary.Has("ev_charger")) return;
+            var ch = ModelLibrary.Spawn("ev_charger", parent, localPos, yaw);
+            var bc = ch.AddComponent<BoxCollider>();
+            bc.center = new Vector3(0f, 0.8f, 0f);
+            bc.size = new Vector3(0.6f, 1.6f, 0.45f);
+            SetStatic(ch);
+        }
+
+        static void BuildOffshoreWind(Transform root, System.Random rng)
+        {
+            // A small offshore wind farm out in the bay: north of the runway (clear of the climb-out to the
+            // east-north-east) and off the west shore, visible from the Atelier across the city.
+            if (!ModelLibrary.Has("wind_turbine_offshore")) return;
+            var farm = Child(root, "Offshore Wind").transform;
+            foreach (var p in new[] { new Vector2(20f, 192f), new Vector2(72f, 198f), new Vector2(124f, 192f), new Vector2(-34f, 44f), new Vector2(-38f, 104f) })
+                Turbine(ModelLibrary.Spawn("wind_turbine_offshore", farm, new Vector3(p.x, CityLayout.WaterLevel, p.y)), false, rng);
         }
 
         static void Ground(GameObject go, bool mini, bool walkable)
@@ -304,7 +357,12 @@ namespace Skyfold.EditorTools
                 c.Substation.socket = c.SubstationSocket;
                 Named(sgo, "substation.socket");
             }
-            if (p.Id == "depot") Named(b, "depot");
+            if (p.Id == "depot")
+            {
+                Named(b, "depot");
+                // Fast charger on the east side of the courier car's bay (the car boards from its west side).
+                Charger(cell, new Vector3(3.6f, 0.15f, 7.0f), 270f);
+            }
         }
 
         static CellSocket MakeSocket(GameObject go, CellLocation location, string verb)

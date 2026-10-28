@@ -6,9 +6,9 @@ using UnityEngine.XR.Interaction.Toolkit.UI;
 namespace Skyfold
 {
     /// <summary>
-    /// In-game HUD. Desktop: objective card, storm timer, prompts, hints, subtitles with Noor's radio
-    /// portrait, guide arrow. VR: a lazy-follow panel for subtitles/prompts/hints plus a wrist panel
-    /// (Y). While VR is active the desktop canvas becomes the spectator overlay on the laptop.
+    /// In-game HUD. Desktop: objective card, storm timer, clean-grid meter, prompts, hints, subtitles with
+    /// Noor's radio portrait, guide arrow. VR: a lazy-follow panel for subtitles/prompts/hints plus a wrist
+    /// panel (Y) that also carries the clean-grid share. While VR is active the desktop canvas becomes the spectator overlay on the laptop.
     /// </summary>
     public sealed class HUDController : MonoBehaviour
     {
@@ -23,13 +23,17 @@ namespace Skyfold
         RectTransform m_ObjectiveCard, m_TimerCard, m_PromptCard, m_HintCard, m_ToastCard, m_SubCard, m_Badge, m_Arrow, m_Speed, m_CursorHint;
         TextMeshProUGUI m_ObjEpisode, m_ObjText, m_ObjKeys, m_Timer, m_TimerLabel, m_Prompt, m_Hint, m_Toast, m_SubSpeaker, m_SubText, m_SpeedText, m_CursorText;
         Image m_Crosshair, m_TimerBg, m_Portrait, m_RadioGlyph;
+        RectTransform m_GridCard, m_GridFill;
+        TextMeshProUGUI m_GridLabel, m_GridText;
+        int m_GridMask = -1;
+        MissionDefinition m_GridMission;
         float m_ToastTime, m_HintTime, m_VRToastTime;
         bool m_ObjectivesCollapsed;
 
         // VR
         Canvas m_VRPanel, m_Wrist;
         RectTransform m_VRSubCard, m_VRPromptCard, m_VRHintCard;
-        TextMeshProUGUI m_VRSub, m_VRSpeaker, m_VRPrompt, m_VRHint, m_WristObj, m_WristTimer, m_WristKeys;
+        TextMeshProUGUI m_VRSub, m_VRSpeaker, m_VRPrompt, m_VRHint, m_WristObj, m_WristTimer, m_WristKeys, m_WristGrid;
         bool m_WristVisible = true;
         float m_WristShowUntil;
         Vector3 m_PanelVel;
@@ -133,6 +137,19 @@ namespace Skyfold
             m_TimerLabel.characterSpacing = 2f;
             m_Timer = UIKit.Text(m_TimerCard, "5:00", 48f, UIStyle.Ink, true);
 
+            // Clean-grid meter under the timer: the renewable share grows with every repair.
+            m_GridCard = Card("Clean Grid", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-40f, -180f), 240f, UIStyle.PanelGlass, out m_GridLabel, 18f);
+            m_GridLabel.text = "CLEAN GRID";
+            m_GridLabel.color = UIStyle.InkSoft;
+            m_GridLabel.characterSpacing = 2f;
+            m_GridText = UIKit.Text(m_GridCard, "30%", 40f, UIStyle.Teal, true);
+            var track = UIKit.Image(m_GridCard, "Track", new Color(0.13f, 0.2f, 0.23f, 0.14f), UIKit.Rounded);
+            UIKit.Layout(track, 12f, 12f, 1f);
+            m_GridFill = UIKit.Image(track.rectTransform, "Fill", UIStyle.Hex("#6FBF5A"), UIKit.Rounded).rectTransform;
+            m_GridFill.anchorMin = Vector2.zero;
+            m_GridFill.anchorMax = new Vector2(0.3f, 1f);
+            m_GridFill.offsetMin = m_GridFill.offsetMax = Vector2.zero;
+
             m_PromptCard = Card("Prompt", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 300f), 640f, new Color(0.13f, 0.2f, 0.23f, 0.86f), out m_Prompt, 28f);
             m_Prompt.color = UIStyle.Pearl;
             m_Prompt.alignment = TextAlignmentOptions.Center;
@@ -188,7 +205,7 @@ namespace Skyfold
             m_SpeedText.alignment = TextAlignmentOptions.Center;
 
             m_Badge = Card("Spectator Badge", new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(-40f, 48f), 330f, new Color(0.06f, 0.43f, 0.45f, 0.92f), out var badgeText, 22f);
-            badgeText.text = "<b>LIVE · VR</b>   SKYFOLD\n<size=16>Hobby build · F5 operator reset (demo)</size>";
+            badgeText.text = "<b>LIVE · VR</b>   SKYFOLD\n<size=16>ADIPEC 2026 edition · F5 operator reset (demo)</size>";
             badgeText.color = UIStyle.Pearl;
 
             m_CursorHint = Card("Cursor Hint", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 220f), 620f, UIStyle.PanelGlass, out m_CursorText, 22f);
@@ -248,7 +265,7 @@ namespace Skyfold
             m_VRSub = UIKit.Text(m_VRSubCard, "", 34f, UIStyle.Pearl);
             m_VRPanel.gameObject.SetActive(false);
 
-            m_Wrist = WorldCanvas("VR Wrist Panel", new Vector2(420f, 260f), 0.0005f);
+            m_Wrist = WorldCanvas("VR Wrist Panel", new Vector2(420f, 300f), 0.0005f);
             var w = (RectTransform)m_Wrist.transform;
             var bg = w.gameObject.AddComponent<Image>();
             bg.sprite = UIKit.Rounded;
@@ -262,6 +279,7 @@ namespace Skyfold
             m_WristTimer = UIKit.Text(w, "", 40f, UIStyle.Ink, true);
             m_WristObj = UIKit.Text(w, "", 30f, UIStyle.Ink);
             m_WristKeys = UIKit.Text(w, "", 22f, UIStyle.InkSoft);
+            m_WristGrid = UIKit.Text(w, "", 24f, UIStyle.Teal, true);
             m_Wrist.gameObject.SetActive(false);
         }
 
@@ -378,6 +396,7 @@ namespace Skyfold
             m_Timer.color = tc;
             m_TimerBg.color = left < 30f ? new Color(1f, 0.9f, 0.86f, 0.96f) : UIStyle.PanelGlass;
             m_TimerCard.gameObject.SetActive(playing);
+            UpdateGrid(md, playing);
 
             // Prompt line.
             string prompt = PromptText(input, rigs);
@@ -401,6 +420,27 @@ namespace Skyfold
 
         ContentSizeFitter m_PromptFit;
         bool? m_PromptBesideCrosshair;
+
+        /// <summary>
+        /// Clean-grid share from CityState facts. A source that comes online mid-mission gets a toast (which
+        /// also rides on the VR hint card); the first reading of a mission is silent.
+        /// </summary>
+        void UpdateGrid(MissionDirector md, bool playing)
+        {
+            int mask = md.Current != null ? GridImpact.Mask(md.Ctx) : 0;
+            if (md.Current != m_GridMission) { m_GridMission = md.Current; m_GridMask = mask; }
+            if (mask != m_GridMask)
+            {
+                string added = GridImpact.NewSource(m_GridMask, mask);
+                if (added != null && playing) HUDMessages.Toast($"<b>Clean grid {GridImpact.Share(mask)}%</b>  {added}");
+                m_GridMask = mask;
+            }
+            int share = GridImpact.Share(mask);
+            m_GridText.text = share + "%<size=50%>  renewable</size>";
+            m_GridFill.anchorMax = new Vector2(share / 100f, 1f);
+            m_GridCard.gameObject.SetActive(playing);
+            if (m_WristGrid != null) m_WristGrid.text = $"Clean grid  {share}%";
+        }
 
         /// <summary>
         /// On foot, a short "[E] ..." prompt sits just right of the crosshair so it never covers the thing you

@@ -40,7 +40,7 @@ namespace Skyfold
         {
             get
             {
-                if (Occupant != null) return "Take the power cell";
+                if (Occupant != null) return "Take the hydrogen cell";
                 switch (location)
                 {
                     case CellLocation.CarCradle: return "Load the cell into the cradle";
@@ -54,8 +54,8 @@ namespace Skyfold
         {
             get
             {
-                if (Occupant != null && !allowRemove) return "The cell is powering the substation.";
-                if (Occupant == null && PowerCell.Instance != null && !PowerCell.Instance.HeldOnDesktop) return "Pick up the power cell first.";
+                if (Occupant != null && !allowRemove) return "The cell is powering the microgrid.";
+                if (Occupant == null && PowerCell.Instance != null && !PowerCell.Instance.HeldOnDesktop) return "Pick up the hydrogen cell first.";
                 return null;
             }
         }

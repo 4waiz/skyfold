@@ -158,7 +158,7 @@ namespace Skyfold.EditorTools
             cell.sockets = new[] { c.Dock, c.Car.cradle, c.SubstationSocket };
             var core = FindDeep(cellGo.transform, "Core");
             cell.core = core != null ? core.GetComponent<Renderer>() : null;
-            cell.verb = "Pick up the power cell";
+            cell.verb = "Pick up the hydrogen cell";
             Named(cellGo, "cell");
             c.Cell = cell;
         }
